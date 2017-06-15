@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>leetcode.xcscheme</key>
+		<key>laicode.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>6F4356BA1D6FF82E00659C9B</key>
+		<key>898DEBAF1EF08322004D7F88</key>
 		<dict>
 			<key>primary</key>
 			<true/>
