@@ -1,6 +1,6 @@
 package laicode_java;
 
-public class Solution {
+public class Solution11 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
