@@ -21,6 +21,7 @@
 #include <time.h>
 #include <unordered_map>
 #include <vector>
+#include <math.h>       /* pow */
 
 // C++ program to find largest rectangle with all 1s in a binary matrix
 using namespace std; 
@@ -4358,7 +4359,7 @@ public:
 //          abcde
 //          cdf
             string result="";
-            longestCommonHelper(s, s.size(), t, t.size(), result);
+            longestCommonHelper(s, (int)s.size(), t, (int)t.size(), result);
             return result;
         }
     }
@@ -4400,7 +4401,7 @@ public:
 //        return lcmatrix[sleng][tleng];
 //    }
     int longest(string s, string t) {
-        return lcsHelper(s, s.size(), t, t.size());
+        return lcsHelper(s, (int)s.size(), t, (int)t.size());
     }
 };
 
@@ -4424,7 +4425,7 @@ private:
         }
     } mysorter; //sort支持这个struct
     void largestProductHelper(vector<string>& dict, int m, int n, priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>, comphelper>& mypq, int* result) {
-        int leng=dict.size();
+        int leng=(int)dict.size();
         mypq.push(make_pair(make_pair(dict[m], m), make_pair(dict[n], n)));
         while (!mypq.empty()) {
             pair<pair<string, int>, pair<string, int>> current=mypq.top();
@@ -4448,7 +4449,7 @@ private:
                     }
                 }
                 if (unique) {
-                    (*result)=current.first.first.size()*current.second.first.size();
+                    (*result)=(int)current.first.first.size()*(int)current.second.first.size();
                 }
             }
             if (m+1<leng && n<leng) {
@@ -4470,10 +4471,83 @@ public:
     }
 };
 
+class Solution193 {
+public:
+    long kth(int k) {
+        priority_queue<long, vector<long>, greater<long>> mypq;
+        mypq.push(3*5*7);
+        unordered_map<long, int> visited;
+        visited[3*5*7]=1;
+        int index=k;
+        while (index>1) {
+            long curr=mypq.top();
+            mypq.pop();
+            if (visited[curr*3]==0) {
+                mypq.push(curr*3);
+                visited[curr*3]++;
+            }
+            if (visited[curr*5]==0) {
+                mypq.push(curr*5);
+                visited[curr*5]++;
+            }
+            if (visited[curr*7]==0) {
+                mypq.push(curr*7);
+                visited[curr*7]++;
+            }
+            index--;
+        }
+        return mypq.top();
+    }
+};
+
+class Solution194 {
+private:
+    class comphelper {
+    public:
+        bool operator()(pair<int, pair<int, int>> a, pair<int, pair<int, int>> b) {
+            return a.first*a.first+a.second.first*a.second.first+a.second.second*a.second.second > \
+            b.first*b.first+b.second.first*b.second.first+b.second.second*b.second.second;
+        }
+    };
+public:
+    vector<int> closest(vector<int> a, vector<int> b, vector<int> c, int k) {
+        int aleng=(int)a.size(), bleng=(int)b.size(), cleng=(int)c.size();
+        sort(a.begin(), a.end());
+        sort(b.begin(), b.end());
+        sort(c.begin(), c.end());
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, comphelper> mypq;
+        
+        for (int x=0; x<aleng && x<k; x++) {
+            for (int y=0; y<bleng && y<k; y++) {
+                for (int z=0; z<cleng && z<k; z++) {
+                    mypq.push(make_pair(a[x], make_pair(b[y], c[z])));
+                }
+            }
+        }
+        pair<int, pair<int, int>> current;
+//        while (!mypq.empty()) {
+//            current=mypq.top();
+//            mypq.pop();
+//            cout<<current.first*current.first+current.second.first*current.second.first+current.second.second*current.second.second<<endl;
+//        }
+        while (!mypq.empty() && k>0) {
+            current=mypq.top();
+            mypq.pop(); k--;
+        }
+        return {current.first, current.second.first, current.second.second};
+    }
+};
+
 int main() {
-    Solution191* new191 = new Solution191();
+    Solution194* new194 = new Solution194();
+    new194->closest({1,3},{2,3},{2,4},3 );
+//    Solution193* new193 = new Solution193();
+//    for (int i=1; i<10; i++) {
+//        cout<<new193->kth(i)<<endl;
+//    }
+//    Solution191* new191 = new Solution191();
 //    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
-    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
+//    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
 //    Solution177* new177 = new Solution177();
 //    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
 //    Solution176* new176 = new Solution176();
@@ -4857,23 +4931,23 @@ int main() {
 	//    t14->left=t31;
 	//    int result140 = new140->maxPathSum(t51);
 	//    cout<<result140<<endl;
-	Solution143* new143 = new Solution143();
-	cout << new143->minCuts("abab") << endl;
-	//cout << new143->minCuts("ababbbabbababa") << endl;
-	Solution138* new138 = new Solution138();
-	TreeNode* t51 = new TreeNode(-5);
-	TreeNode* t2 = new TreeNode(2);
-	TreeNode* t12 = new TreeNode(12);
-	TreeNode* t6 = new TreeNode(6);
-	TreeNode* t14 = new TreeNode(14);
-	TreeNode* t31 = new TreeNode(-3);
-	t51->left = t2;
-	t51->right = t12;
-	t12->left = t6;
-	t12->right = t14;
-	t14->left = t31;
-	int result138 = new138->maxPathSum(t51);
-	cout << result138 << endl;
+//	Solution143* new143 = new Solution143();
+//	cout << new143->minCuts("abab") << endl;
+//	//cout << new143->minCuts("ababbbabbababa") << endl;
+//	Solution138* new138 = new Solution138();
+//	TreeNode* t51 = new TreeNode(-5);
+//	TreeNode* t2 = new TreeNode(2);
+//	TreeNode* t12 = new TreeNode(12);
+//	TreeNode* t6 = new TreeNode(6);
+//	TreeNode* t14 = new TreeNode(14);
+//	TreeNode* t31 = new TreeNode(-3);
+//	t51->left = t2;
+//	t51->right = t12;
+//	t12->left = t6;
+//	t12->right = t14;
+//	t14->left = t31;
+//	int result138 = new138->maxPathSum(t51);
+//	cout << result138 << endl;
 	//    Solution261* new261 = new Solution261();
 	//    vector<int> result261 = new261->sortSpecial({4,2,1,3}, {});
 	//    printintArray(result261);
@@ -4884,22 +4958,22 @@ int main() {
 	//        3     8
 	//      1   4     11
 	//     2 6 7 9  10  12
-	TreeNode* root = new TreeNode(5);
-	root->left = new TreeNode(3);
-	root->right = new TreeNode(8);
-	root->left->left = new TreeNode(1);
-	root->left->right = new TreeNode(4);
-	root->left->left->left = new TreeNode(2);
-	root->left->left->right = new TreeNode(6);
-	root->left->right->left = new TreeNode(7);
-	root->left->right->right = new TreeNode(9);
-	root->right->left = NULL;
-	root->right->right = new TreeNode(11);
-	root->right->right->left = new TreeNode(10);
-	root->right->right->right = new TreeNode(12);
-	Solution129* new129 = new Solution129();
-	TreeNode* result129 = new129->solve(root, { root->left->right->left, root->left->right->right, root->right->right->left });
-	cout << result129->value << endl;
+//	TreeNode* root = new TreeNode(5);
+//	root->left = new TreeNode(3);
+//	root->right = new TreeNode(8);
+//	root->left->left = new TreeNode(1);
+//	root->left->right = new TreeNode(4);
+//	root->left->left->left = new TreeNode(2);
+//	root->left->left->right = new TreeNode(6);
+//	root->left->right->left = new TreeNode(7);
+//	root->left->right->right = new TreeNode(9);
+//	root->right->left = NULL;
+//	root->right->right = new TreeNode(11);
+//	root->right->right->left = new TreeNode(10);
+//	root->right->right->right = new TreeNode(12);
+//	Solution129* new129 = new Solution129();
+//	TreeNode* result129 = new129->solve(root, { root->left->right->left, root->left->right->right, root->right->right->left });
+//	cout << result129->value << endl;
 	//    TreeNodeP* root=new TreeNodeP(5, NULL);
 	//    TreeNodeP* node9=new TreeNodeP(9, root);
 	//    TreeNodeP* node12=new TreeNodeP(12, root);
@@ -4936,20 +5010,20 @@ int main() {
 	//    Solution115* new115 = new Solution115();
 	//    vector<int> result115 = new115->dedup({1,2,2,3,3,3,3});
 	//    cout<<result115[2]<<endl;
-	Solution58* new58 = new Solution58();
-	TreeNode* t5 = new TreeNode(5);
-	TreeNode* t3 = new TreeNode(3);
-	TreeNode* t8 = new TreeNode(8);
-	TreeNode* t1 = new TreeNode(1);
-	TreeNode* t4 = new TreeNode(4);
-	TreeNode* t11 = new TreeNode(11);
-	t5->left = t3;
-	t3->left = t1;
-	t3->right = t4;
-	t5->right = t8;
-	t8->right = t11;
-	vector<int> result58 = new58->zigZag(t5);
-	printintArray(result58);
+//	Solution58* new58 = new Solution58();
+//	TreeNode* t5 = new TreeNode(5);
+//	TreeNode* t3 = new TreeNode(3);
+//	TreeNode* t8 = new TreeNode(8);
+//	TreeNode* t1 = new TreeNode(1);
+//	TreeNode* t4 = new TreeNode(4);
+//	TreeNode* t11 = new TreeNode(11);
+//	t5->left = t3;
+//	t3->left = t1;
+//	t3->right = t4;
+//	t5->right = t8;
+//	t8->right = t11;
+//	vector<int> result58 = new58->zigZag(t5);
+//	printintArray(result58);
 	//    Solution114* new114 = new Solution114();
 	//    cout<<new114->solve({1,2,3,4,5,6,7,8,9,10})<<endl;
 	//    Solution113* new113 = new Solution113();
