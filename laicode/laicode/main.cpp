@@ -4309,7 +4309,175 @@ public:
 	}
 };
 
+class Solution176 {
+private:
+//    void longestCommonHelper(string& s, int bs, string& t, int bt, string& result) {
+//        if (s.size()-bs<=result.size() || t.size()-bt<=result.size() || bs==s.size() || bt==t.size()) {
+//            return;
+//        }
+//        int fs=bs, ft=bt;
+//        while (s[fs]==t[ft] && fs<s.size() && ft<t.size()) {
+//            fs++;
+//            ft++;
+//        }
+//        if (result.size()<fs-bs) {
+//            result=s.substr(bs, fs-bs);
+//        }
+//        longestCommonHelper(s, bs+1, t, bt, result);
+//        longestCommonHelper(s, bs, t, bt+1, result);
+//        longestCommonHelper(s, bs+1, t, bt+1, result);
+//    }
+    void longestCommonHelper(string& s, int m, string& t, int n, string& result) {
+        int lcmatrix[m+1][n+1];
+        int maxsize=0;
+        for (int i=0; i<=m; i++) {
+            for (int j=0; j<=n; j++) {
+                if (i==0 || j==0) {
+                    lcmatrix[i][j]=0;
+                }
+                else if (s[i-1]==t[j-1]) {
+                    lcmatrix[i][j]=lcmatrix[i-1][j-1]+1;
+                    if (lcmatrix[i][j]>maxsize) {
+                        maxsize=lcmatrix[i][j];
+                        result=s.substr(i-maxsize, maxsize);
+                    }
+                }
+                else {
+                    lcmatrix[i][j]=0;
+                }
+            }
+        }
+        return;
+    }
+public:
+    string longestCommon(string s, string t) {
+        if (s.size()==0 || t.size()==0) {
+            return "";
+        }
+        else {
+//          abcde
+//          cdf
+            string result="";
+            longestCommonHelper(s, s.size(), t, t.size(), result);
+            return result;
+        }
+    }
+};
+
+class Solution177 {
+private:
+    int lcsHelper(string& s, int m, string& t, int n) {
+        if (m==0 || n==0) {
+            return 0;
+        }
+        if (s[m-1]==t[n-1]) {
+            return 1 + lcsHelper(s, m-1, t, n-1);
+        }
+        else {
+            return max(lcsHelper(s, m-1, t, n), lcsHelper(s, m, t, n-1));
+        }
+    }
+public:
+//    int longest(string s, string t) {
+//        int sleng=s.size(), tleng=t.size();
+//        if (sleng==0 || tleng==0) {
+//            return 0;
+//        }
+//        vector<vector<int>> lcmatrix(sleng+1, vector<int>(tleng+1, 0));
+//        for (int i=0; i<=sleng; i++) {
+//            for (int j=0; j<=tleng; j++) {
+//                if (i==0 || j==0) {
+//                    lcmatrix[i][j]=0;
+//                }
+//                else if (s[i-1]==t[j-1]) {
+//                    lcmatrix[i][j]=lcmatrix[i-1][j-1]+1;
+//                }
+//                else {
+//                    lcmatrix[i][j]=max(lcmatrix[i-1][j], lcmatrix[i][j-1]);
+//                }
+//            }
+//        }
+//        return lcmatrix[sleng][tleng];
+//    }
+    int longest(string s, string t) {
+        return lcsHelper(s, s.size(), t, t.size());
+    }
+};
+
+class Solution191 {
+private:
+    class comphelper {
+    public:
+        bool operator()(pair<pair<string, int>, pair<string, int>> p1, pair<pair<string, int>, pair<string, int>> p2) {
+            return p1.first.first.size()+p1.second.first.size() > p2.first.first.size()+p2.second.first.size();
+        }
+    };
+    class sorthelper {
+    public:
+        bool operator()(string& a, string& b) {
+            return a.size()>b.size();
+        }
+    };  //sort居然不支持
+    struct sorthelper1 {
+        bool operator()(string a, string b) {
+            return (a.size()>b.size());
+        }
+    } mysorter; //sort支持这个struct
+    void largestProductHelper(vector<string>& dict, int m, int n, priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>, comphelper>& mypq, int* result) {
+        int leng=dict.size();
+        mypq.push(make_pair(make_pair(dict[m], m), make_pair(dict[n], n)));
+        while (!mypq.empty()) {
+            pair<pair<string, int>, pair<string, int>> current=mypq.top();
+            mypq.pop();
+//            cout<<current.first.first<<" ";
+//            cout<<current.second.first<<endl;
+            if (current.first.first.size()*current.second.first.size()>(*result)) {
+                int checker[8]={0};
+                for (int i=0; i<current.first.first.size(); i++) {
+                    int aa=current.first.first[i]/32;
+                    int bb=current.first.first[i]%32;
+                    checker[aa]|=(1<<bb);
+                }
+                bool unique=true;
+                for (int j=0; j<current.second.first.size(); j++) {
+                    int aa=current.second.first[j]/32;
+                    int bb=current.second.first[j]%32;
+                    if ((checker[aa]>>bb) & 1){
+                        unique=false;
+                        break;
+                    }
+                }
+                if (unique) {
+                    (*result)=current.first.first.size()*current.second.first.size();
+                }
+            }
+            if (m+1<leng && n<leng) {
+                largestProductHelper(dict, m+1, n, mypq, result);
+            }
+            if (m<leng && n+1<leng) {
+                largestProductHelper(dict, m, n+1, mypq, result);
+            }
+        }
+        return;
+    }
+public:
+    int largestProduct(vector<string> dict) {
+        sort(dict.begin(), dict.end(), mysorter);
+        priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>, comphelper> mypq;
+        int result=0;
+        largestProductHelper(dict, 0, 1, mypq, &result);
+        return result;
+    }
+};
+
 int main() {
+    Solution191* new191 = new Solution191();
+//    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
+    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
+//    Solution177* new177 = new Solution177();
+//    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
+//    Solution176* new176 = new Solution176();
+//    cout<<new176->longestCommon( "abcdefg","bbcefgh")<<endl;
 	//    Solution188* new188 = new Solution188();
 	//    cout<<new188->exist({1, 2, 2, 3, 4}, 9)<<endl;
 	//    Solution186* new186 = new Solution186();
