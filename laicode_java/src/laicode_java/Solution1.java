@@ -1,6 +1,7 @@
 package laicode_java;
 
 import java.util.Arrays;
+import java.io.*;
 
 public class Solution1 {
 	//¸´ÖÆjavaÎÄ¼þ
@@ -33,7 +34,7 @@ public class Solution1 {
         }
         return array;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // write your code here
     	Solution1 solu1 = new Solution1();
         int[] array=null;
@@ -51,5 +52,24 @@ public class Solution1 {
         array=new int[]{4,3,5,2,1};
         array=solu1.selectionSort(array);
         System.out.println(Arrays.toString(array));
+        InputStreamReader cin=null;
+        try {
+        	cin=new InputStreamReader(System.in);
+        	System.out.println("Enter:");
+        	StringBuffer userinput=new StringBuffer();
+        	while(true) {
+        		char c=(char)cin.read();
+        		if(c=='q') {
+        			break;
+        		}
+        		userinput.append(c);
+    		}
+        	System.out.println(userinput);
+    	}
+        finally {
+        	if(cin!=null) {
+        		cin.close();
+        	}
+        }
     }
 }

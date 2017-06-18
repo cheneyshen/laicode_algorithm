@@ -1,12 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-
-#ifdef __WINDOWS_
+#pragma once
 #include "stdafx.h"
-#endif
-#ifdef _WIN32
-#include "stdafx.h"
-#endif
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -4329,7 +4324,7 @@ private:
 //        longestCommonHelper(s, bs+1, t, bt+1, result);
 //    }
     void longestCommonHelper(string& s, int m, string& t, int n, string& result) {
-        int lcmatrix[m+1][n+1];
+		vector<vector<int>> lcmatrix(m + 1, vector<int>(n + 1, 0));
         int maxsize=0;
         for (int i=0; i<=m; i++) {
             for (int j=0; j<=n; j++) {
@@ -4504,9 +4499,8 @@ class Solution194 {
 private:
     class comphelper {
     public:
-        bool operator()(pair<int, pair<int, int>> a, pair<int, pair<int, int>> b) {
-            return a.first*a.first+a.second.first*a.second.first+a.second.second*a.second.second > \
-            b.first*b.first+b.second.first*b.second.first+b.second.second*b.second.second;
+        bool operator()(vector<int> a, vector<int> b) {
+            return a[0]*a[0]+ a[1]*a[1] + a[1]*a[1]>b[0]*b[0] + b[1]*b[1] + b[1]*b[1];
         }
     };
 public:
@@ -4515,16 +4509,16 @@ public:
         sort(a.begin(), a.end());
         sort(b.begin(), b.end());
         sort(c.begin(), c.end());
-        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, comphelper> mypq;
+        priority_queue<vector<int>, vector<vector<int>>, comphelper> mypq;
         
         for (int x=0; x<aleng && x<k; x++) {
             for (int y=0; y<bleng && y<k; y++) {
                 for (int z=0; z<cleng && z<k; z++) {
-                    mypq.push(make_pair(a[x], make_pair(b[y], c[z])));
+					mypq.push({ a[x],b[y], c[z] });
                 }
             }
         }
-        pair<int, pair<int, int>> current;
+		vector<int> current;
 //        while (!mypq.empty()) {
 //            current=mypq.top();
 //            mypq.pop();
@@ -4534,13 +4528,133 @@ public:
             current=mypq.top();
             mypq.pop(); k--;
         }
-        return {current.first, current.second.first, current.second.second};
+        return current;
     }
 };
 
+class Solution195 {
+private:
+	vector<pair<int, int>> getNeis(pair<int, int> curr, vector<vector<char>>& gym) {
+		vector<pair<int, int>> result;
+		int x = curr.first, y = curr.second;
+		int rows = gym.size(), cols = gym[0].size();
+		if (x + 1<rows && gym[x + 1][y] != 'O') {
+			result.push_back(make_pair(x + 1, y));
+		}
+		if (y + 1<cols && gym[x][y + 1] != 'O') {
+			result.push_back(make_pair(x, y + 1));
+		}
+		if (x - 1 >= 0 && gym[x - 1][y] != 'O') {
+			result.push_back(make_pair(x - 1, y));
+		}
+		if (y - 1 >= 0 && gym[x][y - 1] != 'O') {
+			result.push_back(make_pair(x, y - 1));
+		}
+		return result;
+	}
+	bool addCost(vector<vector<int>>& cost, vector<vector<char>>& gym, int i, int j) {
+		vector<vector<bool>> visited(gym.size(), vector<bool>(gym[0].size(), false));
+		queue<pair<int, int>> myq;
+		myq.push(make_pair(i, j));
+		visited[i][j] = true;
+		int fee = 1;
+		while (!myq.empty()) {
+			int size = (int)myq.size();
+			for (int m = 0; m<size; m++) {
+				pair<int, int> curr = myq.front();
+				myq.pop();
+				vector<pair<int, int>> neis = getNeis(curr, gym);
+				for (int next = 0; next<neis.size(); next++) {
+					if (!visited[neis[next].first][neis[next].second]) {
+						visited[neis[next].first][neis[next].second] = true;
+						cost[neis[next].first][neis[next].second] += fee;
+						myq.push(neis[next]);
+					}
+				}
+			}
+			fee++;
+		}
+		for (int m = 0; m<gym.size(); m++) {
+			for (int n = 0; n<gym[0].size(); n++) {
+				if (toupper(gym[m][n]) == 'E' && !visited[m][n]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+public:
+	vector<int> solve(vector<vector<char>> gym) {
+		vector<int> result;
+		int m = gym.size(), n = gym[0].size();
+		vector<vector<int>> cost(m, vector<int>(n, INT_MAX));
+		for (int i = 0; i<m; i++) {
+			for (int j = 0; j<n; j++) {
+				if (toupper(gym[i][j]) == 'E') {
+					if (!addCost(cost, gym, i, j)) {
+						return result;
+					}
+				}
+			}
+		}
+		for (int i = 0; i<m; i++) {
+			for (int j = 0; j<n; j++) {
+				if ('E' != toupper(gym[i][j]) && 'O' != toupper(gym[i][j])) {
+					if (result.size() == 0) {
+						result.push_back(i);
+						result.push_back(j);
+					}
+					else if (cost[i][j]<cost[result[0]][result[1]]) {
+						result[0] = i;
+						result[1] = j;
+					}
+				}
+			}
+		}
+		return result;
+	}
+};
+
+class Solution198 {
+public:
+	int largest(vector<int> array) {
+		int area=0;
+		stack<int> stk;
+		for (int i = 0; i < array.size(); i++)
+		{
+			if (stk.empty() || array[stk.top()] < array[i]) {
+				stk.push(i);
+			}
+			else {
+				int start = stk.top();
+				stk.pop();
+				int width = stk.empty() ? i : i - stk.top() - 1;
+				area = max(area, array[start] * width);
+				i--; //++, --所以就不变，但是栈顶在变
+			}
+		}
+		while (!stk.empty())
+		{
+			int start = stk.top();
+			stk.pop();
+			int width = stk.empty() ? array.size() : array.size() - stk.top() - 1;
+			area = max(area, array[start] * width);
+		}
+		return area;
+	}
+};
+
 int main() {
+	Solution198* new198 = new Solution198();
+	new198->largest({ 2,3,1 });
+	Solution195* new195 = new Solution195();
+	vector<int> result195 = new195->solve({	{ 'E', 'O', 'C' },
+											{ 'C', 'E',  'C' },
+											{ 'C', 'C',  'C' } });
+	cout << result195[0] << " " << result195[1] << endl;
     Solution194* new194 = new Solution194();
-    new194->closest({1,3},{2,3},{2,4},3 );
+    vector<int> result194 = new194->closest({1,3},{2,3},{2,4},3 );
+	cout << result194[0] << " " << result194[1] << " " << result194[1] << " " << endl;
 //    Solution193* new193 = new Solution193();
 //    for (int i=1; i<10; i++) {
 //        cout<<new193->kth(i)<<endl;
@@ -5492,5 +5606,6 @@ int main() {
 	//    vector<int> result9 = new9->mergeSort({4, 2, -3, 6, 1});
 	//    Solution4* new4 = new Solution4();
 	//    vector<int> result4 = new4->solve({4, 2, -3, 6, 1});
+	cin.get();
 	return 0;
 }
