@@ -1,7 +1,8 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-#pragma once
+#ifdef __WIND32
 #include "stdafx.h"
+#endif
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -4537,7 +4538,7 @@ private:
 	vector<pair<int, int>> getNeis(pair<int, int> curr, vector<vector<char>>& gym) {
 		vector<pair<int, int>> result;
 		int x = curr.first, y = curr.second;
-		int rows = gym.size(), cols = gym[0].size();
+		int rows = (int)gym.size(), cols = (int)gym[0].size();
 		if (x + 1<rows && gym[x + 1][y] != 'O') {
 			result.push_back(make_pair(x + 1, y));
 		}
@@ -4586,7 +4587,7 @@ private:
 public:
 	vector<int> solve(vector<vector<char>> gym) {
 		vector<int> result;
-		int m = gym.size(), n = gym[0].size();
+		int m = (int)gym.size(), n = (int)gym[0].size();
 		vector<vector<int>> cost(m, vector<int>(n, INT_MAX));
 		for (int i = 0; i<m; i++) {
 			for (int j = 0; j<n; j++) {
@@ -4637,14 +4638,129 @@ public:
 		{
 			int start = stk.top();
 			stk.pop();
-			int width = stk.empty() ? array.size() : array.size() - stk.top() - 1;
+			int width = stk.empty() ? (int)array.size() : (int)array.size() - stk.top() - 1;
 			area = max(area, array[start] * width);
 		}
 		return area;
 	}
 };
 
+class Solution199 {
+public:
+    int maxTrapped(vector<int> array) {
+        int i=0, j=(int)array.size();
+        int result=0;
+        int left_max=0, right_max=0;
+        while (i<=j) {
+            left_max=max(left_max, array[i]);
+            right_max=max(right_max, array[j]);
+            if (left_max<=right_max) {
+                result+=left_max-array[i];
+                i++;
+            }
+            else {
+                result+=right_max-array[j];
+                j--;
+            }
+        }
+        return result;
+    }
+};
+
+class Solution200 {
+private:
+    class Element {
+    public:
+        int i, j;
+        int height;
+        Element(int i, int j, int height) {
+            this->i=i;
+            this->j=j;
+            this->height=height;
+        }
+    };
+    class comphelper {
+    public:
+        bool operator()(Element* a, Element* b) {
+            return a->height>b->height;
+        }
+    };
+    vector<Element*> getNeis(Element* ele, vector<vector<int>>& matrix, vector<vector<bool>>& visited) {
+        int i=ele->i, j=ele->j;
+        int m=(int)matrix.size(), n=(int)matrix[0].size();
+        vector<Element*> result;
+        if (i+1<m) {
+            Element* nei=new Element(i+1, j, matrix[i+1][j]);
+            result.push_back(nei);
+        }
+        if (j+1<n) {
+            Element* nei=new Element(i, j+1, matrix[i][j+1]);
+            result.push_back(nei);
+        }
+        if (i-1>=0) {
+            Element* nei=new Element(i-1, j, matrix[i-1][j]);
+            result.push_back(nei);
+        }
+        if (j-1>=0) {
+            Element* nei=new Element(i, j-1, matrix[i][j-1]);
+            result.push_back(nei);
+        }
+        return result;
+    }
+public:
+    int maxTrapped(vector<vector<int>> matrix) {
+        int m=(int)matrix.size(), n=(int)matrix[0].size();
+        if (m<3 || n<3) {
+            return 0;
+        }
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        priority_queue<Element*, vector<Element*>, comphelper> min_heap;
+        int result=0;
+        Element* ele=NULL;
+        for (int i=0; i<m; i++) {
+            ele=new Element(i, 0, matrix[i][0]);
+            min_heap.push(ele);
+            visited[i][0]=true;
+            ele=new Element(i, n-1, matrix[i][n-1]);
+            min_heap.push(ele);
+            visited[i][n-1]=true;
+        }
+        for (int j=0; j<n; j++) {
+            ele=new Element(0, j, matrix[0][j]);
+            min_heap.push(ele);
+            visited[0][j]=true;
+            ele=new Element(m-1, j, matrix[m-1][j]);
+            min_heap.push(ele);
+            visited[m-1][j]=true;
+        }
+        while (!min_heap.empty()) {
+            ele=min_heap.top();
+            min_heap.pop();
+            vector<Element*> neis = getNeis(ele, matrix, visited);
+            for (Element* nei:neis) {
+                if (visited[nei->i][nei->j]) {
+                    continue;
+                }
+                visited[nei->i][nei->j]=true;
+                result+=max(ele->height-nei->height, 0);
+                //LEVEL(Q)=MAX(HEIGHT(Q), MIN(LEVEL(Q), LEVEL(P)));
+                nei->height=max(ele->height, nei->height);
+                min_heap.push(nei);
+            }
+        }
+        return result;
+    }
+};
+
 int main() {
+    Solution200* new200 = new Solution200();
+    int result200 = new200->maxTrapped({{ 2, 3, 4, 2 },
+                                        { 3, 1, 2, 3 },
+                                        { 4, 3, 5, 4 } });
+    cout<<result200<<endl;
+    Solution199* new199 = new Solution199();
+    int result199 = new199->maxTrapped({2,1,3,2,4});
+    cout<<result199<<endl;
 	Solution198* new198 = new Solution198();
 	new198->largest({ 2,3,1 });
 	Solution195* new195 = new Solution195();
