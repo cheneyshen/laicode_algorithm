@@ -2,6 +2,7 @@ package laicode_java;
 
 import java.util.Arrays;
 
+//Merge Sort
 public class Solution2 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

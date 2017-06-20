@@ -1,5 +1,6 @@
 package laicode_java;
 
+//a To the power of b
 public class Solution7 {
 	//¸´ÖÆjavaÎÄ¼þ
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

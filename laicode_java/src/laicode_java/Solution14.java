@@ -42,6 +42,8 @@ class DictImpl implements Dictionary {
 		return sb.toString();
 	}
 }
+
+//Search in unknown sized sorted array
 public class Solution14 {
 	//¸´ÖÆjavaÎÄ¼þ
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

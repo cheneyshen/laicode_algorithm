@@ -3,6 +3,7 @@ package laicode_java;
 import java.util.Deque;
 import java.util.LinkedList;
 
+//Stack with min()
 public class Solution16 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

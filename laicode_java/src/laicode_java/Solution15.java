@@ -3,6 +3,7 @@ package laicode_java;
 import java.util.Deque;
 import java.util.LinkedList;
 
+//Implement queue by two stacks
 public class Solution15 {
 	//¸´ÖÆjavaÎÄ¼þ
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

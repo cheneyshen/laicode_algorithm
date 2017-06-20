@@ -1,5 +1,6 @@
 package laicode_java;
 
+//Reverse Linked List
 public class Solution18 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

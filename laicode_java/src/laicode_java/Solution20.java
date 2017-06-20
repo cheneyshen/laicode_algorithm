@@ -1,5 +1,6 @@
 package laicode_java;
 
+//Check if Linked List has cycle
 public class Solution20 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

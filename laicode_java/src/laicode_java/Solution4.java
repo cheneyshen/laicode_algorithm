@@ -2,6 +2,7 @@ package laicode_java;
 
 import java.util.Arrays;
 
+//Move 0s to the end I
 public class Solution4 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

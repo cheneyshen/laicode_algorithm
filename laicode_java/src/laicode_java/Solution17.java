@@ -3,6 +3,7 @@ package laicode_java;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+//Sort Numbers in three stacks
 public class Solution17 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

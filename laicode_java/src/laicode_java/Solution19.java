@@ -1,5 +1,6 @@
 package laicode_java;
 
+//Find Middle Node of linkedlist
 public class Solution19 {
 	//¸´ÖÆjavaÎÄ¼ş
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done

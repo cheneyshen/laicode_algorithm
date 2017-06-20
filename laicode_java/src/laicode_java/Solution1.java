@@ -3,6 +3,7 @@ package laicode_java;
 import java.util.Arrays;
 import java.io.*;
 
+//Selection Sort
 public class Solution1 {
 	//¸´ÖÆjavaÎÄ¼þ
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done
