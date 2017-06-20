@@ -1,5 +1,7 @@
 package laicode_java;
 
+import java.util.Arrays;
+
 public class Solution5 {
 	//复制java文件
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done
@@ -10,14 +12,41 @@ public class Solution5 {
 	//awk 'NR==2{gsub("hi", "Hello", $1)}; {print $0}' file1 > newfile
 	//代变量就必须要用“”双引号
 	//for i in {3..100}; do sed -i " " "3s/Solution/Solution$i/" Solution$i.java ; done
-	public void printit() {
-		System.out.println("aa");
+	private void swap(int[] array, int a, int b) {
+		int temp=array[a];
+		array[a]=array[b];
+		array[b]=temp;
+	}
+	public int[] rainbowSort(int[] array) {
+		if (array==null || array.length<=1) {
+			return array;
+		}
+		int neg=0;
+		int one=array.length-1;
+		int zero=0;
+		while(zero<=one) {
+			if (array[zero]==-1) {
+				swap(array, zero, neg);
+				zero++;
+				neg++;
+			}
+			else if(array[zero]==0) {
+				zero++;
+			}
+			else {
+				swap(array, zero, one);
+				one--;
+			}
+		}
+		return array;
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Solution1 s1 = new Solution1();
-		s1.printit();
+		Solution5 s5 = new Solution5();
+		int[] array=new int[] {1,1,1,0,0,0,-1,-1,-1,1,0,0,1};
+		array = s5.rainbowSort(array);
+		System.out.println(Arrays.toString(array));
 		return;
 	}
 }

@@ -1,7 +1,8 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-#ifdef __WIND32
-#include "stdafx.h"
+#ifdef __WINDOWS_
+#progma once
+#include "Stdafx.h"
 #endif
 
 #include <algorithm>	// std::sort
