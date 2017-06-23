@@ -7,37 +7,31 @@ public class Solution122 {
     int m=a.length, n=b.length;
     int total=m+n;
     if(total%2!=0) {
-    	return findKth(a, m, b, n, total/2+1);
+    	return findKth(a, 0, b, 0, total/2+1);
     }
     else {
-    	return (findKth(a, m, b, n, total/2) + 
-    			findKth(a, m, b, n, total/2+1))/2.0;
+    	return (findKth(a, 0, b, 0, total/2) + 
+    			findKth(a, 0, b, 0, total/2+1))/2.0;
     }
   }
   
   private double findKth(int[] a, int m, int[] b, int n, int k) {
-	  if(m>n) {
-		  return findKth(b, n, a, m, k);
+	  if(m>=a.length) {
+		  return b[n+k-1];
 	  }
-	  if(m==0) {
-		  return b[k-1];
+	  if(n>=b.length) {
+		  return a[m+k-1];
 	  }
 	  if(k==1) {
-		  return Math.min(a[0], b[0]);
+		  return Math.min(a[m], b[n]);
 	  }
-	  int p1=Math.min(k/2, m), p2=k-p1;
-	  if(a[p1-1]<b[p2-1]) {
-		  int[] newa=new int[m-p1];
-		  System.arraycopy(a, p1, newa, 0, m-p1);
-		  return findKth(newa, m-p1, b, n, k-p1);
-	  }
-	  else if(a[p1-1]>b[p2-1]) {
-		  int[] newb=new int[n-p2];
-		  System.arraycopy(b, p2, newb, 0, n-p2);
-		  return findKth(a, m, newb, n-p2, k-p2);
+	  int ap=m+k/2-1>=a.length?Integer.MAX_VALUE:a[m+k/2-1];
+	  int bp=n+k/2-1>=b.length?Integer.MIN_VALUE:b[n+k/2-1];
+	  if(ap<bp) {
+		  return findKth(a, m+k/2, b, n, k-k/2);
 	  }
 	  else {
-		  return a[p1-1];
+		  return findKth(a, m, b, n+k/2, k-k/2);
 	  }
   }
   
