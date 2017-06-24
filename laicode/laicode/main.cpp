@@ -4410,63 +4410,88 @@ private:
             return p1.first.first.size()+p1.second.first.size() > p2.first.first.size()+p2.second.first.size();
         }
     };
-    class sorthelper {
-    public:
-        bool operator()(string& a, string& b) {
-            return a.size()>b.size();
-        }
-    };  //sort居然不支持
     struct sorthelper1 {
         bool operator()(string a, string b) {
             return (a.size()>b.size());
         }
     } mysorter; //sort支持这个struct
-    void largestProductHelper(vector<string>& dict, int m, int n, priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>, comphelper>& mypq, int* result) {
+    
+    void largestProductHelperIterative(vector<string>& dict, int m, int n, priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>>& mypq, int* result) {
         int leng=(int)dict.size();
         mypq.push(make_pair(make_pair(dict[m], m), make_pair(dict[n], n)));
         while (!mypq.empty()) {
             pair<pair<string, int>, pair<string, int>> current=mypq.top();
             mypq.pop();
-//            cout<<current.first.first<<" ";
-//            cout<<current.second.first<<endl;
-            if (current.first.first.size()*current.second.first.size()>(*result)) {
-                int checker[8]={0};
-                for (int i=0; i<current.first.first.size(); i++) {
-                    int aa=current.first.first[i]/32;
-                    int bb=current.first.first[i]%32;
-                    checker[aa]|=(1<<bb);
-                }
-                bool unique=true;
-                for (int j=0; j<current.second.first.size(); j++) {
-                    int aa=current.second.first[j]/32;
-                    int bb=current.second.first[j]%32;
-                    if ((checker[aa]>>bb) & 1){
-                        unique=false;
-                        break;
-                    }
-                }
-                if (unique) {
-                    (*result)=(int)current.first.first.size()*(int)current.second.first.size();
-                }
+            int mson=current.first.second;
+            int nson=current.second.second;
+            if(allUnique(current.first.first, current.second.first)) {
+                *result = current.first.first.size()*current.second.first.size();
+                return;
             }
-            if (m+1<leng && n<leng) {
-                largestProductHelper(dict, m+1, n, mypq, result);
+            if (mson+1<nson && nson<leng) {
+                    mypq.push(make_pair(make_pair(dict[mson+1], mson+1), make_pair(dict[nson], nson)));
+                
             }
-            if (m<leng && n+1<leng) {
-                largestProductHelper(dict, m, n+1, mypq, result);
+            if (mson<nson && nson+1<leng) {
+                    mypq.push(make_pair(make_pair(dict[mson], mson), make_pair(dict[nson+1], nson+1)));
             }
         }
         return;
     }
+    
+    void largestProductHelperRecursive(vector<string>& dict, int m, int n, priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>>& mypq, int* result) {
+        int leng=(int)dict.size();
+        mypq.push(make_pair(make_pair(dict[m], m), make_pair(dict[n], n)));
+        while (!mypq.empty()) {
+            pair<pair<string, int>, pair<string, int>> current=mypq.top();
+            mypq.pop();
+            if(allUnique(current.first.first, current.second.first)) {
+                *result = current.first.first.size()*current.second.first.size();
+                return;
+            }
+            if (m+1<n && n<leng) {
+                largestProductHelperRecursive(dict, m+1, n, mypq, result);
+            }
+            if (m<n && n+1<leng) {
+                largestProductHelperRecursive(dict, m, n+1, mypq, result);
+            }
+        }
+        return;
+    }
+    
+    bool allUnique(string& a, string& b) {
+        int checker[8]={0};
+        bool unique=true;
+        for (int i=0; i<a.size(); i++) {
+            int aa=a[i]/32;
+            int bb=a[i]%32;
+            checker[aa]|=(1<<bb);
+        }
+        for (int j=0; j<b.size(); j++) {
+            int aa=b[j]/32;
+            int bb=b[j]%32;
+            if ((checker[aa]>>bb) & 1){
+                unique=false;
+                break;
+            }
+        }
+        return unique;
+    }
+    
 public:
     int largestProduct(vector<string> dict) {
         sort(dict.begin(), dict.end(), mysorter);
-        priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>, comphelper> mypq;
+        priority_queue<pair<pair<string, int>, pair<string, int>>, vector<pair<pair<string, int>, pair<string, int>>>> mypq;
         int result=0;
-        largestProductHelper(dict, 0, 1, mypq, &result);
+        largestProductHelperIterative(dict, 0, 1, mypq, &result);
+        cout<<"Iterative Result:"<<result<<endl;
+        result=0;
+        largestProductHelperRecursive(dict, 0, 1, mypq, &result);
+        cout<<"Recursive Result:"<<result<<endl;
         return result;
     }
 };
+
 
 class Solution193 {
 public:
@@ -4776,9 +4801,9 @@ int main() {
 //    for (int i=1; i<10; i++) {
 //        cout<<new193->kth(i)<<endl;
 //    }
-//    Solution191* new191 = new Solution191();
+    Solution191* new191 = new Solution191();
 //    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
-//    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
+    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
 //    Solution177* new177 = new Solution177();
 //    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
 //    Solution176* new176 = new Solution176();
@@ -5723,6 +5748,6 @@ int main() {
 	//    vector<int> result9 = new9->mergeSort({4, 2, -3, 6, 1});
 	//    Solution4* new4 = new Solution4();
 	//    vector<int> result4 = new4->solve({4, 2, -3, 6, 1});
-	cin.get();
+    //	cin.get();
 	return 0;
 }
