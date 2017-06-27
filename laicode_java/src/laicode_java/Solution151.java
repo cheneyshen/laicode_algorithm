@@ -11,8 +11,42 @@ package laicode_java;
 //{2, 3, 2, 1, 4, 5}, the maximum profit you can make is (3 - 2) + (5 - 1) = 5
 
 public class Solution151 {
-	  public int maxProfit(int[] array) {
-	    // write your solution here
-	    return 0;
-	  }
+	public int maxProfit(int[] array) {
+//		if array[2]>array[1]
+//				profit[2][1]=array[2]-array[1]
+//				else 
+//					profit[2][1]=0;
+//		
+//		if array[j]-array[i]>0 
+//			profit[j][i] = array[j]-array[i]
+//			else
+//				profit[j][i]=0
+//			
+//				profit[j][i]=profit[j][k]+profit[k][i];
+//		return profit[5][0];
+//		0 0 0 0 0 0 
+//		1 0 0 0 0 0
+//		0 1 0 0 0 0
+//		0 0 1 0 0 0
+//		0 0 0 4 0 0
+//		0 0 0 0 5 0
+		int leng=array.length;
+		if(leng<=1) {
+			return 0;
+		}
+		int result=0;
+		for(int i=1;i<leng;i++) {
+			if(array[i]>array[i-1]) {
+				result+=array[i]-array[i-1];
+			}
+		}
+		return result;
 	}
+	
+	public static void main(String[] args) {
+		Solution151 s151 = new Solution151();
+		int[] array={2, 3, 2, 1, 4, 5};
+		int result=s151.maxProfit(array);
+		System.out.println(result);
+	}
+}

@@ -15,8 +15,7 @@ package laicode_java;
 //{4, 0, 1, 0, 0}, if the initial position is 2, you are not able to reach the right end of array, return -1 in this case.
 
 public class Solution149 {
-	  public int minJump(int[] array, int index) {
-	    // write your solution here
+	public int minJump(int[] array, int index) {
 	    return 0;
-	  }
 	}
+}

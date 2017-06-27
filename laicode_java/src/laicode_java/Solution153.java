@@ -12,7 +12,29 @@ package laicode_java;
 
 public class Solution153 {
   public int maxProfit(int[] array, int k) {
-    // write your solution here
-    return 0;
+	  int leng=array.length;
+	  if(leng<=1) {
+		  return 0;
+	  }
+	  if(k<1) {
+		  return 0;
+	  }
+	  int[][] matrix=new int[k+1][leng];
+	  int result=0;
+	  for(int kk=1;kk<=k;kk++) {
+		  int temp=matrix[kk-1][0]-array[0];
+		  for(int ii=1;ii<leng;ii++) {
+			  matrix[kk][ii]=Math.max(matrix[kk][ii-1], array[ii]+temp);
+			  temp=Math.max(temp, matrix[kk-1][ii]-array[ii]);
+			  result=Math.max(result, matrix[kk][ii]);
+		  }
+	  }
+	  return result;
+  }
+  
+  public static void main(String[] args) {
+	  Solution153 s153=new Solution153();
+	  int[] array=new int[]{2, 3, 2, 1, 4, 5, 2, 11};
+	  System.out.println(s153.maxProfit(array, 3));
   }
 }
