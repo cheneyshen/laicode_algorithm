@@ -13,8 +13,27 @@ package laicode_java;
 //the characters used in "aba" are not unique
 
 public class Solution144 {
-	  public boolean allUnique(String word) {
-	    // Write your solution here.
-	    return false;
-	  }
+	public boolean allUnique(String word) {
+		char[] array=word.toCharArray();
+		int[] dict=new int[8];
+		for(int i=0;i<array.length;i++) {
+			int aa=array[i]%32;
+			int bb=array[i]/32;
+			if(dict[bb]>>aa > 0) {
+				return false;
+			}
+			dict[bb]|=1<<aa;
+		}
+		return true;
 	}
+	
+	public static void main(String[] args) {
+		Solution144 s144=new Solution144();
+		boolean result=s144.allUnique("abcd");
+		System.out.println(result);
+		result=s144.allUnique("aba");
+		System.out.println(result);
+		result=s144.allUnique("ac");
+		System.out.println(result);
+	}
+}

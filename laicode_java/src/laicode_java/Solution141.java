@@ -14,7 +14,25 @@ package laicode_java;
 
 public class Solution141 {
 	public int missing(int[] array) {
-	    // write your solution here
-	    return -1;
+		int leng=array.length;
+		if(leng==0) {
+			return 1;
+		}
+		for(int i=0;i<leng;i++) {
+			if(array[i]!=i+1) {
+				return i+1;
+			}
+		}
+	    return leng+1;
+	}
+	
+	public static void main(String[] args) {
+		Solution141 s141 = new Solution141();
+		int[] array = {1,2,3};
+		int result=s141.missing(array);
+		System.out.println(result);
+		array=new int[]{};
+		result=s141.missing(array);
+		System.out.println(result);
 	}
 }
