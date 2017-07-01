@@ -7,51 +7,50 @@ public class Solution120 {
 	int asize=a.length();
 	int bsize=b.length();
 	int csize=c.length();
-	int bj=0, ck=0;
-	char[] alist=a.toCharArray();
-	char[] blist=b.toCharArray();
-	char[] clist=c.toCharArray();
-	for(int i=0;i<asize;) {
-		if(bj<bsize && alist[i]==blist[bj]) {
-			i++;
-			bj++;
-		}
-		else if(ck<csize && alist[i]==clist[ck]) {
-			i++;
-			ck++;
-		}
-		else {
-			return false;
+	if(asize+bsize!=csize) {
+		return false;
+	}
+	boolean[][] interleaved=new boolean[asize+1][bsize+1];
+	interleaved[0][0]=true;
+	for(int i=1;i<=asize;i++) {
+		if(c.charAt(i-1)==a.charAt(i-1) && interleaved[i-1][0]) {
+			interleaved[i][0]=true;
 		}
 	}
-    if(bj==bsize && ck==csize) {
-    	return true;
-    }
-    else {
-    	return false;
-    }
+	for(int i=1;i<=bsize;i++) {
+		if(c.charAt(i-1)==b.charAt(i-1) && interleaved[0][i-1]) {
+			interleaved[0][i]=true;
+		}
+	}
+	for(int i=1;i<=asize;i++) {
+		for(int j=1;j<=bsize;j++) {
+			if((c.charAt(i+j-1)==a.charAt(i-1) && interleaved[i-1][j]) || 
+			(c.charAt(i+j-1)==b.charAt(j-1) && interleaved[i][j-1])) {
+				interleaved[i][j]=true;
+			}
+		}
+	}
+//	for(int i=0;i<=asize;i++) {
+//		for(int j=0;j<=bsize;j++) {
+//			if(interleaved[i][j]) {
+//				System.out.print(1+" ");
+//			}
+//			else {
+//
+//				System.out.print(0+" ");
+//			}
+//		}
+//		System.out.println();
+//	}
+	return interleaved[asize][bsize];
   }
   
   public static void main(String[] args) {
 
 	  Solution120 s120 = new Solution120();
-	  String A="abcde";
-	  String B="acd";
-	  String C="be";
-	  B="adc";
-	  boolean result=s120.canMerge(A, B, C);
+	  boolean result=s120.canMerge("a", "b", "ba");
 	  System.out.println(result);
-	  result=s120.canMerge("XXZXXXY", "XXY", "XXZ");
-	  System.out.println(result);
-	  result=s120.canMerge("XXXXXX", "XXX", "XXX");
-	  System.out.println(result);
-	  result=s120.canMerge("WZXY","XY" ,"WZ" );
-	  System.out.println(result);
-	  result=s120.canMerge("XXY", "XY", "X");
-	  System.out.println(result);
-	  result=s120.canMerge("XXY", "YX", "X");
-	  System.out.println(result);
-	  result=s120.canMerge("XXXXZY", "XXY", "XXZ");
+	  result=s120.canMerge("ab", "ac", "acab");
 	  System.out.println(result);
   }
 }

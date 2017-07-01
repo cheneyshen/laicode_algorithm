@@ -4,8 +4,12 @@ import java.util.*;
 //Search In Shifted Sorted Array II
 public class Solution130 {
 	public int search(int[] array, int target) {
-		int left=0, right=array.length-1;
-		while(left<right) {
+	    int leng=array.length;
+	    if(leng<=0) {
+	    	return -1;
+	    }
+		int left=0, right=leng-1;
+		while(left<=right) {
 			int mid=left+(right-left)/2;
 			if(array[mid]==target) {
 				return mid;
@@ -29,6 +33,7 @@ public class Solution130 {
 				}
 			}
 			else {
+				//array[mid]=array[left], 3, 3, 3, 1, 2  
 				left++;
 			}
 		}
@@ -37,7 +42,7 @@ public class Solution130 {
 	
 	public static void main(String[] args) {
 		Solution130 s130 = new Solution130();
-		int[] array= {3, 3, 3, 1, 3};
+		int[] array= {1};
 		int result=s130.search(array, 1);
 		System.out.println(result);
 	}

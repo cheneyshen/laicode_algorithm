@@ -1,7 +1,7 @@
 package laicode_java;
 import java.util.*;
 
-//Generate random maza
+//Generate random maze
 public class Solution128 {
 	public int[][] maze(int n) {
 		int[][] result=new int[n][n];
@@ -48,7 +48,7 @@ public class Solution128 {
 	
 	public static void main(String[] args) {
 		Solution128 s128 = new Solution128();
-		int[][] result=s128.maze(5);
+		int[][] result=s128.maze(4);
 		for(int i = 0; i < result.length; i++) {
 		      for(int j = 0; j < result[0].length; j++)
 		      {
@@ -60,7 +60,8 @@ public class Solution128 {
 }
 
 enum Dir {
-	NORTH(0, 1), SOUTH(0, -1), EAST(1, 0), WEST(-1, 0);
+//	NORTH(0, 1), SOUTH(0, -1), EAST(1, 0), WEST(-1, 0);
+	NORTH(-1, 0), SOUTH(1, 0), EAST(0, -1), WEST(0, 1);
 	int dx, dy;
 	Dir(int dx, int dy) {
 		this.dx=dx;

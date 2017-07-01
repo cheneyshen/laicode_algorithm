@@ -22,7 +22,7 @@ public class Solution129 {
 			int mid=left+(right-left)/2;
 			int realmid=(mid+shift)%array.length;
 			if(array[realmid]==target) {
-				return mid;
+				return realmid;
 			}
 			else if(array[realmid]>target) {
 				right=mid-1;

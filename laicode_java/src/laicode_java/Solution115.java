@@ -20,12 +20,12 @@ public class Solution115 {
 		int amid=ai+k/2-1;
 		int bmid=bi+k/2-1;
 		int aval=amid>=a.length?Integer.MAX_VALUE:a[amid];
-		int bval=bmid>=b.length?Integer.MIN_VALUE:b[bmid];
-		if(aval<=bval) {
+		int bval=bmid>=b.length?Integer.MAX_VALUE:b[bmid];
+		if(aval<bval) {
 			return helper(a, amid+1, b, bi, k-k/2);
 		}
 		else {
-			return helper(a, bi, b, bmid+1, k-k/2);
+			return helper(a, ai, b, bmid+1, k-k/2);
 		}
 	}
 	
@@ -34,6 +34,10 @@ public class Solution115 {
 		int[] a={1, 4, 6};
 		int[] b={2, 3};
 		int result=s115.kth(a, b, 3);
+		System.out.println(result);
+		a=new int[]{1,2,3,4};
+		b=new int[]{5};
+		result=s115.kth(a, b, 5);
 		System.out.println(result);
 	}
 }

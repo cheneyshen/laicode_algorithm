@@ -19,8 +19,9 @@ public class Solution121 {
 				if(array[start-1]==array[end-1]) {
 					isP[start][end]=end-start<2||isP[start+1][end-1];
 				}
-				if(isP[start][end] && end-start>dist) {
+				if(isP[start][end] && end-start>=dist) {
 					result=s.substring(start-1, end);
+					dist=end-start;
 				}
 			}
 		}
@@ -29,7 +30,9 @@ public class Solution121 {
 	
 	public static void main(String[] args) {
 		Solution121 s121 = new Solution121();
-		String result=s121.longestPalindrome("abbc");
+		String result=s121.longestPalindrome("abacbbcabcb");
+		System.out.println(result);
+		result=s121.longestPalindrome("a");
 		System.out.println(result);
 	}
 }

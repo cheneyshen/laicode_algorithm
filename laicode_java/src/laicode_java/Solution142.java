@@ -28,6 +28,7 @@ public class Solution142 {
 					result.add(b.get(i));
 				}
 			}
+			Collections.sort(result);
 			return result;
 		}
 	}

@@ -3,6 +3,9 @@ package laicode_java;
 //Total Occurrence
 public class Solution132 {
 	public int totalOccurrence(int[] array, int target) {
+		if(array.length<=0) {
+			return 0;
+		}
 		int left=0, right=array.length-1;
 		int first=-1, last=-1;
 		while(left<right-1) {

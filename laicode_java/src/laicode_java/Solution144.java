@@ -19,7 +19,7 @@ public class Solution144 {
 		for(int i=0;i<array.length;i++) {
 			int aa=array[i]%32;
 			int bb=array[i]/32;
-			if(dict[bb]>>aa > 0) {
+			if((dict[bb] & (1 << aa)) > 0) {
 				return false;
 			}
 			dict[bb]|=1<<aa;
@@ -33,7 +33,7 @@ public class Solution144 {
 		System.out.println(result);
 		result=s144.allUnique("aba");
 		System.out.println(result);
-		result=s144.allUnique("ac");
+		result=s144.allUnique("bcdkowa");
 		System.out.println(result);
 	}
 }
