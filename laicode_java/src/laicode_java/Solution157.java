@@ -13,19 +13,44 @@ package laicode_java;
 //You may need to add more fields for the class.
 import java.util.*;
 public class Solution157 {
-	  private final int k;
-	  
-	  public Solution157(int k) {
+	private final int k;
+	private int count;
+	private ArrayList<Integer> result;
+	public Solution157(int k) {
 	    // Complete the constructor if necessary.
 	    this.k = k;
-	  }
-	  
-	  public void read(int value) {
-	    // Write your implementation here.
-	  }
-	  
-	  public List<Integer> sample() {
-	    // Write your implementation here.
-	    return new ArrayList<Integer>();
-	  }
+	    this.count=0;
+	    this.result=new ArrayList<Integer>();
 	}
+	  
+	public void read(int value) {
+		// Write your implementation here.
+		if(result.size()<k) {
+			result.add(value);
+			count++;
+		}
+		else {
+			int index=(int)Math.random()*count;
+			if(index<k) {
+				result.set(index, value);
+			}
+		}
+	}
+	  
+	public List<Integer> sample() {
+	    // Write your implementation here.
+	    return result;
+	}
+	
+	public static void main(String[] main) {
+		Solution157 s157 = new Solution157(5);
+		s157.read(1);
+		s157.read(2);
+		s157.read(3);
+		s157.read(4);
+		s157.read(5);
+		s157.read(6);
+		List<Integer> result=s157.sample();
+		System.out.println(result);
+	}
+}

@@ -8,8 +8,49 @@ package laicode_java;
 //Input: n = 4, Return 5.
 
 public class Solution163 {
-  public int stairs(int n) {
-    //Input your code here
-    return 0;
-  }
+	public int stairs(int n) {
+//		0 1
+//		1
+//
+//		0 1 2
+//		1 1 0
+//		2 0 0
+//
+//		0 1 2 3
+//		1 1 1 0
+//		2 0 1 0
+//		1 2 0 0
+//
+//		0 1 2 3 4
+//		1 1 1 1 0
+//		1 2 0 1 0
+//		1 1 2 0 0
+//		2 0 2 0 0
+//		2 0 1 1 0
+		if(n<=0) {
+			return 0;
+		}
+		else if(n==1) {
+			return 1;
+		}
+		else if(n==2) {
+			return 2;
+		}
+		else {
+			int[] table=new int[n];
+			table[0]=1;
+			table[1]=2;
+			for(int i=2;i<n;i++) {
+				table[i]=table[i-1]+table[i-2];
+			}
+			return table[n-1];
+		}
+	}
+	
+	public static void main(String[] args) {
+		Solution163 s163 = new Solution163();
+		System.out.println(s163.stairs(4));
+	}
 }
+
+
