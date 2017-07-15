@@ -9,11 +9,8 @@ import java.util.*;
 
 public class Solution162 {
 	public int numOfTrees(int n) {
-		if(n<=0) {
+		if(n<=1) {
 			return 0;
-		}
-		else if(n==1) {
-			return 1;
 		}
 		List<TreeNode> result=constuctBST(1, n);
 		return result.size();

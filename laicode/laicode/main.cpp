@@ -19,8 +19,10 @@
 #include <unordered_map>
 #include <vector>
 #include <math.h>       /* pow */
+#include <sstream>
+#include <unordered_set>
 
-// C++ program to find largest rectangle with all 1s in a binary matrix
+// C++ program to  largest rectangle with all 1s in a binary matrix
 using namespace std; 
 //
 //  main.cpp
@@ -81,6 +83,22 @@ public:
 	GraphNode(int v) : value(v) {}
 };
 
+class Point {
+public:
+    static const int right=0, down=1, left=2, up=3;
+    int d, x, y;
+    Point(int d, int x, int y): d(d), x(x), y(y){
+        
+    }
+    bool equal(Point p) {
+        if(d==p.d && x==p.x && y==p.y) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+};
 static void printintArray(vector<int> A)
 {
 	int i;
@@ -4674,9 +4692,13 @@ public:
 class Solution199 {
 public:
     int maxTrapped(vector<int> array) {
-        int i=0, j=(int)array.size();
+        int i=0, j=(int)array.size()-1;
         int result=0;
         int left_max=0, right_max=0;
+        if(j<=1) {
+            return result;
+        }
+        //{1,3,2,4,1,3,2,4,3,2}
         while (i<=j) {
             left_max=max(left_max, array[i]);
             right_max=max(right_max, array[j]);
@@ -4778,32 +4800,821 @@ public:
     }
 };
 
+class Solution500 {
+private:
+    const char flag='1';
+    void dfsHelper(vector<string>& zombies, vector<bool>& visited, int index, const char& target) {
+        for(int cursor=0;cursor<zombies.size();cursor++) {
+            const char& refchar = zombies[index].at(cursor);
+            if(refchar==target && visited[cursor]==false) {
+                visited[cursor]=true;
+                dfsHelper(zombies, visited, cursor, target);
+            }
+        }
+        return;
+    }
+    
+public:
+    int zombieCluster(vector<string> zombies) {
+        int n=(int)zombies.size();
+        if(n<=1) {
+            return n;
+        }
+        vector<bool> visited(n, false);
+        int result=0;
+        for(int zombie=0;zombie<n;zombie++) {
+            if(visited[zombie]==false) {
+                result++;
+                dfsHelper(zombies, visited, zombie, flag);
+            }
+        }
+        return result;
+    }
+
+};
+
+class Solution501 {
+private:
+    void dfsHelper(string& input, int i, int leng, string& combo, vector<string>& result) {
+        if(i==leng-1) {
+            combo+=input[i];
+            result.push_back(combo);
+            combo.pop_back();
+            return;
+        }
+        combo+=input[i];
+        combo+=" ";
+        dfsHelper(input, i+1, leng, combo, result);
+        combo.pop_back();
+        dfsHelper(input, i+1, leng, combo, result);
+        combo.pop_back();
+    }
+    
+public:
+    vector<string> listspace(string input) {
+        int leng=(int)input.size();
+        vector<string> result;
+        if(leng<=0) {
+            return result;
+        }
+        string combo="";
+        dfsHelper(input, 0, leng, combo, result);
+        return result;
+    }
+};
+
+
+class Solution502 {
+public:
+    bool isCousions(TreeNode* root, TreeNode* one, TreeNode* two) {
+        if(root==nullptr) {
+            return false;
+        }
+        if(one==two) {
+            return false;
+        }
+        vector<TreeNode*> path;
+        TreeNode* lparent=NULL;
+        TreeNode* rparent=NULL;
+        int lHeight=getHeight(root, one, path, &lparent);
+        path.clear();
+        int rHeight=getHeight(root, two, path, &rparent);
+        if(lHeight!=rHeight) {
+            return false;
+        }
+        if(lparent==rparent) {
+            return false;
+        }
+        return true;
+    }
+private:
+    int getHeight(TreeNode* root, TreeNode* target, vector<TreeNode*>& path, TreeNode** parent) {
+        if(root==NULL) {
+            return 0;
+        }
+        if(root==target) {
+            *parent=path[path.size()-1];
+            return 1;
+        }
+        path.push_back(root);
+        int left=getHeight(root->left, target, path, parent);
+        int right=getHeight(root->right, target, path, parent);
+        path.pop_back();
+        return max(left, right)+1;
+    }
+};
+
+class Solution503 {
+public:
+    int minCut(int n) {
+        int result=minCutHelper(n);
+        return result;
+    }
+private:
+    int minCutHelper(int n) {
+        if(n<=0) {
+            return 0;
+        }
+        for(int i=n/2+1;i>=1;i--) {
+            if(i*i==n) {
+                return 1;
+            }
+            else if(i*i<n) {
+                return 1+minCutHelper(n-i*i);
+            }
+        }
+        return n;
+    }
+};
+
+class Solution504 {
+public:
+    bool cycle(vector<string> array) {
+        int leng=(int)array.size();
+        if(leng<=0) {
+            return false;
+        }
+        vector<string> result;
+        result.push_back(array[0]);
+        vector<bool> visited(leng, false);
+        return dfsHelper(array, leng, result, visited, array[0][0]);
+    }
+private:
+    bool dfsHelper(vector<string>& array, int leng, vector<string>& result, vector<bool>& visited, char sign) {
+        if(result.size()==leng) {
+            if(result[leng-1][result[leng-1].length()-1]==sign) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        string str=result[result.size()-1];
+        char lastsign=str[str.length()-1];
+        for(int i=1;i<leng;i++) {
+            if(visited[i]==true) {
+                continue;
+            }
+            if(lastsign==array[i][0]) {
+                visited[i]=true;
+                result.push_back(array[i]);
+                bool curr=dfsHelper(array, leng, result, visited, lastsign);
+                if(curr) {
+                    return true;
+                }
+                else {
+                    visited[i]=false;
+                    result.pop_back();
+                }
+            }
+        }
+        return false;
+    }
+};
+
+class Solution183 {
+public:
+    vector<int> solve(vector<int> array, int target) {
+        if(array.size()<=1) {
+            return vector<int> ();
+        }
+        sort(array.begin(), array.end());
+        if(array.size()==2) {
+            return array;
+        }
+        int start=0, end=(int)array.size()-1;
+        int minDist=INT_MAX;
+        vector<int> result;
+        while(start<end) {
+            int sum=array[start]+array[end];
+            int dist=abs(sum-target);
+            if(dist<minDist) {
+                result={array[start], array[end]};
+                minDist=dist;
+            }
+            if(dist==0) {
+                return result;
+            }
+            else if(sum>target) {
+                end--;
+            }
+            else {
+                start++;
+            }
+        }
+        return result;
+    }
+};
+
+class Solution184 {
+public:
+    int smallerPairs(vector<int> array, int target) {
+        if(array.size()<=1) {
+            return 0;
+        }
+        sort(array.begin(), array.end());
+        if(array.size()==2) {
+            if(array[0]+array[1]<=target) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+        int result=0;
+        for(int i=0;i<array.size()-1 && array[i]<=target;++i) {
+            int other=target-array[i];
+            int low=i, high=(int)array.size()-1;
+            int mid = i;
+            while(low<=high) {
+                mid=low+(high-low)/2;
+                if(array[mid]<other) {
+                    if(mid+1<=high && array[mid+1]>=other) {
+                        break;
+                    }
+                    else {
+                        low=mid+1;
+                    }
+                }
+                else {
+                    if(mid-1>=low && array[mid-1]<other) {
+                        mid=mid-1;
+                        break;
+                    }
+                    else {
+                        high=mid-1;
+                    }
+                }
+            }
+            result+=mid-i;
+        }
+        return result;
+    }
+    
+};
+
+class Solution185 {
+public:
+    bool existSum(vector<int> a, vector<int> b, int target) {
+        vector<int> vb=b;
+        sort(vb.begin(), vb.end());
+        for(int i=0;i<a.size();++i) {
+            int other=target-a[i];
+            int start=0, end=(int)vb.size()-1;
+            while(start<=end) {
+                int mid=start+(end-start)/2;
+                if(vb[mid]==other) {
+                    return true;
+                }
+                else if(vb[mid]>other){
+                    end=mid-1;
+                }
+                else {
+                    start=mid+1;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+class Solution187 {
+public:
+    bool exist(vector<int> a, vector<int> b, vector<int> c, int target) {
+        unordered_map<int, int> lookup;
+        for(int i=0;i<c.size();i++) {
+            lookup[c[i]]++;
+        }
+        for(int i=0;i<a.size();i++) {
+            for(int j=0;j<b.size();j++) {
+                if(lookup[target-a[i]-b[j]]>0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+class Solution192 {
+//    0 0
+//    1 0
+//    0 1
+//    2 0
+//    1 1
+//    3 0
+public:
+    int kth(int k) {
+        if(k<=0) {
+            return 0;
+        }
+        if(k==1){
+            return 1;
+        }
+        vector<int> result(k, 0);
+        int i2=0, i3=0;
+        int next=1;
+        result[0]=1;
+        for(int i=1;i<k;++i) {
+            next=min(result[i2]*2, result[i3]*3);
+            result[i]=next;
+            if(result[i]==result[i2]*2) {
+                i2++;
+            }
+            if(result[i]==result[i3]*3) {
+                i3++;
+            }
+        }
+        return result[k-1];
+    }
+};
+
+class Solution196 {
+private:
+    vector<pair<int, int>> getNeis(int x, int y, int rows, int cols) {
+        vector<pair<int, int>> result;
+        if(x-1>=0) {
+            result.push_back(make_pair(x-1, y));
+        }
+        if(x+1<rows) {
+            result.push_back(make_pair(x+1, y));
+        }
+        if(y-1>=0) {
+            result.push_back(make_pair(x, y-1));
+        }
+        if(y+1<cols) {
+            result.push_back(make_pair(x, y+1));
+        }
+        return result;
+    }
+    
+    void getDist(int x, int y, vector<vector<int>>& dist, int rows, int cols) {
+        vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+        queue<pair<int, int>> myque;
+        myque.push(make_pair(x, y));
+        visited[x][y]=true;
+        while(!myque.empty()) {
+            int size=(int)myque.size();
+            for(int i=0;i<size;++i) {
+                pair<int, int> cur=myque.front();
+                myque.pop();
+                vector<pair<int, int>> neibs=getNeis(cur.first, cur.second, rows, cols);
+                for(int m=0;m<neibs.size();++m) {
+                    if(visited[neibs[m].first][neibs[m].second]==false) {
+                        visited[neibs[m].first][neibs[m].second]=true;
+                        dist[neibs[m].first][neibs[m].second]=dist[cur.first][cur.second]+1;
+                        myque.push(neibs[m]);
+                    }
+                }
+            }
+        }
+    }
+public:
+    vector<int> solve(vector<vector<char>> gym) {
+        int rows=(int)gym.size();
+        if(rows<=0) {
+            return vector<int>();
+        }
+        int cols=(int)gym[0].size();
+        if(cols<=0) {
+            return vector<int>();
+        }
+        vector<pair<int, int>> equips;
+        for(int i=0;i<rows;i++) {
+            for(int j=0;j<cols;j++) {
+                if(gym[i][j]=='E') {
+                    equips.push_back(make_pair(i, j));
+                }
+            }
+        }
+        if(equips.size()<=0) {
+            return vector<int>();
+        }
+        if(equips.size()==1) {
+            return {equips[0].first, equips[1].second};
+        }
+        vector<int> result(2, 0);
+        vector<vector<vector<int>>> dist(equips.size(), vector<vector<int>>(rows, vector<int>(cols, 0)));
+        for(int i=0;i<equips.size();i++) {
+            getDist(equips[i].first, equips[i].second, dist[i], rows, cols);
+        }
+        for(int m=1;m<equips.size();++m) {
+            for(int i=0;i<rows;++i) {
+                for(int j=0;j<cols;++j) {
+                    dist[0][i][j]+=dist[m][i][j];
+                }
+            }
+        }
+        int minValue=dist[0][0][0];
+        for(int i=0;i<rows;++i) {
+            for(int j=0;j<cols;++j) {
+                if(minValue>dist[0][i][j]) {
+                    minValue=dist[0][i][j];
+                    result[0]=i;
+                    result[1]=j;
+                }
+            }
+        }
+        return result;
+    }
+};
+
+class Solution201 {
+public:
+    int largest(vector<int> array) {
+        int result=0;
+        int leng=(int)array.size();
+        if(leng<=0) {
+            return result;
+        }
+        int left=0, right=leng-1;
+        while(left<right) {
+            int minheight=min(array[left], array[right]);
+            result=max(result, minheight*(right-left));
+            if (left<right && array[left]<=array[right]) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+        return result;
+    }
+};
+
+class Solution505 {
+private:
+    int getLeftHeight(TreeNode* root) {
+        if(root==NULL) {
+            return 0;
+        }
+        return getLeftHeight(root->left)+1;
+    }
+    int getRightHeight(TreeNode* root) {
+        if(root==NULL) {
+            return 0;
+        }
+        return getRightHeight(root->right)+1;
+    }
+    
+public:
+    int count(TreeNode* root) {
+        //base case
+        if(root==NULL) {
+            return 0;
+        }
+        if(root->left==NULL && root->right==NULL) {
+            return 1;
+        }
+        int left=getLeftHeight(root->left);
+        int right=getRightHeight(root->right);
+        if(left==right) {
+            return pow(2, left+1)-1;
+        }
+        else {
+            int leftCounts=count(root->left);
+            int rightCounts=count(root->right);
+            return leftCounts+rightCounts+1;
+        }
+    }
+};
+
+class Solution506 {
+private:
+    bool isExist(set<Point*>& list, Point* p) {
+        bool result=false;
+        set<Point*>::iterator it;
+        for(it=list.begin(); it!=list.end(); ++it) {
+            if((*it)->d==p->d && (*it)->x==p->x && (*it)->y==p->y) {
+                result=true;
+            }
+        }
+        cout<<result<<endl;
+        return result;
+    }
+    
+    Point* go(Point* start, char command) {
+        if(command=='G') {
+            if(start->d==start->right) {
+                return new Point(start->d, start->x+1, start->y);
+            }
+            else if(start->d==start->down) {
+                return new Point(start->d, start->x, start->y-1);
+            }
+            else if(start->d==start->left) {
+                return new Point(start->d, start->x-1, start->y);
+            }
+            else if(start->d==start->up) {
+                return new Point(start->d, start->x, start->y+1);
+            }
+        }
+        else if(command=='L') {
+            return new Point((start->d+4-1)%4, start->x, start->y);
+        }
+        else if(command=='R') {
+            return new Point((start->d+1)%4, start->x, start->y);
+        }
+        return start;
+    }
+public:
+    vector<string> doesCircleExist(vector < string > commands) {
+        int leng=(int)commands.size();
+        vector<string> result;
+        if(leng<=0) {
+            return {""};
+        }
+        for(int i=0;i<leng;++i) {
+            int leng2=(int)commands[i].size();
+            if(leng2<=0) {
+                result.push_back("");
+            }
+            if(leng2==1) {
+                if(commands[i][0]=='G') {
+                    result.push_back("NO");
+                }
+                else {
+                    result.push_back("YES");
+                }
+            }
+            else {
+                Point* current=new Point(0, 0, 0);
+                set<Point*> lookup;
+                lookup.insert(current);
+                for(int i=0;i<4;++i) {
+                    for(int j=0;j<leng2;j++) {
+                        current=go(current, commands[i].at(j));
+                    }
+                    if(isExist(lookup, current)) {
+                        result.push_back("YES");
+                    }
+                    else {
+                        result.push_back("NO");
+                    }
+                }
+                
+            }
+        }
+        return result;
+    }
+};
+
+
+int generateMatrix(vector<vector<int>>& matrix, int rows, int cols) {
+    int count=1;
+    for(int i=0;i<rows;i++) {
+        for(int j=0;j<cols;j++) {
+            matrix[i][j]=count++;
+        }
+    }
+    return 0;
+}
+int printSpiral(vector<vector<int>>& matrix, int offset, int rows, int cols) {
+    if(rows<=0 || cols<=0) {
+        return 0;
+    }
+    if(rows==1) {
+        for(int x=0;x<cols;x++) {
+            cout<<matrix[0+offset][x+offset]<<",";
+        }
+        return 0;
+    }
+    if(cols==1) {
+        for(int x=0;x<rows;x++) {
+            cout<<matrix[x+offset][0+offset]<<",";
+        }
+        return 0;
+    }
+    for(int i=0;i<cols-1;i++) {
+        cout<<matrix[0+offset][i+offset]<<",";
+    }
+    for(int j=0;j<rows-1;j++) {
+        cout<<matrix[j+offset][cols-1-offset]<<",";
+    }
+    for(int m=cols-1;m>0;m--) {
+        cout<<matrix[rows-1-offset][m+offset]<<",";
+    }
+    for(int n=rows-1;n>0;n--) {
+        cout<<matrix[n+offset][0+offset]<<",";
+    }
+    printSpiral(matrix, offset+1, rows-2, cols-2);
+    return 0;
+}
+
+class Solution507 {
+private:
+    void dfs(unordered_map<int, unordered_set<int>>& mp, unordered_set<int>& visited, set<int>& result, int i, int start) {
+        visited.insert(i);
+        for(auto next:mp[i]) {
+            if(result.count(next)!=0) {
+                result.erase(next);
+                result.insert(start);
+                continue;
+            }
+            if(visited.count(next)) {
+                continue;
+            }
+            dfs(mp, visited, result, next, start);
+        }
+    }
+public:
+    vector<int> putad(unordered_map<int, unordered_set<int>>& mp) {
+        set<int> result;
+        vector<int> output;
+        unordered_set<int> visited;
+        for(auto i:mp) {
+            cout<<i.first<<endl;
+            if(!visited.count(i.first)) {
+                result.insert(i.first);
+                dfs(mp, visited, result, i.first, i.first);
+            }
+        }
+        copy(result.begin(), result.end(), back_inserter(output));
+        return output;
+    }
+};
+
+struct host {
+    int id;
+    int score;
+};
+
+vector<vector<int>> counting(vector<vector<int>>& input, unordered_map<int, int>& lookup) {
+    vector<vector<int>> result;
+    for(auto i:input) {
+        if(lookup[i[0]]==0) {
+            result.push_back(i);
+        }
+        lookup[i[0]]++;
+    }
+    return result;
+}
+
+bool comparebyscore(const vector<int>& a, const vector<int>& b) {
+    if(a[1]>=b[1]) {
+        return true;
+    }
+    return false;
+}
+
+vector<vector<int>> sorting(vector<vector<int>>& input) {
+    vector<vector<int>> result=input;
+    sort(result.begin(), result.end(), comparebyscore);
+    return result;
+}
+
+// To execute C++, please define "int main()"
 int main() {
-    Solution200* new200 = new Solution200();
-    int result200 = new200->maxTrapped({{ 2, 3, 4, 2 },
-                                        { 3, 1, 2, 3 },
-                                        { 4, 3, 5, 4 } });
-    cout<<result200<<endl;
-    Solution199* new199 = new Solution199();
-    int result199 = new199->maxTrapped({2,1,3,2,4});
-    cout<<result199<<endl;
-	Solution198* new198 = new Solution198();
-	new198->largest({ 2,3,1 });
-	Solution195* new195 = new Solution195();
-	vector<int> result195 = new195->solve({	{ 'E', 'O', 'C' },
-											{ 'C', 'E',  'C' },
-											{ 'C', 'C',  'C' } });
-	cout << result195[0] << " " << result195[1] << endl;
-    Solution194* new194 = new Solution194();
-    vector<int> result194 = new194->closest({1,3},{2,3},{2,4},3 );
-	cout << result194[0] << " " << result194[1] << " " << result194[1] << " " << endl;
+    
+    vector<vector<int>> words = { {1,200}, {2,199}, {3, 198}, {4, 197}, {5, 196}, \
+        {6, 195}, {4, 194}, {1, 193}, {7, 192}};
+    unordered_map<int, int> lookup;
+    vector<vector<int>> result=counting(words, lookup);
+    vector<vector<vector<int>>> pages(10, vector<vector<int>>());
+    vector<vector<vector<int>>> output;
+    int k=6, cursor=0, j=0;
+    for(auto i:words) {
+        if(lookup[i[0]]>0) {
+            if(pages[j].size()<k) {
+                pages[j].push_back(i);
+            }
+            else {
+                pages[++j].push_back(i);
+            }
+            lookup[i[0]]--;
+        }
+    }
+    for(auto i:pages) {
+        vector<vector<int>> current=sorting(i);
+        output.push_back(current);
+    }
+//    Solution507* s507 = new Solution507();
+//    unordered_map<int, unordered_set<int>> graph;
+//    graph[1].insert(2);
+//    graph[2].insert(3);
+//    graph[3].insert(1);
+//    graph[4].insert(2);
+//    vector<int> o507=s507->putad(graph);
+//    cout<<o507[0]<<endl;
+//    Solution506* new506 = new Solution506();
+//    cout<<new506->doesCircleExist({"GRGL"})[0]<<endl;
+//    Solution505* new505 = new Solution505();
+//    TreeNode* t1=new TreeNode(1);
+//    TreeNode* t2=new TreeNode(2);
+//    TreeNode* t3=new TreeNode(3);
+//    TreeNode* t4=new TreeNode(4);
+//    TreeNode* t5=new TreeNode(5);
+//    TreeNode* t6=new TreeNode(6);
+//    TreeNode* t7=new TreeNode(7);
+//    t1->left=t2;
+//    t1->right=t3;
+//    t2->left=t4;
+//    t2->right=t5;
+//    t3->left=t6;
+//    t3->right=t7;
+//    cout<<new505->count(t1)<<endl;
+//    t1=NULL;
+//    cout<<new505->count(t1)<<endl;
+//    t1=new TreeNode(10);
+//    cout<<new505->count(t1)<<endl;
+//    Solution201* new201 = new Solution201();
+//    int result=new201->largest({ 2, 1, 3, 1, 2, 1 });
+//    cout<<result<<endl;
+//    Solution196* new196 = new Solution196();
+//    vector<int> result=new196->solve( { { 'E', ' ', ' ' },
+//                                        { ' ', 'E', ' ' },
+//                                        { 'E', ' ', ' ' } });
+//    cout<<result[0]<<" "<<result[1]<<endl;
+//    Solution192* new192 = new Solution192();
+//    cout<<new192->kth(1)<<endl;
+//    cout<<new192->kth(2)<<endl;
+//    cout<<new192->kth(3)<<endl;
+//    cout<<new192->kth(4)<<endl;
+//    cout<<new192->kth(5)<<endl;
+//    cout<<new192->kth(6)<<endl;
+//    cout<<new192->kth(7)<<endl;
+//    Solution187* new187 = new Solution187();
+//    cout<<new187->exist({1, 3, 5}, {8, 2}, {3}, 14)<<endl;
+//    Solution185* new185 = new Solution185();
+//    vector<int> a= {3, 1, 5};
+//    vector<int> b= {2, 8};
+//    int target=7;
+//    bool result=new185->existSum(a, b, target);
+//    cout<<result<<endl;
+//    a= {3, 4, -1, 0};
+//    b= {5, -1, 2};
+//    target=-2;
+//    result=new185->existSum(a, b, target);
+//    cout<<result<<endl;
+//    Solution184* new184 = new Solution184();
+//    vector<int> array = {-1, 0, 1};
+//    cout<<new184->smallerPairs(array, 1)<<endl;
+//    cout<<new184->smallerPairs(array, 0)<<endl;
+//    cout<<new184->smallerPairs(array, -1)<<endl;
+//    array={1, 2, 2, 4, 7};
+//    cout<<new184->smallerPairs(array, 7)<<endl;
+//    Solution183* new183 = new Solution183();
+//    vector<int> result183=new183->solve({1, 3, 7, 11, 13}, 7);
+//    cout<<result183[0]<<" "<<result183[1]<<endl;
+//    Solution504* new504 = new Solution504();
+//    cout<<new504->cycle({"aab", "bac", "aaa"})<<endl;
+//    Solution503* new503 = new Solution503();
+//    cout<<new503->minCut(10)<<endl;
+//    Solution502* new502 = new Solution502();
+//    TreeNode* t6=new TreeNode(6);
+//    TreeNode* t3=new TreeNode(3);
+//    TreeNode* t5=new TreeNode(5);
+//    TreeNode* t7=new TreeNode(7);
+//    TreeNode* t8=new TreeNode(8);
+//    TreeNode* t1=new TreeNode(1);
+//    TreeNode* t2=new TreeNode(2);
+//    t6->left=t3;
+//    t3->left=t7;
+//    t3->right=t8;
+//    t6->right=t5;
+//    t5->left=t1;
+//    t5->right=t2;
+//    cout<<new502->isCousions(t6, t7, t1)<<endl;
+//    Solution501* new501 = new Solution501();
+//    vector<string> result=new501->listspace("abc");
+//    for(auto i:result) {
+//        cout<<i<<endl;
+//    }
+//    Solution500* new500 = new Solution500();
+//    vector<string> array;
+//    array.push_back("1100");
+//    array.push_back("1110");
+//    array.push_back("0110");
+//    array.push_back("0001");
+//    int result=new500->zombieCluster(array);
+//    array.clear();
+//    cout<<result<<endl;
+//    Solution200* new200 = new Solution200();
+//    int result200 = new200->maxTrapped({{ 2, 3, 4, 2 },
+//                                        { 3, 1, 2, 3 },
+//                                        { 4, 3, 5, 4 } });
+//    cout<<result200<<endl;
+//    Solution199* new199 = new Solution199();
+//    int result199 = new199->maxTrapped({2,1,3,2,4});
+//    cout<<result199<<endl;
+//    result199 = new199->maxTrapped({1,3,2,4,1,3,2,4,3,2});
+//    cout<<result199<<endl;
+//	Solution198* new198 = new Solution198();
+//	new198->largest({ 2,3,1 });
+//	Solution195* new195 = new Solution195();
+//	vector<int> result195 = new195->solve({	{ 'E', 'O', 'C' },
+//											{ 'C', 'E',  'C' },
+//											{ 'C', 'C',  'C' } });
+//	cout << result195[0] << " " << result195[1] << endl;
+//    Solution194* new194 = new Solution194();
+//    vector<int> result194 = new194->closest({1,3},{2,3},{2,4},3 );
+//	cout << result194[0] << " " << result194[1] << " " << result194[1] << " " << endl;
 //    Solution193* new193 = new Solution193();
 //    for (int i=1; i<10; i++) {
 //        cout<<new193->kth(i)<<endl;
 //    }
-    Solution191* new191 = new Solution191();
+//    Solution191* new191 = new Solution191();
 //    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
-    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
+//    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
 //    Solution177* new177 = new Solution177();
 //    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
 //    Solution176* new176 = new Solution176();

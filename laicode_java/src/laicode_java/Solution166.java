@@ -16,8 +16,30 @@ package laicode_java;
 //¡°acb2c4¡± ¡ú ¡°acbbcccc¡±
 
 public class Solution166 {
-	  public String decompress(String input) {
-	    // Write your solution here.
-	    return "";
-	  }
+	public String decompress(String input) {
+	    int leng=input.length();
+	    if(leng<=1) {
+	    	return input;
+	    }
+	    String output="";
+	    char current=input.charAt(0);
+	    for(int i=0;i<leng;++i) {
+	    	if(input.charAt(i)>'9') {
+	    		current=input.charAt(i);
+	    		output+=current;
+	    	}
+	    	else {
+	    		for(char j='2';j<=input.charAt(i);j++) {
+	    			output+=current;
+	    		}
+	    	}
+	    }
+	    return output;
 	}
+	
+	public static void main(String[] args) {
+		Solution166 s166=new Solution166();
+		String result=s166.decompress("acb2c4");
+		System.out.println(result);
+	}
+}
