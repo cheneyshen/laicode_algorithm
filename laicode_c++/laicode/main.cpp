@@ -126,6 +126,48 @@ public:
 	}
 };
 
+class Solution8 {
+public:
+    int evalRPN(vector<string> tokens) {
+        int leng = tokens.size();
+        stack<int> stk;
+        for (int i = 0; i < leng; i++)
+        {
+            if (tokens[i][0]>='1' && tokens[i][0] <= '9')
+            {
+                int token = stoi(tokens[i]);
+                stk.push(token);
+            }
+            else if (tokens[i]=="+") {
+                int b = stk.top(); stk.pop();
+                int a = stk.top(); stk.pop();
+                int c = a + b;
+                stk.push(c);
+            }
+            else if (tokens[i] == "-") {
+                int b = stk.top(); stk.pop();
+                int a = stk.top(); stk.pop();
+                int c = a - b;
+                stk.push(c);
+            }
+            else if (tokens[i] == "*") {
+                int b = stk.top(); stk.pop();
+                int a = stk.top(); stk.pop();
+                int c = a*b;
+                stk.push(c);
+            }
+            else if(tokens[i]=="/")
+            {
+                int b = stk.top(); stk.pop();
+                int a = stk.top(); stk.pop();
+                int c = a / b;
+                stk.push(c);
+            }
+        }
+        return stk.top();
+    }
+};
+
 class Solution9 {
 public:
 
@@ -228,29 +270,6 @@ public:
 			}
 		}
 		return result;
-	}
-};
-
-class Solution258 {
-public:
-	vector<int> moveZero(vector<int> array) {
-		int leng = (int)array.size();
-		if (leng <= 0) {
-			return array;
-		}
-		int front = 0, end = leng - 1;
-		while (front <= end) {
-			if (array[front] != 0) {
-				front++;
-			}
-			else if (array[end] == 0) {
-				end--;
-			}
-			else {
-				swap(array[front], array[end]);
-			}
-		}
-		return array;
 	}
 };
 
@@ -427,7 +446,7 @@ public:
 	}
 };
 
-class Solution18 {
+class Solution19 {
 public:
 	vector<int> kClosest(vector<int> array, int target, int k) {
 		int leng = (int)array.size();
@@ -504,6 +523,77 @@ public:
 		}
 		return binarySearch(input, target, left, right);
 	}
+};
+
+class Solutino21 {
+//    Search In Shifted Sorted Array I
+//    Given a target integer T and an integer array A, A is sorted in ascending order first, then shifted by an arbitrary number of positions.
+//    
+//    For Example, A = {3, 4, 5, 1, 2} (shifted left by 2 positions). Find the index i such that A[i] == T or return -1 if there is no such index.
+//        
+//        Assumptions
+//        
+//        There are no duplicate elements in the array.
+//        Examples
+//        
+//        A = {3, 4, 5, 1, 2}, T = 4, return 1
+//        A = {1, 2, 3, 4, 5}, T = 4, return 3
+//        A = {3, 5, 6, 1, 2}, T = 4, return -1
+//        Corner Cases
+//    
+//        What if A is null or A is of zero length? We should return -1 in this case.
+public:
+    int search(vector<int> input, int target) {
+        int left=0, right=input.size()-1;
+        while (left<right) {
+            int mid=left+(right-left)/2;
+            if (input[mid]>input[right]) {
+                left=mid+1;
+            }
+            else {
+                right=mid;
+            }
+        }
+        int shift=left;
+        left=0, right=input.size()-1;
+        while (left<=right) {
+            int mid=left+(right-left)/2;
+            int realmid=(mid+shift)%input.size();
+            if(input[realmid]==target) {
+                return realmid;
+            }
+            else if(input[realmid]>target) {
+                right=mid-1;
+            }
+            else {
+                left=mid+1;
+            }
+        }
+        return -1;
+    }
+};
+
+class Solution22 {
+//    Search In Shifted Sorted Array II
+//    Given a target integer T and an integer array A, A is sorted in ascending order first, then shifted by an arbitrary number of positions.
+//    
+//    For Example, A = {3, 4, 5, 1, 2} (shifted left by 2 positions). Find the index i such that A[i] == T or return -1 if there is no such index.
+//        
+//        Assumptions
+//        
+//        There could be duplicate elements in the array.
+//        Examples
+//        
+//    A = {3, 4, 5, 1, 2}, T = 4, return 1
+//    A = {3, 3, 3, 1, 3}, T = 1, return 3
+//    A = {3, 1, 3, 3, 3}, T = 1, return 1
+//    ​Corner Cases
+//    
+//    What if A is null or A is of zero length? We should return -1 in this case.
+public:
+    int solve(vector<int> input, int target) {
+        return 0;
+    }
 };
 
 class Solution267 {
@@ -3104,6 +3194,30 @@ public:
 		}
 		return left_node != NULL ? left_node : right_node;
 	}
+};
+
+
+class Solution258 {
+public:
+    vector<int> moveZero(vector<int> array) {
+        int leng = (int)array.size();
+        if (leng <= 0) {
+            return array;
+        }
+        int front = 0, end = leng - 1;
+        while (front <= end) {
+            if (array[front] != 0) {
+                front++;
+            }
+            else if (array[end] == 0) {
+                end--;
+            }
+            else {
+                swap(array[front], array[end]);
+            }
+        }
+        return array;
+    }
 };
 
 class Solution259 {

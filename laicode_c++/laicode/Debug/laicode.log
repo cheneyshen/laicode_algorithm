@@ -1,0 +1,63 @@
+﻿  main.cpp
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(125): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(129): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1064): warning C4018: “>”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1164): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1183): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1253): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1317): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1349): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1355): warning C4018: “>”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1375): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1372): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1443): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1474): warning C4018: “<=”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1475): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1497): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1501): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1504): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1526): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1545): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1594): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1595): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1615): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1640): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1731): warning C4018: “>=”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1753): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(1762): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2018): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2022): warning C4018: “>”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2088): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2141): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2188): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2226): warning C4018: “<=”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(2723): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3139): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3142): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3207): warning C4018: “<=”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3356): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3517): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3545): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3665): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3911): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3912): warning C4018: “>=”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3919): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3932): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(3974): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4184): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4198): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4209): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4210): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4231): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4253): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4294): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4430): warning C4018: “>”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4432): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4438): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4567): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4577): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4578): warning C4018: “<”: 有符号/无符号不匹配
+d:\workspace\laicode_algorithm\laicode\laicode\main.cpp(4623): warning C4018: “<”: 有符号/无符号不匹配
+  laicode.vcxproj -> D:\workspace\laicode_algorithm\laicode\Debug\laicode.exe
+  laicode.vcxproj -> D:\workspace\laicode_algorithm\laicode\Debug\laicode.pdb (Partial PDB)
