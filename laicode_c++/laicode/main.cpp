@@ -1,9 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-#ifdef __WINDOWS_
-#progma once
-#include "Stdafx.h"
-#endif
+#pragma once
+#include"stdafx.h"
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -2892,6 +2890,7 @@ public:
 	}
 };
 
+
 class Solution281 {
 public:
 	string removeSpaces(string input) {
@@ -3660,6 +3659,15 @@ public:
 };
 
 class Solution87 {
+	/*Max Product Of Cutting Rope
+		Given a rope with positive integer - length n, how to cut the rope into m integer - length parts with length p[0], p[1], ..., p[m - 1], in order to get the maximal product of p[0] * p[1] * ... *p[m - 1] ? m is determined by you and must be greater than 0 (at least one cut must be made).Return the max product you can have.
+
+		Assumptions
+
+		n >= 2
+		Examples
+
+		n = 12, the max product is 3 * 3 * 3 * 3 = 81(cut the rope into 4 pieces with length of each is 3).*/
 public:
 	int maxProduct(int length) {
 		//        vector<int> product(length+1, 0);
@@ -3686,6 +3694,17 @@ public:
 };
 
 class Solution88 {
+	/*Array Hopper I
+		Given an array A of non - negative integers, you are initially positioned at index 0 of the array.A[i] means the maximum jump distance from that position(you can only jump towards the end of the array).Determine if you are able to reach the last index.
+
+		Assumptions
+
+		The given array is not null and has length of at least 1.
+		Examples
+
+	{ 1, 3, 2, 0, 3 }, we are able to reach the end of array(jump to index 1 then reach the end of the array)
+
+	{2, 1, 1, 0, 2 }, we are not able to reach the end of array*/
 public:
 	bool canJump(vector<int> input) {
 		if (input.size()<1) {
@@ -3709,6 +3728,17 @@ public:
 };
 
 class Solution89 {
+	//Array Hopper II
+	//	Given an array A of non - negative integers, you are initially positioned at index 0 of the array.A[i] means the maximum jump distance from index i(you can only jump towards the end of the array).Determine the minimum number of jumps you need to reach the end of array.If you can not reach the end of the array, return -1.
+
+	//	Assumptions
+
+	//	The given array is not null and has length of at least 1.
+	//	Examples
+
+	//{ 3, 3, 1, 0, 4 }, the minimum jumps needed is 2 (jump to index 1 then to the end of array)
+
+	//{ 2, 1, 1, 0, 2 }, you are not able to reach the end of array, return -1 in this case.
 public:
 	int minJump(vector<int> input) {
 		if (input.size() == 1) {
@@ -3724,6 +3754,112 @@ public:
 			}
 		}
 		return mi[0] == INT_MAX ? -1 : mi[0];
+	}
+};
+
+class Solution90 {
+	//Array Hopper III
+	//	Given an array of non - negative integers, you are initially positioned at index 0 of the array.A[i] means the maximum jump distance from that position(you can only jump towards the end of the array).Determine the minimum number of jumps you need to jump out of the array.
+
+	//	By jump out, it means you can not stay at the end of the array.Return - 1 if you can not do so.
+
+	//	Assumptions
+
+	//	The given array is not null and has length of at least 1.
+	//	Examples
+
+	//{ 1, 3, 2, 0, 2 }, the minimum number of jumps needed is 3 (jump to index 1 then to the end of array, then jump out)
+
+	//{ 3, 2, 1, 1, 0 }, you are not able to jump out of array, return -1 in this case.
+public:
+	int minJump(vector<int> array) {
+		if (array.size() == 0)
+		{
+			return -1;
+		}
+		vector<int> jumps(array.size(), 0);
+		fill(jumps.begin(), jumps.end(), INT_MAX);
+		jumps[0] = 0;
+		for (int i = 0; i < array.size(); i++)
+		{
+			for (int j = array[i]; j >= 0; j--)
+			{
+				if (jumps[i] != INT_MAX)
+				{
+					if (i + j < array.size())
+					{
+						jumps[i + j] = min(jumps[i + j], jumps[i] + 1);
+					}
+					else {
+						return jumps[i] + 1;
+					}
+				}
+			}
+		}
+		if (array[array.size() - 1] > 0) {
+			if (jumps[array.size() - 1] != INT_MAX) {
+				return jumps[array.size() - 1] + 1;
+			}
+			else {
+				return -1;
+			}
+		}
+		else {
+			return -1;
+		}
+	}
+};
+
+class Solution91 {
+	//Array Hopper IV
+	//	Given an array A of non - negative integers, you are initially positioned at an arbitrary index of the array.A[i] means the maximum jump distance from that position(you can either jump left or jump right).Determine the minimum jumps you need to reach the right end of the array.Return - 1 if you can not reach the right end of the array.
+
+	//	Assumptions
+
+	//	The given array is not null and has length of at least 1.
+	//	Examples
+
+	//{ 1, 3, 1, 2, 2 }, if the initial position is 2, the minimum jumps needed is 2 (jump to index 1 then to the right end of array)
+
+	//{ 3, 3, 1, 0, 0 }, if the initial position is 2, the minimum jumps needed is 2 (jump to index 1 then to the right end of array)
+
+	// { 4, 0, 1, 0, 0 }, if the initial position is 2, you are not able to reach the right end of array, return -1 in this case.
+public:
+	int minJump(vector<int> array, int index) {
+		int leng = array.size();
+		vector<int> cancome(leng, INT_MAX);
+		if (leng <= index || index < 0) {
+			return -1;
+		}
+		cancome[index] = 0;
+		minJumpHelper(array, leng, index, cancome);
+		if (cancome[leng-1]==INT_MAX)
+		{
+			return -1;
+		}
+		else {
+			return cancome[leng - 1];
+		}
+		return 0;
+	}
+private:
+	void minJumpHelper(vector<int>& array, int leng, int index, vector<int>& cancome) {
+		if (index<0 || index>=leng || array[index] == 0)
+		{
+			return;
+		}
+		for (int i = 1; i <= array[index]; i++)
+		{
+			if (i+index<leng && cancome[index + i]> cancome[index] + 1)
+			{
+				cancome[index+i] = cancome[index] + 1;
+				minJumpHelper(array, leng, index + i, cancome);
+			}
+			if (index - i >= 0 && cancome[index - i] > cancome[index] + 1) {
+				cancome[index - i] = cancome[index] + 1;
+				minJumpHelper(array, leng, index - i, cancome);
+			}
+		}
 	}
 };
 
@@ -8334,6 +8470,8 @@ int main() {
 	//    Solution99* new99 = new Solution99();
 	//    cout<<new99->canBreak("bcdbcdabc", {"abc","bcd","def"})<<endl;
 	//    cout<<new99->canBreak("robob", {"bob", "cat", "rob"})<<endl;
+Solution91* s91 = new Solution91();
+s91->minJump({1, 3, 1, 2, 2}, 2);
 	//    Solution89* new89 = new Solution89();
 	//    cout<<new89->minJump({3, 3, 1, 0, 4})<<" "<<new89->minJump({2, 1, 1, 0, 2})<<endl;
 	//    Solution88* new88 = new Solution88();
@@ -8526,7 +8664,7 @@ int main() {
 	//    t8->right=t11;
 	//    vector<int> result55 = new55->getRange(t5, 2, 5);
 	//    cout<<result55[0]<<endl;
-	    Solution54* new54 = new Solution54();
+	   /* Solution54* new54 = new Solution54();
 	    TreeNode* t5=new TreeNode(5);
 	    TreeNode* t3=new TreeNode(3);
 	    TreeNode* t1=new TreeNode(1);
@@ -8537,9 +8675,9 @@ int main() {
 	    t3->left=t1;
 	    t3->right=t4;
 	    cout<<new54->isBST1(t5)<<endl;
-    TreeNode* t2=new TreeNode(2);
-    t1->left=t2;
-    cout<<new54->isBST1(t1)<<endl;
+		TreeNode* t2=new TreeNode(2);
+		t1->left=t2;
+		cout<<new54->isBST1(t1)<<endl;*/
 	//    Solution50* new50 = new Solution50();
 	//    TreeNode* t5=new TreeNode(5);
 	//    TreeNode* t51=new TreeNode(5);
@@ -8717,12 +8855,12 @@ int main() {
 	//    cout<<new31->front()<<endl;
 	//    Solution267* new267 = new Solution267();
 	//    vector<int> result267 = new267->search({{1,2,3}, {4,5,6}, {7,8,9}}, 8);
-    Solution27* s27 = new Solution27();
+    /*Solution27* s27 = new Solution27();
     cout<<s27->kthSum({1, 3, 5}, {4, 8}, 1)<<endl;
     cout<<s27->kthSum({1, 3, 5}, {4, 8}, 2)<<endl;
     cout<<s27->kthSum({1, 3, 5}, {4, 8}, 3)<<endl;
     cout<<s27->kthSum({1, 3, 5}, {4, 8}, 4)<<endl;
-    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 5)<<endl;
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 5)<<endl;*/
 	//    Solution17* new17 = new Solution17();
 	//    int result17 = new17->solve({1, 3, 3, 4}, 2);
 	//    cout<<result17<<endl;
