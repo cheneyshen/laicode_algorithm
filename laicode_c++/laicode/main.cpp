@@ -592,7 +592,132 @@ class Solution22 {
 //    What if A is null or A is of zero length? We should return -1 in this case.
 public:
     int solve(vector<int> input, int target) {
-        return 0;
+        if(input.size()==0) {
+            return -1;
+        }
+        int left=0, right=input.size()-1;
+        while (left<=right) {
+            int mid=left+(right-left)/2;
+            if (input[mid]==target) {
+                return mid;
+            }
+            else if(input[mid]==input[left]) {
+                left++;
+            }
+            else if(input[mid]>input[left]) {
+                if (input[mid]>=target && target>=input[left]) {
+                    right=mid-1;
+                }
+                else {
+                    left=mid+1;
+                }
+            }
+            else {
+                if (input[mid]<=target && input[right]>=target) {
+                    left=mid+1;
+                }
+                else {
+                    right=mid-1;
+                }
+            }
+        }
+        return -1;
+    }
+};
+
+class Solution23 {
+//    Shift Position
+//    Given an integer array A, A is sorted in ascending order first then shifted by an arbitrary number of positions, For Example, A = {3, 4, 5, 1, 2} (shifted left by 2 positions). Find the index of the smallest number.
+//    
+//    Assumptions
+//    
+//    There are no duplicate elements in the array
+//    Examples
+//    
+//    A = {3, 4, 5, 1, 2}, return 3
+//    A = {1, 2, 3, 4, 5}, return 0
+//    Corner Cases
+//    
+//    What if A is null or A is of zero length? We should return -1 in this case.
+public:
+    int shiftPosition(vector<int> input) {
+        if(input.size()<=0) {
+            return -1;
+        }
+        int left=0, right=input.size()-1;
+        while (left<right) {
+            int mid=left+(right-left)/2;
+            if (input[mid]>=input[right]) {
+                left=mid+1;
+            }
+            else {
+                right=mid;
+            }
+        }
+        return left;
+    }
+};
+
+class Solution24 {
+//    Total Occurrence
+//    Given a target integer T and an integer array A sorted in ascending order, Find the total number of occurrences of T in A.
+//    
+//    Examples
+//    
+//    A = {1, 2, 3, 4, 5}, T = 3, return 1
+//    A = {1, 2, 2, 2, 3}, T = 2, return 3
+//    A = {1, 2, 2, 2, 3}, T = 4, return 0
+//    Corner Cases
+//    
+//    What if A is null? We should return 0 in this case.
+public:
+    int totalOccurrence(vector<int> input, int target) {
+        if (input.size()<=0) {
+            return 0;
+        }
+        int left=0, right=input.size()-1;
+        int first=-1, last=-1;
+        while (left<right-1) {
+            int mid=left+(right-left)/2;
+            if (input[mid]==target) {
+                right=mid;
+            }
+            else if (input[mid]>target) {
+                right=mid;
+            }
+            else {
+                left=mid;
+            }
+        }
+        if (input[left]==target) {
+            first=left;
+        }
+        else if (input[right]==target) {
+            first=right;
+        }
+        if (first==-1) {
+            return 0;
+        }
+        left=0, right=input.size()-1;
+        while (left<right-1) {
+            int mid=left+(right-left)/2;
+            if(input[mid]==target) {
+                left=mid;
+            }
+            else if(input[mid]<target) {
+                left=mid;
+            }
+            else {
+                right=mid;
+            }
+        }
+        if (input[right]==target) {
+            last=right;
+        }
+        else if (input[left]==target) {
+            last=left;
+        }
+        return last-first+1;
     }
 };
 
@@ -639,6 +764,16 @@ public:
 };
 
 class Solution31 {
+//    Queue By Two Stacks
+//Java: Implement a queue by using two stacks. The queue should provide size(), isEmpty(), offer(), poll() and peek() operations. When the queue is empty, poll() and peek() should return null.
+//    
+//    C++: Implement a queue by using two stacks. The queue should provide size(), isEmpty(), push(), front() and pop() operations. When the queue is empty, front() should return -1.
+//    
+//    Assumptions
+//    
+//    The elements in the queue are all Integers.
+//    size() should return the number of elements buffered in the queue.
+//    isEmpty() should return true if there is no element buffered in the queue, false otherwise.
 private:
 	stack<int> stack1;
 	stack<int> stack2;
@@ -695,6 +830,13 @@ public:
 };
 
 class Solution32 {
+//    Stack With min()
+//    Enhance the stack implementation to support min() operation. min() should return the current minimum value in the stack. If the stack is empty, min() should return -1.
+//    
+//    pop() - remove and return the top element, if the stack is empty, return -1
+//    push(int element) - push the element to top
+//    top() - return the top element without remove it, if the stack is empty, return -1
+//    min() - return the current min value in the stack.
 private:
 	StackMinNode* head;
 public:
@@ -736,7 +878,35 @@ public:
 	}
 };
 
+class Solution33 {
+//    Number Of Nodes
+//    Return the number of nodes in the linked list.
+//    
+//    Examples
+//    
+//    L = null, return 0
+//    L = 1 -> null, return 1
+//    L = 1 -> 2 -> null, return 2
+public:
+    int numberOfNodes(ListNode* head) {
+        int result=0;
+        while (head!=NULL) {
+            head=head->next;
+            result+=1;
+        }
+        return result;
+    }
+};
+
 class Solution34 {
+//    Reverse Linked List
+//    Reverse a singly-linked list.
+//    
+//    Examples
+//    
+//    L = null, return null
+//    L = 1 -> null, return 1 -> null
+//    L = 1 -> 2 -> 3 -> null, return 3 -> 2 -> 1 -> null
 public:
 	ListNode* reverse(ListNode* head) {
 		if (head == NULL || head->next == NULL) {
@@ -756,6 +926,16 @@ public:
 };
 
 class Solution36 {
+//    Middle Node Of Linked List
+//    Find the middle node of a given linked list.
+//    
+//    Examples
+//    
+//    L = null, return null
+//    L = 1 -> null, return 1
+//    L = 1 -> 2 -> null, return 1
+//    L = 1 -> 2 -> 3 -> null, return 2
+//    L = 1 -> 2 -> 3 -> 4 -> null, return 2
 public:
 	ListNode* middleNode(ListNode* head) {
 		if (head == NULL || head->next == NULL) {
@@ -775,6 +955,8 @@ public:
 };
 
 class Solution37 {
+//    Check If Linked List Has A Cycle
+//    Check if a given linked list has a cycle. Return true if it does, otherwise return false.
 public:
 	bool hasCycle(ListNode* head) {
 		ListNode* fast = head;
@@ -796,7 +978,45 @@ public:
 	}
 };
 
+class Solution38 {
+//    Cycle Node In Linked List
+//    Check if a given linked list has a cycle. Return the node where the cycle starts. Return null if there is no cycle.
+public:
+    ListNode* cycleNode(ListNode* head) {
+        ListNode* fast=head;
+        ListNode* slow=head;
+        while (fast && slow) {
+            fast=fast->next;
+            slow=slow->next;
+            if (fast) {
+                fast=fast->next;
+            }
+            else {
+                return NULL;
+            }
+            if (fast==slow) {
+                fast=head;
+                while (fast && slow && fast!=slow) {
+                    fast=fast->next;
+                    slow=slow->next;
+                }
+                return fast;
+            }
+        }
+        return NULL;
+    }
+};
+
 class Solution39 {
+//    Insert In Sorted Linked List
+//    Insert a value in a sorted linked list.
+//    
+//    Examples
+//    
+//    L = null, insert 1, return 1 -> null
+//    L = 1 -> 3 -> 5 -> null, insert 2, return 1 -> 2 -> 3 -> 5 -> null
+//    L = 1 -> 3 -> 5 -> null, insert 3, return 1 -> 3 -> 3 -> 5 -> null
+//    L = 2 -> 3 -> null, insert 1, return 1 -> 2 -> 3 -> null
 public:
 	ListNode* insert(ListNode* head, int value) {
 		ListNode* node = new ListNode(value);
@@ -816,6 +1036,14 @@ public:
 };
 
 class Solution40 {
+//    Merge Two Sorted Linked Lists
+//    Merge two sorted lists into one large sorted list.
+//    
+//    Examples
+//    
+//    L1 = 1 -> 4 -> 6 -> null, L2 = 2 -> 5 -> null, merge L1 and L2 to 1 -> 2 -> 4 -> 5 -> 6 -> null
+//    L1 = null, L2 = 1 -> 2 -> null, merge L1 and L2 to 1 -> 2 -> null
+//    L1 = null, L2 = null, merge L1 and L2 to null
 public:
 	ListNode* merge(ListNode* one, ListNode* two) {
 		if (one == NULL && two == NULL) {
@@ -857,6 +1085,15 @@ public:
 };
 
 class Solution41 {
+//    ReOrder Linked List
+//    Reorder the given singly-linked list N1 -> N2 -> N3 -> N4 -> … -> Nn -> null to be N1- > Nn -> N2 -> Nn-1 -> N3 -> Nn-2 -> … -> null
+//    
+//    Examples
+//    
+//    L = null, is reordered to null
+//    L = 1 -> null, is reordered to 1 -> null
+//    L = 1 -> 2 -> 3 -> 4 -> null, is reordered to 1 -> 4 -> 2 -> 3 -> null
+//    L = 1 -> 2 -> 3 -> null, is reordred to 1 -> 3 -> 2 -> null
 private:
 	ListNode* reorderHelper(ListNode* left, ListNode* right) {
 		if (left == NULL && right == NULL) {
@@ -940,6 +1177,12 @@ public:
 };
 
 class Solution42 {
+//    Partition Linked List
+//    Given a linked list and a target value T, partition it such that all nodes less than T are listed before the nodes larger than or equal to target value T. The original relative order of the nodes in each of the two partitions should be preserved.
+//    
+//    Examples
+//    
+//    L = 2 -> 4 -> 3 -> 5 -> 1 -> null, T = 3, is partitioned to 2 -> 1 -> 4 -> 3 -> 5 -> null
 public:
 	ListNode* partition(ListNode* head, int target) {
 		if (head == NULL) {
@@ -968,6 +1211,44 @@ public:
 };
 
 class Solution43 {
+//    In-order Traversal Of Binary Tree
+//    Implement an iterative, in-order traversal of a given binary tree, return the list of keys of each node in the tree as it is in-order traversed.
+//    
+//    Examples
+//    
+//            5
+//    
+//          /    \
+//    
+//        3        8
+//    
+//      /   \        \
+//    
+//    1      4        11
+//    
+//    In-order traversal is [1, 3, 4, 5, 8, 11]
+//    
+//    Corner Cases
+//    
+//    What if the given binary tree is null? Return an empty list in this case.
+//        How is the binary tree represented?
+//        
+//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
+//        
+//        For Example:
+//        
+//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+//        
+//          1
+//        
+//        /   \
+//        
+//       2     3
+//        
+//            /
+//        
+//           4
+
 private:
 	void inOrderHelper(TreeNode* root, vector<int>& result) {
 		if (root == NULL) {
@@ -992,6 +1273,43 @@ public:
 };
 
 class Solution44 {
+//    Pre-order Traversal Of Binary Tree
+//    Implement an iterative, pre-order traversal of a given binary tree, return the list of keys of each node in the tree as it is pre-order traversed.
+//    
+//    Examples
+//    
+//          5
+//    
+//        /    \
+//    
+//       3        8
+//    
+//     /   \        \
+//    
+//    1      4        11
+//    
+//    Pre-order traversal is [5, 3, 1, 4, 8, 11]
+//    
+//    Corner Cases
+//    
+//    What if the given binary tree is null? Return an empty list in this case.
+//        How is the binary tree represented?
+//        
+//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
+//        
+//        For Example:
+//        
+//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+//        
+//           1
+//        
+//         /   \
+//        
+//        2     3
+//        
+//             /
+//        
+//            4
 private:
 	void preOrderHelper(TreeNode* root, vector<int>& result) {
 		if (root == NULL) {
@@ -1009,11 +1327,6 @@ private:
 	}
 public:
 	vector<int> preOrder(TreeNode* root) {
-		//12345678   8/4=2
-		//12 34 56 78
-		//12 43 65 78
-		//12 56 34 78
-		//1526 3748
 		vector<int> result;
 		preOrderHelper(root, result);
 		return result;
@@ -1021,6 +1334,43 @@ public:
 };
 
 class Solution45 {
+//    Post-order Traversal Of Binary Tree
+//    Implement an iterative, post-order traversal of a given binary tree, return the list of keys of each node in the tree as it is post-order traversed.
+//    
+//    Examples
+//    
+//           5
+//    
+//         /    \
+//    
+//        3        8
+//    
+//      /   \        \
+//    
+//    1      4        11
+//    
+//    Post-order traversal is [1, 4, 3, 11, 8, 5]
+//    
+//    Corner Cases
+//    
+//    What if the given binary tree is null? Return an empty list in this case.
+//        How is the binary tree represented?
+//        
+//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
+//        
+//        For Example:
+//        
+//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+//        
+//          1
+//        
+//        /   \
+//        
+//        2     3
+//        
+//            /
+//
+//           4
 private:
 	void postOrderHelper(TreeNode* root, vector<int>& result) {
 		if (root == NULL) {
@@ -1043,6 +1393,55 @@ public:
 };
 
 class Solution46 {
+//    Check If Binary Tree Is Balanced
+//    Check if a given binary tree is balanced. A balanced binary tree is one in which the depths of every node’s left and right subtree differ by at most 1.
+//        
+//        Examples
+//        
+//                5
+//        
+//              /    \
+//        
+//            3        8
+//        
+//          /   \        \
+//        
+//        1      4        11
+//        
+//        is balanced binary tree,
+//        
+//             5
+//        
+//            /
+//        
+//          3
+//        
+//        /   \
+//        
+//        1      4
+//        
+//        is not balanced binary tree.
+//        
+//        Corner Cases
+//        
+//        What if the binary tree is null? Return true in this case.
+//        How is the binary tree represented?
+//            
+//            We use the level order traversal sequence with a special symbol "#" denoting the null node.
+//            
+//        For Example:
+//            
+//            The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+//            
+//              1
+//            
+//            /   \
+//            
+//            2     3
+//            
+//                 /
+//            
+//                4
 private:
 	int getHeight(TreeNode* root) {
 		if (root == NULL) {
@@ -1068,6 +1467,36 @@ public:
 };
 
 class Solution48 {
+//    Symmetric Binary Tree
+//    Check if a given binary tree is symmetric.
+//        
+//        Examples
+//        
+//                5
+//        
+//              /    \
+//        
+//            3        3
+//        
+//          /   \    /   \
+//        
+//        1      4  4      1
+//        
+//        is symmetric.
+//        
+//               5
+//        
+//             /    \
+//        
+//           3        3
+//        
+//         /   \    /   \
+//        
+//        1      4  1      4
+//        
+//        is not symmetric.
+//        
+//        Corner Cases
 private:
 	bool isSymmHelper(TreeNode* left, TreeNode* right) {
 		if (left == NULL && right == NULL) {
@@ -1092,7 +1521,76 @@ public:
 	}
 };
 
+class Solution49 {
+//    Identical Binary Tree
+//    Check if two given binary trees are identical. Identical means the equal valued keys are at the same position in the two binary trees.
+//        
+//        Examples
+//
+//            5
+//        
+//          /    \
+//        
+//        3        8
+//        
+//        and
+//
+//            5
+//        
+//          /    \
+//        
+//        3        8
+//        
+//        are identical trees.
+//        
+
+public:
+    bool isIdentical(TreeNode *r1, TreeNode *r2) {
+        if (r1==NULL && r2==NULL) {
+            return true;
+        }
+        else if (r1==NULL || r2==NULL) {
+            return false;
+        }
+        else if (r1->value!=r2->value) {
+            return false;
+        }
+        else {
+            return isIdentical(r1->left, r2->left) && isIdentical(r1->right, r2->right);
+        }
+    }
+};
 class Solution50 {
+    
+//    Tweaked Identical Binary Trees
+//    Determine whether two given binary trees are identical assuming any number of ‘tweak’s are allowed. A tweak is defined as a swap of the children of one node in the tree.
+//    
+//    Examples
+//    
+//           5
+//    
+//         /    \
+//    
+//       3        8
+//    
+//     /   \
+//    
+//    1      4
+//    
+//    and
+//    
+//          5
+//    
+//        /    \
+//    
+//       8        3
+//    
+//     /   \
+//    
+//    1     4
+//    
+//    the two binary trees are tweaked identical.
+
 public:
 	bool isTweakedIdentical(TreeNode* r1, TreeNode* r2) {
 		if (r1 == NULL && r2 == NULL) {
@@ -1115,6 +1613,16 @@ public:
 };
 
 class Solution54 {
+//    Is Binary Search Tree Or Not
+//    Determine if a given binary tree is binary search tree.
+//        
+//    Assumptions
+//        
+//    There are no duplicate keys in binary search tree.
+//    You can assume the keys stored in the binary search tree can not be Integer.MIN_VALUE or Integer.MAX_VALUE.
+//    Corner Cases
+//        
+//    What if the binary tree is null? Return true in this case.
 private:
 	bool isBSTHelper(TreeNode* root, int left, int right) {
 		if (root == NULL) {
@@ -1128,6 +1636,21 @@ private:
 			return false;
 		}
 	}
+    
+    void isBSTHelper1(TreeNode* root, TreeNode* &prev, bool* isbst) {
+        if (root==NULL || *isbst==false) {
+            return;
+        }
+        isBSTHelper1(root->left, prev, isbst);
+        if(prev!=NULL) {
+            *isbst &= root->value > prev->value;
+        }
+        if(root!=NULL) {
+            prev=root;
+        }
+        isBSTHelper1(root->right, prev, isbst);
+    }
+    
 public:
 	bool isBST(TreeNode* root) {
 		if (root == NULL) {
@@ -1135,9 +1658,40 @@ public:
 		}
 		return isBSTHelper(root, INT_MIN, INT_MAX);
 	}
+    
+    bool isBST1(TreeNode* root) {
+        if (root==NULL) {
+            return true;
+        }
+        TreeNode* min = NULL;
+        bool flag=true;
+        bool *isbst=&flag;
+        isBSTHelper1(root, min, isbst);
+        return flag;
+    }
 };
 
 class Solution55 {
+//    Get Keys In Binary Search Tree In Given Range
+//    Get the list of keys in a given binary search tree in a given range[min, max] in ascending order, both min and max are inclusive.
+//    
+//    Examples
+//    
+//    5
+//    
+//    /    \
+//    
+//    3        8
+//    
+//    /   \        \
+//    
+//    1     4        11
+//    
+//    get the keys in [2, 5] in ascending order, result is  [3, 4, 5]
+//    
+//    Corner Cases
+//    
+//    What if there are no keys in the given range? Return an empty list in this case.
 private:
 	void getRangeHelper(TreeNode* root, int min, int max, vector<int>& result) {
 		if (root == NULL) {
@@ -1162,6 +1716,19 @@ public:
 };
 
 class Solution25 {
+//    K Smallest In Unsorted Array
+//    Find the K smallest numbers in an unsorted integer array A. The returned numbers should be in ascending order.
+//    
+//    Assumptions
+//    
+//    A is not null
+//    K is >= 0 and smaller than or equal to size of A
+//    Return
+//    
+//    an array with size K containing the K smallest numbers in ascending order
+//    Examples
+//    
+//    A = {3, 4, 1, 2, 5}, K = 3, the 3 smallest numbers are {1, 2, 3}
 public:
 	vector<int> KSmallest(vector<int> input, int k) {
 		priority_queue<int> mypq;
@@ -1184,6 +1751,23 @@ public:
 };
 
 class Solution26 {
+//    Kth Smallest Number In Sorted Matrix
+//    Given a matrix of size N x M. For each row the elements are sorted in ascending order, and for each column the elements are also sorted in ascending order. Find the Kth smallest number in it.
+//        
+//        Assumptions
+//        
+//        the matrix is not null, N > 0 and M > 0
+//        K > 0 and K <= N * M
+//        Examples
+//        
+//      { {1,  3,   5,  7},
+//        {2,  4,   8,   9},
+//        {3,  5, 11, 15},
+//        {6,  8, 13, 18} }
+//        
+//        the 5th smallest number is 4
+//        the 8th smallest number is 6
+
 public:
 	class comphelper {
 	public:
@@ -1224,7 +1808,319 @@ public:
 	}
 };
 
+class Solution27 {
+//    Kth Smallest Sum In Two Sorted Arrays
+//    Given two sorted arrays A and B, of sizes m and n respectively. Define s = a + b, where a is one element from A and b is one element from B. Find the Kth smallest s out of all possible s'.
+//    
+//    Assumptions
+//    
+//    A is not null and A is not of zero length, so as B
+//    K > 0 and K <= m * n
+//    Examples
+//    
+//    A = {1, 3, 5}, B = {4, 8}
+//    
+//    1st smallest s is 1 + 4 = 5
+//    2nd smallest s is 3 + 4 = 7
+//    3rd, 4th smallest s are 9 (1 + 8, 4 + 5)
+//    5th smallest s is 3 + 8 = 11
+public:
+    class Pair {
+    public:
+        int first;
+        int second;
+        Pair(int first, int second) {
+            this->first=first;
+            this->second=second;
+        }
+    };
+    
+    class Combo {
+    public:
+        int a,b;
+        Combo(int a, int b) : a(a), b(b){
+        }
+        string toString() {
+            return to_string(a)+" "+to_string(b);
+        }
+    };
+    
+    class Node {
+    public:
+        Pair* pa;
+        Pair* pb;
+        Node(Pair* pa, Pair* pb) : pa(pa), pb(pb){
+        }
+    };
+    
+    class comphelper {
+    public:
+        bool operator() (Node* a, Node* b) {
+            int a1=a->pa->first+a->pb->first;
+            int b1=b->pa->first+b->pb->first;
+            return a1>b1;
+        }
+    };
+    
+    int kthSum(vector<int> a, vector<int> b, int k) {
+        priority_queue<Node*, vector<Node*>, comphelper> myque;
+        unordered_set<string> myset;
+        int aleng=a.size();
+        int bleng=b.size();
+        int loop=k;
+        if (aleng==0 || bleng==0) {
+            return 0;
+        }
+        if (k<=0 || k>aleng*bleng) {
+            return 0;
+        }
+        Pair* aone=new Pair(a[0], 0);
+        Pair* bone=new Pair(b[0], 0);
+        Node* one=new Node(aone, bone);
+        Combo* newbo=new Combo(0, 0);
+        myque.push(one);
+        myset.insert(newbo->toString());
+        while (!myque.empty()) {
+            Node* now=myque.top(); myque.pop();
+            loop--;
+            if (loop==0) {
+                return now->pa->first+now->pb->first;
+            }
+            int aindex=now->pa->second;
+            int bindex=now->pb->second;
+            newbo=new Combo(aindex+1, bindex);
+            if (aindex+1<aleng && myset.count(newbo->toString())==0) {
+                aone=new Pair(a[aindex+1], aindex+1);
+                Node* newone=new Node(aone, now->pb);
+                myque.push(newone);
+                myset.insert(newbo->toString());
+            }
+            newbo=new Combo(aindex, bindex+1);
+            if (bindex+1<bleng && myset.count(newbo->toString())==0) {
+                bone=new Pair(b[bindex+1], bindex+1);
+                Node* newtwo=new Node(now->pa, bone);
+                myque.push(newtwo);
+                myset.insert(newbo->toString());
+            }
+        }
+        return 0;
+    }
+};
+
+class Solution28 {
+//    Selection Sort Linked List
+//    Given a singly-linked list, where each node contains an integer value, sort it in ascending order. The selectoin sort algorithm should be used to solve this problem.
+//    
+//    Examples
+//    
+//    null, is sorted to null
+//    1 -> null, is sorted to 1 -> null
+//    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
+//    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to 2 -> 3 -> 4 -> 5 -> 6
+public:
+    ListNode* selectionSort(ListNode* a) {
+        for (ListNode* node1=a; node1!=NULL; node1=node1->next) {
+            ListNode* min=node1;
+            for (ListNode* node2=node1; node2!=NULL; node2=node2->next) {
+                if (min->value>node2->value) {
+                    min=node2;
+                }
+            }
+            swap(node1->value, min->value);
+        }
+        return a;
+    }
+};
+
+class Solution29 {
+//    Merge Sort Linked List
+//    Given a singly-linked list, where each node contains an integer value, sort it in ascending order. The merge sort algorithm should be used to solve this problem.
+//    
+//    Examples
+//    
+//    null, is sorted to null
+//    1 -> null, is sorted to 1 -> null
+//    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
+//    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to -3 -> 2 -> 4 -> 5 -> 6
+public:
+    ListNode* mergeSort(ListNode* a) {
+        // write your solution here
+        if (a==NULL || a->next==NULL) {
+            return a;
+        }
+        ListNode* left=a;
+        ListNode* right=getMiddle(a);
+        ListNode* prev=right;
+        right=right->next;
+        if (prev!=NULL) {
+            prev->next=NULL;
+        }
+        left=mergeSort(left);
+        right=mergeSort(right);
+        a=merge(left, right);
+        return a;
+    }
+private:
+    //	4 2 6 -3 5
+    //	le=0, ri=length-1=4
+    //	mid=2
+    //	4 2 6 -3 5
+    //	sort(lefthalf);
+    //	sort(righthalf);
+    //	merge(lefthalf, righthalf);
+    ListNode* getMiddle(ListNode* head) {
+        if (head==NULL || head->next==NULL) {
+            return head;
+        }
+        ListNode *slow=head, *fast=head;
+        while (fast->next!=NULL && fast->next->next!=NULL) {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        return slow;
+    }
+    
+    ListNode* merge(ListNode* left, ListNode* right) {
+        if (left==NULL) {
+            return right;
+        }
+        else if (right==NULL) {
+            return left;
+        }
+        else {
+            ListNode *result, *index;
+            if (left->value<=right->value) {
+                result=left;
+                left=left->next;
+            }
+            else {
+                result=right;
+                right=right->next;
+            }
+            index=result;
+            while (left && right) {
+                if (left->value<=right->value) {
+                    index->next=left;
+                    left=left->next;
+                    index=index->next;
+                }
+                else {
+                    index->next=right;
+                    right=right->next;
+                    index=index->next;
+                }
+            }
+            if (left!=NULL) {
+                index->next=left;
+            }
+            if (right!=NULL) {
+                index->next=right;
+            }
+            return result;
+        }
+    }
+};
+
+class Solution30 {
+//    Quick Sort Linked List
+//    Given a singly-linked list, where each node contains an integer value, sort it in ascending order. The quick sort algorithm should be used to solve this problem.
+//    
+//    Examples
+//    
+//    null, is sorted to null
+//    1 -> null, is sorted to 1 -> null
+//    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
+//    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to -3 -> 2 -> 4 -> 5 -> 6
+public:
+    ListNode* quickSort(ListNode* a) {
+//		每次选header为pivot
+//		把所有小于等于pivot的节点都挪到前面，再将pivot移到指针位置
+//		这样，小于等于pivot的都在该节点左边，大于等于的都在右边
+//		再重新quickSort左半边，右半边
+        if (a==NULL || a->next==NULL) {
+            return a;
+        }
+        ListNode* head=a;
+        ListNode* result=quickSortHelper(head, NULL);
+        return result;
+    }
+private:
+    ListNode* quickSortHelper(ListNode* head, ListNode* tail) {
+        if (head==NULL || head==tail) {
+            return head;
+        }
+        ListNode* pivot=partition(head, tail);
+        quickSortHelper(head, pivot);
+        quickSortHelper(pivot->next, tail);
+        return head;
+    }
+    
+    ListNode* partition(ListNode* head, ListNode* tail) {
+        int pivot=head->value;
+        ListNode *i=head, *j=head->next;
+        while (j!=tail) {
+            if (j->value<=pivot) {
+                i=i->next;
+                swap(i->value, j->value);
+            }
+            j=j->next;
+        }
+        head->value=i->value;
+        i->value=pivot;
+        return i;
+    }
+};
+
 class Solution47 {
+//    Check If Binary Tree Is Completed
+//    Check if a given binary tree is completed. A complete binary tree is one in which every level of the binary tree is completely filled except possibly the last level. Furthermore, all nodes are as far left as possible.
+//        
+//        Examples
+//
+//              5
+//        
+//            /    \
+//        
+//           3        8
+//        
+//         /   \
+//        
+//        1      4
+//        
+//        is completed.
+//        
+//               5
+//        
+//             /    \
+//        
+//            3        8
+//        
+//          /   \        \
+//        
+//        1      4        11
+//        
+//        is not completed.
+//        
+//        Corner Cases
+//        
+//        What if the binary tree is null? Return true in this case.
+//            How is the binary tree represented?
+//            
+//            We use the level order traversal sequence with a special symbol "#" denoting the null node.
+//            
+//            For Example:
+//            
+//            The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+//            
+//               1
+//            
+//             /   \
+//            
+//            2     3
+//            
+//                 /
+//            
+//                4
 private:
 	int nodeCounts(TreeNode* root) {
 		if (root == NULL) {
@@ -1255,9 +2151,62 @@ public:
 		int node_count = nodeCounts(root);
 		return isCompletedHelper(root, 0, node_count);
 	}
+    bool isCompleted1(TreeNode* root) {
+        if (root==NULL) {
+            return true;
+        }
+        queue<TreeNode*> myque;
+        bool flag=false;
+        myque.push(root);
+        while (!myque.empty()) {
+            TreeNode* curr=myque.front();
+            myque.pop();
+            if(!curr->left) {
+                //no left child, set flag
+                flag=true;
+            }
+            else if(flag) {
+                return false;
+            }
+            else {
+                myque.push(curr->left);
+            }
+            if (!curr->right) {
+                //no right child, set flag
+                flag=true;
+            }
+            else if (flag){
+                return false;
+            }
+            else {
+                myque.push(curr->right);
+            }
+        }
+        return true;
+    }
 };
 
 class Solution56 {
+//    Bipartite
+//    Determine if an undirected graph is bipartite. A bipartite graph is one in which the nodes can be divided into two groups such that no nodes have direct edges to other nodes in the same group.
+//        
+//        Examples
+//        
+//        1  --   2
+//        
+//        /
+//        
+//        3  --   4
+//        
+//        is bipartite (1, 3 in group 1 and 2, 4 in group 2).
+//        
+//        1  --   2
+//        
+//        /   |
+//        
+//        3  --   4
+//        
+//        is not bipartite.
 private:
 	bool bfsMark(GraphNode* node, map<GraphNode*, int>& nodemark) {
 		// if this node has been traversed, no need to do again
@@ -1300,6 +2249,27 @@ public:
 };
 
 class Solution57 {
+//    Get Keys In Binary Tree Layer By Layer
+//    Get the list of list of keys in a given binary tree layer by layer. Each layer is represented by a list of keys and the keys are traversed from left to right.
+//    
+//    Examples
+//    
+//    5
+//    
+//    /    \
+//    
+//    3        8
+//    
+//    /   \        \
+//    
+//    1     4        11
+//    
+//    the result is [ [5], [3, 8], [1, 4, 11] ]
+//    
+//    Corner Cases
+//    
+//    What if the binary tree is null? Return an empty list of list in this case.
+
 public:
 	vector<vector<int>> solve(TreeNode* root) {
 		vector<vector<int>> resultset;
@@ -1329,6 +2299,17 @@ public:
 };
 
 class Solution62 {
+//    All Subsets I
+//    Given a set of characters represented by a String, return a list containing all subsets of the characters.
+//    
+//    Assumptions
+//    
+//    There are no duplicate characters in the original set.
+//    ​Examples
+//    
+//    Set = "abc", all the subsets are [“”, “a”, “ab”, “abc”, “ac”, “b”, “bc”, “c”]
+//    Set = "", all the subsets are [""]
+//    Set = null, all the subsets are []
 private:
 	void allsubsets(string input, string& current, vector<string>& result) {
 		if (input.size() == 0) {
@@ -1354,6 +2335,14 @@ public:
 };
 
 class Solution64 {
+//    All Permutations I
+//    Given a string with no duplicate characters, return a list with all permutations of the characters.
+//    
+//    Examples
+//    
+//    Set = “abc”, all permutations are [“abc”, “acb”, “bac”, “bca”, “cab”, “cba”]
+//    Set = "", all permutations are [""]
+//    Set = null, all permutations are []
 private:
 	void allpermutations(string input, int index, vector<string>& result) {
 		if (index == input.size()) {
@@ -1379,6 +2368,17 @@ public:
 };
 
 class Solution66 {
+//    All Valid Permutations Of Parentheses I
+//    Given N pairs of parentheses “()”, return a list with all the valid permutations.
+//    
+//    Assumptions
+//    
+//    N >= 0
+//    Examples
+//    
+//    N = 1, all valid permutations are ["()"]
+//    N = 3, all valid permutations are ["((()))", "(()())", "(())()", "()(())", "()()()"]
+//    N = 0, all valid permutations are [""]
 private:
 	void allvalidpermutationsofparentheses(string permu, int left, int right, int num, vector<string>& result) {
 		if (permu.size() == 2 * num) {
@@ -1417,6 +2417,35 @@ public:
 };
 
 class Solution73 {
+//    Combinations Of Coins
+//    Given a number of different denominations of coins (e.g., 1 cent, 5 cents, 10 cents, 25 cents), get all the possible ways to pay a target number of cents.
+//    
+//    Arguments
+//    
+//    coins - an array of positive integers representing the different denominations of coins, there are no duplicate numbers and the numbers are sorted by descending order, eg. {25, 10, 5, 2, 1}
+//    target - a non-negative integer representing the target number of cents, eg. 99
+//    Assumptions
+//    
+//    coins is not null and is not empty, all the numbers in coins are positive
+//    target >= 0
+//    You have infinite number of coins for each of the denominations, you can pick any number of the coins.
+//        Return
+//        
+//        a list of ways of combinations of coins to sum up to be target.
+//        each way of combinations is represented by list of integer, the number at each index means the number of coins used for the denomination at corresponding index.
+//            Examples
+//            
+//            coins = {2, 1}, target = 4, the return should be
+//    
+//    [
+//     
+//     [0, 4],   (4 cents can be conducted by 0 * 2 cents + 4 * 1 cents)
+//     
+//     [1, 2],   (4 cents can be conducted by 1 * 2 cents + 2 * 1 cents)
+//     
+//     [2, 0]    (4 cents can be conducted by 2 * 2 cents + 0 * 1 cents)
+//     
+//     ]
 private:
 	void combinationOfCoins(int target, const vector<int> coins, int index, vector<int>& combo, vector<vector<int>>& result) {
 		if (index == coins.size() - 1 && (target%coins[coins.size() - 1] == 0)) {
@@ -1443,6 +2472,21 @@ public:
 };
 
 class Solution67 {
+//    Top K Frequent Words
+//    Given a composition with different kinds of words, return a list of the top K most frequent words in the composition.
+//    
+//    Assumptions
+//    
+//    the composition is not null and is not guaranteed to be sorted
+//    K >= 1 and K could be larger than the number of distinct words in the composition, in this case, just return all the distinct words
+//    Return
+//    
+//    a list of words ordered from most frequent one to least frequent one (the list could be of size K or smaller than K)
+//    Examples
+//    
+//    Composition = ["a", "a", "b", "b", "b", "b", "c", "c", "c", "d"], top 2 frequent words are [“b”, “c”]
+//    Composition = ["a", "a", "b", "b", "b", "b", "c", "c", "c", "d"], top 4 frequent words are [“b”, “c”, "a", "d"]
+//    Composition = ["a", "a", "b", "b", "b", "b", "c", "c", "c", "d"], top 5 frequent words are [“b”, “c”, "a", "d"]
 public:
 	class comhelper {
 	public:
@@ -1475,6 +2519,17 @@ public:
 };
 
 class Solution68 {
+//    Missing Number I
+//    Given an integer array of size N - 1, containing all the numbers from 1 to N except one, find the missing number.
+//    
+//    Assumptions
+//    
+//    The given array is not null, and N >= 1
+//    Examples
+//    
+//    A = {2, 1, 4}, the missing number is 3
+//    A = {1, 2, 3}, the missing number is 4
+//    A = {}, the missing number is 1
 public:
 	int missing(vector<int> array) {
 		long result = 0;
@@ -1498,7 +2553,108 @@ public:
 	}
 };
 
+class Solution69 {
+//    Missing Number II
+//    Given an integer array of size N - 1 sorted by ascending order, containing all the numbers from 1 to N except one, find the missing number.
+//    
+//    Assumptions
+//    
+//    The given array is not null, and N >= 1
+//    Examples
+//    
+//    A = {1, 2, 4}, the missing number is 3
+//    A = {1, 2, 3}, the missing number is 4
+//    A = {}, the missing number is 1
+public:
+    int missing(vector<int> array) {
+        int leng=array.size();
+        if (leng==0) {
+            return 1;
+        }
+        for (int i=0; i<leng; i++) {
+            if (array[i]!=i+1) {
+                return i+1;
+            }
+        }
+        return leng+1;
+    }
+};
+
+class Solution70 {
+//    Common Numbers Of Two Arrays I
+//    Find all numbers that appear in both of the two unsorted arrays, return the common numbers in increasing order.
+//    
+//    Assumptions
+//    
+//    Both arrays are not null.
+//    There are no duplicate numbers in each of the two arrays respectively.
+//    Exmaples
+//    
+//    A = {1, 2, 3}, B = {3, 1, 4}, return [1, 3]
+//    A = {}, B = {3, 1, 4}, return []
+public:
+    vector<int> common(vector<int> a, vector<int> b) {
+        if (a.size()==0 || b.size()==0) {
+            return {};
+        }
+        else {
+            unordered_map<int, int> dict;
+            vector<int> result;
+            for (int i=0; i<a.size(); i++) {
+                dict[a[i]]++;
+            }
+            for (int i=0; i<b.size(); i++) {
+                if (dict[b[i]]==0) {
+                    result.push_back(b[i]);
+                }
+            }
+            sort(result.begin(), result.end());
+            return result;
+        }
+    }
+};
+
+class Solution71 {
+//    Common Numbers Of Two Arrays II
+//    Find all numbers that appear in both of two unsorted arrays.
+//    
+//    Assumptions
+//    
+//    Both of the two arrays are not null.
+//    In any of the two arrays, there could be duplicate numbers.
+//    Examples
+//    
+//    A = {1, 2, 3, 2}, B = {3, 4, 2, 2, 2}, return [2, 2, 3] (there are both two 2s in A and B)
+    vector<int> common(vector<int> a, vector<int> b) {
+        if (a.size()==0 || b.size()==0) {
+            return {};
+        }
+        unordered_map<int, int> dict;
+        vector<int> result;
+        for (int i=0; i<a.size(); i++) {
+            dict[a[i]]++;
+        }
+        for (int i=0; i<b.size(); i++) {
+            if (dict[b[i]]>0) {
+                result.push_back(b[i]);
+                dict[b[i]]--;
+            }
+        }
+        sort(result.begin(), result.end());
+        return result;
+    }
+};
 class Solution72 {
+//    Common Numbers Of Two Sorted Arrays
+//    Find all numbers that appear in both of two sorted arrays (the two arrays are all sorted in ascending order).
+//    
+//    Assumptions
+//    
+//    In each of the two sorted arrays, there could be duplicate numbers.
+//    Both two arrays are not null.
+//    Examples
+//    
+//    A = {1, 1, 2, 2, 3}, B = {1, 1, 2, 5, 6}, common numbers are [1, 1, 2]
 public:
 	vector<int> common(vector<int> a, vector<int> b) {
 		vector<int> result;
@@ -1520,6 +2676,18 @@ public:
 };
 
 class Solution79 {
+//    Remove Adjacent Repeated Characters I
+//    Remove adjacent, repeated characters in a given string, leaving only one character for each group of such characters.
+//        
+//        Assumptions
+//        
+//        Try to do it in place.
+//            Examples
+//            
+//            “aaaabbbc” is transferred to “abc”
+//            Corner Cases
+//            
+//            If the given string is null, we do not need to do anything.
 public:
 	string deDup(string s) {
 		int leng = (int)s.size();
@@ -1542,9 +2710,92 @@ public:
 	}
 };
 
-class Solution82 {
+class Solution80 {
+//    Remove Adjacent Repeated Characters II
+//    Remove adjacent, repeated characters in a given string, leaving only two characters for each group of such characters. The characters in the string are sorted in ascending order.
+//        
+//        Assumptions
+//        
+//        Try to do it in place.
+//            Examples
+//            
+//            “aaaabbbc” is transferred to “aabbc”
+//            Corner Cases
+//            
+//            If the given string is null, we do not need to do anything.
+    string deDup(string input) {
+        int leng=input.size();
+        if (leng<=2) {
+            return input;
+        }
+        string result="";
+        result+=input[0];
+        result+=input[1];
+        for (int i=2; i<leng; i++) {
+            if (input[i]==input[i-2]) {
+                continue;
+            }
+            else {
+                result+=input[i];
+            }
+        }
+        return result;
+    }
+};
+
+class Solution81 {
+//    Remove Adjacent Repeated Characters III
+//    Remove adjacent, repeated characters in a given string, leaving no character for each group of such characters. The characters in the string are sorted in ascending order.
+//        
+//        Assumptions
+//        
+//        Try to do it in place.
+//            Examples
+//            
+//            “aaaabbbc” is transferred to “c”
+//            Corner Cases
+//            
+//            If the given string is null, we do not need to do anything.
 public:
-	string deDup(string s) {
+    string duDup(string input) {
+        int leng=input.size();
+        if (leng<=1) {
+            return input;
+        }
+        string result="";
+        result+=input[0];
+        for (int i=1; i<leng; ) {
+            if (result.size()>0 && input[i]==result.back()) {
+                while (i<leng && input[i]==result.back()) {
+                    i++;
+                }
+                result.pop_back();
+            }
+            else {
+                result+=input[i];
+                i++;
+            }
+        }
+        return result;
+    }
+};
+
+class Solution82 {
+//    Remove Adjacent Repeated Characters IV
+//    Repeatedly remove all adjacent, repeated characters in a given string from left to right.
+//    
+//    No adjacent characters should be identified in the final string.
+//    
+//    Examples
+//    
+//    "abbbaaccz" → "aaaccz" → "ccz" → "z"
+//    "aabccdc" → "bccdc" → "bdc"
+public:
+    string deDup(string s) {
+        // abbbaaccz
+        // z
+        // s
+        //         f
 		if (s.size() <= 1) {
 			return s;
 		}
@@ -1571,7 +2822,51 @@ public:
 	}
 };
 
+class Solution83 {
+//    Encode Space
+//    In URL encoding, whenever we see an space " ", we need to replace it with "20%". Provide a method that performs this encoding for a given string.
+//        
+//        Examples
+//        
+//        "google/q?flo wer market" → "google/q?flo20%wer20%market"
+//        Corner Cases
+//        
+//        If the given string is null, we do not need to do anything.
+public:
+    string encode(string input) {
+        if (input.size()==0) {
+            return input;
+        }
+        string result="";
+        for (int i=0; i<input.size(); i++) {
+            if (input[i]==' ') {
+                result+="20%";
+            }
+            else {
+                result+=input[i];
+            }
+        }
+        return result;
+    }
+};
+
 class Solution85 {
+//    Determine If One String Is Another's Substring
+//    Determine if a small string is a substring of another large string.
+//        
+//        Return the index of the first occurrence of the small string in the large string.
+//        
+//        Return -1 if the small string is not a substring of the large string.
+//            
+//            Assumptions
+//            
+//            Both large and small are not null
+//            If small is empty string, return 0
+//            Examples
+//            
+//            “ab” is a substring of “bcabc”, return 2
+//            “bcd” is not a substring of “bcabc”, return -1
+//            "" is substring of "abc", return 0
 public:
 	int strstr(string large, string small) {
 		if (small.size() == 0) {
@@ -1645,6 +2940,15 @@ public:
 };
 
 class Solution65 {
+//    All Permutations II
+//    Given a string with possible duplicate characters, return a list with all permutations of the characters.
+//    
+//    Examples
+//    
+//    Set = “abc”, all permutations are [“abc”, “acb”, “bac”, “bca”, “cab”, “cba”]
+//    Set = "aba", all permutations are ["aab", "aba", "baa"]
+//    Set = "", all permutations are [""]
+//    Set = null, all permutations are []
 private:
 	void permutation2(vector<string>& result, string input, int index) {
 		if (index == input.size()) {
@@ -1673,6 +2977,22 @@ public:
 };
 
 class Solution84 {
+//    Reverse Words In A Sentence I
+//    Reverse the words in a sentence.
+//
+//    Assumptions
+//
+//    Words are separated by single space
+//
+//    There are no heading or tailing white spaces
+//
+//    Examples
+//
+//    “I love Google” → “Google love I”
+//
+//    Corner Cases
+//
+//    If the given string is null, we do not need to do anything.
 public:
 	string reverseWords(string s) {
 		if (s.size() <= 1) {
@@ -1894,6 +3214,15 @@ public:
 };
 
 class Solution35 {
+//    Reverse Linked List In Pairs
+//    Reverse pairs of elements in a singly-linked list.
+//    
+//    Examples
+//    
+//    L = null, after reverse is null
+//    L = 1 -> null, after reverse is 1 -> null
+//    L = 1 -> 2 -> null, after reverse is 2 -> 1 -> null
+//    L = 1 -> 2 -> 3 -> null, after reverse is 2 -> 1 -> 3 -> null
 public:
 	ListNode* reverseInPairs(ListNode* head) {
 		if (head == NULL || head->next == NULL) {
@@ -2152,6 +3481,15 @@ public:
 };
 
 class Solution74 {
+//    Power Of Two
+//    Determine if a given integer is power of 2.
+//        
+//        Examples
+//        
+//        16 is power of 2 (2 ^ 4)
+//        3 is not
+//        0 is not
+//        -1 is not
 public:
 	bool isPowerOfTwo(int number) {
 		if (number == 0) {
@@ -2169,6 +3507,12 @@ public:
 };
 
 class Solution75 {
+//    Number Of Different Bits
+//    Determine the number of bits that are different for two given integers.
+//        
+//    Examples
+//        
+//    5(“0101”) and 8(“1000”) has 3 different bits
 public:
 	int diffBits(int a, int b) {
 		//        int count=0;
@@ -2191,7 +3535,44 @@ public:
 	}
 };
 
+class Solution76 {
+//    All Unique Characters I
+//    Determine if the characters of a given string are all unique.
+//        
+//        Assumptions
+//        
+//        The only set of possible characters used in the string are 'a' - 'z', the 26 lower case letters.
+//        The given string is not null.
+//        Examples
+//        
+//        the characters used in "abcd" are unique
+//        the characters used in "aba" are not unique
+public:
+    bool allUnique(string word) {
+        int dict[8]={0};
+        for (int i=0; i<word.size(); i++) {
+            int aa=word[i]%32;
+            int bb=word[i]/32;
+            if (dict[bb] && (1<<aa)) {
+                return false;
+            }
+            dict[bb]|=1<<aa;
+        }
+        return true;
+    }
+};
 class Solution77 {
+//    All Unique Characters II
+//    Determine if the characters of a given string are all unique.
+//        
+//        Assumptions
+//        
+//        We are using ASCII charset, the value of valid characters are from 0 to 255
+//        The given string is not null
+//        Examples
+//        
+//        all the characters in "abA+\8" are unique
+//        "abA+\a88" contains duplicate characters
 public:
 	bool allUnique(string s) {
 		int mapper[8] = { 0 };
@@ -2210,6 +3591,15 @@ public:
 };
 
 class Solution78 {
+//    Hexadecimal Representation
+//    Generate the hexadecimal representation for a given non-negative integer number as a string. The hex representation should start with "0x".
+//        
+//        There should not be extra zeros on the left side.
+//        
+//        Examples
+//        
+//        0's hex representation is "0x0"
+//        255's hex representation is "0xFF"
 public:
 	string hex(int n) {
 		string result;
@@ -2238,6 +3628,17 @@ public:
 };
 
 class Solution86 {
+//    Longest Ascending SubArray
+//    Given an unsorted array, find the length of the longest subarray in which the numbers are in ascending order.
+//    
+//    Assumptions
+//    
+//    The given array is not null
+//    Examples
+//    
+//    {7, 2, 3, 1, 5, 8, 9, 6}, longest ascending subarray is {1, 5, 8, 9}, length is 4.
+//    
+//    {1, 2, 3, 3, 4, 4, 5}, longest ascending subarray is {1, 2, 3}, length is 3.
 public:
 	int longest(vector<int> input) {
 		if (input.size() == 0) {
@@ -2906,6 +4307,22 @@ public:
 };
 
 class Solution58 {
+//    Get Keys In Binary Tree Layer By Layer Zig-Zag Order
+//    Get the list of keys in a given binary tree layer by layer in zig-zag order.
+//    
+//    Examples
+//    
+//    5
+//    
+//    /    \
+//    
+//    3        8
+//    
+//    /   \        \
+//    
+//    1     4        11
+//    
+//    the result is [5, 3, 8, 11, 4, 1]
 public:
 	vector<int> zigZag(TreeNode* root) {
 		vector<int> result;
@@ -2957,6 +4374,34 @@ public:
 		}
 		return result;
 	}
+};
+
+class Solution60 {
+//    Height of Binary Tree
+//    Find the height of binary tree.
+//    
+//Examples:
+//    
+//    5
+//    
+//    /    \
+//    
+//    3        8
+//    
+//    /   \        \
+//    
+//    1      4        11
+//    
+//    The height of above binary tree is 3.
+public:
+    int findHeight(TreeNode* root) {
+        if(root==NULL) {
+            return 0;
+        }
+        else {
+            return max(findHeight(root->left), findHeight(root->right)) + 1;
+        }
+    }
 };
 
 class Solution115 {
@@ -3361,6 +4806,50 @@ public:
 };
 
 class Solution51 {
+//    Insert In Binary Search Tree
+//    Insert a key in a binary search tree if the binary search tree does not already contain the key. Return the root of the binary search tree.
+//        
+//        Assumptions
+//        
+//        There are no duplicate keys in the binary search tree
+//        
+//        If the key is already existed in the binary search tree, you do not need to do anything
+//            
+//            Examples
+//            
+//                  5
+//            
+//                /    \
+//            
+//               3        8
+//            
+//             /   \
+//            
+//            1     4
+//            
+//            insert 11, the tree becomes
+//            
+//                  5
+//            
+//                /    \
+//            
+//               3        8
+//            
+//             /   \        \
+//            
+//            1     4       11
+//            
+//            insert 6, the tree becomes
+//            
+//                   5
+//            
+//                 /    \
+//            
+//               3        8
+//            
+//             /   \     /  \
+//            
+//            1     4   6    11
 public:
 	TreeNode* insert(TreeNode* root, int value) {
 		// Write your solution here.
@@ -3394,6 +4883,13 @@ public:
 };
 
 class Solution52 {
+//    Search In Binary Search Tree
+//    Find the target key K in the given binary search tree, return the node that contains the key if K is found, otherwise return null.
+//        
+//    Assumptions
+//        
+//    There are no duplicate keys in the binary search tree
+//
 public:
 	TreeNode* solve(TreeNode* root, int value) {
 		if (root == NULL) {
@@ -3416,6 +4912,14 @@ public:
 };
 
 class Solution53 {
+//    Delete In Binary Search Tree
+//    Delete the target key K in the given binary search tree if the binary search tree contains K. Return the root of the binary search tree.
+//        
+//    Find your own way to delete the node from the binary search tree, after deletion the binary search tree's property should be maintained.
+//        
+//    Assumptions
+//        
+//    There are no duplicate keys in the binary search tree
 public:
 	TreeNode* solve(TreeNode* root, int value) {
 		if (root == NULL) {
@@ -4041,6 +5545,12 @@ public:
 };
 
 class Solution63 {
+//    All Subsets II
+//    Given a set of characters represented by a String, return a list containing all subsets of the characters.
+//    
+//    Assumptions
+//    
+//    There could be duplicate characters in the original set.
 private:
 	void solveHelper(string input, int index, string& combo, vector<string>& result) {
 		if (index >= input.size()) {
@@ -7016,17 +8526,20 @@ int main() {
 	//    t8->right=t11;
 	//    vector<int> result55 = new55->getRange(t5, 2, 5);
 	//    cout<<result55[0]<<endl;
-	//    Solution54* new54 = new Solution54();
-	//    TreeNode* t5=new TreeNode(5);
-	//    TreeNode* t3=new TreeNode(3);
-	//    TreeNode* t1=new TreeNode(1);
-	//    TreeNode* t4=new TreeNode(4);
-	//    TreeNode* t8=new TreeNode(8);
-	//    t5->left=t3;
-	//    t5->right=t8;
-	//    t3->left=t1;
-	//    t3->right=t4;
-	//    cout<<new54->isBST(t5)<<endl;
+	    Solution54* new54 = new Solution54();
+	    TreeNode* t5=new TreeNode(5);
+	    TreeNode* t3=new TreeNode(3);
+	    TreeNode* t1=new TreeNode(1);
+	    TreeNode* t4=new TreeNode(4);
+	    TreeNode* t8=new TreeNode(8);
+	    t5->left=t3;
+	    t5->right=t8;
+	    t3->left=t1;
+	    t3->right=t4;
+	    cout<<new54->isBST1(t5)<<endl;
+    TreeNode* t2=new TreeNode(2);
+    t1->left=t2;
+    cout<<new54->isBST1(t1)<<endl;
 	//    Solution50* new50 = new Solution50();
 	//    TreeNode* t5=new TreeNode(5);
 	//    TreeNode* t51=new TreeNode(5);
@@ -7204,6 +8717,12 @@ int main() {
 	//    cout<<new31->front()<<endl;
 	//    Solution267* new267 = new Solution267();
 	//    vector<int> result267 = new267->search({{1,2,3}, {4,5,6}, {7,8,9}}, 8);
+    Solution27* s27 = new Solution27();
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 1)<<endl;
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 2)<<endl;
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 3)<<endl;
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 4)<<endl;
+    cout<<s27->kthSum({1, 3, 5}, {4, 8}, 5)<<endl;
 	//    Solution17* new17 = new Solution17();
 	//    int result17 = new17->solve({1, 3, 3, 4}, 2);
 	//    cout<<result17<<endl;
