@@ -3863,7 +3863,211 @@ private:
 	}
 };
 
+class Solution92 {
+
+	//Buy Stock I
+	//	Given an array of positive integers representing a stock’s price on each day.On each day you can only make one operation : either buy or sell one unit of stock and you can make at most 1 transaction.Determine the maximum profit you can make.
+
+	//	Assumptions
+
+	//	The given array is not null and is length of at least 2.
+	//	Examples
+
+	//{ 2, 3, 2, 1, 4, 5 }, the maximum profit you can make is 5 - 1 = 4
+public:
+	int maxProfit(vector<int> array) {
+		int leng = array.size();
+		if (leng<=1)
+		{
+			return 0;
+		}
+		int minprice = array[0];
+		int maxprofit = 0;
+		for (int i = 0; i < leng; i++)
+		{
+			minprice = min(minprice, array[i]);
+			maxprofit = max(maxprofit, array[i] - minprice);
+		}
+		return maxprofit;
+	}
+};
+
+class Solution93 {
+	//Buy Stock II
+	//	Given an array of positive integers representing a stock’s price on each day.On each day you can only make one operation : either buy or sell one unit of stock, you can make as many transactions you want, but at any time you can only hold at most one unit of stock.Determine the maximum profit you can make.
+
+	//	Assumptions
+
+	//	The give array is not null and is length of at least 2
+	//	Examples
+
+	//{ 2, 3, 2, 1, 4, 5 }, the maximum profit you can make is(3 - 2) + (5 - 1) = 5
+	//		if array[2]>array[1]
+	//				profit[2][1]=array[2]-array[1]
+	//				else 
+	//					profit[2][1]=0;
+	//		
+	//		if array[j]-array[i]>0 
+	//			profit[j][i] = array[j]-array[i]
+	//			else
+	//				profit[j][i]=0
+	//			
+	//				profit[j][i]=profit[j][k]+profit[k][i];
+	//		return profit[5][0];
+	//		0 0 0 0 0 0 
+	//		1 0 0 0 0 0
+	//		0 1 0 0 0 0
+	//		0 0 1 0 0 0
+	//		0 0 0 4 0 0
+	//		0 0 0 0 5 0
+public:
+	int maxProfit(vector<int> array) {
+		int leng = array.size();
+		if (leng <= 1) {
+			return 0;
+		}
+		int result = 0;
+		for (int i = 0; i < leng; i++)
+		{
+			if (array[i]>array[i-1])
+			{
+				result += array[i] - array[i - 1];
+			}
+		}
+		return result;
+	}
+};
+
+class Solution94 {
+
+	//Buy Stock III
+	//	Given an array of positive integers representing a stock’s price on each day.On each day you can only make one operation : either buy or sell one unit of stock, at any time you can only hold at most one unit of stock, and you can make at most 2 transactions in total.Determine the maximum profit you can make.
+
+	//	Assumptions
+
+	//	The give array is not null and is length of at least 2
+	//	Examples
+
+	//{ 2, 3, 2, 1, 4, 5, 2, 11 }, the maximum profit you can make is(5 - 1) + (11 - 2) = 13
+public:
+	int maxProfit(vector<int> array) {
+		//切一刀,两边各做一次
+		int leng = array.size();
+		if (leng <= 1) {
+			return 0;
+		}
+		int result = 0;
+		for (int i = 1; i < leng; i++) {
+			int leftmax = maxHelper(array, 0, i);
+			int rightmax = maxHelper(array, i + 1, leng - 1);
+			result = max(result, leftmax + rightmax);
+		}
+		return result;
+	}
+	int maxProfit1(vector<int> array) {
+		//切一刀,两边各做一次
+		int leng = array.size();
+		if (leng<=1)
+		{
+			return 0;
+		}
+		return maxHelper1(array, 2);
+	}
+private:
+	int maxHelper(vector<int>& array, int left, int right) {
+		if (right-left<=0)
+		{
+			return 0;
+		}
+		int minprice = array[left];
+		int result = 0;
+		for (int i = left; i <= right; i++)
+		{
+			minprice = min(minprice, array[i]);
+			result = max(result, array[i] - minprice);
+		}
+		return result;
+	}
+	int maxHelper1(vector<int>& array, int k) {
+		// f[k, ii] represents the max profit up until prices[ii] (Note: NOT ending with prices[ii]) using at most k transactions. 
+		// f[k, ii] = max(f[k, ii-1], prices[ii] - prices[jj] + f[k-1, jj]) { jj in range of [0, ii-1] }
+		//          = max(f[k, ii-1], prices[ii] + max(f[k-1, jj] - prices[jj]))
+		// f[0, ii] = 0; 0 times transation makes 0 profit
+		// f[k, 0] = 0; if there is only one price data point you can't make any money no matter how many times you can trade
+		if (array.size() <= 1) {
+			return 0;
+		}
+		int result = 0;
+		vector<vector<int>> matrix(k + 1, vector<int>(array.size(), 0));
+		for (int kk = 1; kk <= k; kk++)
+		{
+			int temp = matrix[kk - 1][0] - array[0];
+			for (int ii = 1; ii < array.size(); ii++)
+			{
+				matrix[kk][ii] = max(matrix[kk][ii - 1], array[ii] + temp);
+				temp = max(temp, matrix[kk - 1][ii] - array[ii]);
+				result = max(result, matrix[kk][ii]);
+			}
+		}
+		return result;
+// zero time	0 0 0 0 0 0 0 0  
+//	1st time	0 1 1 1 3 4 4 10    tmp:-2, -2, -2, -1, -1, -1, -1
+//	2nd time	0 1 1 1 6 7 7 13	tmp:-2, -1,  2,  2,  2,  2, 2
+	}
+};
+
+
+class Solution95 {
+	/*Buy Stock IV
+		Given an array of integers representing a stock’s price on each day.On each day you can only make one operation : either buy or sell one unit of stock, and at any time you can only hold at most one unit of stock, and you can make at most K transactions in total.Determine the maximum profit you can make.
+
+		Assumptions
+
+		The give array is not null and is length of at least 2
+		Examples
+
+	{ 2, 3, 2, 1, 4, 5, 2, 11 }, K = 3, the maximum profit you can make is(3 - 2) + (5 - 1) + (11 - 2) = 14*/
+public:
+	int maxProfit(vector<int> array, int k) {
+		int leng = array.size();
+		if (leng <= 1) {
+			return 0;
+		}
+		if (k<1)
+		{
+			return 0;
+		}
+		vector<vector<int>> matrix(k + 1, vector<int>(leng, 0));
+		int result = 0;
+		for (int kk = 1; kk <= k; kk++)
+		{
+			int temp = matrix[kk - 1][0] - array[0];
+			for (int ii = 1; ii < leng; ii++)
+			{
+				matrix[kk][ii] = max(matrix[kk][ii - 1], array[ii] + temp);
+				temp = max(temp, matrix[kk - 1][ii] - array[ii]);
+				result = max(result, matrix[kk][ii]);
+			}
+		}
+		return result;
+	}
+};
+
 class Solution99 {
+	//Dictionary Word I
+	//	Given a word and a dictionary, determine if it can be composed by concatenating words from the given dictionary.
+
+	//	Assumptions
+
+	//	The given word is not null and is not empty
+	//	The given dictionary is not null and is not empty and all the words in the dictionary are not null or empty
+	//	Examples
+
+	//	Dictionary : {“bob”, “cat”, “rob”}
+
+	//Word: “robob” return false
+
+	//Word : “robcatbob” return true since it can be composed by "rob", "cat", "bob"
 public:
 	bool canBreak(string input, vector<string> dict) {
 		if (input.size() == 0) {
@@ -3871,12 +4075,12 @@ public:
 		}
 		vector<bool> vb(input.size() + 1, false);
 		for (int i = 1; i <= input.size(); i++) {
-			if (std::find(dict.begin(), dict.end(), input.substr(0, i)) != dict.end()) {
+			if (find(dict.begin(), dict.end(), input.substr(0, i)) != dict.end()) {
 				vb[i] = true;
 				continue;
 			}
 			for (int j = 1; j<i; j++) {
-				if (vb[j] == true && (std::find(dict.begin(), dict.end(), input.substr(j, i - j)) != dict.end())) {
+				if (vb[j] == true && (find(dict.begin(), dict.end(), input.substr(j, i - j)) != dict.end())) {
 					vb[i] = true;
 					break;
 				}
@@ -3887,6 +4091,17 @@ public:
 };
 
 class Solution100 {
+	/*	Edit Distance
+		Given two strings of alphanumeric characters, determine the minimum number of Replace, Delete, and Insert operations needed to transform one string into the other.
+
+		Assumptions
+
+		Both strings are not null
+		Examples
+
+		string one : “sigh”, string two : “asith”
+
+		the edit distance between one and two is 2 (one insert “a” at front then replace “g” with “t”).*/
 public:
 	int editDistance(string s1, string s2) {
 		int m = (int)s1.size(), n = (int)s2.size();
@@ -3913,6 +4128,23 @@ public:
 };
 
 class Solution101 {
+	//Largest Square Of 1s
+	//	Determine the largest square of 1s in a binary matrix(a binary matrix only contains 0 and 1), return the length of the largest square.
+
+	//	Assumptions
+
+	//	The given matrix is not null and guaranteed to be of size N * N, N >= 0
+	//	Examples
+
+	//{ { 0, 0, 0, 0 },
+
+	//{ 1, 1, 1, 1 },
+
+	//{ 0, 1, 1, 1 },
+
+	//{ 1, 0, 1, 1 } }
+
+	//	the largest square of 1s has length of 2
 public:
 	int largest(vector<vector<int>> matrix) {
 		int row = (int)matrix.size(), col = (int)matrix[0].size();
@@ -3946,6 +4178,17 @@ public:
 };
 
 class Solution97 {
+	//Largest SubArray Sum
+	//	Given an unsorted integer array, find the subarray that has the greatest sum.Return the sum.
+
+	//	Assumptions
+
+	//	The given array is not null and has length of at least 1.
+	//	Examples
+
+	//{ 2, -1, 4, -2, 1 }, the largest subarray sum is 2 + (-1) + 4 = 5
+
+	//{-2, -1, -3}, the largest subarray sum is - 1
 public:
 	int largestSum(vector<int> input) {
 		int leng = (int)input.size();
@@ -3971,7 +4214,152 @@ public:
 	}
 };
 
+class Solution98 {
+	/*	
+	Largest SubArray Product
+		Given an unsorted array of doubles, find the subarray that has the greatest product.Return the product.
+
+		Assumptions
+
+		The given array is not null and has length of at least 1.
+		Examples
+
+	{ 2.0, -0.1, 4, -2, -1.5 }, the largest subarray product is 4 * (-2) * (-1.5) = 12
+	*/
+public:
+	double largestProduct(vector<double> array) {
+		//int leng = array.size();
+		//if (leng==0)
+		//{
+		//	return 0;
+		//}
+		//else if (leng == 1) {
+		//	return array[0];
+		//}
+		//else if (leng == 2) {
+		//	return max(array[0] * array[1], max(array[1], array[0]));
+		//}
+		//else {
+		//	// 	//    	  0 2.0
+		//	// 	//    	  1 -0.1
+		//	// 	//    	  2 4
+		//	// 	//    	  3 1.6
+		//	// 	//    	  4 12
+		//	double resultmax = DBL_MAX;
+		//	for (int i = 0; i < leng; i++)
+		//	{
+		//		double loopmax = array[i];
+		//		double current = array[i];
+		//		resultmax = max(resultmax, current);
+		//		for (int j = i; j >=0; j--)
+		//		{
+		//			if (j == i) {
+		//				continue;
+		//			}
+		//			else {
+		//				current = current*array[j];
+		//				loopmax = max(loopmax, current);
+		//				resultmax = max(resultmax, loopmax);
+		//			}
+		//		}
+		//	}
+		//	return resultmax;
+		//}
+		if (array.size()==0)
+		{
+			return 0;
+		}
+		double maxproduct = array[0];
+		double maxtemp = array[0];
+		double mintemp = array[0];
+		for (int i = 1; i < array.size(); i++)
+		{
+			double a = maxtemp*array[i];
+			double b = mintemp*array[i];
+			maxtemp = max(array[i], max(a, b));
+			mintemp = min(array[i], min(a, b));
+			maxproduct = max(maxproduct, maxtemp);
+		}
+		return maxproduct;
+	}
+};
+
+class Solution102 {
+
+	//Largest Rectangle Of 1s
+	//	Determine the largest rectangle of 1s in a binary matrix(a binary matrix only contains 0 and 1), return the area.
+
+	//	Assumptions
+
+	//	The given matrix is not null and has size of M * N, M >= 0 and N >= 0
+	//	Examples
+
+	//{ { 0, 0, 0, 0 },
+
+	//{ 1, 1, 1, 1 },
+
+	//{ 0, 1, 1, 1 },
+
+	//{ 1, 0, 1, 1 } }
+
+	//	the largest rectangle of 1s has area of 2 * 3 = 6
+public:
+	int largest(vector<vector<int>> matrix) {
+		if (matrix.size()==0)
+		{
+			return 0;
+		}
+		int result = 0, m = matrix.size(), n = matrix[0].size();
+		vector<int> left(n, 0);
+		vector<int> right(n, 0);
+		vector<int> height(n, 0);
+		for (int i = 0; i < m; i++) {
+			int curleft = 0, curright = n;
+			for (int j = 0; j < n; j++) {
+				if (matrix[i][j] == 1) {
+					height[j]++;
+				}
+				else {
+					height[j] = 0;
+				}
+			}
+			for (int j = 0; j < n; j++) {
+				if (matrix[i][j] == 1) {
+					left[j]=max(curleft, left[j]);
+				}
+				else {
+					left[j] = 0;
+					curleft = j + 1;
+				}
+			}
+			for (int j = n-1; j >= 0; j--)
+			{
+				if (matrix[i][j]==1)
+				{
+					right[j] = min(right[j], curright);
+				}
+				else {
+					right[j] = n; curright = j;
+				}
+			}
+			for (int j = 0; j < n; j++) {
+				result = max(result, (right[j] - left[j])*height[j]);
+			}
+		}
+		return result;
+	}
+};
+
 class Solution103 {
+	/*  Longest Consecutive 1s
+		Given an array containing only 0s and 1s, find the length of the longest subarray of consecutive 1s.
+
+		Assumptions
+
+		The given array is not null
+		Examples
+
+	{ 0, 1, 0, 1, 1, 1, 0 }, the longest consecutive 1s is 3.*/
 public:
 	int longest(vector<int> input) {
 		int leng = (int)input.size();
@@ -5594,6 +5982,23 @@ public:
 };
 
 class Solution96 {
+	//Merge Stones
+	//	We have a list of piles of stones, each pile of stones has a certain weight, represented by an array of integers.In each move, we can merge two adjacent piles into one larger pile, the cost is the sum of the weights of the two piles.We merge the piles of stones until we have only one pile left.Determine the minimum total cost.
+
+	//	Assumptions
+
+	//	stones is not null and is length of at least 1
+	//	Examples
+
+	//{ 4, 3, 3, 4 }, the minimum cost is 28
+
+	//	merge first 4 and first 3, cost 7
+
+	//	merge second 3 and second 4, cost 7
+
+	//	merge two 7s, cost 14
+
+	//	total cost = 7 + 7 + 14 = 28
 public:
 	int minCostInterative(vector<int> stones) {
 		int leng = (int)stones.size();
@@ -5631,7 +6036,7 @@ public:
 						mincost[j][i] = min(mincost[j][i], mincost[j][k] + mincost[k + 1][i] + subsumm[j][i]);
 					}
 				}
-				cout << j << " " << i << " " << mincost[j][i] << endl;
+				//cout << j << " " << i << " " << mincost[j][i] << endl;
 			}
 		}
 		return mincost[0][leng - 1];
