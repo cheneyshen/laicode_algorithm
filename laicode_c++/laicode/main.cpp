@@ -1,7 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-#pragma once
-#include"stdafx.h"
+//#pragma once
+//#include"stdafx.h"
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -3235,6 +3235,21 @@ public:
 };
 
 class Solution121 {
+//    Spiral Order Traverse I
+//    Traverse an N * N 2D array in spiral order clock-wise starting from the top left corner. Return the list of traversal sequence.
+//    
+//    Assumptions
+//    
+//    The 2D array is not null and has size of N * N where N >= 0
+//    Examples
+//    
+//    { {1,  2,  3},
+//        
+//        {4,  5,  6},
+//        
+//        {7,  8,  9} }
+//    
+//    the traversal sequence is [1, 2, 3, 6, 9, 8, 7, 4, 5]
 private:
 	void spiralHelper(vector<vector<int>>& input, vector<int>& result, int offset, int size) {
 		if (size == 1) {
@@ -3270,6 +3285,21 @@ public:
 };
 
 class Solution122 {
+//    Spiral Order Traverse II
+//    Traverse an M * N 2D array in spiral order clock-wise starting from the top left corner. Return the list of traversal sequence.
+//    
+//    Assumptions
+//    
+//    The 2D array is not null and has size of M * N where M, N >= 0
+//    Examples
+//    
+//    { {1,  2,  3,  4},
+//        
+//        {5,  6,  7,  8},
+//        
+//        {9, 10, 11, 12} }
+//    
+//    the traversal sequence is [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
 private:
 	void spiralHelper2(vector<vector<int>>& matrix, vector<int>& result, int offset, int m, int n) {
 		//1行或者1列
@@ -3318,7 +3348,74 @@ public:
 	}
 };
 
+class Solution123 {
+//    Spiral Order Generate I
+//    Generate an N * N 2D array in spiral order clock-wise starting from the top left corner, using the numbers of 1, 2, 3, …, N * N in increasing order.
+//    
+//    Assumptions
+//    
+//    N >= 0
+//    Examples
+//    
+//    N = 3, the generated matrix is
+//    
+//    { {1,  2,  3}
+//        
+//        {8,  9,  4},
+//        
+//        {7,  6,  5} }
+private:
+    void helper(int offset, int size, int& current, vector<vector<int>>& result) {
+        if (size==0) {
+            return;
+        }
+        else if(size==1) {
+            result[offset][offset]=current++;
+            return;
+        }
+        for (int i=0; i<size-1; i++) {
+            result[0+offset][i+offset]=current++;
+        }
+        for (int i=0; i<size-1; i++) {
+            result[i+offset][size-1+offset]=current++;
+        }
+        for (int i=size-1; i>0; i--) {
+            result[size-1+offset][i+offset]=current++;
+        }
+        for (int i=size-1; i>0; i--) {
+            result[i+offset][0+offset]=current++;
+        }
+        helper(offset+1, size-2, current, result);
+    }
+public:
+    vector<vector<int>> solve(int n) {
+        if (n==1) {
+            return {{1}};
+        }
+        vector<vector<int>> result(n, vector<int>(n, 0));
+        int now=1;
+        helper(0, n, now, result);
+        return result;
+    }
+};
+
 class Solution124 {
+//    Spiral Order Generate II
+//    Generate an M * N 2D array in spiral order clock-wise starting from the top left corner, using the numbers of 1, 2, 3, …, M * N in increasing order.
+//    
+//    Assumptions
+//    
+//    M >= 0, N >= 0
+//    Examples
+//    
+//    M = 3, N = 4, the generated matrix is
+//    
+//    { {1,  2,  3,  4}
+//        
+//        {10, 11, 12, 5},
+//        
+//        {9,  8,  7,  6} }
+    
 private:
 	void solveHelper(vector<vector<int>>& matrix, int count, int offset, int m, int n) {
 		int counter = count;
@@ -3388,6 +3485,30 @@ public:
 };
 
 class Solution126 {
+//    Lowest Common Ancestor I
+//    Given two nodes in a binary tree, find their lowest common ancestor.
+//    
+//    Assumptions
+//    
+//    There is no parent pointer for the nodes in the binary tree
+//        
+//        The given two nodes are guaranteed to be in the binary tree
+//        
+//        Examples
+//        
+//        5
+//        
+//        /   \
+//        
+//        9     12
+//        
+//        /  \      \
+//        
+//        2    3      14
+//        
+//        The lowest common ancestor of 2 and 14 is 5
+//        
+//        The lowest common ancestor of 2 and 9 is 9
 public:
 	TreeNode* solve(TreeNode* root, TreeNode* one, TreeNode* two) {
 		if (root == NULL) {
@@ -4386,6 +4507,25 @@ public:
 };
 
 class Solution104 {
+//    Longest Cross Of 1s
+//    Given a matrix that contains only 1s and 0s, find the largest cross which contains only 1s, with the same arm lengths and the four arms joining at the central point.
+//    
+//    Return the arm length of the largest cross.
+//    
+//    Assumptions
+//    
+//    The given matrix is not null, has size of N * M, N >= 0 and M >= 0.
+//    Examples
+//    
+//    { {0, 0, 0, 0},
+//        
+//        {1, 1, 1, 1},
+//        
+//        {0, 1, 1, 1},
+//        
+//        {1, 0, 1, 1} }
+//    
+//    the largest cross of 1s has arm length 2.
 public:
 	int largest(vector<vector<int>> matrix) {
 		//    {0, 0, 0, 0},
@@ -4501,6 +4641,25 @@ public:
 };
 
 class Solution105 {
+//    Largest X Of 1s
+//    Given a matrix that contains only 1s and 0s, find the largest X shape which contains only 1s, with the same arm lengths and the four arms joining at the central point.
+//    
+//    Return the arm length of the largest X shape.
+//    
+//    Assumptions
+//    
+//    The given matrix is not null, has size of N * M, N >= 0 and M >= 0.
+//    Examples
+//    
+//    { {0, 0, 0, 0},
+//        
+//        {1, 1, 1, 1},
+//        
+//        {0, 1, 1, 1},
+//        
+//        {1, 0, 1, 1} }
+//    
+//    the largest X of 1s has arm length 2.
 public:
 	int largest(vector<vector<int> > input) {
 		//    {0, 0, 0, 0},
@@ -4616,6 +4775,25 @@ public:
 };
 
 class Solution106 {
+//    Largest SubMatrix Sum
+//    Given a matrix that contains integers, find the submatrix with the largest sum.
+//    
+//    Return the sum of the submatrix.
+//    
+//    Assumptions
+//    
+//    The given matrix is not null and has size of M * N, where M >= 1 and N >= 1
+//    Examples
+//    
+//    { {1, -2, -1, 4},
+//        
+//        {1, -1,  1, 1},
+//        
+//        {0, -1, -1, 1},
+//        
+//        {0,  0,  1, 1} }
+//    
+//    the largest submatrix sum is (-1) + 4 + 1 + 1 + (-1) + 1 + 1 + 1 = 7.
 private:
 	int matrixSumHelper(vector<int>& array) {
 		int leng = (int)array.size();
@@ -4681,7 +4859,101 @@ public:
 	}
 };
 
+class Solution107 {
+//    Largest SubMatrix Product
+//    Given a matrix that contains doubles, find the submatrix with the largest product.
+//    
+//    Return the product of the submatrix.
+//    
+//    Assumptions
+//    
+//    The given double matrix is not null and has size of M * N, where M >= 1 and N >= 1
+//    Examples
+//    
+//    { {1, -0.2, -1},
+//        
+//        {1, -1.5,  1},
+//        
+//        {0,     0,  1} }
+//    
+//    the largest submatrix product is 1 * 1 = 1.
+public:
+    double largest(vector<vector<double>> matrix) {
+        if (matrix.size()==0) {
+            return 0.0;
+        }
+        int rows=matrix.size(), cols=matrix[0].size();
+        //		{2.0, -1.0,  0.5,  1.0, -3.0},
+        //		{0.0, -2.0, -1.0,  2.0,  0.1},
+        //		{3.0,  0.2,  1.0, -3.0, -2.0}
+        //		2.0 -2.0 -1.0 -1.0  3.0
+        //		0.0  0.0  0.0  0.0  0.0
+        //		3.0  0.6  0.6 -1.8  3.6
+        double result=matrix[0][0];
+        vector<vector<double>> matrixProduct(rows, vector<double>(cols, 0));
+        //preprocess for all columns
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                if (j==0) {
+                    matrixProduct[i][j]=matrix[i][j];
+                }
+                else {
+                    matrixProduct[i][j]=matrix[i][j]*matrixProduct[i][j-1];
+                    //Perhaps this value == -0.0
+                    if(abs(matrixProduct[i][j])==0) {
+                        matrixProduct[i][j]=0;
+                    }
+                }
+            }
+        }
+        //zip all the rows for [i,j] columns (0<=i<=j<N)
+        for (int i=0; i<cols; i++) {
+            for (int j=i; j<cols; j++) {
+                vector<double> testing(rows, 0);
+                for (int m=0; m<rows; m++) {
+                    if (matrixProduct[m][j]==0 && matrix[m][j]!=0) {
+                        testing[m]=1;
+                        for (int k=i; k<=j; k++) {
+                            testing[m]=testing[m]*matrix[m][k];
+                        }
+                    }
+                    else if (matrix[m][j]==0) {
+                        testing[m]=0;
+                    }
+                    else {
+                        testing[m]=matrixProduct[m][j]/matrixProduct[m][i]*matrix[m][i];
+                    }
+                }
+                result=max(result, matrixProductHelper(testing));
+            }
+        }
+        return result;
+    }
+private:
+    double matrixProductHelper(vector<double>& array) {
+        if (array.size()==0) {
+            return 0;
+        }
+        double maxProduct=array[0];
+        double minCurrent=array[0];
+        double maxCurrent=array[0];
+        for (int i=1; i<array.size(); i++) {
+            double a=minCurrent*array[i];
+            double b=maxCurrent*array[i];
+            minCurrent=min(array[i], min(a, b));
+            maxCurrent=max(array[i], max(a, b));
+            maxProduct=max(maxProduct, maxCurrent);
+        }
+        return maxProduct;
+    }
+};
 class Solution108 {
+//    Perfect Shuffle
+//    Given an array of integers (without any duplicates), shuffle the array such that all permutations are equally likely to be generated.
+//    
+//    Assumptions
+//    
+//    The given array is not null
 public:
 	// std::srand(time(NULL)); is already called for you.
 	void solve(vector<int>& input) {
@@ -4695,6 +4967,14 @@ public:
 };
 
 class Solution109 {
+//    Reservoir Sampling
+//    Consider an unlimited flow of data elements. How do you sample one element from this flow, such that at any point during the processing of the flow, you can return a random element from the n elements read so far.
+//        
+//        You will implement two methods for a sampling class:
+//            
+//            read(int value) - read one number from the flow
+//            sample() - return at any time the sample, if n values have been read, the probability of returning any one of the n values is 1/n, return null(Java)/INT_MIN(C++) if there is no value read so far
+//                You may need to add more fields for the class.
 private:
 	int count = 0;
 	int result;
@@ -4713,7 +4993,43 @@ public:
 	}
 };
 
+class Solution110 {
+//    Generalized Reservoir Sampling
+//    Consider an unlimited flow of data elements. How do you sample k element from this flow, such that at any point during the processing of the flow, you can return a random set of k elements from the n elements read so far.
+//        
+//        Assumptions
+//        
+//        k >= 1
+//        You will implement two methods for a sampling class:
+//            
+//            read(int value) - read one number from the flow
+//            sample() - return at any time the k samples as a list, return the list of all values read when the number of values read so fas <= k.
+//            You may need to add more fields for the class.
+private:
+    int k;
+    vector<int> result;
+public:
+    Solution110(int size) {
+        k=size;
+    }
+    vector<int> sample() {
+        return result;
+    }
+    void read(int i) {
+        if (result.size()<=k) {
+            result.push_back(i);
+        }
+        else {
+            int index=random()*k;
+            if (index<k) {
+                result[index]=i;
+            }
+        }
+    }
+};
 class Solution111 {
+//    Random7 Using Random5
+//    Given a random generator random5(), the return value of random5() is 0 - 4 with equal probability. Use random5() to implement random7().
 private:
 	int rand5() {
 		return rand() % 5;
@@ -4737,6 +5053,8 @@ public:
 };
 
 class Solution112 {
+//    Random1000 Using Random5
+//    Given a random generator random5(), the return value of random5() is 0 - 4 with equal probability. Use random5() to implement random1000()
 	// std::srand(time(NULL)); is called for you.
 private:
 	int rand5() {
@@ -4766,6 +5084,21 @@ public:
 };
 
 class Solution113 {
+//    Median Tracker
+//    Given an unlimited flow of numbers, keep track of the median of all elements seen so far.
+//    
+//    You will have to implement the following two methods for the class
+//        
+//        read(int value) - read one value from the flow
+//        median() - return the median at any time, return null if there is no value read so far
+//            Examples
+//            
+//            read(1), median is 1
+//            read(2), median is 1.5
+//            read(3), median is 2
+//            read(10), median is 2.5
+//            ......
+
 public:
 	priority_queue<int, vector<int>, less<int>> max_heap;
 	priority_queue<int, vector<int>, greater<int>> min_heap;
@@ -4814,6 +5147,19 @@ public:
 };
 
 class Solution114 {
+//    95 Percentile
+//    Given a list of integers representing the lengths of urls, find the 95 percentile of all lengths (95% of the urls have lengths <= returned length).
+//    
+//    Assumptions
+//    
+//    The maximum length of valid url is 4096
+//    
+//    The list is not null and is not empty and does not contain null
+//    
+//    Examples
+//    
+//    [1, 2, 3, ..., 95, 96, 97, 98, 99, 100], 95 percentile of all lengths is 95.
+
 public:
 	int solve(vector<int> values) {
 		//    95 Percentile
@@ -4929,6 +5275,15 @@ public:
 };
 
 class Solution115 {
+//    Array Deduplication I
+//    Given a sorted integer array, remove duplicate elements. For each group of elements with the same value keep only one of them. Do this in-place, using the left side of the original array and maintain the relative order of the elements of the array. Return the array after deduplication.
+//    
+//    Assumptions
+//    
+//    The array is not null
+//    Examples
+//    
+//    {1, 2, 2, 3, 3, 3} → {1, 2, 3}
 public:
 	vector<int> dedup(vector<int> input) {
 		int leng = (int)input.size();
@@ -4955,6 +5310,15 @@ public:
 };
 
 class Solution116 {
+//    Array Deduplication II
+//    Given a sorted integer array, remove duplicate elements. For each group of elements with the same value keep at most two of them. Do this in-place, using the left side of the original array and maintain the relative order of the elements of the array. Return the array after deduplication.
+//    
+//    Assumptions
+//    
+//    The given array is not null
+//    Examples
+//    
+//    {1, 2, 2, 3, 3, 3} → {1, 2, 2, 3, 3}
 public:
 	vector<int> dedup(vector<int> array) {
 		int leng = (int)array.size();
@@ -4981,6 +5345,15 @@ public:
 };
 
 class Solution117 {
+//    Array Deduplication III
+//    Given a sorted integer array, remove duplicate elements. For each group of elements with the same value do not keep any of them. Do this in-place, using the left side of the original array and and maintain the relative order of the elements of the array. Return the array after deduplication.
+//        
+//        Assumptions
+//        
+//        The given array is not null
+//        Examples
+//        
+//    {1, 2, 2, 3, 3, 3} → {1}
 public:
 	vector<int> dedup(vector<int> array) {
 		int leng = (int)array.size();
@@ -5013,6 +5386,18 @@ public:
 };
 
 class Solution118 {
+    
+//    Array Deduplication IV
+//    Given an unsorted integer array, remove adjacent duplicate elements repeatedly, from left to right. For each group of elements with the same value do not keep any of them.
+//        
+//        Do this in-place, using the left side of the original array. Return the array after deduplication.
+//        
+//        Assumptions
+//        
+//        The given array is not null
+//        Examples
+//        
+//    {1, 2, 3, 3, 3, 2, 2} → {1, 2, 2, 2} → {1}, return {1}
 public:
 	vector<int> dedup(vector<int> input) {
 		int leng = (int)input.size();
@@ -5040,6 +5425,16 @@ public:
 };
 
 class Solution119 {
+//    Largest And Smallest
+//    Use the least number of comparisons to get the largest and smallest number in the given integer array. Return the largest number and the smallest number.
+//    
+//    Assumptions
+//    
+//    The given array is not null and has length of at least 1
+//    Examples
+//    
+//    {2, 1, 5, 4, 3}, the largest number is 5 and smallest number is 1. return [5, 1].
+//
 public:
 	vector<int> largestAndSmallest(vector<int> input) {
 		int leng = (int)input.size();
@@ -5071,7 +5466,80 @@ public:
 	}
 };
 
+class Solution120 {
+//    Largest And Second Largest
+//    Use the least number of comparisons to get the largest and 2nd largest number in the given integer array. Return the largest number and 2nd largest number.
+//    
+//    Assumptions
+//    
+//    The given array is not null and has length of at least 2
+//    Examples
+//    
+//    {2, 1, 5, 4, 3}, the largest number is 5 and 2nd largest number is 4.
+//    
+public:
+    vector<int> largestAndSecond(vector<int> array) {
+        int leng=(int)array.size();
+        if (leng<1) {
+            return {0, 0};
+        }
+        else if (leng==1) {
+            return {array[0], array[0]};
+        }
+        else if (leng==2) {
+            return {max(array[0], array[1]), min(array[0], array[1])};
+        }
+        int leng2=2*leng;
+        int secondLarge=-1;
+        int index;
+        vector<int> heaper(leng2, -1);
+        for (index=leng; index<leng2; index++) {
+            heaper[index]=array[index-leng];
+        }
+        for (index=leng2-2; index>=2; index=index-2) {
+            heaper[index/2]=max(heaper[index], heaper[index+1]);
+        }
+        int largest=heaper[1];
+        for (index=1; index<leng; ) {
+            if (heaper[2*index]==heaper[index]) {
+                if (secondLarge<heaper[2*index+1]) {
+                    secondLarge=heaper[2*index+1];
+                }
+                index=2*index;
+            }
+            else {
+                if (secondLarge<heaper[2*index]) {
+                    secondLarge=heaper[2*index];
+                }
+                index=2*index+1;
+            }
+        }
+        return {largest, secondLarge};
+    }
+};
+
 class Solution125 {
+//    Rotate Matrix
+//    Rotate an N * N matrix clockwise 90 degrees.
+//    
+//    Assumptions
+//    
+//    The matrix is not null and N >= 0
+//    Examples
+//    
+//    { {1,  2,  3}
+//        
+//        {8,  9,  4},
+//        
+//        {7,  6,  5} }
+//    
+//    after rotation is
+//    
+//    { {7,  8,  1}
+//        
+//        {6,  9,  2},
+//        
+//        {5,  4,  3} }
 private:
 	void solveHelper(vector<vector<int>>& matrix, int offset, int size) {
 		if (size <= 1) {
@@ -5108,6 +5576,32 @@ public:
 };
 
 class Solution127 {
+//    Lowest Common Ancestor II
+//    Given two nodes in a binary tree (with parent pointer available), find their lowest common ancestor.
+//    
+//    Assumptions
+//    
+//    There is parent pointer for the nodes in the binary tree
+//        
+//        The given two nodes are not guaranteed to be in the binary tree
+//        
+//        Examples
+//        
+//        5
+//        
+//        /   \
+//        
+//        9     12
+//        
+//        /  \      \
+//        
+//        2    3      14
+//        
+//        The lowest common ancestor of 2 and 14 is 5
+//        
+//        The lowest common ancestor of 2 and 9 is 9
+//        
+//        The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
 private:
 	int solve127Helper(TreeNodeP* one) {
 		int result = 0;
@@ -5145,7 +5639,94 @@ public:
 	}
 };
 
+class Solution128 {
+//    Lowest Common Ancestor III
+//    Given two nodes in a binary tree, find their lowest common ancestor (the given two nodes are not guaranteed to be in the binary tree).
+//    
+//    Return null If any of the nodes is not in the tree.
+//    
+//    Assumptions
+//    
+//    There is no parent pointer for the nodes in the binary tree
+//        
+//        The given two nodes are not guaranteed to be in the binary tree
+//        
+//        Examples
+//        
+//        5
+//        
+//        /   \
+//        
+//        9     12
+//        
+//        /  \      \
+//        
+//        2    3      14
+//        
+//        The lowest common ancestor of 2 and 14 is 5
+//        
+//        The lowest common ancestor of 2 and 9 is 9
+//        
+//        The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* one, TreeNode* two) {
+        if (findNode(root, one)==false || findNode(root, two)==false) {
+            return NULL;
+        }
+        return LCAHelper(root, one, two);
+    }
+private:
+    TreeNode* LCAHelper(TreeNode* root, TreeNode* one, TreeNode* two) {
+        if (root==NULL || one==root || two==root) {
+            return root;
+        }
+        TreeNode* left=LCAHelper(root->left, one, two);
+        TreeNode* right=LCAHelper(root->right, one, two);
+        if (left!=NULL && right!=NULL) {
+            return root;
+        }
+        return left==NULL?right:left;
+    }
+    
+    bool findNode(TreeNode* one, TreeNode* two) {
+        if (one==NULL || two==NULL) {
+            return false;
+        }
+        else if (one==two){
+            return true;
+        }
+        
+        return findNode(one->left, two) || findNode(one->right, two);
+    }
+};
+
 class Solution129 {
+//    Lowest Common Ancestor IV
+//    Given K nodes in a binary tree, find their lowest common ancestor.
+//    
+//    Assumptions
+//    
+//    K >= 2
+//    
+//    There is no parent pointer for the nodes in the binary tree
+//        
+//        The given K nodes are guaranteed to be in the binary tree
+//        
+//        Examples
+//        
+//        5
+//        
+//        /   \
+//        
+//        9     12
+//        
+//        /  \      \
+//        
+//        2    3      14
+//        
+//        The lowest common ancestor of 2, 3, 14 is 5
+//        
+//        The lowest common ancestor of 2, 3, 9 is 9
 public:
 	TreeNode* solve(TreeNode* root, vector<TreeNode*> nodes) {
 		if (root == NULL) {
@@ -5165,6 +5746,51 @@ public:
 	}
 };
 
+class Solution130 {
+//    Deep Copy Skip List
+//    A Skip List is a special type of linked list, where each of the nodes has a forward pointer to another node in the front and forward pointers are guaranteed to be in non-descending order.
+//    
+//    Make a deep copy of the original skip list.
+public:
+    class SkipListNode {
+    public:
+        int value;
+        SkipListNode* next;
+        SkipListNode* forward;
+        SkipListNode(int v) {
+            value = v;
+            next = forward = NULL;
+        }
+    };
+    
+    SkipListNode* solve(SkipListNode* n) {
+        if (n==NULL) {
+            return n;
+        }
+        unordered_map<SkipListNode*, SkipListNode*> mapper;
+        SkipListNode* head=n;
+        SkipListNode* result=new SkipListNode(n->value);
+        mapper[head]=result;
+        SkipListNode* newhead=result;
+        SkipListNode* output=result;
+        while (head->next!=NULL) {
+            newhead->next=new SkipListNode(head->next->value);
+            mapper[head->next]=newhead->next;
+            head=head->next;
+            newhead=newhead->next;
+        }
+        head=n;
+        newhead=result;
+        while (head!=NULL) {
+            if (head->forward!=NULL) {
+                newhead->forward=mapper[head->forward];
+            }
+            head=head->next;
+            newhead=newhead->next;
+        }
+        return output;
+    }
+};
 
 class Solution258 {
 public:
@@ -5262,6 +5888,22 @@ public:
 };
 
 class Solution138 {
+//    Maximum Path Sum Binary Tree I
+//    Given a binary tree in which each node contains an integer number. Find the maximum possible sum from one leaf node to another leaf node. If there is no such path available, return Integer.MIN_VALUE(Java)/INT_MIN (C++).
+//    
+//    Examples
+//    
+//    -15
+//    
+//    /    \
+//    
+//    2      11
+//    
+//    /    \
+//    
+//    6     14
+//    
+//    The maximum path sum is 6 + 11 + 14 = 31.
 private:
 	int getMaxPathSumHelper(TreeNode* root, int& result) {
 		if (root == NULL) {
@@ -5299,6 +5941,17 @@ public:
 };
 
 class Solution143 {
+//    Minimum Cuts For Palindromes
+//    Given a string, a partitioning of the string is a palindrome partitioning if every substring of the partition is a palindrome. Determine the fewest cuts needed for a palindrome partitioning of a given string.
+//        
+//        Assumptions
+//        
+//        The given string is not null
+//        Examples
+//        
+//        “a | babbbab | bab | aba” is a palindrome partitioning of “ababbbabbababa”.
+//        
+//        The minimum number of cuts needed is 3.
 public:
 	int getMinHelper(string input) {
 		int leng = (int)input.size();
@@ -5327,6 +5980,214 @@ public:
 	int minCuts(string input) {
 		return getMinHelper(input);
 	}
+};
+
+class Solution144 {
+    
+//    Recover Binary Search Tree
+//    Given a Binary Search Tree with only two nodes swapped. Try to find them and recover the binary search tree.
+//    
+//Input:
+//    
+//    4
+//    
+//    / \
+//    
+//    2   6
+//    
+//    / \   / \
+//    
+//    1  5 3  7
+//    
+//Output:       4
+//    
+//    / \
+//    
+//    2   6
+//    
+//    /  \   / \
+//    
+//    1  3   5  7
+public:
+    TreeNode* recover(TreeNode* root) {
+        if (root==NULL || (root->left ==NULL && root->right==NULL)) {
+            return root;
+        }
+        recoverHelper(root, INT_MIN, INT_MAX);
+        if (node1!=NULL) {
+            swap(node1->value, node2->value);
+        }
+        return root;
+    }
+private:
+    TreeNode* node1=NULL;
+    TreeNode* node2=NULL;
+    TreeNode* prev=NULL;
+    
+    void recoverHelper(TreeNode* root, int left, int right) {
+        if (root==NULL) {
+            return;
+        }
+        recoverHelper(root, left, root->value);
+        if (prev!=NULL && prev->value>root->value) {
+            if (node1==NULL) {
+                node1=prev;
+            }
+            node2=root;
+        }
+        prev=root;
+        recoverHelper(root->right, root->value, right);
+    }
+};
+
+class Solution145 {
+    
+//    Find all binary search trees
+//Description: Given a number n, generate all possible BST from 1…n.
+//    
+//Input:   3
+//    
+//Output:
+//    
+//    1                 3       2              3      1
+//    
+//    \              /         /   \          /           \
+//    
+//    3        2       1        3    1               2
+//    
+//    /         /                              \                \
+//    
+//    2        1                                  2               3
+public:
+    vector<TreeNode*> generateBSTs(int n) {
+        if (n<1) {
+            return {};
+        }
+        else if (n==1) {
+            TreeNode* t1=new TreeNode(1);
+            return {t1};
+        }
+        vector<TreeNode*> result;
+        result=buildBST(1, n);
+        return result;
+    }
+private:
+    vector<TreeNode*> buildBST(int left, int right) {
+        vector<TreeNode*> result;
+        if (left>right) {
+            result.push_back(NULL);
+            return result;
+        }
+        else if (left==right) {
+            result.push_back(new TreeNode(left));
+            return result;
+        }
+        for (int i=left; i<=right; i++) {
+            vector<TreeNode*> lefts=buildBST(left, i-1);
+            vector<TreeNode*> rights=buildBST(i+1, right);
+            for (auto ileft:lefts) {
+                for (auto iright:rights) {
+                    TreeNode* ti=new TreeNode(i);  //must regeneate root each time
+                    ti->left=ileft;
+                    ti->right=iright;
+                    result.push_back(ti);
+                }
+            }
+        }
+        return result;
+    }
+};
+
+class Solution146 {
+//    Find Number of BSTs Generated
+//    Find the number of different Binary Search Trees generated from 1-n.
+//    
+//Example:
+//    
+//Input: 3, Return: 5
+public:
+    int numOfTrees(int n) {
+        if (n<=0) {
+            return 0;
+        }
+        else if (n==1) {
+            return 1;
+        }
+        vector<TreeNode*> result=constructBST(1, n);
+        return result.size();
+    }
+    
+private:
+    vector<TreeNode*> constructBST(int left, int right) {
+        vector<TreeNode*> result;
+        if (left>right) {
+            result.push_back(NULL);
+            return result;
+        }
+        else if(left==right) {
+            result.push_back(new TreeNode(left));
+            return result;
+        }
+        for (int i=left; i<=right; i++) {
+            vector<TreeNode*> lefts=constructBST(left, i-1);
+            vector<TreeNode*> rights=constructBST(i+1, right);
+            for (auto ileft:lefts) {
+                for (auto iright:rights) {
+                    TreeNode* ti=new TreeNode(i);
+                    ti->left=ileft;
+                    ti->right=iright;
+                    result.push_back(ti);
+                }
+            }
+        }
+        return result;
+    }
+};
+
+class Solution147 {
+    
+//    Restore IP Addresses
+//    Given a string containing only digits, restore it by retiring all possible valid IP address combinations.
+//    
+//Input:  ”25525511135”
+//    
+//Output: [“255.255.11.135”, “255.255.111.35”]
+public:
+    vector<string> restore(string ip) {
+        int leng=ip.size();
+        string combo="";
+        vector<string> result;
+        restoreHelper(ip, 0, leng-1, combo, result);
+        return result;
+    }
+private:
+    void restoreHelper(string& ip, int left, int right, string& combo, vector<string>& result) {
+        if (left>=right) {
+            size_t found=combo.find_first_of(".");
+            int repeats=0;
+            while (found!=string::npos)
+            {
+                repeats++;
+                found=combo.find_first_of(".",found+1);
+            }
+            if (found==3) {
+                result.push_back(combo);
+            }
+            combo="";
+        }
+        for (int i=1; i<=3 && left+i<=right; i++) {
+            int i_auto = stoi(ip.substr(left, i), nullptr, 0);
+            if (i_auto<256 && i_auto>=0) {
+                combo+=ip.substr(left, i);
+                combo+=".";
+                restoreHelper(ip, left+i, right, combo, result);
+                combo.pop_back();
+                for (int j=0; j<i; j++) {
+                    combo.pop_back();
+                }
+            }
+        }
+    }
 };
 
 class Solution51 {
@@ -5483,6 +6344,29 @@ public:
 };
 
 class Solution139 {
+//    Maximum Path Sum Binary Tree II
+//    Given a binary tree in which each node contains an integer number. Find the maximum possible sum from any node to any node (the start node and the end node can be the same).
+//    
+//    Assumptions
+//    
+//    ​The root of the given binary tree is not null
+//    Examples
+//    
+//    -1
+//    
+//    /    \
+//    
+//    2      11
+//    
+//    /    \
+//    
+//    6    -14
+//    
+//    one example of paths could be -14 -> 11 -> -1 -> 2
+//    
+//    another example could be the node 11 itself
+//    
+//    The maximum path sum in the above binary tree is 6 + 11 + (-1) + 2 = 18
 private:
 	int maxPathSumHelper(TreeNode* root, int* global_max) {
 		if (root == NULL) {
@@ -5505,9 +6389,32 @@ public:
 };
 
 class Solution140 {
+//    Maximum Path Sum Binary Tree III
+//    Given a binary tree in which each node contains an integer number. Find the maximum possible subpath sum(both the starting and ending node of the subpath should be on the same path from root to one of the leaf nodes, and the subpath is allowed to contain only one node).
+//    
+//    Assumptions
+//    
+//    The root of given binary tree is not null
+//    Examples
+//    
+//    -5
+//    
+//    /    \
+//    
+//    2      11
+//    
+//    /    \
+//    
+//    6     14
+//    
+//    /
+//    
+//    -3
+//    
+//    The maximum path sum is 11 + 14 = 25
 private:
 	// Time = O(n^2)
-	void maxPathSumHelper(TreeNode* root, vector<TreeNode*> path_prefix, int* global_max) {
+	void maxPathSumHelper(TreeNode* root, vector<TreeNode*>& path_prefix, int* global_max) {
 		if (root == NULL) {
 			return;
 		}
@@ -5559,15 +6466,41 @@ private:
 public:
 	int maxPathSum(TreeNode* root) {
 		int result = INT_MIN;
-		//        vector<TreeNode*> routes;
-		//        maxPathSumHelper(root, routes, &result);
-		//        maxPathSumWorker(root, 0, &result);
+        vector<TreeNode*> routes;
+        maxPathSumHelper(root, routes, &result);
+        maxPathSumWorker(root, 0, &result);
 		maxPathSumUpper(root, 0, &result);
 		return result;
 	}
 };
 
 class Solution141 {
+//    Binary Tree Path Sum To Target III
+//    Given a binary tree in which each node contains an integer number. Determine if there exists a path (the path can only be from one node to itself or to any of its descendants), the sum of the numbers on the path is the given target number.
+//        
+//        Examples
+//        
+//        5
+//        
+//        /    \
+//        
+//        2      11
+//        
+//        /    \
+//        
+//        6     14
+//        
+//        /
+//        
+//        3
+//        
+//        If target = 17, There exists a path 11 + 6, the sum of the path is target.
+//        
+//        If target = 20, There exists a path 11 + 6 + 3, the sum of the path is target.
+//        
+//        If target = 10, There does not exist any paths sum of which is target.
+//        
+//        If target = 11, There exists a path only containing the node 11.
 private:
 	void matchedSumHelper(TreeNode* root, int presum, int target, unordered_map<int, int>& mymap, int* found) {
 		if (root == NULL) {
@@ -5595,6 +6528,73 @@ public:
 	}
 };
 
+class Solution142 {
+//    Binary Tree Diameter
+//    Given a binary tree in which each node contains an integer number. The diameter is defined as the longest distance from one leaf node to another leaf node. The distance is the number of nodes on the path.
+//    
+//    If there does not exist any such paths, return 0.
+//    
+//    Examples
+//    
+//    5
+//    
+//    /    \
+//    
+//    2      11
+//    
+//          /    \
+//    
+//          6     14
+//    
+//    The diameter of this tree is 4 (2 → 5 → 11 → 14)
+//                      1
+//                   2     6
+//                3     4
+//              7  8   5
+//                9   10      7(9 8 3 2 4 5 10)
+//    1
+//       2
+//     3   4   (3 2 4)
+public:
+    int diameter(TreeNode* root) {
+        int height=0;
+        int counts=leaves(root);
+        if (counts<=1) {
+            return 0;
+        }
+        return diameter(root, &height);
+    }
+private:
+    int leaves(TreeNode* root) {
+        if (root==NULL) {
+            return 0;
+        }
+        if (root->left==NULL && root->right==NULL) {
+            return 1;
+        }
+        else {
+            return leaves(root->left)+leaves(root->right);
+        }
+    }
+    int diameter(TreeNode* root, int* height) {
+        if (root==NULL) {
+            *height=0;
+            return 0;
+        }
+        
+        int lh=0, rh=0;
+        int ldiamter=0, rdiameter=0;
+        ldiamter=diameter(root->left, &lh);
+        rdiameter=diameter(root->right, &rh);
+        *height=max(lh, rh)+1;
+        if (lh==0 || rh==0) {
+            return max(ldiamter, rdiameter);
+        }
+        else {
+            return max(max(ldiamter, rdiameter),lh+rh+1);
+        }
+    }
+};
 class Solution211 {
 private:
 	TreeNode* reconstructHelper(vector<int> post, int left, int right) {
@@ -5715,6 +6715,9 @@ public:
 };
 
 class Solution131 {
+//    Deep Copy Linked List With Random Pointer
+//    Each of the nodes in the linked list has another pointer pointing to a random node in the list or null. Make a deep copy of the original list.
+//
 public:
 	class RandomListNode {
 	public:
@@ -5755,6 +6758,14 @@ public:
 };
 
 class Solution132 {
+    
+//    Deep Copy Undirected Graph
+//    Make a deep copy of an undirected graph, there could be cycles in the original graph.
+//    
+//    Assumptions
+//    
+//    The given graph is not null
+
 public:
 	GraphNode* solve(GraphNode* startNode) {
 		if (startNode == NULL) {
@@ -5784,6 +6795,13 @@ public:
 };
 
 class Solution133 {
+//    Merge K Sorted Array
+//    Merge K sorted array into one big sorted array in ascending order.
+//    
+//    Assumptions
+//    
+//    The input arrayOfArrays is not null, none of the arrays is null either.
+
 public:
 	struct element {
 		int index_of_row;
@@ -5822,7 +6840,7 @@ public:
 			while (!min_heap.empty()) {
 				element temp = min_heap.top();
 				result.push_back(temp.value);
-				cout << min_heap.size() << endl;
+//				cout << min_heap.size() << endl;
 				min_heap.pop();
 				if (temp.index_in_row + 1<arrayOfArrays[temp.index_of_row].size()) {
 					temp.index_in_row += 1;
@@ -5850,6 +6868,12 @@ public:
 };
 
 class Solution134 {
+//    Merge K Sorted Lists
+//    Merge K sorted lists into one big sorted list in ascending order.
+//    
+//    Assumptions
+//    
+//    ListOfLists is not null, and none of the lists is null.
 public:
 	class listNodeComparer {
 	public:
@@ -5890,6 +6914,30 @@ public:
 };
 
 class Solution135 {
+//    Closest Number In Binary Search Tree
+//    In a binary search tree, find the node containing the closest number to the given target number.
+//    
+//Assumptions:
+//    
+//    The given root is not null.
+//    There are no duplicate keys in the binary search tree.
+//Examples:
+//    
+//    5
+//    
+//    /    \
+//    
+//    2      11
+//    
+//    /    \
+//    
+//    6     14
+//    
+//    closest number to 4 is 5
+//    
+//    closest number to 10 is 11
+//    
+//    closest number to 6 is 6
 public:
 	void closestHelper(TreeNode* root, int target, int* solution) {
 		if (root == NULL) {
@@ -5926,6 +6974,32 @@ public:
 };
 
 class Solution136 {
+//    Largest Number Smaller In Binary Search Tree
+//    In a binary search tree, find the node containing the largest number smaller than the given target number.
+//    
+//    If there is no such number, return INT_MIN.
+//    
+//Assumptions:
+//    
+//    The given root is not null.
+//    There are no duplicate keys in the binary search tree.
+//    Examples
+//    
+//    5
+//    
+//    /    \
+//    
+//    2      11
+//    
+//    /    \
+//    
+//    6     14
+//    
+//    largest number smaller than 1 is Integer.MIN_VALUE(Java) or INT_MIN(c++)
+//    
+//    largest number smaller than 10 is 6
+//    
+//    largest number smaller than 6 is 5
 public:
 	void largestSmallerHelper(TreeNode* root, int target, int* solution) {
 		if (root == NULL) {
@@ -5953,6 +7027,12 @@ public:
 };
 
 class Solution137 {
+//    Cutting Wood I
+//    There is a wooden stick with length L >= 1, we need to cut it into pieces, where the cutting positions are defined in an int array A. The positions are guaranteed to be in ascending order in the range of [1, L - 1]. The cost of each cut is the length of the stick segment being cut. Determine the minimum total cost to cut the stick into the defined pieces.
+//    
+//    Examples
+//    
+//    L = 10, A = {2, 4, 7}, the minimum total cost is 10 + 4 + 6 = 20 (cut at 4 first then cut at 2 and cut at 7)
 public:
 	int minCost(vector<int> cuts, int length) {
 		int leng = (int)cuts.size();
@@ -5971,7 +7051,7 @@ public:
 				}
 				else {
 					for (int k = i + 1; k<j; k++) {
-						cout << matrix[i][j] << "\t" << matrix[i][k] << "\t" << matrix[k][j] << "\t" << fullcuts[j] << "\t" << fullcuts[i] << endl;
+//						cout << matrix[i][j] << "\t" << matrix[i][k] << "\t" << matrix[k][j] << "\t" << fullcuts[j] << "\t" << fullcuts[i] << endl;
 						matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j] + fullcuts[j] - fullcuts[i]);
 					}
 				}
@@ -8131,15 +9211,15 @@ public:
 
 // To execute C++, please define "int main()"
 int main() {
-    Solution400* s400 = new Solution400();
-    s400->rainbowSortIII({1}, 1);
-    s400->rainbowSortIII({1, 3, 2, 1, 2} , 3);
-    s400->rainbowSortIII({3, 1, 5, 5, 1, 4, 2}, 5);
-    
-    Solution399* s399 = new Solution399();
-    s399->rainbowSortII({0} );
-    s399->rainbowSortII({1,0} );
-    s399->rainbowSortII({1, 3, 1, 2, 0} );
+//    Solution400* s400 = new Solution400();
+//    s400->rainbowSortIII({1}, 1);
+//    s400->rainbowSortIII({1, 3, 2, 1, 2} , 3);
+//    s400->rainbowSortIII({3, 1, 5, 5, 1, 4, 2}, 5);
+//    
+//    Solution399* s399 = new Solution399();
+//    s399->rainbowSortII({0} );
+//    s399->rainbowSortII({1,0} );
+//    s399->rainbowSortII({1, 3, 1, 2, 0} );
 //    Solution383* s383 = new Solution383();
 //    s383->reverseWords(" I  love  Google  ");
 //    Solution350* s350 = new Solution350();
@@ -8467,7 +9547,6 @@ int main() {
 	//    TreeNode* now=new51->insert(root, 38);
 	//    cout<<now->value;
 	//    solve125({ {1,  2,  3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16} });
-	//    largestAndSecond({2, 1, 5, 4, 3});
 	//    largestAndSmallest({2, 1, 5, 4, 3});
 	//    dedup4({1, 2, 2, 3, 3, 3, 2});
 	//    dedup3({1, 2, 2, 3, 3, 3, 4});
@@ -8694,6 +9773,19 @@ int main() {
 	//    Solution211* new211 = new Solution211();
 	//    TreeNode* result211 = new211->reconstruct( {1, 4, 3, 11, 8, 5});
 	//    cout<<result211->left->right->value<<endl;
+    Solution147* s147 = new Solution147();
+    vector<string> o147 = s147->restore("25525511135");
+    Solution145* s145 = new Solution145();
+    vector<TreeNode*> o145 = s145->generateBSTs(3);
+//    TreeNode* t1=new TreeNode(1);
+//    TreeNode* t2=new TreeNode(2);
+//    TreeNode* t3=new TreeNode(3);
+//    TreeNode* t4=new TreeNode(4);
+//    t1->right=t2;
+//    t2->right=t4;
+//    t2->left=t3;
+//    Solution142* s142 = new Solution142();
+//    s142->diameter(t1);
 	//    Solution141* new141 = new Solution141();
 	//    TreeNode* t5=new TreeNode(5);
 	//    TreeNode* t2=new TreeNode(2);
@@ -8786,6 +9878,8 @@ int main() {
 	//                                        {9,10,11,12},
 	//                                        {13,14,15,16}};
 	//    new125->solve(result125);
+    Solution120* s120 = new Solution120();
+    s120->largestAndSecond({2,1,5,4,3});
 	//    Solution119* new119 = new Solution119();
 	//    vector<int> result119 = new119->largestAndSmallest({2, 1, 5, 4, 3});
 	//    cout<<result119[0]<<" "<<result119[1]<<endl;
@@ -8875,8 +9969,8 @@ int main() {
 	//    Solution99* new99 = new Solution99();
 	//    cout<<new99->canBreak("bcdbcdabc", {"abc","bcd","def"})<<endl;
 	//    cout<<new99->canBreak("robob", {"bob", "cat", "rob"})<<endl;
-Solution91* s91 = new Solution91();
-s91->minJump({1, 3, 1, 2, 2}, 2);
+    //  Solution91* s91 = new Solution91();
+    //  s91->minJump({1, 3, 1, 2, 2}, 2);
 	//    Solution89* new89 = new Solution89();
 	//    cout<<new89->minJump({3, 3, 1, 0, 4})<<" "<<new89->minJump({2, 1, 1, 0, 2})<<endl;
 	//    Solution88* new88 = new Solution88();
@@ -8926,6 +10020,8 @@ s91->minJump({1, 3, 1, 2, 2}, 2);
 	//    if (result124.size()>0) {
 	//        cout<<result124[0][0]<<endl;
 	//    }
+    Solution123* s123 = new Solution123();
+    s123->solve(3);
 	//    Solution122* new122 = new Solution122();
 	//    vector<int> result122 = new122->spiral({{1}});
 	//    cout<<result122[0]<<endl;
