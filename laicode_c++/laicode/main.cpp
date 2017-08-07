@@ -1,7 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
-//#pragma once
-//#include"stdafx.h"
+#pragma once
+#include"stdafx.h"
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -19,6 +19,7 @@
 #include <math.h>       /* pow */
 #include <sstream>
 #include <unordered_set>
+#include <random>
 
 // C++ program to  largest rectangle with all 1s in a binary matrix
 using namespace std; 
@@ -1607,6 +1608,159 @@ public:
 					isTweakedIdentical(r1->right, r2->left));
 		}
 		return false;
+	}
+};
+
+class Solution51 {
+	//    Insert In Binary Search Tree
+	//    Insert a key in a binary search tree if the binary search tree does not already contain the key. Return the root of the binary search tree.
+	//        
+	//        Assumptions
+	//        
+	//        There are no duplicate keys in the binary search tree
+	//        
+	//        If the key is already existed in the binary search tree, you do not need to do anything
+	//            
+	//            Examples
+	//            
+	//                  5
+	//            
+	//                /    \
+	//            
+//               3        8
+//            
+//             /   \
+//            
+//            1     4
+//            
+//            insert 11, the tree becomes
+//            
+//                  5
+//            
+//                /    \
+//            
+//               3        8
+//            
+//             /   \        \
+//            
+//            1     4       11
+//            
+//            insert 6, the tree becomes
+//            
+//                   5
+//            
+//                 /    \
+//            
+//               3        8
+//            
+//             /   \     /  \
+//            
+//            1     4   6    11
+public:
+	TreeNode* insert(TreeNode* root, int value) {
+		// Write your solution here.
+		if (root == NULL) {
+			root = new TreeNode(value);
+			return root;
+		}
+		TreeNode* parent = NULL;
+		TreeNode* current = root;
+		while (current != NULL) {
+			if (current->value == value) {
+				return root;
+			}
+			else if (current->value>value) {
+				parent = current;
+				current = current->left;
+			}
+			else {
+				parent = current;
+				current = current->right;
+			}
+		}
+		if (parent->value<value) {
+			parent->right = new TreeNode(value);
+		}
+		else {
+			parent->left = new TreeNode(value);
+		}
+		return root;
+	}
+};
+
+class Solution52 {
+	//    Search In Binary Search Tree
+	//    Find the target key K in the given binary search tree, return the node that contains the key if K is found, otherwise return null.
+	//        
+	//    Assumptions
+	//        
+	//    There are no duplicate keys in the binary search tree
+	//
+public:
+	TreeNode* solve(TreeNode* root, int value) {
+		if (root == NULL) {
+			return NULL;
+		}
+		TreeNode* temp = root;
+		while (temp != NULL) {
+			if (temp->value == value) {
+				return temp;
+			}
+			else if (temp->value>value) {
+				temp = temp->left;
+			}
+			else {
+				temp = temp->right;
+			}
+		}
+		return NULL;
+	}
+};
+
+class Solution53 {
+	//    Delete In Binary Search Tree
+	//    Delete the target key K in the given binary search tree if the binary search tree contains K. Return the root of the binary search tree.
+	//        
+	//    Find your own way to delete the node from the binary search tree, after deletion the binary search tree's property should be maintained.
+	//        
+	//    Assumptions
+	//        
+	//    There are no duplicate keys in the binary search tree
+public:
+	TreeNode* solve(TreeNode* root, int value) {
+		if (root == NULL) {
+			return root;
+		}
+		if (root->value>value) {
+			//删除后，总会改变树的结构，不管改变的左子树还是右子树，返回新子树的根之后从新连接
+			root->left = solve(root->left, value);
+		}
+		else if (root->value<value) {
+			//删除后，总会改变树的结构，不管改变的左子树还是右子树，返回新子树的根之后从新连接
+			root->right = solve(root->right, value);
+		}
+		else {
+			if (root->left == NULL && root->right == NULL) {
+				//不需要改
+				return NULL;
+			}
+			else if (root->left == NULL || root->right == NULL) {
+				//只返回另一个子树
+				return root->left == NULL ? root->right : root->left;
+			}
+			else {
+				//find the node with smallest value in the right subtree
+				//copy its value to root
+				//recurse delete the smallest node from right of this root
+				TreeNode* closet = root->right;
+				while (closet->left != NULL) {
+					closet = closet->left;
+				}
+				root->value = closet->value;
+				root->right = solve(root->right, closet->value);
+			}
+		}
+		return root;
 	}
 };
 
@@ -5020,7 +5174,7 @@ public:
             result.push_back(i);
         }
         else {
-            int index=random()*k;
+            int index=rand()*k;
             if (index<k) {
                 result[index]=i;
             }
@@ -6154,195 +6308,444 @@ class Solution147 {
 //Output: [“255.255.11.135”, “255.255.111.35”]
 public:
     vector<string> restore(string ip) {
-        int leng=ip.size();
-        string combo="";
+        vector<string> combo;
         vector<string> result;
-        restoreHelper(ip, 0, leng-1, combo, result);
+        restoreHelper(ip, 0, combo, result);
         return result;
     }
 private:
-    void restoreHelper(string& ip, int left, int right, string& combo, vector<string>& result) {
-        if (left>=right) {
-            size_t found=combo.find_first_of(".");
-            int repeats=0;
-            while (found!=string::npos)
-            {
-                repeats++;
-                found=combo.find_first_of(".",found+1);
-            }
-            if (found==3) {
-                result.push_back(combo);
-            }
-            combo="";
-        }
-        for (int i=1; i<=3 && left+i<=right; i++) {
-            int i_auto = stoi(ip.substr(left, i), nullptr, 0);
-            if (i_auto<256 && i_auto>=0) {
-                combo+=ip.substr(left, i);
-                combo+=".";
-                restoreHelper(ip, left+i, right, combo, result);
-                combo.pop_back();
-                for (int j=0; j<i; j++) {
-                    combo.pop_back();
-                }
-            }
-        }
-    }
-};
-
-class Solution51 {
-//    Insert In Binary Search Tree
-//    Insert a key in a binary search tree if the binary search tree does not already contain the key. Return the root of the binary search tree.
-//        
-//        Assumptions
-//        
-//        There are no duplicate keys in the binary search tree
-//        
-//        If the key is already existed in the binary search tree, you do not need to do anything
-//            
-//            Examples
-//            
-//                  5
-//            
-//                /    \
-//            
-//               3        8
-//            
-//             /   \
-//            
-//            1     4
-//            
-//            insert 11, the tree becomes
-//            
-//                  5
-//            
-//                /    \
-//            
-//               3        8
-//            
-//             /   \        \
-//            
-//            1     4       11
-//            
-//            insert 6, the tree becomes
-//            
-//                   5
-//            
-//                 /    \
-//            
-//               3        8
-//            
-//             /   \     /  \
-//            
-//            1     4   6    11
-public:
-	TreeNode* insert(TreeNode* root, int value) {
-		// Write your solution here.
-		if (root == NULL) {
-			root = new TreeNode(value);
-			return root;
-		}
-		TreeNode* parent = NULL;
-		TreeNode* current = root;
-		while (current != NULL) {
-			if (current->value == value) {
-				return root;
-			}
-			else if (current->value>value) {
-				parent = current;
-				current = current->left;
-			}
-			else {
-				parent = current;
-				current = current->right;
-			}
-		}
-		if (parent->value<value) {
-			parent->right = new TreeNode(value);
-		}
-		else {
-			parent->left = new TreeNode(value);
-		}
-		return root;
-	}
-};
-
-class Solution52 {
-//    Search In Binary Search Tree
-//    Find the target key K in the given binary search tree, return the node that contains the key if K is found, otherwise return null.
-//        
-//    Assumptions
-//        
-//    There are no duplicate keys in the binary search tree
-//
-public:
-	TreeNode* solve(TreeNode* root, int value) {
-		if (root == NULL) {
-			return NULL;
-		}
-		TreeNode* temp = root;
-		while (temp != NULL) {
-			if (temp->value == value) {
-				return temp;
-			}
-			else if (temp->value>value) {
-				temp = temp->left;
-			}
-			else {
-				temp = temp->right;
-			}
-		}
-		return NULL;
-	}
-};
-
-class Solution53 {
-//    Delete In Binary Search Tree
-//    Delete the target key K in the given binary search tree if the binary search tree contains K. Return the root of the binary search tree.
-//        
-//    Find your own way to delete the node from the binary search tree, after deletion the binary search tree's property should be maintained.
-//        
-//    Assumptions
-//        
-//    There are no duplicate keys in the binary search tree
-public:
-	TreeNode* solve(TreeNode* root, int value) {
-		if (root == NULL) {
-			return root;
-		}
-		if (root->value>value) {
-			//删除后，总会改变树的结构，不管改变的左子树还是右子树，返回新子树的根之后从新连接
-			root->left = solve(root->left, value);
-		}
-		else if (root->value<value) {
-			//删除后，总会改变树的结构，不管改变的左子树还是右子树，返回新子树的根之后从新连接
-			root->right = solve(root->right, value);
-		}
-		else {
-			if (root->left == NULL && root->right == NULL) {
-				//不需要改
-				return NULL;
-			}
-			else if (root->left == NULL || root->right == NULL) {
-				//只返回另一个子树
-				return root->left == NULL ? root->right : root->left;
-			}
-			else {
-				//find the node with smallest value in the right subtree
-				//copy its value to root
-				//recurse delete the smallest node from right of this root
-				TreeNode* closet = root->right;
-				while (closet->left != NULL) {
-					closet = closet->left;
+    void restoreHelper(string& ip, int left, vector<string>& combo, vector<string>& result) {
+        if (combo.size()==4) {
+			if (left == ip.size()) {
+				string addr = combo[0];
+				for (int i = 1; i < 4; i++) {
+					addr += ("." + combo[i]);
 				}
-				root->value = closet->value;
-				root->right = solve(root->right, closet->value);
+				result.push_back(addr);
+			}
+			return;
+        }
+		string current;
+		for (int i = left; i < ip.size() && i < left+3; i++)
+		{
+			current += ip[i];
+			if (isValidNum(current));
+			{
+				combo.push_back(current);
+				restoreHelper(ip, i+1, combo, result);
+				combo.pop_back();
 			}
 		}
-		return root;
+    }
+
+	bool isValidNum(string s) {
+		if (s.empty() || s.size() > 3) return false;
+		if (s[0] == '0' && s.size() != 1) return false;
+		if (s.size() == 3 && stoi(s) > 255) return false;
+		return true;
 	}
 };
 
+class Solution148 {
+	/*Decode Ways
+		A message containing letters from A - Z is being encoded to numbers using the following ways :
+
+	‘A’ = 1
+
+		‘B’ = 2
+
+		…
+
+		‘Z’ = 26
+
+		Given an encoded message containing digits, determine the total number of ways to decode it.
+
+		Input:    “212”
+
+		It can be either decoded as 2, 1, 2("BAB") or 2, 12("BL") or 21, 2("UB"), return 3.*/
+public:
+	int numDecodeWay(string s) {
+		if (s.size() == 0 || s[0] == '0')
+		{
+			return 0;
+		}
+		return numDecodeWay(s, 0);
+	}
+
+	int numDecodeWay1(string s) {
+		int n = s.size();
+		vector<int> mem(n + 1, -1);
+		mem[n] = 1;
+		return s.empty() ? 0 : num(0, s, mem);
+	}
+
+	int num(int i, string& s, vector<int>& mem) {
+		if (mem[i] >= 0)	return mem[i];
+		if (s[i] == '0')	return mem[i] = 0;
+		int result = num(i + 1, s, mem);
+		if (i < s.size() - 1 && (s[i] == '1' || (s[i] == '2' && s[i + 1] < '7'))) {
+			result += num(i + 2, s, mem);
+		}
+		return mem[i] = result;
+	}
+
+	int numDecoding(string s) {
+		int n = s.size();
+		vector<int> dp(n + 1);
+		dp[n] = 1;
+		for (int i = n-1; i >= 0; i--)
+		{
+			if (s[i]=='0')
+			{
+				dp[i] = '0';
+			}
+			else {
+				dp[i] = dp[i + 1];
+				if (i < n - 1 && (s[i] == '1' || (s[i] == '2' && s[i + 1] < '7'))) {
+					dp[i] += dp[i + 2];
+				}
+			}
+		}
+		return s.empty() ? 0 : dp[0];
+	}
+
+	int numDecoding1(string s) {
+		int p = 1, pp, n = s.size();
+		for (int i = n - 1; i >= 0; i--) {
+			int curr = s[i] == '0' ? 0 : p;
+			if (i < n - 1 && (s[i] == '1' || (s[i] == '2'&&s[i + 1] < '7'))) {
+				curr += pp;
+			}
+			pp = p;
+			p = curr;
+		}
+		return s.empty()?0:p;
+	}
+
+private:
+	int numDecodeWay(string& s, int i) {
+		if (i==s.size())
+		{
+			return 1;
+		}
+		if (s[i] == '0') {
+			return 0;
+		}
+		int result = numDecodeWay(s, i + 1);
+		if (i < s.size() - 1 && (s[i] == '1' || (s[i] == '2' && s[i + 1] < '7'))) {
+			result += numDecodeWay(s, i + 2);
+		}
+		return result;
+	}
+		
+};
+
+class Solution149 {
+	//Merge Two Sorted Array
+	//	Merge two sorted arrays.
+
+	//	Input: [1, 2, 3], [2, 4, 6]
+
+	//	Output : [1, 2, 2, 3, 4, 6]
+public:
+	vector<int> merge(vector<int> A, int m, vector<int> B, int n) {
+		int index = m + n - 1, idx1 = m - 1, idx2 = n - 1;
+		while (idx1>=0 && idx2>=0)
+		{
+			if (A[idx1] < B[idx2]) {
+				A[index--] = B[idx2--];
+			}
+			else {
+				A[index--] = A[idx1--];
+			}
+		}
+		if (idx2>=0 || idx1<0)
+		{
+			while (index >= 0) {
+				A[index--] = B[idx2--];
+			}
+		}
+		return A;
+	}
+};
+
+class Solution150 {
+	//Scramble String
+	//	Given a string s1, we may represent it as a binary tree by partitioning it to two non - empty substrings recursively.
+
+	//	Below is one possible representation of s1 = "great":
+
+	//great
+
+	//	/ \
+
+	//	gr    eat
+
+	//	/ \ / \
+
+	//	g   r  e   at
+
+	//	/ \
+
+	//	a   t
+
+	//	To scramble the string, we may choose any non - leaf node and swap its two children.For example, if we choose the node "gr" and swap its two children, it produces a scrambled string "rgeat".
+
+	//	rgeat
+
+	//	/ \
+
+	//	rg    eat
+
+	//	/ \ / \
+
+	//	r   g   e   at
+
+	//	/ \
+
+	//	a   t
+
+	//	We say that "rgeat" is a scrambled string of "great".Similarly, if we continue to swap the children of nodes "eat" and "at", it produces a scrambled string "rgtae".
+
+	//	rgtae
+
+	//	/ \
+
+	//	rg    tae
+
+	//	/ \ / \
+
+	//	r   g  ta  e
+
+	//	/ \
+
+	//	t   a
+
+	//	We say that "rgtae" is a scrambled string of "great".Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
+
+public:
+	bool isScramble(string s1, string s2) {
+		if (s1.size() != s2.size()) {
+			return false;
+		}
+		int leng = s1.size();
+		vector<vector<vector<int>>> memo(leng, vector<vector<int>>(leng, vector<int>(leng, -1)));
+		return isScrambleMemo(s1, 0, s2, 0, leng, memo);
+	}
+private:
+	bool isScrambleMemo(string& s1, int i1, string& s2, int i2, int leng, vector<vector<vector<int>>>& memo) {
+		if (leng==1)
+		{
+			return s1[i1] == s2[i2];
+		}
+		int result = memo[i1][i2][leng - 1];
+		if (result!=-1)
+		{
+			return result == 1 ? true : false;
+		}
+		result = 0;
+		for (int i = 1; i < leng; i++)
+		{
+			if (isScrambleMemo(s1, i1, s2, i2, i, memo) && isScrambleMemo(s1, i1+i, s2, i2+i, leng-i, memo))
+			{
+				result = 1;
+				break;
+			}
+			if (isScrambleMemo(s1, i1, s2, i2+leng-i, i, memo) && isScrambleMemo(s1, i1+i, s2, i2, leng-i, memo))
+			{
+				result = 1;
+				break;
+			}
+		}
+		memo[i1][i2][leng - 1] = result;
+		return result == 1 ? true : false;
+	}
+};
+
+class Solution152 {
+
+	//Remove Extra Duplicates from Sorted List
+	//	Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+	//	Input:  1->2->3->3->4->4->5
+	//	Output : 1->2->5
+	//	Input : 1->1->1
+
+	//	Output : NULL
+public:
+	ListNode* removeDup(ListNode* head) {
+		if (head == NULL || head->next == NULL)
+		{
+			return head;
+		}
+		ListNode* fake = new ListNode(-1);
+		fake->next = head;
+		ListNode* prev = fake;
+		ListNode* slow = head, *fast1 = head, *fast2 = head;
+		int dist = 0;
+		while (fast2 != NULL) {
+			while (fast2 != NULL && fast2->value == fast1->value) {
+				fast2 = fast2->next;
+				dist++;
+			}
+			// 1   2   3   3   4   4   5
+			//             s
+			//                         f1
+			//                             f2
+			if (dist == 1)
+			{
+				slow->value = fast1->value;
+				prev = slow;
+				slow = slow->next;
+				fast1 = fast2;
+				dist = 0;
+			}
+			else {
+				fast1 = fast2;
+				dist = 0;
+			}
+		}
+		ListNode* cur = slow;
+		prev->next = NULL;
+		while (cur != NULL) {
+			slow = cur;
+			cur = cur->next;
+			delete slow;
+		}
+		return fake->next;
+	}
+};
+
+class Solution153 {
+	ListNode* removeDup(ListNode* head) {
+		if (head == NULL || head->next == NULL)
+		{
+			return head;
+		}
+		ListNode* prev = new ListNode(-1);
+		prev->next = head;
+		ListNode* slow = head, *fast1 = head, *fast2 = head;
+		while (fast2 != NULL) {
+			while (fast2 != NULL && fast2->value == fast1->value) {
+				fast2 = fast2->next;
+			}
+			slow->value = fast1->value;
+			prev = slow;
+			slow = slow->next;
+			fast1 = fast2;
+		}
+		prev->next = NULL;
+		while (slow != NULL) {
+			ListNode* curr = slow;
+			slow = slow->next;
+			delete curr;
+		}
+		return head;
+	}
+};
+
+class Solution154 {
+	//Word Search
+	//	Given a 2D board and a word, find if the word exists in the grid.The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring.The same letter cell may not be used more than once.
+
+	//	Input: board = [
+
+	//			   [“ABCE”],
+
+	//				   [“SFCS”],
+
+	//				   [“ADEE”]
+
+	//		   ]
+
+	//	Output: Word = “ABCCED”   return true
+
+	//			   Word = “SEE”      return true
+
+	//			   Word = “ABCB”      return false
+public:
+	bool isWord(vector<vector<char>> board, string word) {
+		if (board.empty())
+		{
+			return false;
+		}
+		int rows = board.size(), cols = board[0].size();
+		bool result = false;
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++) {
+				vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+				if (board[i][j]==word[0])
+				{
+					wordSearch(board, word, i, j, 0, visited, result);
+				}
+				if(result) {
+					return result;
+				}
+			}
+		}
+		return result;
+	}
+private:
+	void wordSearch(vector<vector<char>>& board, string& word, int row, int col, int i, vector<vector<bool>>& visited, bool& result) {
+		if (result == true) {
+			return;
+		}
+		if (i==word.size()-1 && board[row][col]==word[i])
+		{
+			result = true;
+			return;
+		}
+		if (board[row][col] == word[i]) {
+			visited[row][col] = true;
+			if (row+1<board.size() && board[row+1][col]==word[i+1] && visited[row+1][col]==false)
+			{
+				wordSearch(board, word, row + 1, col, i + 1, visited, result);
+			}
+			if (result==false && col + 1 < board[0].size() && board[row][col + 1] == word[i + 1] && visited[row][col + 1] == false) {
+				wordSearch(board, word, row , col + 1, i + 1, visited, result);
+			}
+			if (result == false && row - 1>=0 && board[row - 1][col] == word[i + 1] && visited[row - 1][col] == false)
+			{
+				wordSearch(board, word, row - 1, col, i + 1, visited, result);
+			}
+			if (result == false && col - 1 >=0 && board[row][col - 1] == word[i + 1] && visited[row][col - 1] == false) {
+				wordSearch(board, word, row, col - 1, i + 1, visited, result);
+			}
+			visited[row][col] = false;
+		}
+		return;
+	}
+};
+
+class Solution155 {
+	//Combinations
+	//	Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+	//	E.g.Input: n = 4, k = 2
+
+	//	Output : [
+
+	//				 [2, 4],
+
+	//					 [3, 4],
+
+	//					 [2, 3],
+
+	//					 [1, 2],
+
+	//					 [1, 3],
+
+	//					 [1, 4]
+
+	//			 ]
+public:
+	vector<vector<int>> combine(int n, int k) {
+		for (int i = 1; i < n; i++) {
+
+		}
+	}
+};
 class Solution139 {
 //    Maximum Path Sum Binary Tree II
 //    Given a binary tree in which each node contains an integer number. Find the maximum possible sum from any node to any node (the start node and the end node can be the same).
@@ -9211,572 +9614,606 @@ public:
 
 // To execute C++, please define "int main()"
 int main() {
-//    Solution400* s400 = new Solution400();
-//    s400->rainbowSortIII({1}, 1);
-//    s400->rainbowSortIII({1, 3, 2, 1, 2} , 3);
-//    s400->rainbowSortIII({3, 1, 5, 5, 1, 4, 2}, 5);
-//    
-//    Solution399* s399 = new Solution399();
-//    s399->rainbowSortII({0} );
-//    s399->rainbowSortII({1,0} );
-//    s399->rainbowSortII({1, 3, 1, 2, 0} );
-//    Solution383* s383 = new Solution383();
-//    s383->reverseWords(" I  love  Google  ");
-//    Solution350* s350 = new Solution350();
-//    int r350 = s350->minReplacements("bbbbbaaaab");
-//    r350 = s350->minReplacements("aaabbabbaaaabba");
-//    r350 = s350->minReplacements("aaaaaaaa");
-//    Solution348* s348 = new Solution348();
-//    s348->reverse("abbegi");
-//    Solution342* s342 = new Solution342();
-//    cout<<s342->isomorphic("aba", "aaa")<<endl;
-//    cout<<s342->isomorphic("hhkkhhkkk", "ccddcceee")<<endl;
-//    cout<<s342->isomorphic( "fgh","ghf" )<<endl;
-//    Solution315* s315 = new Solution315();
-//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
-//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
-//    r315 = s315->dedup({4,4,4,1,2,3,3,3});
-//    Solution235* s235 = new Solution235();
-//    cout<<s235->countAndSay(3)<<endl;
-//    cout<<s235->countAndSay(4)<<endl;
-//    cout<<s235->countAndSay(5)<<endl;
-//    cout<<s235->countAndSay(6)<<endl;
-//    Solution219* s219 = new Solution219();
-//    int r219 = s219->whiteObjects({ {0,0,0,1}, {1,0,1,1}, {1,1,0,0}, {0,1,0,0} });
-//    cout<<r219<<endl;
-//    Solution214* s214 = new Solution214();
-//    TreeNode* r214 = s214->reconstruct( {1, 3, 4, 5, 8, 11}, {1, 4, 3, 11, 8, 5});
-//    cout<<r214->left->right->value<<endl;
-//    Solution212* s212 = new Solution212();
-//    TreeNode* r212 = s212->reconstruct( {3,2,8,1,5,12,4,7,10,13} );
-//    cout<<r212->right->right->value<<endl;
-//    r212 = s212->reconstruct( {41, 38} );
-//    cout<<r212->left->value<<endl;
-//    Solution210* s210 = new Solution210();
-//    TreeNode* r210 = s210->reconstruct( {5, 3, 1, 4, 8, 11} );
-//    cout<<r210->left->right->value<<endl;
-//    Solution208* s208 = new Solution208();
-//    vector<int> result={};
-//    result=s208->majority( {1, 2, 1, 2, 1}, 3);
-//    assert(result[0]==1);
-//    assert(result[1]==2);
-//    result=s208->majority( {1, 2, 1, 2, 3, 3, 1}, 4);
-//    assert(result[0]==1);
-//    assert(result[1]==2);
-//    assert(result[2]==3);
-//    result=s208->majority( {2, 1}, 2);
-//    assert(result.size()==0);
-//    Solution207* s207 = new Solution207();
-//    vector<int> result=s207->majority({1, 2, 2, 3, 1, 3});
-//    assert(result.size()==0);
-//    vector<vector<int>> words = { {1,200}, {2,199}, {3, 198}, {4, 197}, {5, 196}, \
-//        {6, 195}, {4, 194}, {1, 193}, {7, 192}};
-//    unordered_map<int, int> lookup;
-//    vector<vector<int>> result=counting(words, lookup);
-//    vector<vector<vector<int>>> pages(10, vector<vector<int>>());
-//    vector<vector<vector<int>>> output;
-//    int k=6, cursor=0, j=0;
-//    for(auto i:words) {
-//        if(lookup[i[0]]>0) {
-//            if(pages[j].size()<k) {
-//                pages[j].push_back(i);
-//            }
-//            else {
-//                pages[++j].push_back(i);
-//            }
-//            lookup[i[0]]--;
-//        }
-//    }
-//    for(auto i:pages) {
-//        vector<vector<int>> current=sorting(i);
-//        output.push_back(current);
-//    }
-//    Solution507* s507 = new Solution507();
-//    unordered_map<int, unordered_set<int>> graph;
-//    graph[1].insert(2);
-//    graph[2].insert(3);
-//    graph[3].insert(1);
-//    graph[4].insert(2);
-//    vector<int> o507=s507->putad(graph);
-//    cout<<o507[0]<<endl;
-//    Solution506* new506 = new Solution506();
-//    cout<<new506->doesCircleExist({"GRGL"})[0]<<endl;
-//    Solution505* new505 = new Solution505();
-//    TreeNode* t1=new TreeNode(1);
-//    TreeNode* t2=new TreeNode(2);
-//    TreeNode* t3=new TreeNode(3);
-//    TreeNode* t4=new TreeNode(4);
-//    TreeNode* t5=new TreeNode(5);
-//    TreeNode* t6=new TreeNode(6);
-//    TreeNode* t7=new TreeNode(7);
-//    t1->left=t2;
-//    t1->right=t3;
-//    t2->left=t4;
-//    t2->right=t5;
-//    t3->left=t6;
-//    t3->right=t7;
-//    cout<<new505->count(t1)<<endl;
-//    t1=NULL;
-//    cout<<new505->count(t1)<<endl;
-//    t1=new TreeNode(10);
-//    cout<<new505->count(t1)<<endl;
-//    Solution201* new201 = new Solution201();
-//    int result=new201->largest({ 2, 1, 3, 1, 2, 1 });
-//    cout<<result<<endl;
-//    Solution196* new196 = new Solution196();
-//    vector<int> result=new196->solve( { { 'E', ' ', ' ' },
-//                                        { ' ', 'E', ' ' },
-//                                        { 'E', ' ', ' ' } });
-//    cout<<result[0]<<" "<<result[1]<<endl;
-//    Solution192* new192 = new Solution192();
-//    cout<<new192->kth(1)<<endl;
-//    cout<<new192->kth(2)<<endl;
-//    cout<<new192->kth(3)<<endl;
-//    cout<<new192->kth(4)<<endl;
-//    cout<<new192->kth(5)<<endl;
-//    cout<<new192->kth(6)<<endl;
-//    cout<<new192->kth(7)<<endl;
-//    Solution187* new187 = new Solution187();
-//    cout<<new187->exist({1, 3, 5}, {8, 2}, {3}, 14)<<endl;
-//    Solution185* new185 = new Solution185();
-//    vector<int> a= {3, 1, 5};
-//    vector<int> b= {2, 8};
-//    int target=7;
-//    bool result=new185->existSum(a, b, target);
-//    cout<<result<<endl;
-//    a= {3, 4, -1, 0};
-//    b= {5, -1, 2};
-//    target=-2;
-//    result=new185->existSum(a, b, target);
-//    cout<<result<<endl;
-//    Solution184* new184 = new Solution184();
-//    vector<int> array = {-1, 0, 1};
-//    cout<<new184->smallerPairs(array, 1)<<endl;
-//    cout<<new184->smallerPairs(array, 0)<<endl;
-//    cout<<new184->smallerPairs(array, -1)<<endl;
-//    array={1, 2, 2, 4, 7};
-//    cout<<new184->smallerPairs(array, 7)<<endl;
-//    Solution183* new183 = new Solution183();
-//    vector<int> result183=new183->solve({1, 3, 7, 11, 13}, 7);
-//    cout<<result183[0]<<" "<<result183[1]<<endl;
-//    Solution504* new504 = new Solution504();
-//    cout<<new504->cycle({"aab", "bac", "aaa"})<<endl;
-//    Solution503* new503 = new Solution503();
-//    cout<<new503->minCut(10)<<endl;
-//    Solution502* new502 = new Solution502();
-//    TreeNode* t6=new TreeNode(6);
-//    TreeNode* t3=new TreeNode(3);
-//    TreeNode* t5=new TreeNode(5);
-//    TreeNode* t7=new TreeNode(7);
-//    TreeNode* t8=new TreeNode(8);
-//    TreeNode* t1=new TreeNode(1);
-//    TreeNode* t2=new TreeNode(2);
-//    t6->left=t3;
-//    t3->left=t7;
-//    t3->right=t8;
-//    t6->right=t5;
-//    t5->left=t1;
-//    t5->right=t2;
-//    cout<<new502->isCousions(t6, t7, t1)<<endl;
-//    Solution501* new501 = new Solution501();
-//    vector<string> result=new501->listspace("abc");
-//    for(auto i:result) {
-//        cout<<i<<endl;
-//    }
-//    Solution500* new500 = new Solution500();
-//    vector<string> array;
-//    array.push_back("1100");
-//    array.push_back("1110");
-//    array.push_back("0110");
-//    array.push_back("0001");
-//    int result=new500->zombieCluster(array);
-//    array.clear();
-//    cout<<result<<endl;
-//    Solution200* new200 = new Solution200();
-//    int result200 = new200->maxTrapped({{ 2, 3, 4, 2 },
-//                                        { 3, 1, 2, 3 },
-//                                        { 4, 3, 5, 4 } });
-//    cout<<result200<<endl;
-//    Solution199* new199 = new Solution199();
-//    int result199 = new199->maxTrapped({2,1,3,2,4});
-//    cout<<result199<<endl;
-//    result199 = new199->maxTrapped({1,3,2,4,1,3,2,4,3,2});
-//    cout<<result199<<endl;
-//	Solution198* new198 = new Solution198();
-//	new198->largest({ 2,3,1 });
-//	Solution195* new195 = new Solution195();
-//	vector<int> result195 = new195->solve({	{ 'E', 'O', 'C' },
-//											{ 'C', 'E',  'C' },
-//											{ 'C', 'C',  'C' } });
-//	cout << result195[0] << " " << result195[1] << endl;
-//    Solution194* new194 = new Solution194();
-//    vector<int> result194 = new194->closest({1,3},{2,3},{2,4},3 );
-//	cout << result194[0] << " " << result194[1] << " " << result194[1] << " " << endl;
-//    Solution193* new193 = new Solution193();
-//    for (int i=1; i<10; i++) {
-//        cout<<new193->kth(i)<<endl;
-//    }
-//    Solution191* new191 = new Solution191();
-//    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
-//    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
-//    Solution177* new177 = new Solution177();
-//    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
-//    Solution176* new176 = new Solution176();
-//    cout<<new176->longestCommon( "abcdefg","bbcefgh")<<endl;
-	//    Solution188* new188 = new Solution188();
-	//    cout<<new188->exist({1, 2, 2, 3, 4}, 9)<<endl;
-	//    Solution186* new186 = new Solution186();
-	//    vector<vector<int>> result186 = new186->solve({-1,0,1}, 0);
-	//    for (int i=0; i<result186.size(); i++) {
-	//        for (int j=0; j<result186[i].size(); j++) {
-	//            cout<<result186[i][j]<<' ';
+	//    Solution400* s400 = new Solution400();
+	//    s400->rainbowSortIII({1}, 1);
+	//    s400->rainbowSortIII({1, 3, 2, 1, 2} , 3);
+	//    s400->rainbowSortIII({3, 1, 5, 5, 1, 4, 2}, 5);
+	//    
+	//    Solution399* s399 = new Solution399();
+	//    s399->rainbowSortII({0} );
+	//    s399->rainbowSortII({1,0} );
+	//    s399->rainbowSortII({1, 3, 1, 2, 0} );
+	//    Solution383* s383 = new Solution383();
+	//    s383->reverseWords(" I  love  Google  ");
+	//    Solution350* s350 = new Solution350();
+	//    int r350 = s350->minReplacements("bbbbbaaaab");
+	//    r350 = s350->minReplacements("aaabbabbaaaabba");
+	//    r350 = s350->minReplacements("aaaaaaaa");
+	//    Solution348* s348 = new Solution348();
+	//    s348->reverse("abbegi");
+	//    Solution342* s342 = new Solution342();
+	//    cout<<s342->isomorphic("aba", "aaa")<<endl;
+	//    cout<<s342->isomorphic("hhkkhhkkk", "ccddcceee")<<endl;
+	//    cout<<s342->isomorphic( "fgh","ghf" )<<endl;
+	//    Solution315* s315 = new Solution315();
+	//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
+	//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
+	//    r315 = s315->dedup({4,4,4,1,2,3,3,3});
+	//    Solution235* s235 = new Solution235();
+	//    cout<<s235->countAndSay(3)<<endl;
+	//    cout<<s235->countAndSay(4)<<endl;
+	//    cout<<s235->countAndSay(5)<<endl;
+	//    cout<<s235->countAndSay(6)<<endl;
+	//    Solution219* s219 = new Solution219();
+	//    int r219 = s219->whiteObjects({ {0,0,0,1}, {1,0,1,1}, {1,1,0,0}, {0,1,0,0} });
+	//    cout<<r219<<endl;
+	//    Solution214* s214 = new Solution214();
+	//    TreeNode* r214 = s214->reconstruct( {1, 3, 4, 5, 8, 11}, {1, 4, 3, 11, 8, 5});
+	//    cout<<r214->left->right->value<<endl;
+	//    Solution212* s212 = new Solution212();
+	//    TreeNode* r212 = s212->reconstruct( {3,2,8,1,5,12,4,7,10,13} );
+	//    cout<<r212->right->right->value<<endl;
+	//    r212 = s212->reconstruct( {41, 38} );
+	//    cout<<r212->left->value<<endl;
+	//    Solution210* s210 = new Solution210();
+	//    TreeNode* r210 = s210->reconstruct( {5, 3, 1, 4, 8, 11} );
+	//    cout<<r210->left->right->value<<endl;
+	//    Solution208* s208 = new Solution208();
+	//    vector<int> result={};
+	//    result=s208->majority( {1, 2, 1, 2, 1}, 3);
+	//    assert(result[0]==1);
+	//    assert(result[1]==2);
+	//    result=s208->majority( {1, 2, 1, 2, 3, 3, 1}, 4);
+	//    assert(result[0]==1);
+	//    assert(result[1]==2);
+	//    assert(result[2]==3);
+	//    result=s208->majority( {2, 1}, 2);
+	//    assert(result.size()==0);
+	//    Solution207* s207 = new Solution207();
+	//    vector<int> result=s207->majority({1, 2, 2, 3, 1, 3});
+	//    assert(result.size()==0);
+	//    vector<vector<int>> words = { {1,200}, {2,199}, {3, 198}, {4, 197}, {5, 196}, \
+	//        {6, 195}, {4, 194}, {1, 193}, {7, 192}};
+	//    unordered_map<int, int> lookup;
+	//    vector<vector<int>> result=counting(words, lookup);
+	//    vector<vector<vector<int>>> pages(10, vector<vector<int>>());
+	//    vector<vector<vector<int>>> output;
+	//    int k=6, cursor=0, j=0;
+	//    for(auto i:words) {
+	//        if(lookup[i[0]]>0) {
+	//            if(pages[j].size()<k) {
+	//                pages[j].push_back(i);
+	//            }
+	//            else {
+	//                pages[++j].push_back(i);
+	//            }
+	//            lookup[i[0]]--;
 	//        }
 	//    }
-	//    Solution182* new182 = new Solution182();
-	//    vector<vector<int>> result182 = new182->solve({2, 1, 3, 2, 4, 3, 4, 2}, 6);
-	//    cout<<result182[1][0]<<endl;
-	//    Solution181* new181 = new Solution181();
-	//    vector<vector<int>> result181 = new181->solve({1, 2, 2, 4}, 6);
-	//    cout<<result181[1][0]<<endl;
-	//    Solution180* new180 = new Solution180();
-	//    cout<<new180->existSum({2, 4, 1}, 4)<<endl;
-	//    Solution179* new179 = new Solution179();
-	//    vector<string> result179 = new179->solve(2, 1, 1);
-	//    for (int i=0; i<result179.size(); i++) {
-	//        cout<<result179[i]<<" ";
+	//    for(auto i:pages) {
+	//        vector<vector<int>> current=sorting(i);
+	//        output.push_back(current);
 	//    }
-	//    cout<<'\n'<<result179.size()<<endl;
-	//    Solution178* new178 = new Solution178();
+	//    Solution507* s507 = new Solution507();
+	//    unordered_map<int, unordered_set<int>> graph;
+	//    graph[1].insert(2);
+	//    graph[2].insert(3);
+	//    graph[3].insert(1);
+	//    graph[4].insert(2);
+	//    vector<int> o507=s507->putad(graph);
+	//    cout<<o507[0]<<endl;
+	//    Solution506* new506 = new Solution506();
+	//    cout<<new506->doesCircleExist({"GRGL"})[0]<<endl;
+	//    Solution505* new505 = new Solution505();
 	//    TreeNode* t1=new TreeNode(1);
 	//    TreeNode* t2=new TreeNode(2);
 	//    TreeNode* t3=new TreeNode(3);
 	//    TreeNode* t4=new TreeNode(4);
 	//    TreeNode* t5=new TreeNode(5);
+	//    TreeNode* t6=new TreeNode(6);
+	//    TreeNode* t7=new TreeNode(7);
 	//    t1->left=t2;
-	//    t1->right=t5;
-	//    t2->left=t3;
-	//    t2->right=t4;
-	//    TreeNode* result178 = new178->reverse(t1);
-	//    cout<<result178->left->right->value<<endl;
-	//    Solution171* new171 = new Solution171();
-	//    vector<int> result171 = new171->common({1,2,3,3}, {2,3,4,4,5}, {1,1,3,3});
-	//    printintArray(result171);
-	//    Solution63* new63 = new Solution63();
-	//    vector<string> result63 = new63->solve("abb");
-	//    vector<string> result632 = new63->solve2("abb");
-	//    for (auto i:result63) {
-	//        cout<<i<<endl;
-	//    }
-	//    for (auto i:result632) {
-	//        cout<<i<<endl;
-	//    }
-	//    Solution96* new96 = new Solution96();
-	//    cout<<new96->minCostInterative({4, 3, 3, 4, 4})<<endl;
-	//    cout<<new96->minCost({4, 3, 3, 4, 4});
-	//    Solution137* new137=new Solution137;
-	//    cout<<new137->minCost({2, 4, 7}, 10);
-	//    TreeNode* t5=new TreeNode(5);
-	//    TreeNode* t2=new TreeNode(2);
-	//    TreeNode* t11=new TreeNode(11);
+	//    t1->right=t3;
+	//    t2->left=t4;
+	//    t2->right=t5;
+	//    t3->left=t6;
+	//    t3->right=t7;
+	//    cout<<new505->count(t1)<<endl;
+	//    t1=NULL;
+	//    cout<<new505->count(t1)<<endl;
+	//    t1=new TreeNode(10);
+	//    cout<<new505->count(t1)<<endl;
+	//    Solution201* new201 = new Solution201();
+	//    int result=new201->largest({ 2, 1, 3, 1, 2, 1 });
+	//    cout<<result<<endl;
+	//    Solution196* new196 = new Solution196();
+	//    vector<int> result=new196->solve( { { 'E', ' ', ' ' },
+	//                                        { ' ', 'E', ' ' },
+	//                                        { 'E', ' ', ' ' } });
+	//    cout<<result[0]<<" "<<result[1]<<endl;
+	//    Solution192* new192 = new Solution192();
+	//    cout<<new192->kth(1)<<endl;
+	//    cout<<new192->kth(2)<<endl;
+	//    cout<<new192->kth(3)<<endl;
+	//    cout<<new192->kth(4)<<endl;
+	//    cout<<new192->kth(5)<<endl;
+	//    cout<<new192->kth(6)<<endl;
+	//    cout<<new192->kth(7)<<endl;
+	//    Solution187* new187 = new Solution187();
+	//    cout<<new187->exist({1, 3, 5}, {8, 2}, {3}, 14)<<endl;
+	//    Solution185* new185 = new Solution185();
+	//    vector<int> a= {3, 1, 5};
+	//    vector<int> b= {2, 8};
+	//    int target=7;
+	//    bool result=new185->existSum(a, b, target);
+	//    cout<<result<<endl;
+	//    a= {3, 4, -1, 0};
+	//    b= {5, -1, 2};
+	//    target=-2;
+	//    result=new185->existSum(a, b, target);
+	//    cout<<result<<endl;
+	//    Solution184* new184 = new Solution184();
+	//    vector<int> array = {-1, 0, 1};
+	//    cout<<new184->smallerPairs(array, 1)<<endl;
+	//    cout<<new184->smallerPairs(array, 0)<<endl;
+	//    cout<<new184->smallerPairs(array, -1)<<endl;
+	//    array={1, 2, 2, 4, 7};
+	//    cout<<new184->smallerPairs(array, 7)<<endl;
+	//    Solution183* new183 = new Solution183();
+	//    vector<int> result183=new183->solve({1, 3, 7, 11, 13}, 7);
+	//    cout<<result183[0]<<" "<<result183[1]<<endl;
+	//    Solution504* new504 = new Solution504();
+	//    cout<<new504->cycle({"aab", "bac", "aaa"})<<endl;
+	//    Solution503* new503 = new Solution503();
+	//    cout<<new503->minCut(10)<<endl;
+	//    Solution502* new502 = new Solution502();
 	//    TreeNode* t6=new TreeNode(6);
-	//    TreeNode* t14=new TreeNode(14);
-	//    t5->left=t2;
-	//    t5->right=t11;
-	//    t11->left=t6;
-	//    t11->right=t14;
-	//    Solution136* new136=new Solution136();
-	//    cout<<new136->largestSmaller(t5, 1);
+	//    TreeNode* t3=new TreeNode(3);
 	//    TreeNode* t5=new TreeNode(5);
+	//    TreeNode* t7=new TreeNode(7);
+	//    TreeNode* t8=new TreeNode(8);
+	//    TreeNode* t1=new TreeNode(1);
 	//    TreeNode* t2=new TreeNode(2);
-	//    TreeNode* t11=new TreeNode(11);
-	//    TreeNode* t6=new TreeNode(6);
-	//    TreeNode* t14=new TreeNode(14);
-	//    t5->left=t2;
-	//    t5->right=t11;
-	//    t11->left=t6;
-	//    t11->right=t14;
-	//    Solution135* new135=new Solution135();
-	//    cout<<new135->closest(t5, 14);
-	//    ListNode* n1=new ListNode(1);
-	//    ListNode* n3=new ListNode(3);
-	//    ListNode* n5=new ListNode(5);
-	//    ListNode* n7=new ListNode(7);
-	//    ListNode* n9=new ListNode(9);
-	//    ListNode* n2=new ListNode(2);
-	//    ListNode* n4=new ListNode(4);
-	//    ListNode* n6=new ListNode(6);
-	//    ListNode* n8=new ListNode(8);
-	//    ListNode* n10=new ListNode(10);
-	//    n1->next=n3;
-	//    n3->next=n5;
-	//    n5->next=n7;
-	//    n7->next=n9;
-	//    n2->next=n4;
-	//    n4->next=n6;
-	//    n6->next=n8;
-	//    n8->next=n10;
-	//    Solution134* new134 = new Solution134();
-	//    new134->solve({n1, n2});
-	//    Solution133* new133 = new Solution133();
-	//    vector<int> result=new133->merge({ {1, 5, 9, 13}, {2, 6, 10, 14}, {3, 7, 11, 15}, {4, 8, 12, 16} });
-	//    vector<int> result=new133->merge({{0,1,2,3}});
-	//    for(auto i:result) {
-	//        cout<<i<<" ";
-	//    }
-	//    Solution132* new132=new Solution132();
-	//    GraphNode* n1=new GraphNode(1);
-	//    GraphNode* n2=new GraphNode(2);
-	//    GraphNode* n3=new GraphNode(3);
-	//    n1->neighbors.push_back(n2);
-	//    n1->neighbors.push_back(n3);
-	//    n2->neighbors.push_back(n1);
-	//    n3->neighbors.push_back(n3);
-	//    n3->neighbors.push_back(n1);
-	//    n2->neighbors.push_back(n2);
-	//    GraphNode* result = new132->solve(n1);
-	//    Solution53* new53=new Solution53();
-	//    TreeNode* root= new TreeNode(41);
-	//    TreeNode* now=new53->solve(root, 41);
-	//    cout<<now;
-	//    Solution52* new52=new Solution52();
-	//    TreeNode* root= new TreeNode(41);
-	//    TreeNode* now=new52->solve(root, 41);
-	//    cout<<now;
-	//    Solution51* new51=new Solution51();
-	//    TreeNode* root= new TreeNode(41);
-	//    TreeNode* now=new51->insert(root, 38);
-	//    cout<<now->value;
-	//    solve125({ {1,  2,  3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16} });
-	//    largestAndSmallest({2, 1, 5, 4, 3});
-	//    dedup4({1, 2, 2, 3, 3, 3, 2});
-	//    dedup3({1, 2, 2, 3, 3, 3, 4});
-	//    dedup2({1, 2, 2, 3, 3, 3, 4, 4});
-	//    dedup1({1, 2, 2, 3, 3, 3, 4, 4});
-	//    TreeNode* root= new TreeNode(5);
-	//    root->left=new TreeNode(3);
-	//    root->right=new TreeNode(8);
-	//    root->left->left=new TreeNode(1);
-	//    root->left->right=new TreeNode(4);
-	//    root->left->left->left=new TreeNode(2);
-	//    root->left->left->right=new TreeNode(6);
-	//    root->left->right->left=new TreeNode(7);
-	//    root->left->right->right=new TreeNode(9);
-	//    root->right->left=NULL;
-	//    root->right->right=new TreeNode(11);
-	//    root->right->right->left=new TreeNode(10);
-	//    root->right->right->right=new TreeNode(12);
-	//    zigZag(root);
-	//    vector<string> tcs = printpermutationif(2);
-	//    cout<<largestSubMatrixSum({{1},{-2}});
-
-	//    cout<<largestx({{0, 0, 0, 0},
-	//                    {1, 1, 1, 1},
-	//                    {0, 1, 1, 1},
-	//                    {1, 0, 1, 1} });
-	//    cout<<largestcross({{0, 0, 0, 0},
-	//                        {1, 1, 1, 1},
-	//                        {0, 1, 1, 1},
-	//                        {1, 0, 1, 1} });
-	//    cout<<longest1s({0, 1, 0, 1, 1, 1, 0});
-	//    cout<<largestSum({2, -1, 4, -2, 1});
-	//    cout<<largestSum({-2, -1, -3});
-	//    reorder({1,2,3,4,5,6,7,8});
-	//    cout<<decompress("a1c0b2c4");
-	//
-
-	//    cout<<isPowerOfTwo(-2147483648)<<endl;
-	//    cout<<diffBits(5, 8)<<endl;
-	//    cout<<Change(29)<<endl;
-	//    cout<<allUnique("abA+\a88")<<" "<<allUnique("abA+\8")<<endl;
-	//    vector<vector<int>> input1={ {1,  2,  3},
-	//        {4,  5,  6},
-	//        {7,  8,  9} };
-	//    vector<vector<int>> input2={{1, 2,  3, 4},
-	//                                {5, 6,  7, 8},
-	//                                {9, 10,11,12},
-	//                                {13,14,15,16}};
-	//    vector<vector<int>> input3={ {1,  2,  3,  4},
-	//                                {5,  6,  7,  8},
-	//                                {9, 10, 11, 12} };
-	//
-	//    vector<vector<int>> input4={ {1,  2,  3},
-	//                                {4, 5,  6},
-	//                                {7,  8, 9},
-	//                                {10, 11, 12} };
-	//    vector<int> result=spiral(input2);
-	//    vector<int> result=spiral2({{1}} );
-	//    for(auto i:result) {
-	//        cout<<i<<" ";
-	//    }
-	//    solve(3, 5);
-	//    generateMatrix(3,1);
-	//    solve(0);
-	//    solve(1);
-	//    solve(2);
-	//    solve(3);
-	//    solve(4);
-	//    solve(5);
-	//    solve(6);
-	//    solve(7);
-	//    solve(8);
-	//    solve(9);
-	//    cout<<match("apple","a3e")<<endl;
-	//    cout<<longest({7, 2, 3, 1, 5, 8, 9, 6})<<endl;
-	//cout<<canJump({1,2,0})<<endl;
-	//cout<<minJump({2, 1, 1, 0, 2});
-	/*
-	Trie trie;
-	trie.insert("ab");
-	cout<<trie.search("ab")<<endl;
-	cout<<trie.search("a")<<endl;
-	cout<<trie.startsWith("a")<<endl;
-
-	int arr[] = {10, 13, 16, 7, 8, 9, 1, 5};
-	*/
-
-	//    printf("hello!");
-	//printf("%d\n", HammingDistance(4, 14));
-
-	//int n = sizeof(arr)/sizeof(arr[0]);
-	//quickSort(arr, 0, n-1);
-	//printf("Sorted array: \n");
-	//printArray(arr, n);
-
-	//    std::set<int> myints;
-	//    std::cout << "0. size: " << myints.size() << '\n';
-	//    for (int i=0; i<10; ++i) myints.insert(i);
-	//    std::cout << "1. size: " << myints.size() << '\n';
-	//
-	//    myints.insert (100);
-	//    std::cout << "2. size: " << myints.size() << '\n';
-	//
-	//    myints.erase(5);
-	//    vector<string> sss;
-	//    std::cout << "3. size: " << myints.size() << '\n'<<labs(2147483647+1)<<endl;
-	//    sss.push_back(to_string(121));
-	//    sss.push_back(to_string(12));
-	//    sort(sss.begin(), sss.end(), comp());
-	//    cout<<sss[0]+sss[1]<<endl;
-	//    cout<<sss[1]+sss[0]<<endl;
-	//    if(to_string(33)<to_string(34))
-	//        cout<<to_string(33)<<endl;
-	//    else
-	//        cout<<to_string(34)<<endl;
-	//    return 0;
-
-	//    vector<int> A={1,3,3,6,9,9,12,15};
-	//    vector<int> result;
-	//    //result=mergeSort(A, 0, 4);
-	//    //result=quickSort(A);
-	//    result=kClosest(A, 0, 3);
-	//    printArray(result);
-	//BSTNode* root = CreateBST(A, 5);
-	//cout<<root->key<<endl;
-	//    vector<vector<int>> matrix = { {1, 2, 3}, {4, 5, 7}, {8, 9, 10} };
-	//    matrix={{1,2,3,3,4},{4,5,6,7,10},{12,14,14,17,19},{22,22,22,24,25}};
-	//    matrix={{1},{2},{3},{4}};
-	//    int target=0;
-	//    vector<int> result=search(matrix, target);
+	//    t6->left=t3;
+	//    t3->left=t7;
+	//    t3->right=t8;
+	//    t6->right=t5;
+	//    t5->left=t1;
+	//    t5->right=t2;
+	//    cout<<new502->isCousions(t6, t7, t1)<<endl;
+	//    Solution501* new501 = new Solution501();
+	//    vector<string> result=new501->listspace("abc");
 	//    for(auto i:result) {
 	//        cout<<i<<endl;
 	//    }
-	//    string aaa="abc";
-	//    vector<string> result=solve61(aaa);
-	//    vector<string> result=solve62(aaa);
-	//    cout<<aaa<<endl;
-	//    int num=3;
-	//    vector<int> combos;
-	//    cout<<combos.size()<<endl;
-	//    result=solve63(3);
+	//    Solution500* new500 = new Solution500();
+	//    vector<string> array;
+	//    array.push_back("1100");
+	//    array.push_back("1110");
+	//    array.push_back("0110");
+	//    array.push_back("0001");
+	//    int result=new500->zombieCluster(array);
+	//    array.clear();
+	//    cout<<result<<endl;
+	//    Solution200* new200 = new Solution200();
+	//    int result200 = new200->maxTrapped({{ 2, 3, 4, 2 },
+	//                                        { 3, 1, 2, 3 },
+	//                                        { 4, 3, 5, 4 } });
+	//    cout<<result200<<endl;
+	//    Solution199* new199 = new Solution199();
+	//    int result199 = new199->maxTrapped({2,1,3,2,4});
+	//    cout<<result199<<endl;
+	//    result199 = new199->maxTrapped({1,3,2,4,1,3,2,4,3,2});
+	//    cout<<result199<<endl;
+	//	Solution198* new198 = new Solution198();
+	//	new198->largest({ 2,3,1 });
+	//	Solution195* new195 = new Solution195();
+	//	vector<int> result195 = new195->solve({	{ 'E', 'O', 'C' },
+	//											{ 'C', 'E',  'C' },
+	//											{ 'C', 'C',  'C' } });
+	//	cout << result195[0] << " " << result195[1] << endl;
+	//    Solution194* new194 = new Solution194();
+	//    vector<int> result194 = new194->closest({1,3},{2,3},{2,4},3 );
+	//	cout << result194[0] << " " << result194[1] << " " << result194[1] << " " << endl;
+	//    Solution193* new193 = new Solution193();
+	//    for (int i=1; i<10; i++) {
+	//        cout<<new193->kth(i)<<endl;
+	//    }
+	//    Solution191* new191 = new Solution191();
+	//    cout<<new191->largestProduct({"abcw", "baz", "foo", "bar", "xtfn", "abcdef"})<<endl;
+	//    cout<<new191->largestProduct({"a","b","c","deuf","fhiop","lmhdnu","xpyzewu","rsptu"})<<endl;
+	//    Solution177* new177 = new Solution177();
+	//    cout<<new177->longest( "abcde", "cbabdfe")<<endl;
+	//    Solution176* new176 = new Solution176();
+	//    cout<<new176->longestCommon( "abcdefg","bbcefgh")<<endl;
+		//    Solution188* new188 = new Solution188();
+		//    cout<<new188->exist({1, 2, 2, 3, 4}, 9)<<endl;
+		//    Solution186* new186 = new Solution186();
+		//    vector<vector<int>> result186 = new186->solve({-1,0,1}, 0);
+		//    for (int i=0; i<result186.size(); i++) {
+		//        for (int j=0; j<result186[i].size(); j++) {
+		//            cout<<result186[i][j]<<' ';
+		//        }
+		//    }
+		//    Solution182* new182 = new Solution182();
+		//    vector<vector<int>> result182 = new182->solve({2, 1, 3, 2, 4, 3, 4, 2}, 6);
+		//    cout<<result182[1][0]<<endl;
+		//    Solution181* new181 = new Solution181();
+		//    vector<vector<int>> result181 = new181->solve({1, 2, 2, 4}, 6);
+		//    cout<<result181[1][0]<<endl;
+		//    Solution180* new180 = new Solution180();
+		//    cout<<new180->existSum({2, 4, 1}, 4)<<endl;
+		//    Solution179* new179 = new Solution179();
+		//    vector<string> result179 = new179->solve(2, 1, 1);
+		//    for (int i=0; i<result179.size(); i++) {
+		//        cout<<result179[i]<<" ";
+		//    }
+		//    cout<<'\n'<<result179.size()<<endl;
+		//    Solution178* new178 = new Solution178();
+		//    TreeNode* t1=new TreeNode(1);
+		//    TreeNode* t2=new TreeNode(2);
+		//    TreeNode* t3=new TreeNode(3);
+		//    TreeNode* t4=new TreeNode(4);
+		//    TreeNode* t5=new TreeNode(5);
+		//    t1->left=t2;
+		//    t1->right=t5;
+		//    t2->left=t3;
+		//    t2->right=t4;
+		//    TreeNode* result178 = new178->reverse(t1);
+		//    cout<<result178->left->right->value<<endl;
+		//    Solution171* new171 = new Solution171();
+		//    vector<int> result171 = new171->common({1,2,3,3}, {2,3,4,4,5}, {1,1,3,3});
+		//    printintArray(result171);
+		//    Solution63* new63 = new Solution63();
+		//    vector<string> result63 = new63->solve("abb");
+		//    vector<string> result632 = new63->solve2("abb");
+		//    for (auto i:result63) {
+		//        cout<<i<<endl;
+		//    }
+		//    for (auto i:result632) {
+		//        cout<<i<<endl;
+		//    }
+		//    Solution96* new96 = new Solution96();
+		//    cout<<new96->minCostInterative({4, 3, 3, 4, 4})<<endl;
+		//    cout<<new96->minCost({4, 3, 3, 4, 4});
+		//    Solution137* new137=new Solution137;
+		//    cout<<new137->minCost({2, 4, 7}, 10);
+		//    TreeNode* t5=new TreeNode(5);
+		//    TreeNode* t2=new TreeNode(2);
+		//    TreeNode* t11=new TreeNode(11);
+		//    TreeNode* t6=new TreeNode(6);
+		//    TreeNode* t14=new TreeNode(14);
+		//    t5->left=t2;
+		//    t5->right=t11;
+		//    t11->left=t6;
+		//    t11->right=t14;
+		//    Solution136* new136=new Solution136();
+		//    cout<<new136->largestSmaller(t5, 1);
+		//    TreeNode* t5=new TreeNode(5);
+		//    TreeNode* t2=new TreeNode(2);
+		//    TreeNode* t11=new TreeNode(11);
+		//    TreeNode* t6=new TreeNode(6);
+		//    TreeNode* t14=new TreeNode(14);
+		//    t5->left=t2;
+		//    t5->right=t11;
+		//    t11->left=t6;
+		//    t11->right=t14;
+		//    Solution135* new135=new Solution135();
+		//    cout<<new135->closest(t5, 14);
+		//    ListNode* n1=new ListNode(1);
+		//    ListNode* n3=new ListNode(3);
+		//    ListNode* n5=new ListNode(5);
+		//    ListNode* n7=new ListNode(7);
+		//    ListNode* n9=new ListNode(9);
+		//    ListNode* n2=new ListNode(2);
+		//    ListNode* n4=new ListNode(4);
+		//    ListNode* n6=new ListNode(6);
+		//    ListNode* n8=new ListNode(8);
+		//    ListNode* n10=new ListNode(10);
+		//    n1->next=n3;
+		//    n3->next=n5;
+		//    n5->next=n7;
+		//    n7->next=n9;
+		//    n2->next=n4;
+		//    n4->next=n6;
+		//    n6->next=n8;
+		//    n8->next=n10;
+		//    Solution134* new134 = new Solution134();
+		//    new134->solve({n1, n2});
+		//    Solution133* new133 = new Solution133();
+		//    vector<int> result=new133->merge({ {1, 5, 9, 13}, {2, 6, 10, 14}, {3, 7, 11, 15}, {4, 8, 12, 16} });
+		//    vector<int> result=new133->merge({{0,1,2,3}});
+		//    for(auto i:result) {
+		//        cout<<i<<" ";
+		//    }
+		//    Solution132* new132=new Solution132();
+		//    GraphNode* n1=new GraphNode(1);
+		//    GraphNode* n2=new GraphNode(2);
+		//    GraphNode* n3=new GraphNode(3);
+		//    n1->neighbors.push_back(n2);
+		//    n1->neighbors.push_back(n3);
+		//    n2->neighbors.push_back(n1);
+		//    n3->neighbors.push_back(n3);
+		//    n3->neighbors.push_back(n1);
+		//    n2->neighbors.push_back(n2);
+		//    GraphNode* result = new132->solve(n1);
+		//    Solution53* new53=new Solution53();
+		//    TreeNode* root= new TreeNode(41);
+		//    TreeNode* now=new53->solve(root, 41);
+		//    cout<<now;
+		//    Solution52* new52=new Solution52();
+		//    TreeNode* root= new TreeNode(41);
+		//    TreeNode* now=new52->solve(root, 41);
+		//    cout<<now;
+		//    Solution51* new51=new Solution51();
+		//    TreeNode* root= new TreeNode(41);
+		//    TreeNode* now=new51->insert(root, 38);
+		//    cout<<now->value;
+		//    solve125({ {1,  2,  3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16} });
+		//    largestAndSmallest({2, 1, 5, 4, 3});
+		//    dedup4({1, 2, 2, 3, 3, 3, 2});
+		//    dedup3({1, 2, 2, 3, 3, 3, 4});
+		//    dedup2({1, 2, 2, 3, 3, 3, 4, 4});
+		//    dedup1({1, 2, 2, 3, 3, 3, 4, 4});
+		//    TreeNode* root= new TreeNode(5);
+		//    root->left=new TreeNode(3);
+		//    root->right=new TreeNode(8);
+		//    root->left->left=new TreeNode(1);
+		//    root->left->right=new TreeNode(4);
+		//    root->left->left->left=new TreeNode(2);
+		//    root->left->left->right=new TreeNode(6);
+		//    root->left->right->left=new TreeNode(7);
+		//    root->left->right->right=new TreeNode(9);
+		//    root->right->left=NULL;
+		//    root->right->right=new TreeNode(11);
+		//    root->right->right->left=new TreeNode(10);
+		//    root->right->right->right=new TreeNode(12);
+		//    zigZag(root);
+		//    vector<string> tcs = printpermutationif(2);
+		//    cout<<largestSubMatrixSum({{1},{-2}});
 
-	//    TreeNode* root= new TreeNode(10);
-	//    root->left=new TreeNode(5);
-	//    root->right=new TreeNode(15);
-	//    root->left->left=new TreeNode(2);
-	//    root->left->left->left=NULL;
-	//    root->left->left->right=NULL;
-	//    root->left->right=NULL;
-	//
-	//    root->right->left=NULL;
-	//    root->right->right=NULL;
-	//    vector<vector<int>> result65 = solve65(root);
-	//    cout<<endl;
+		//    cout<<largestx({{0, 0, 0, 0},
+		//                    {1, 1, 1, 1},
+		//                    {0, 1, 1, 1},
+		//                    {1, 0, 1, 1} });
+		//    cout<<largestcross({{0, 0, 0, 0},
+		//                        {1, 1, 1, 1},
+		//                        {0, 1, 1, 1},
+		//                        {1, 0, 1, 1} });
+		//    cout<<longest1s({0, 1, 0, 1, 1, 1, 0});
+		//    cout<<largestSum({2, -1, 4, -2, 1});
+		//    cout<<largestSum({-2, -1, -3});
+		//    reorder({1,2,3,4,5,6,7,8});
+		//    cout<<decompress("a1c0b2c4");
+		//
+
+		//    cout<<isPowerOfTwo(-2147483648)<<endl;
+		//    cout<<diffBits(5, 8)<<endl;
+		//    cout<<Change(29)<<endl;
+		//    cout<<allUnique("abA+\a88")<<" "<<allUnique("abA+\8")<<endl;
+		//    vector<vector<int>> input1={ {1,  2,  3},
+		//        {4,  5,  6},
+		//        {7,  8,  9} };
+		//    vector<vector<int>> input2={{1, 2,  3, 4},
+		//                                {5, 6,  7, 8},
+		//                                {9, 10,11,12},
+		//                                {13,14,15,16}};
+		//    vector<vector<int>> input3={ {1,  2,  3,  4},
+		//                                {5,  6,  7,  8},
+		//                                {9, 10, 11, 12} };
+		//
+		//    vector<vector<int>> input4={ {1,  2,  3},
+		//                                {4, 5,  6},
+		//                                {7,  8, 9},
+		//                                {10, 11, 12} };
+		//    vector<int> result=spiral(input2);
+		//    vector<int> result=spiral2({{1}} );
+		//    for(auto i:result) {
+		//        cout<<i<<" ";
+		//    }
+		//    solve(3, 5);
+		//    generateMatrix(3,1);
+		//    solve(0);
+		//    solve(1);
+		//    solve(2);
+		//    solve(3);
+		//    solve(4);
+		//    solve(5);
+		//    solve(6);
+		//    solve(7);
+		//    solve(8);
+		//    solve(9);
+		//    cout<<match("apple","a3e")<<endl;
+		//    cout<<longest({7, 2, 3, 1, 5, 8, 9, 6})<<endl;
+		//cout<<canJump({1,2,0})<<endl;
+		//cout<<minJump({2, 1, 1, 0, 2});
+		/*
+		Trie trie;
+		trie.insert("ab");
+		cout<<trie.search("ab")<<endl;
+		cout<<trie.search("a")<<endl;
+		cout<<trie.startsWith("a")<<endl;
+
+		int arr[] = {10, 13, 16, 7, 8, 9, 1, 5};
+		*/
+
+		//    printf("hello!");
+		//printf("%d\n", HammingDistance(4, 14));
+
+		//int n = sizeof(arr)/sizeof(arr[0]);
+		//quickSort(arr, 0, n-1);
+		//printf("Sorted array: \n");
+		//printArray(arr, n);
+
+		//    std::set<int> myints;
+		//    std::cout << "0. size: " << myints.size() << '\n';
+		//    for (int i=0; i<10; ++i) myints.insert(i);
+		//    std::cout << "1. size: " << myints.size() << '\n';
+		//
+		//    myints.insert (100);
+		//    std::cout << "2. size: " << myints.size() << '\n';
+		//
+		//    myints.erase(5);
+		//    vector<string> sss;
+		//    std::cout << "3. size: " << myints.size() << '\n'<<labs(2147483647+1)<<endl;
+		//    sss.push_back(to_string(121));
+		//    sss.push_back(to_string(12));
+		//    sort(sss.begin(), sss.end(), comp());
+		//    cout<<sss[0]+sss[1]<<endl;
+		//    cout<<sss[1]+sss[0]<<endl;
+		//    if(to_string(33)<to_string(34))
+		//        cout<<to_string(33)<<endl;
+		//    else
+		//        cout<<to_string(34)<<endl;
+		//    return 0;
+
+		//    vector<int> A={1,3,3,6,9,9,12,15};
+		//    vector<int> result;
+		//    //result=mergeSort(A, 0, 4);
+		//    //result=quickSort(A);
+		//    result=kClosest(A, 0, 3);
+		//    printArray(result);
+		//BSTNode* root = CreateBST(A, 5);
+		//cout<<root->key<<endl;
+		//    vector<vector<int>> matrix = { {1, 2, 3}, {4, 5, 7}, {8, 9, 10} };
+		//    matrix={{1,2,3,3,4},{4,5,6,7,10},{12,14,14,17,19},{22,22,22,24,25}};
+		//    matrix={{1},{2},{3},{4}};
+		//    int target=0;
+		//    vector<int> result=search(matrix, target);
+		//    for(auto i:result) {
+		//        cout<<i<<endl;
+		//    }
+		//    string aaa="abc";
+		//    vector<string> result=solve61(aaa);
+		//    vector<string> result=solve62(aaa);
+		//    cout<<aaa<<endl;
+		//    int num=3;
+		//    vector<int> combos;
+		//    cout<<combos.size()<<endl;
+		//    result=solve63(3);
+
+		//    TreeNode* root= new TreeNode(10);
+		//    root->left=new TreeNode(5);
+		//    root->right=new TreeNode(15);
+		//    root->left->left=new TreeNode(2);
+		//    root->left->left->left=NULL;
+		//    root->left->left->right=NULL;
+		//    root->left->right=NULL;
+		//
+		//    root->right->left=NULL;
+		//    root->right->right=NULL;
+		//    vector<vector<int>> result65 = solve65(root);
+		//    cout<<endl;
 
 
-	//}
+		//}
 
-	//vector<int> lexicalOrder(int n) {
-	//    int result[n];
-	//    for(int i=1;i<=n;i++)
-	//        result[i-1]=i;
-	//    quickSort(result, 0, n-1);
-	//    vector<int> x(result, result + sizeof( result)/ sizeof( result[0]));
-	//    return x;
-	//}
-	// Driver code
-	/*
+		//vector<int> lexicalOrder(int n) {
+		//    int result[n];
+		//    for(int i=1;i<=n;i++)
+		//        result[i-1]=i;
+		//    quickSort(result, 0, n-1);
+		//    vector<int> x(result, result + sizeof( result)/ sizeof( result[0]));
+		//    return x;
+		//}
+		// Driver code
+		/*
 
-	vector<char> row;
-	vector<vector<char>> matrix;
-	row.push_back('1');
-	row.push_back('0');
-	row.push_back('1');
-	row.push_back('0');
-	row.push_back('0');
-	matrix.push_back(row);
-	row.clear();
-	row.push_back('1');
-	row.push_back('0');
-	row.push_back('1');
-	row.push_back('1');
-	row.push_back('1');
-	matrix.push_back(row);
-	row.clear();
-	row.push_back('1');
-	row.push_back('1');
-	row.push_back('1');
-	row.push_back('1');
-	row.push_back('1');
-	matrix.push_back(row);
-	row.clear();
-	row.push_back('1');
-	row.push_back('0');
-	row.push_back('0');
-	row.push_back('1');
-	row.push_back('0');
-	matrix.push_back(row);
-	row.clear();
-	cout<<"rows:"<<matrix.size()<<endl;
-	cout<<"cols:"<<matrix[0].size()<<endl;
-	cout << "Area of maximum rectangle is "<< maxRectangle(matrix)<<endl;
+		vector<char> row;
+		vector<vector<char>> matrix;
+		row.push_back('1');
+		row.push_back('0');
+		row.push_back('1');
+		row.push_back('0');
+		row.push_back('0');
+		matrix.push_back(row);
+		row.clear();
+		row.push_back('1');
+		row.push_back('0');
+		row.push_back('1');
+		row.push_back('1');
+		row.push_back('1');
+		matrix.push_back(row);
+		row.clear();
+		row.push_back('1');
+		row.push_back('1');
+		row.push_back('1');
+		row.push_back('1');
+		row.push_back('1');
+		matrix.push_back(row);
+		row.clear();
+		row.push_back('1');
+		row.push_back('0');
+		row.push_back('0');
+		row.push_back('1');
+		row.push_back('0');
+		matrix.push_back(row);
+		row.clear();
+		cout<<"rows:"<<matrix.size()<<endl;
+		cout<<"cols:"<<matrix[0].size()<<endl;
+		cout << "Area of maximum rectangle is "<< maxRectangle(matrix)<<endl;
 
-	//cout<<getHint("1123", "0111")<<endl;
-	vector<int>now=lexicalOrder(13);
-	for (vector<int>::const_iterator i = now.begin(); i != now.end(); ++i)
-	cout << *i << ' ';
-	cout<<endl;
-	cout<<pow(10, max((int)log10(13), (int)log10(113)))<<' '<<endl;
-	return 0;
-	*/
-	//cout<<canBreak("robcatbob", {"bob", "cat", "rob"});
-	//cout<<editDistance("sigh", "asith");
-	//cout<<largest({ {0, 0, 0, 0},  {1, 1, 1, 1}, {0, 1, 1, 1},  {1, 0, 1, 1}});
-	//solve("aba");
-	//cout<<reverseWords("I love Google");
-	//cout<<replace("docomoco","co","omo" );
-	//    Solution215* new215 = new Solution215();
-	//    TreeNode* result215 = new215->reconstruct({4,8,10,12,14,20,22}, {20,8,22,4,12,10,14});
-	//    cout<<result215->left->right->value<<endl;
-	//    Solution213* new213 = new Solution213();
-	//    TreeNode* result213 = new213->reconstruct({1, 3, 4, 5, 8, 11}, {5, 3, 1, 4, 8, 11});
-	//    cout<<result213->left->right->value<<endl;
-	//    Solution211* new211 = new Solution211();
-	//    TreeNode* result211 = new211->reconstruct( {1, 4, 3, 11, 8, 5});
-	//    cout<<result211->left->right->value<<endl;
-    Solution147* s147 = new Solution147();
-    vector<string> o147 = s147->restore("25525511135");
-    Solution145* s145 = new Solution145();
-    vector<TreeNode*> o145 = s145->generateBSTs(3);
+		//cout<<getHint("1123", "0111")<<endl;
+		vector<int>now=lexicalOrder(13);
+		for (vector<int>::const_iterator i = now.begin(); i != now.end(); ++i)
+		cout << *i << ' ';
+		cout<<endl;
+		cout<<pow(10, max((int)log10(13), (int)log10(113)))<<' '<<endl;
+		return 0;
+		*/
+		//cout<<canBreak("robcatbob", {"bob", "cat", "rob"});
+		//cout<<editDistance("sigh", "asith");
+		//cout<<largest({ {0, 0, 0, 0},  {1, 1, 1, 1}, {0, 1, 1, 1},  {1, 0, 1, 1}});
+		//solve("aba");
+		//cout<<reverseWords("I love Google");
+		//cout<<replace("docomoco","co","omo" );
+		//    Solution215* new215 = new Solution215();
+		//    TreeNode* result215 = new215->reconstruct({4,8,10,12,14,20,22}, {20,8,22,4,12,10,14});
+		//    cout<<result215->left->right->value<<endl;
+		//    Solution213* new213 = new Solution213();
+		//    TreeNode* result213 = new213->reconstruct({1, 3, 4, 5, 8, 11}, {5, 3, 1, 4, 8, 11});
+		//    cout<<result213->left->right->value<<endl;
+		//    Solution211* new211 = new Solution211();
+		//    TreeNode* result211 = new211->reconstruct( {1, 4, 3, 11, 8, 5});
+		//    cout<<result211->left->right->value<<endl;
+	Solution154* s154 = new Solution154();
+	vector<vector<char>> board = { {'A','B','C','E'},
+	{'S', 'F', 'E', 'S' },
+	{'A', 'D', 'E', 'E'} };
+	string word = "ABCESEEEFS";
+	bool o154 = s154->isWord(board, word);
+	word = "ABCB";
+	o154 = s154->isWord(board, word);
+	board = { {'a'} };
+	word = "a";
+	o154 = s154->isWord(board, word);
+	//ListNode* l1 = new ListNode(1);
+	//ListNode* l2 = new ListNode(2);
+	//ListNode* l3 = new ListNode(3);
+	//ListNode* l31 = new ListNode(3);
+	//ListNode* l4 = new ListNode(4);
+	//ListNode* l41 = new ListNode(4);
+	//ListNode* l5 = new ListNode(5);
+	//l1->next = l2;
+	//l2->next = l3;
+	//l3->next = l31;
+	//l31->next = l4;
+	//l4->next = l41;
+	//l41->next = l5;
+	//Solution152* s152 = new Solution152();
+	//ListNode* o152 = s152->removeDup(l1);
+	//Solution150* s150 = new Solution150();
+	//bool o150 = s150->isScramble("great", "rgtae");
+	//cout << o150 << endl;
+	//o150 = s150->isScramble("agreat", "rgaeds");
+	//cout << o150 << endl;
+
+	//Solution148* s148 = new Solution148();
+	//cout << s148->numDecodeWay("212");
+    //Solution147* s147 = new Solution147();
+    //vector<string> o147 = s147->restore("25525511135");
+    //Solution145* s145 = new Solution145();
+    //vector<TreeNode*> o145 = s145->generateBSTs(3);
 //    TreeNode* t1=new TreeNode(1);
 //    TreeNode* t2=new TreeNode(2);
 //    TreeNode* t3=new TreeNode(3);
@@ -9878,8 +10315,8 @@ int main() {
 	//                                        {9,10,11,12},
 	//                                        {13,14,15,16}};
 	//    new125->solve(result125);
-    Solution120* s120 = new Solution120();
-    s120->largestAndSecond({2,1,5,4,3});
+    //Solution120* s120 = new Solution120();
+    //s120->largestAndSecond({2,1,5,4,3});
 	//    Solution119* new119 = new Solution119();
 	//    vector<int> result119 = new119->largestAndSmallest({2, 1, 5, 4, 3});
 	//    cout<<result119[0]<<" "<<result119[1]<<endl;
