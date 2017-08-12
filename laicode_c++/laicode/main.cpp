@@ -1,7 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
 //#pragma once
-//#include"stdafx.h"
+#include"stdafx.h"
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -54,15 +54,6 @@ public:
 	TreeNodeP* parent;
 	TreeNodeP(int v, TreeNodeP* p) :
 		value(v), left(NULL), right(NULL), parent(p) {}
-};
-
-class UnknownSizeVector {
-public:
-	int get(int index) {
-		//Return INT_MIN if out of bound;
-		//Otherwise return the element value;
-		return INT_MIN;
-	}
 };
 
 struct StackMinNode {
@@ -335,6 +326,17 @@ public:
 };
 
 class Solution11 {
+	//Rainbow Sort
+	//	Given an array of balls, where the color of the balls can only be Red, Green or Blue, sort the balls such that all the Red balls are grouped on the left side, all the Green balls are grouped in the middle and all the Blue balls are grouped on the right side. (Red is denoted by - 1, Green is denoted by 0, and Blue is denoted by 1).
+
+	//	Examples
+
+	//{ 0 } is sorted to{ 0 }
+	//{1, 0} is sorted to{ 0, 1 }
+	//{1, 0, 1, -1, 0} is sorted to{ -1, 0, 0, 1, 1 }
+	//	Assumptions
+
+	//	The input array is not null.
 public:
 	vector<int> rainbowSort(vector<int> a) {
 		int leng = (int)a.size();
@@ -362,6 +364,20 @@ public:
 };
 
 class Solution12 {
+
+	//Fibonacci Number
+	//	Get the Kth number in the Fibonacci Sequence. (K is 0 - indexed, the 0th Fibonacci number is 0 and the 1st Fibonacci number is 1).
+
+	//	Examples
+
+	//	0th fibonacci number is 0
+	//	1st fibonacci number is 1
+	//	2nd fibonacci number is 1
+	//	3rd fibonacci number is 2
+	//	6th fibonacci number is 8
+	//	Corner Cases
+
+	//	What if K < 0 ? in this case, we should always return 0.
 public:
 	long fibonacci(int K) {
 		if (K <= 0) {
@@ -383,26 +399,48 @@ public:
 };
 
 class Solution13 {
+
+	//a to the power of b
+	//	Evaluate a to the power of b, assuming both a and b are integers and b is non - negative.
+
+	//	Examples
+
+	//	power(2, 0) = 1
+	//	power(2, 3) = 8
+	//	power(0, 10) = 0
+	//	power(-2, 5) = -32
 public:
 	long power(int a, int b) {
-		if (a == 0) {
-			return 0;
-		}
-		else if (b == 0) {
+		if (b == 0) {
 			return 1;
 		}
+		if (b < 0) {
+			return 0;
+		}
 		else if (b % 2 == 0) {
-			long result = power(a, b / 2);
+			long long result = power(a, b / 2);
 			return result*result;
 		}
 		else {
-			long result = power(a, b / 2);
+			long long result = power(a, b / 2);
 			return result*result*a;
 		}
 	}
 };
 
 class Solution14 {
+
+	//Classical Binary Search
+	//	Given a target integer T and an integer array A sorted in ascending order, find the index i such that A[i] == T or return -1 if there is no such index.
+
+	//	Assumptions
+
+	//	There can be duplicate elements in the array, and you can return any of the indices i such that A[i] == T.
+	//	Examples
+
+	//	A = { 1, 2, 3, 4, 5 }, T = 3, return 2
+	//	A = { 1, 2, 3, 4, 5 }, T = 6, return -1
+	//	A = { 1, 2, 2, 2, 3, 4 }, T = 2, return 1 or 2 or 3
 public:
 	int solve(vector<int> input, int target) {
 		int leng = (int)input.size();
@@ -427,6 +465,18 @@ public:
 };
 
 class Solution15 {
+
+	//First Occurrence
+	//	Given a target integer T and an integer array A sorted in ascending order, find the index of the first occurrence of T in A or return -1 if there is no such index.
+
+	//	Assumptions
+
+	//	There can be duplicate elements in the array.
+	//	Examples
+
+	//	A = { 1, 2, 3 }, T = 2, return 1
+	//	A = { 1, 2, 3 }, T = 4, return -1
+	//	A = { 1, 2, 2, 2, 3 }, T = 2, return 1
 public:
 	int firstOccur(vector<int> input, int target) {
 		int leng = (int)input.size();
@@ -466,6 +516,18 @@ public:
 };
 
 class Solution16 {
+	//Last Occurrence
+	//	Given a target integer T and an integer array A sorted in ascending order, find the index of the last occurrence of T in A or return -1 if there is no such index.
+
+	//	Assumptions
+
+	//	There can be duplicate elements in the array.
+
+	//	Examples
+
+	//	A = { 1, 2, 3 }, T = 2, return 1
+	//	A = { 1, 2, 3 }, T = 4, return -1
+	//	A = { 1, 2, 2, 2, 3 }, T = 2, return 3
 public:
 	int lastOccur(vector<int> input, int target) {
 		int leng = (int)input.size();
@@ -505,6 +567,19 @@ public:
 };
 
 class Solution17 {
+
+	//Closest In Sorted Array
+	//	Given a target integer T and an integer array A sorted in ascending order, find the index i in A such that A[i] is closest to T.
+
+	//	Assumptions
+
+	//	There can be duplicate elements in the array, and we can return any of the indices with same value.
+	//	Examples
+
+	//	A = { 1, 2, 3 }, T = 2, return 1
+	//	A = { 1, 4, 6 }, T = 3, return 1
+	//	A = { 1, 4, 6 }, T = 5, return 1 or 2
+	//	A = { 1, 3, 3, 4 }, T = 2, return 0 or 1 or 2
 public:
 	int solve(vector<int> input, int target) {
 		int leng = (int)input.size();
@@ -535,6 +610,17 @@ public:
 };
 
 class Solution19 {
+
+	//K Closest In Sorted Array
+	//	Given a target integer T, a non - negative integer K and an integer array A sorted in ascending order, find the K closest numbers to T in A.
+
+	//	Assumptions
+
+	//	A is not null
+	//	K is guranteed to be >= 0 and K is guranteed to be <= A.length
+	//	Return
+
+	//	A size K integer array containing the K closest numbers(not indices) in A, sorted in ascending order by the difference between the number and T.
 public:
 	vector<int> kClosest(vector<int> array, int target, int k) {
 		int leng = (int)array.size();
@@ -586,7 +672,22 @@ public:
 };
 
 class Solution20 {
+	//Search In Unknown Sized Sorted Array
+	//	Given a integer dictionary A of unknown size, where the numbers in the dictionary are sorted in ascending order, determine if a given target integer T is in the dictionary.Return the index of T in A, return -1 if T is not in A.
+
+	//	Assumptions
+
+	//	dictionary A is not null
+	//	dictionary.get(i) will return null(Java) / INT_MIN(C++) if index i is out of bounds
 private:
+	class UnknownSizeVector {
+	public:
+		int get(int index) {
+			//Return INT_MIN if out of bound;
+			//Otherwise return the element value;
+			return INT_MIN;
+		}
+	};
 	int binarySearch(UnknownSizeVector& input, int target, int left, int right) {
 		while (left <= right) {
 			int mid = left + (right - left) / 2;
@@ -1326,6 +1427,17 @@ public:
 		}
 		return prev;
 	}
+
+	ListNode* reverse1(ListNode* head) {
+		if (head == NULL || head->next == NULL) {
+			return head;
+		}
+		ListNode* new_node = head->next;
+		ListNode* new_head = reverse1(new_node);
+		new_node->next = head;
+		head->next = NULL;
+		return new_head;
+	}
 };
 
 class Solution35 {
@@ -1656,23 +1768,6 @@ class Solution43 {
 //    Corner Cases
 //    
 //    What if the given binary tree is null? Return an empty list in this case.
-//        How is the binary tree represented?
-//        
-//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
-//        
-//        For Example:
-//        
-//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
-//        
-//          1
-//        
-//        /   \
-//        
-//       2     3
-//        
-//            /
-//        
-//           4
 
 private:
 	void inOrderHelper(TreeNode* root, vector<int>& result) {
@@ -1718,23 +1813,6 @@ class Solution44 {
 //    Corner Cases
 //    
 //    What if the given binary tree is null? Return an empty list in this case.
-//        How is the binary tree represented?
-//        
-//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
-//        
-//        For Example:
-//        
-//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
-//        
-//           1
-//        
-//         /   \
-//        
-//        2     3
-//        
-//             /
-//        
-//            4
 private:
 	void preOrderHelper(TreeNode* root, vector<int>& result) {
 		if (root == NULL) {
@@ -1779,23 +1857,6 @@ class Solution45 {
 //    Corner Cases
 //    
 //    What if the given binary tree is null? Return an empty list in this case.
-//        How is the binary tree represented?
-//        
-//        We use the level order traversal sequence with a special symbol "#" denoting the null node.
-//        
-//        For Example:
-//        
-//        The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
-//        
-//          1
-//        
-//        /   \
-//        
-//        2     3
-//        
-//            /
-//
-//           4
 private:
 	void postOrderHelper(TreeNode* root, vector<int>& result) {
 		if (root == NULL) {
@@ -1850,23 +1911,6 @@ class Solution46 {
 //        Corner Cases
 //        
 //        What if the binary tree is null? Return true in this case.
-//        How is the binary tree represented?
-//            
-//            We use the level order traversal sequence with a special symbol "#" denoting the null node.
-//            
-//        For Example:
-//            
-//            The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
-//            
-//              1
-//            
-//            /   \
-//            
-//            2     3
-//            
-//                 /
-//            
-//                4
 private:
 	int getHeight(TreeNode* root) {
 		if (root == NULL) {
@@ -1924,23 +1968,6 @@ class Solution47 {
     //        Corner Cases
     //
     //        What if the binary tree is null? Return true in this case.
-    //            How is the binary tree represented?
-    //
-    //            We use the level order traversal sequence with a special symbol "#" denoting the null node.
-    //
-    //            For Example:
-    //
-    //            The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
-    //
-    //               1
-    //
-    //             /   \
-    //
-    //            2     3
-    //
-    //                 /
-    //
-    //                4
 private:
     int nodeCounts(TreeNode* root) {
         if (root == NULL) {
@@ -2036,7 +2063,6 @@ class Solution48 {
 //        
 //        is not symmetric.
 //        
-//        Corner Cases
 private:
 	bool isSymmHelper(TreeNode* left, TreeNode* right) {
 		if (left == NULL && right == NULL) {
@@ -2331,13 +2357,13 @@ private:
 		}
 	}
     
-    void isBSTHelper1(TreeNode* root, TreeNode* &prev, bool* isbst) {
-        if (root==NULL || *isbst==false) {
+    void isBSTHelper1(TreeNode* root, TreeNode* &prev, bool& isbst) {
+        if (root==NULL || isbst==false) {
             return;
         }
         isBSTHelper1(root->left, prev, isbst);
         if(prev!=NULL) {
-            *isbst &= root->value > prev->value;
+            isbst &= root->value > prev->value;
         }
         if(root!=NULL) {
             prev=root;
@@ -2358,10 +2384,9 @@ public:
             return true;
         }
         TreeNode* min = NULL;
-        bool flag=true;
-        bool *isbst=&flag;
+        bool isbst = true;
         isBSTHelper1(root, min, isbst);
-        return flag;
+        return isbst;
     }
 };
 
@@ -2655,8 +2680,6 @@ public:
 	}
 };
 
-
-
 class Solution63 {
     //    All Subsets II
     //    Given a set of characters represented by a String, return a list containing all subsets of the characters.
@@ -2664,6 +2687,11 @@ class Solution63 {
     //    Assumptions
     //
     //    There could be duplicate characters in the original set.
+	//​Examples
+	//	Set = "abc", all the subsets are["", "a", "ab", "abc", "ac", "b", "bc", "c"]
+	//	Set = "abb", all the subsets are["", "a", "ab", "abb", "b", "bb"]
+	//	Set = "", all the subsets are[""]
+	//	Set = null, all the subsets are[]
 private:
     void solveHelper(string input, int index, string& combo, vector<string>& result) {
         if (index >= input.size()) {
@@ -4087,43 +4115,6 @@ class Solution98 {
      */
 public:
     double largestProduct(vector<double> array) {
-        //int leng = array.size();
-        //if (leng==0)
-        //{
-        //	return 0;
-        //}
-        //else if (leng == 1) {
-        //	return array[0];
-        //}
-        //else if (leng == 2) {
-        //	return max(array[0] * array[1], max(array[1], array[0]));
-        //}
-        //else {
-        //	// 	//    	  0 2.0
-        //	// 	//    	  1 -0.1
-        //	// 	//    	  2 4
-        //	// 	//    	  3 1.6
-        //	// 	//    	  4 12
-        //	double resultmax = DBL_MAX;
-        //	for (int i = 0; i < leng; i++)
-        //	{
-        //		double loopmax = array[i];
-        //		double current = array[i];
-        //		resultmax = max(resultmax, current);
-        //		for (int j = i; j >=0; j--)
-        //		{
-        //			if (j == i) {
-        //				continue;
-        //			}
-        //			else {
-        //				current = current*array[j];
-        //				loopmax = max(loopmax, current);
-        //				resultmax = max(resultmax, loopmax);
-        //			}
-        //		}
-        //	}
-        //	return resultmax;
-        //}
         if (array.size()==0)
         {
             return 0;
@@ -4141,6 +4132,46 @@ public:
         }
         return maxproduct;
     }
+
+	double largestProduct1(vector<double> array) {
+		int leng = array.size();
+		if (leng==0)
+		{
+			return 0;
+		}
+		else if (leng == 1) {
+			return array[0];
+		}
+		else if (leng == 2) {
+			return max(array[0] * array[1], max(array[1], array[0]));
+		}
+		else {
+			// 	//    	  0 2.0
+			// 	//    	  1 -0.1
+			// 	//    	  2 4
+			// 	//    	  3 1.6
+			// 	//    	  4 12
+			double resultmax = DBL_MAX;
+			for (int i = 0; i < leng; i++)
+			{
+				double loopmax = array[i];
+				double current = array[i];
+				resultmax = max(resultmax, current);
+				for (int j = i; j >=0; j--)
+				{
+					if (j == i) {
+						continue;
+					}
+					else {
+						current = current*array[j];
+						loopmax = max(loopmax, current);
+						resultmax = max(resultmax, loopmax);
+					}
+				}
+			}
+			return resultmax;
+		}
+	}
 };
 
 class Solution99 {
@@ -5241,7 +5272,7 @@ class Solution120 {
     //    Examples
     //    
     //    {2, 1, 5, 4, 3}, the largest number is 5 and 2nd largest number is 4.
-    //    
+    //    -1 5 4 5 4 2 1 5 4 3
 public:
     vector<int> largestAndSecond(vector<int> array) {
         int leng=(int)array.size();
@@ -6074,24 +6105,24 @@ class Solution135 {
     //
     //    closest number to 6 is 6
 public:
-    void closestHelper(TreeNode* root, int target, int* solution) {
+    void closestHelper(TreeNode* root, int target, int& solution) {
         if (root == NULL) {
             return;
         }
         if (root->value < target) {
-            if (abs(root->value - target) < abs(*solution - target)) {
-                *solution = root->value;
+            if (abs(root->value - target) < abs(solution - target)) {
+                solution = root->value;
             }
             closestHelper(root->right, target, solution);
         }
         else if (root->value > target) {
-            if (abs(root->value - target) < abs(*solution - target)) {
-                *solution = root->value;
+            if (abs(root->value - target) < abs(solution - target)) {
+                solution = root->value;
             }
             closestHelper(root->left, target, solution);
         }
         else {
-            *solution = target;
+            solution = target;
             //return root->value; // target
         }
         return;
@@ -6102,7 +6133,7 @@ public:
         }
         else {
             int solution = root->value;
-            closestHelper(root, target, &solution);
+            closestHelper(root, target, solution);
             return solution;
         }
     }
@@ -6136,7 +6167,7 @@ class Solution136 {
     //
     //    largest number smaller than 6 is 5
 public:
-    void largestSmallerHelper(TreeNode* root, int target, int* solution) {
+    void largestSmallerHelper(TreeNode* root, int target, int& solution) {
         if (root == NULL) {
             return;
         }
@@ -6144,7 +6175,7 @@ public:
             largestSmallerHelper(root->left, target, solution);
         }
         else {
-            *solution = root->value;
+            solution = root->value;
             largestSmallerHelper(root->right, target, solution);
         }
         return;
@@ -6155,7 +6186,7 @@ public:
         }
         else {
             int solution = INT_MIN;
-            largestSmallerHelper(root, target, &solution);
+            largestSmallerHelper(root, target, solution);
             return solution;
         }
     }
@@ -6409,13 +6440,13 @@ class Solution141 {
     //
     //        If target = 11, There exists a path only containing the node 11.
 private:
-    void matchedSumHelper(TreeNode* root, int presum, int target, unordered_map<int, int>& mymap, int* found) {
+    void matchedSumHelper(TreeNode* root, int presum, int target, unordered_map<int, int>& mymap, int& found) {
         if (root == NULL) {
             return;
         }
         presum += root->value;
         if (mymap[presum - target] != 0) {
-            *found = 1;
+            found = 1;
             return;
         }
         mymap[presum]++;
@@ -6430,7 +6461,7 @@ public:
         int found = 0;
         unordered_map<int, int> mymap;
         mymap[0]++;
-        matchedSumHelper(root, 0, target, mymap, &found);
+        matchedSumHelper(root, 0, target, mymap, found);
         return found == 1;
     }
 };
@@ -6469,7 +6500,7 @@ public:
         if (counts<=1) {
             return 0;
         }
-        return diameter(root, &height);
+        return diameter(root, height);
     }
 private:
     int leaves(TreeNode* root) {
@@ -6483,17 +6514,17 @@ private:
             return leaves(root->left)+leaves(root->right);
         }
     }
-    int diameter(TreeNode* root, int* height) {
+    int diameter(TreeNode* root, int& height) {
         if (root==NULL) {
-            *height=0;
+            height=0;
             return 0;
         }
         
         int lh=0, rh=0;
         int ldiamter=0, rdiameter=0;
-        ldiamter=diameter(root->left, &lh);
-        rdiameter=diameter(root->right, &rh);
-        *height=max(lh, rh)+1;
+        ldiamter=diameter(root->left, lh);
+        rdiameter=diameter(root->right, rh);
+        height=max(lh, rh)+1;
         if (lh==0 || rh==0) {
             return max(ldiamter, rdiameter);
         }
@@ -6546,7 +6577,6 @@ public:
 };
 
 class Solution144 {
-    
     //    Recover Binary Search Tree
     //    Given a Binary Search Tree with only two nodes swapped. Try to find them and recover the binary search tree.
     //
@@ -6577,7 +6607,7 @@ public:
             return root;
         }
         recoverHelper(root, INT_MIN, INT_MAX);
-        if (node1!=NULL) {
+        if (node1!=NULL && node2!=NULL) {
             swap(node1->value, node2->value);
         }
         return root;
@@ -7026,6 +7056,12 @@ public:
 };
 
 class Solution153 {
+	//Remove Duplicates from Sorted List
+	//	Given a sorted linked list, delete all duplicates such that each element appear only once.
+
+	//	Input: 1->1->2
+
+	//	Output : 1->2
     ListNode* removeDup(ListNode* head) {
         if (head == NULL || head->next == NULL)
         {
@@ -7056,21 +7092,13 @@ class Solution153 {
 class Solution154 {
     //Word Search
     //	Given a 2D board and a word, find if the word exists in the grid.The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring.The same letter cell may not be used more than once.
-    
     //	Input: board = [
-    
     //			   [“ABCE”],
-    
-    //				   [“SFCS”],
-    
-    //				   [“ADEE”]
-    
+    //			   [“SFCS”],
+    //			   [“ADEE”]
     //		   ]
-    
     //	Output: Word = “ABCCED”   return true
-    
     //			   Word = “SEE”      return true
-    
     //			   Word = “ABCB”      return false
 public:
     bool isWord(vector<vector<char>> board, string word) {
@@ -7109,67 +7137,189 @@ private:
             visited[row][col] = true;
             if (row+1<board.size() && board[row+1][col]==word[i+1] && visited[row+1][col]==false)
             {
-                wordSearch(board, word, row + 1, col, i + 1, visited, result);
-            }
-            if (result==false && col + 1 < board[0].size() && board[row][col + 1] == word[i + 1] && visited[row][col + 1] == false) {
-                wordSearch(board, word, row , col + 1, i + 1, visited, result);
-            }
-            if (result == false && row - 1>=0 && board[row - 1][col] == word[i + 1] && visited[row - 1][col] == false)
-            {
-                wordSearch(board, word, row - 1, col, i + 1, visited, result);
-            }
-            if (result == false && col - 1 >=0 && board[row][col - 1] == word[i + 1] && visited[row][col - 1] == false) {
-                wordSearch(board, word, row, col - 1, i + 1, visited, result);
-            }
-            visited[row][col] = false;
-        }
-        return;
-    }
+wordSearch(board, word, row + 1, col, i + 1, visited, result);
+			}
+			if (result == false && col + 1 < board[0].size() && board[row][col + 1] == word[i + 1] && visited[row][col + 1] == false) {
+				wordSearch(board, word, row, col + 1, i + 1, visited, result);
+			}
+			if (result == false && row - 1 >= 0 && board[row - 1][col] == word[i + 1] && visited[row - 1][col] == false)
+			{
+				wordSearch(board, word, row - 1, col, i + 1, visited, result);
+			}
+			if (result == false && col - 1 >= 0 && board[row][col - 1] == word[i + 1] && visited[row][col - 1] == false) {
+				wordSearch(board, word, row, col - 1, i + 1, visited, result);
+			}
+			visited[row][col] = false;
+		}
+		return;
+	}
 };
 
 class Solution155 {
-    //Combinations
-    //	Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
-    
-    //	E.g.Input: n = 4, k = 2
-    
-    //	Output : [
-    
-    //				 [2, 4],
-    
-    //					 [3, 4],
-    
-    //					 [2, 3],
-    
-    //					 [1, 2],
-    
-    //					 [1, 3],
-    
-    //					 [1, 4]
-    
-    //			 ]
+	//Combinations
+	//	Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.    //	E.g.Input: n = 4, k = 2
+	//	Output : [
+	//				 [2, 4],
+	//					 [3, 4],
+	//					 [2, 3],
+	//					 [1, 2],
+	//					 [1, 3],
+	//					 [1, 4]
+	//			 ]
 public:
-    vector<vector<int>> combine(int n, int k) {
-        for (int i = 1; i < n; i++) {
-            
-        }
-        return vector<vector<int>>{};
-    }
+	vector<vector<int>> combine(int n, int k) {
+		vector<vector<int>> result;
+		if (n < k) {
+			return result;
+		}
+		vector<int> temp;
+		combine(result, temp, 0, 0, n, k);
+		return result;
+	}
+
+	vector<vector<int>> combine1(int n, int k) {
+		vector<vector<int>> result;
+		if (n == 0 || k == 0) {
+			return result;
+		}
+		vector<int> temp(k, 0);
+		core(result, temp, 1, n, k);
+		return result;
+	}
+private:
+	void core(vector<vector<int>>& result, vector<int>& temp, int start, int end, int k) {
+		int i = start;
+		while (i <= end - k + 1) {
+			temp[temp.size() - k] = i;
+			i++;
+			if (k > 1) {
+				core(result, temp, i, end, k - 1);
+			}
+			else {
+				result.push_back(temp);
+			}
+		}
+	}
+	void combine(vector<vector<int>>& result, vector<int>& temp, int start, int size, int n, int k) {
+		if (size == k) {
+			result.push_back(temp);
+			return;
+		}
+		for (int i = start; i < n; i++) {
+			temp.push_back(i + 1);
+			combine(result, temp, i + 1, size + 1, n, k);
+			temp.pop_back();
+		}
+	}
 };
 
 class Solution156 {
+//Minimum Window Substring
+//	Given a string S and a string T, find the minimum window in S which will contain all the characters in T
+//	Input : S = “ADOBECODEBANC”
+//	T = “ABC”
+//	Output : “BANC”
 public:
-private:
-    
+	string minWindow(string s, string t) {
+		if (t.size() > s.size()) {
+			return "";
+		}
+		string result;
+		int slow = 0, count = 0, min_len = s.size() + 1;
+		unordered_map<char, int> dict;
+		for (int i = 0; i < t.size(); i++) {
+			dict[t[i]]++;
+		}
+		for (int fast = 0; fast < s.size(); fast++) {
+			if (dict.find(s[fast]) != dict.end()) {
+				dict[s[fast]]--;
+				if (dict[s[fast]] >= 0) {
+					count++;
+				}
+				while (count == t.size()) {
+					if (fast - slow + 1 < min_len) {
+						min_len = fast - slow + 1;
+						result = s.substr(slow, min_len);
+					}
+					if (dict.find(s[slow]) != dict.end()) {
+						dict[s[slow]]++;
+						if (dict[s[slow]] > 0) {
+							count--;
+						}
+					}
+					slow++;
+				}
+			}
+		}
+		return result;
+	}
 };
 
 class Solution158 {
+	//Set Matrix Zeroes
+	//	Given a m x n matrix, if an element is 0, set its entire row and column to 0.
+	//	E.g.Input: Matrix = [
+	//			[1, 1, 1, 1, 0],
+	//			[0, 1, 1, 0, 1],
+	//			[1, 1, 1, 0, 1],
+	//			[1, 1, 1, 1, 1]
+	//	]
+	//	Output: Matrix = [
+	//					[0, 0, 0, 0, 0],
+	//					[0, 0, 0, 0, 0],
+	//					[0, 0, 0, 0, 0],
+	//					[0, 1, 1, 0, 0],
+	//			]
 public:
+	vector<vector<int>> setZero(vector<vector<int>> matrix) {
+		//[1, 1, 1, 1, 0],
+		//[0, 1, 1, 0, 1],
+		//[1, 1, 1, 0, 1],
+		//[1, 1, 1, 1, 1]
+		//rows(0, 0, 0, 1)
+		//cols(0, 1, 1, 0, 0)
+		//0 0 0 0 0
+		//0 0 0 0 0
+		//0 0 0 0 0
+		//0 1 1 0 0
+		//1.遍历第一行第一列得到first_row=0 first_col=0
+		//2.遍历其他元素，若==0，则其第一行第一列为0
+		//3.遍历其他元素，若第一行第一列为0，则=0
+		//4.根据first_row,first_col置第一列第一行
+		int rows = matrix.size(), cols = matrix[0].size();
+		vector<int> m(rows, 1);
+		vector<int> n(cols, 1);
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (matrix[i][j] == 0) {
+					m[i] = 0; n[j] = 0;
+				}
+			}
+		}
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				if (m[i] == 0 || n[j] == 0) {
+					matrix[i][j] = 0;
+				}
+			}
+		}
+		return matrix;
+	}
 private:
     
 };
 
 class Solution159 {
+	/*Simplify Path
+		Given an absolute path for a file(Unix - style), simplify it.
+
+		Input: path = “ / home / ”
+
+		Output : “ / home”
+
+		Input : path = “ / a / . / b / .. / .. / c / ”
+
+		Output : “ / c”*/
 public:
 private:
     
@@ -11376,6 +11526,14 @@ int main() {
 		//    Solution171* new171 = new Solution171();
 		//    vector<int> result171 = new171->common({1,2,3,3}, {2,3,4,4,5}, {1,1,3,3});
 		//    printintArray(result171);
+
+	Solution158* s158 = new Solution158();
+	s158->setZero({ { 1, 1, 1, 1, 0 },{ 0, 1, 1, 0, 1 },{ 1, 1, 1, 0, 1 },{ 1, 1, 1, 1, 1 } });
+	Solution156* s156 = new Solution156();
+	string ss = "adobecodebanc", tt = "abc";
+	ss = s156->minWindow(ss, tt);
+	Solution155* s155 = new Solution155();
+	s155->combine1(4, 2);
 		//    Solution63* new63 = new Solution63();
 		//    vector<string> result63 = new63->solve("abb");
 		//    vector<string> result632 = new63->solve2("abb");
@@ -12261,18 +12419,18 @@ int main() {
 	//    n7->next=n9;
 	//    ListNode* result36 = new36->middleNode(n1);
 	//    cout<<result36->value<<endl;
-	//    Solution34* new34 = new Solution34();
-	//    ListNode* n1=new ListNode(1);
-	//    ListNode* n3=new ListNode(3);
-	//    ListNode* n5=new ListNode(5);
-	//    ListNode* n7=new ListNode(7);
-	//    ListNode* n9=new ListNode(9);
-	//    n1->next=n3;
-	//    n3->next=n5;
-	//    n5->next=n7;
-	//    n7->next=n9;
-	//    ListNode* result34 = new34->reverse(n1);
-	//    cout<<result34->value<<endl;
+	    //Solution34* new34 = new Solution34();
+	    //ListNode* n1=new ListNode(1);
+	    //ListNode* n3=new ListNode(3);
+	    //ListNode* n5=new ListNode(5);
+	    //ListNode* n7=new ListNode(7);
+	    //ListNode* n9=new ListNode(9);
+	    //n1->next=n3;
+	    //n3->next=n5;
+	    //n5->next=n7;
+	    //n7->next=n9;
+	    //ListNode* result34 = new34->reverse1(n1);
+	    //cout<<result34->value<<endl;
 	//    Solution32* new32 = new Solution32();
 	//    cout<<new32->top()<<endl;
 	//    cout<<new32->min()<<endl;
