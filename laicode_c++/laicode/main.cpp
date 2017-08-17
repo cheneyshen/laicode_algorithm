@@ -1,7 +1,7 @@
 // laicode.cpp : 定义控制台应用程序的入口点。
 //
 //#pragma once
-#include"stdafx.h"
+//#include"stdafx.h"
 
 #include <algorithm>	// std::sort
 #include <assert.h>
@@ -20,7 +20,12 @@
 #include <sstream>
 #include <unordered_set>
 #include <random>
-
+#include <float.h>      /* DBL_MAX */
+#include <list>
+#include <thread>
+#include <condition_variable>
+#include <mutex>
+#include <unistd.h>
 // C++ program to  largest rectangle with all 1s in a binary matrix
 using namespace std; 
 //
@@ -7321,66 +7326,450 @@ class Solution159 {
 
 		Output : “ / c”*/
 public:
+    string simplify(string path) {
+        vector<string> arr;
+        istringstream ss(path);
+        string token;
+        string result;
+        while(getline(ss, token, '/')) {
+            arr.push_back(token);
+        }
+        vector<string> real;
+        for (int i=0; i<arr.size(); i++) {
+            if (arr[i]=="" || arr[i]==".") {
+                continue;
+            }
+            else if(arr[i]==".." && !real.empty()) {
+                real.pop_back();
+            }
+            else if(arr[i]!="..") {
+                real.push_back(arr[i]);
+            }
+        }
+        for (int i=0; i<real.size(); i++) {
+            result+="/"+real[i];
+        }
+        if(result.empty()) {
+            return "/";
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution160 {
+//    Climbing Stairs
+//    There are in total n steps to climb until you can reach the top. You can climb 1 or 2 steps a time. Determine the number of ways you can do that.
+//        
+//        Example:
+//        
+//        Input: n = 4, Return 5.
 public:
+    int stairs(int n) {
+        //		0 1
+        //		1
+        //
+        //		0 1 2
+        //		1 1 0
+        //		2 0 0
+        //
+        //		0 1 2 3
+        //		1 1 1 0
+        //		2 0 1 0
+        //		1 2 0 0
+        //
+        //		0 1 2 3 4
+        //		1 1 1 1 0
+        //		1 2 0 1 0
+        //		1 1 2 0 0
+        //		2 0 2 0 0
+        //		2 0 1 1 0
+        if(n<=0) {
+            return 0;
+        }
+        else if(n==1) {
+            return 1;
+        }
+        else if(n==2) {
+            return 2;
+        }
+        else {
+            vector<int> table(n, 0);
+            table[0]=1;
+            table[1]=2;
+            for(int i=2;i<n;i++) {
+                table[i]=table[i-1]+table[i-2];
+            }
+            return table[n-1];
+        }
+    }
 private:
     
 };
 
 class Solution161 {
+//    Square Root I
+//    Given an integer number n, find its integer square root.
+//    
+//Assumption:
+//    
+//    n is guaranteed to be >= 0.
+//Example:
+//    
+//Input: 18, Return: 4
+//    
+//Input: 4, Return: 2
 public:
+    int sqrt(int x) {
+        if(x<=0) {
+            return 0;
+        }
+        else if(x==1) {
+            return 1;
+        }
+        else {
+            int i=x/2;
+            for(;i>=2;--i) {
+                if(pow(i, 2)<=x) {
+                    break;
+                }
+            }
+            return i;
+        }
+    }
 private:
     
 };
 
 class Solution162 {
+//    Plus One
+//    Given a non-negative number represented as an array of digits, plus one to the number.
+//    
+//Input: [2, 5, 9]
+//    
+//Output: [2, 6, 0]
 public:
+    vector<int> plus(vector<int> digits) {
+        if (digits.empty()) {
+            return digits;
+        }
+        int carry=1;
+        for (int i=digits.size()-1; i>=0; i--) {
+            int digit=(digits[i]+carry)%10;
+            carry=(digits[i]+carry)/10;
+            digits[i]=digit;
+            if(carry==0) {
+                return digits;
+            }
+        }
+        vector<int> result(digits.size()+1);
+        result[0]=1;
+        return result;
+    }
 private:
     
 };
 
 
 class Solution163 {
+//    Add Binary
+//    Given two binary strings, return their sum (also a binary string).
+//    
+//Input: a = “11”
+//    
+//    b = “1”
+//    
+//Output: “100”
 public:
+    string addBinary(string a, string b) {
+        if (a.empty()) {
+            return b;
+        }
+        if (b.empty()) {
+            return a;
+        }
+        int carry=0;
+        int i=a.size()-1, j=b.size()-1;
+        string result;
+        while(i>=0 || j>=0 || carry!=0) {
+            if (i>=0) {
+                carry+=a[i]-'0';
+                i--;
+            }
+            if(j>=0) {
+                carry+=b[j]-'0';
+                j--;
+            }
+            result.insert(result.begin(), carry%2+'0');
+            carry=carry/2;
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution164 {
+//    Minimum Path Sum
+//    Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
+//    
+//Input: [
+//        
+//        [5, 1, 2, 4],
+//        
+//        [4, 1, 0, 1],
+//        
+//        [0, 3, 7, 6]
+//        
+//        ]    
+//    
+//Output: 14
 public:
+    int miniPathSum(vector<vector<int>> grid) {
+        if (grid.empty()) {
+            return 0;
+        }
+        int m=grid.size();
+        int n=grid[0].size();
+        int Min[m][n];
+        Min[0][0]=grid[0][0];
+        for(int i=1;i<m;i++) {
+            Min[i][0]=grid[i][0]+Min[i-1][0];
+        }
+        for(int j=1;j<n;j++) {
+            Min[0][j]=grid[0][j]+Min[0][j-1];
+        }
+        for(int ki=1;ki<m;ki++) {
+            for(int kj=1;kj<n;kj++) {
+                Min[ki][kj]=min(Min[ki-1][kj], Min[ki][kj-1])+grid[ki][kj];
+            }
+        }
+        return Min[m-1][n-1];
+    }
 private:
     
 };
 
 class Solution165 {
+//    Possible Paths with Obstacles
+//    There is a robot on top left corner of the matrix, it can only move down or right. The matrix is represented by either 0(path) or 1(obstacle). For obstacle, robot can not move through. Find the number of possible ways for robot to move to right down corner.
+//        
+//        Input:    [
+//                   
+//                   [0,0,0],
+//                   
+//                   [0,1,0],
+//                   
+//                   [0,0,0]
+//                   
+//                   ]
+//        
+//        Output: 2
 public:
+    int possiblepath(vector<vector<int>>& obstacleGrid) {
+        //if(m<n) return uniquePaths(n, m);
+        int m = obstacleGrid.size(), n = obstacleGrid[0].size();
+        vector<vector<int>> path(m, vector<int>(n, 0));
+        path[0][0] = 0;
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++) {
+                if (obstacleGrid[i][j]==0) {
+                    if (i==0 && j==0) {
+                        path[0][0]=1;
+                    }
+                    else if(i==0) {
+                        path[0][j] = path[0][j-1];
+                    }
+                    else if(j==0) {
+                        path[i][0] = path[i-1][0];
+                    }
+                    else {
+                        path[i][j] = path[i-1][j] + path[i][j-1];
+                    }
+                }
+            }
+        return path[m-1][n-1];
+    }
+private:
+    
+};
+
+class Solution166 {
+//    Rotate List by K places
+//    Given a list, rotate the list to the right by k places, where k is non-negative.
+//    
+//Input: 1->2->3->4->5->NULL, k = 2
+//    
+//Output: 4->5->1->2->3->NULL
+public:
+    ListNode* rotateKplace(ListNode* head, int k) {
+        if(head==NULL || k==0) {
+            return head;
+        }
+        int leng=1;
+        ListNode *p=head, *pre;
+        while(p->next!=NULL) {
+            p=p->next;
+            leng++;
+        }
+        k=leng-k%leng;
+        p->next=head;
+        while(k--) {
+            p=p->next;
+        }
+        head=p->next;
+        p->next=NULL;
+        return head;
+    }
 private:
     
 };
 
 class Solution167 {
+//    Permutation Sequence
+//    The set [1,2,3,…,n] contains a total of n! unique permutations, return kth largest permutation.
+//    
+//    E.g.    Input: n = 3, k = 2    =>    "123"
+//    
+//    "132"
+//    
+//    "213"
+//    
+//    "231"
+//    
+//    "312"
+//    
+//    "321"
+//    
+//Output: “132”
 public:
+    string getPermutation(int n, int k) {
+        string perm;
+        for(int i=1;i<=n;i++) {
+            perm+=i+'0';
+        }
+        string result;
+        int index=k;
+        helper(perm, result, index, 0);
+        return result;
+    }
 private:
-    
+    void helper(string input, string& result, int& index, int start) {
+        if(start==input.size()) {
+            index--;
+            if(index==0) {
+                result=input;
+            }
+            return;
+        }
+        for(int i=start;i<input.size();i++) {
+            swap(input[i], input[start]);
+            helper(input, result, index, start+1);
+            swap(input[i], input[start]);
+            
+        }
+    }
 };
 
 class Solution168 {
+//    Length of Last Word
+//    Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+//    
+//Input: s = “Hello World   “
+//    
+//Output: 5
 public:
+    int lenOflast(string s) {
+        int leng=0, i=s.size()-1;
+        while (s[i]==' ') {
+            i--;
+        }
+        for (; i>=0 && s[i]!=' '; i--) {
+            leng++;
+        }
+        return leng;
+    }
 private:
     
 };
 
 class Solution169 {
+//    Gray Code
+//    The gray code is a binary numeral system where two successive values differ in only one bit.
+//    
+//    For example: given n = 2, return [0,1,3,2], the gray code sequence is:
+//    
+//    00 - 0
+//    
+//    01 - 1
+//    
+//    11 - 3
+//    
+//    10 - 2
+//    
+//    Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.
+//    
+//    E.g.    Input: n = 2
+//    
+//Output: [0, 2, 3, 1]
 public:
+    vector<int> graycode(int n) {
+        vector<string> array=grayHelper(n);
+        vector<int> result;
+        for (int i=0; i<array.size(); i++) {
+            result.push_back(convert2b(array[i]));
+        }
+        return result;
+    }
 private:
-    
+    int convert2b(string a) {
+        int result=0;
+        for (int i=0; i<a.size(); i++) {
+            if (a[i]=='1') {
+                result=result*2+1;
+            }
+            else {
+                result=result*2;
+            }
+        }
+        return result;
+    }
+    vector<string> grayHelper(int n) {
+        if(n<0) {
+            return {};
+        }
+        else if(n==0) {
+            return {"0"};
+        }
+        else if(n==1) {
+            return {"0", "1"};
+        }
+        else {
+            vector<string> result;
+            vector<string> lower=grayHelper(n-1);
+            for (int i=0; i<lower.size(); i++) {
+                result.push_back("0"+lower[i]);
+            }
+            for (int i=lower.size()-1; i>=0; i--) {
+                result.push_back("1"+lower[i]);
+            }
+            return result;
+        }
+    }
 };
 
 class Solution171 {
+//    Common Elements In Three Sorted Array
+//    Find all common elements in 3 sorted arrays.
+//    
+//    Assumptions
+//    
+//    The 3 given sorted arrays are not null
+//    There could be duplicate elements in each of the arrays
+//    Examples
+//    
+//    A = {1, 2, 2, 3}, B = {2, 2, 3, 5}, C = {2, 2, 4}, the common elements are [2, 2]
 public:
     vector<int> common(vector<int> a, vector<int> b, vector<int> c) {
         if (a.size() == 0 || b.size() == 0 || c.size() == 0) {
@@ -7416,6 +7805,17 @@ public:
 };
 
 class Solution172 {
+//    String Replace
+//    Given an original string input, and two strings S and T, replace all occurrences of S in input with T.
+//    
+//    Assumptions
+//    
+//    input, S and T are not null, S is not empty string
+//    Examples
+//    
+//    input = "appledogapple", S = "apple", T = "cat", input becomes "catdogcat"
+//    input = "dodododo", S = "dod", T = "a", input becomes "aoao"
+
 private:
     void finderHelper(string& input, int index, string s, vector<pair<int, int>>& positions) {
         for (int i = index, j = 0; i<input.size(); ) {
@@ -7458,18 +7858,103 @@ public:
 };
 
 class Solution173 {
+//    Compress String
+//    Given a string, replace adjacent, repeated characters with the character followed by the number of repeated occurrences. If the character does not has any adjacent, repeated occurrences, it is not changed.
+//    
+//    Assumptions
+//    
+//    The string is not null
+//    
+//    The characters used in the original string are guaranteed to be ‘a’ - ‘z’
+//    
+//    There are no adjacent repeated characters with length > 9
+//    
+//    Examples
+//    
+//    “abbcccdeee” → “ab2c3de3”
 public:
+    string compress(string input) {
+        int leng=input.length();
+        if(leng<=1) {
+            return input;
+        }
+        string output = "";
+        output+=input[0];
+        int count=1;
+        for(int i=1;i<leng;) {
+            while(i<leng && input[i]==input[i-1]) {
+                count++;
+                i++;
+            }
+            if(count>1) {
+                output+=count+'0';
+            }
+            if(i<leng) {
+                output+=input[i];
+            }
+            count=1;
+            i++;
+        }
+        return output;
+    }
 private:
-    
 };
 
 class Solution174 {
+//    Decompress String I
+//    Given a string in compressed form, decompress it to the original string. The adjacent repeated characters in the original string are compressed to have the character followed by the number of repeated occurrences. If the character does not have any adjacent repeated occurrences, it is not compressed.
+//    
+//    Assumptions
+//    
+//    The string is not null
+//    
+//    The characters used in the original string are guaranteed to be ‘a’ - ‘z’
+//    
+//    There are no adjacent repeated characters with length > 9
+//    
+//    Examples
+//    
+//    “acb2c4” → “acbbcccc”
 public:
+    string decompress(string input) {
+    int leng=input.length();
+    if(leng<=1) {
+        return input;
+    }
+    string output="";
+    char current=input[0];
+    for(int i=0;i<leng;++i) {
+        if(input[i]>'9') {
+            current=input[i];
+            output+=current;
+        }
+        else {
+            for(char j='2';j<=input[i];j++) {
+                output+=current;
+            }
+        }
+    }
+    return output;
+}
 private:
     
 };
 
 class Solution175 {
+//    Decompress String II
+//    Given a string in compressed form, decompress it to the original string. The adjacent repeated characters in the original string are compressed to have the character followed by the number of repeated occurrences.
+//    
+//    Assumptions
+//    
+//    The string is not null
+//    
+//    The characters used in the original string are guaranteed to be ‘a’ - ‘z’
+//    
+//    There are no adjacent repeated characters with length > 9
+//    
+//    Examples
+//    
+//    “a1c0b2c4” → “abbcccc”
 public:
     string decompress(string input) {
         if (input.size() <= 1) {
@@ -7496,6 +7981,15 @@ public:
 };
 
 class Solution176 {
+//    Longest Common Substring
+//    Find the longest common substring of two given strings.
+//    
+//    Assumptions
+//    
+//    The two given strings are not null
+//    Examples
+//    
+//    S = “abcde”, T = “cdf”, the longest common substring of S and T is “cd”
 private:
     //    void longestCommonHelper(string& s, int bs, string& t, int bt, string& result) {
     //        if (s.size()-bs<=result.size() || t.size()-bt<=result.size() || bs==s.size() || bt==t.size()) {
@@ -7551,6 +8045,15 @@ public:
 };
 
 class Solution177 {
+//    Longest Common Subsequence
+//    Find the length of longest common subsequence of two given strings.
+//    
+//    Assumptions
+//    
+//    The two given strings are not null
+//    Examples
+//    
+//    S = “abcde”, T = “cbabdfe”, the longest common subsequence of s and t is {‘a’, ‘b’, ‘d’, ‘e’}, the length is 4.
 private:
     int lcsHelper(string& s, int m, string& t, int n) {
         if (m==0 || n==0) {
@@ -7593,6 +8096,24 @@ public:
 
 
 class Solution178 {
+//    Reverse Binary Tree Upside Down
+//    Given a binary tree where all the right nodes are leaf nodes, flip it upside down and turn it into a tree with left leaf nodes as the root.
+//    
+//    Examples
+//    
+//    1
+//    /    \
+//    2        5
+//    /   \
+//    3      4
+//    
+//    is reversed to
+//    
+//    3
+//    /    \
+//    2        4
+//    /   \
+//    1      5
 public:
     TreeNode* reverse(TreeNode* root) {
         if (root == NULL || root->left == NULL) {
@@ -7608,6 +8129,15 @@ public:
 };
 
 class Solution179 {
+//    All Valid Permutations Of Parentheses II
+//    Get all valid permutations of l pairs of (), m pairs of [] and n pairs of {}.
+//    
+//    Assumptions
+//    
+//    l, m, n >= 0
+//    Examples
+//    
+//    l = 1, m = 1, n = 0, all the valid permutations are ["()[]", "([])", "[()]", "[]()"]
 public:
     void solveHelper(int length, vector<int>& remains, string& path_prefix, stack<char>& mystk, vector<string>& result) {
         for (auto i : remains) {
@@ -7770,6 +8300,19 @@ public:
 };
 
 class Solution180 {
+//    2 Sum
+//    Determine if there exist two elements in a given array, the sum of which is the given target number.
+//        
+//        Assumptions
+//        
+//        The given array is not null and has length of at least 2
+//        ​Examples
+//        
+//        A = {1, 2, 3, 4}, target = 5, return true (1 + 4 = 5)
+//    
+//    A = {2, 4, 2, 1}, target = 4, return true (2 + 2 = 4)
+//    
+//    A = {2, 4, 1}, target = 4, return false
 public:
     bool existSum(vector<int> array, int target) {
         unordered_map<int, int> lookup;
@@ -7784,6 +8327,18 @@ public:
 };
 
 class Solution181 {
+//    2 Sum All Pair I
+//    Find all pairs of elements in a given array that sum to the given target number. Return all the pairs of indices.
+//    
+//    Assumptions
+//    
+//    The given array is not null and has length of at least 2.
+//    
+//    Examples
+//    
+//    A = {1, 3, 2, 4}, target = 5, return [[0, 3], [1, 2]]
+//    
+//    A = {1, 2, 2, 4}, target = 6, return [[1, 3], [2, 3]]
 private:
     void solveHelper(vector<int> array, int target, vector<vector<int>>& result) {
         unordered_map<int, set<int>> lookup;
@@ -7816,6 +8371,16 @@ public:
 };
 
 class Solution182 {
+//    2 Sum All Pair II
+//    Find all pairs of elements in a given array that sum to the pair the given target number. Return all the distinct pairs of values.
+//    
+//    Assumptions
+//    
+//    The given array is not null and has length of at least 2
+//    The order of the values in the pair does not matter
+//    Examples
+//    
+//    A = {2, 1, 3, 2, 4, 3, 4, 2}, target = 6, return [[2, 4], [3, 3]]
 private:
     void solveHelper(vector<int> array, int target, vector<vector<int>>& result) {
         unordered_map<int, int> lookup;
@@ -7839,6 +8404,15 @@ public:
 };
 
 class Solution183 {
+//    2 Sum Closest
+//    Find the pair of elements in a given array that sum to a value that is closest to the given target number. Return the values of the two numbers.
+//    
+//    Assumptions
+//    
+//    The given array is not null and has length of at least 2
+//    Examples
+//    
+//    A = {1, 4, 7, 13}, target = 7, closest pair is 1 + 7 = 8, return [1, 7].
 public:
     vector<int> solve(vector<int> array, int target) {
         if(array.size()<=1) {
@@ -7873,6 +8447,13 @@ public:
 };
 
 class Solution184 {
+//    2 Sum Smaller
+//    Determine the number of pairs of elements in a given array that sum to a value smaller than the given target number.
+//    
+//    Assumptions
+//    The given array is not null and has length of at least 2
+//    Examples
+//    A = {1, 2, 2, 4, 7}, target = 7, number of pairs is 6({1,2}, {1, 2}, {1, 4}, {2, 2}, {2, 4}, {2, 4})
 public:
     int smallerPairs(vector<int> array, int target) {
         if(array.size()<=1) {
@@ -7920,6 +8501,14 @@ public:
 };
 
 class Solution185 {
+//    2 Sum 2 Arrays
+//    Given two arrays A and B, determine whether or not there exists a pair of elements, one drawn from each array, that sums to the given target number.
+//    
+//    Assumptions
+//    The two given arrays are not null and have length of at least 1
+//    Examples
+//    A = {3, 1, 5}, B = {2, 8}, target = 7, return true(pick 5 from A and pick 2 from B)
+//    A = {1, 3, 5}, B = {2, 8}, target = 6, return false
 public:
     bool existSum(vector<int> a, vector<int> b, int target) {
         vector<int> vb=b;
@@ -7945,6 +8534,15 @@ public:
 };
 
 class Solution186 {
+//    3 Sum
+//    Determine if there exists three elements in a given array that sum to the given target number. Return all the triple of values that sums to target.
+//        
+//        Assumptions
+//        
+//        The given array is not null and has length of at least 3
+//        No duplicate triples should be returned, order of the values in the tuple does not matter
+//        Examples
+//        A = {1, 2, 2, 3, 2, 4}, target = 8, return [[1, 3, 4], [2, 2, 4]]
 private:
     void solveHelper(vector<int> array, int target, vector<vector<int>>& result) {
         sort(array.begin(), array.end());
@@ -7986,6 +8584,13 @@ public:
 };
 
 class Solution187 {
+//    3 Sum 3 Arrays
+//    Given three arrays, determine if a set can be made by picking one element from each array that sums to the given target number.
+//        
+//        Assumptions
+//        The three given arrays are not null and have length of at least 1
+//        Examples
+//        A = {1, 3, 5}, B = {8, 2}, C = {3}, target = 14, return true(pick 3 from A, pick 8 from B and pick 3 from C)
 public:
     bool exist(vector<int> a, vector<int> b, vector<int> c, int target) {
         unordered_map<int, int> lookup;
@@ -8004,6 +8609,14 @@ public:
 };
 
 class Solution188 {
+//    4 Sum
+//    Determine if there exists a set of four elements in a given array that sum to the given target number.
+//        
+//        Assumptions
+//        The given array is not null and has length of at least 4
+//        Examples
+//        A = {1, 2, 2, 3, 4}, target = 9, return true(1 + 2 + 2 + 4 = 8)
+//    A = {1, 2, 2, 3, 4}, target = 12, return false
 public:
     bool exist(vector<int> array, int target) {
         unordered_map<int, pair<int, int>> lookup;
@@ -8022,19 +8635,126 @@ public:
 };
 
 class Solution189 {
+//    Text Justification
+//    Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+//    
+//Input: words: ["This", "is", "an", "example", "of", "text", "justification."]    L: 16.
+//Output:[
+//        "This    is    an",
+//        "example  of text",
+//        "justification.  "
+//        ]
+//Input: words: [“This”, “is”, “my”]       L = 5
+//Output: [
+//         “This ”,
+//         “is my”
+//         ]
 public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> result;
+        int i=0, n=words.size();
+        while (i<n) {
+            int leng=words[i].size();
+            int j=i+1;
+            while (j<n && leng+1+words[j].size()<=maxWidth) {
+                leng+=1+words[j].size();
+                j++;
+            }
+            string line=words[i];
+            if (j==n) {
+                for (int k=i+1; k<n; k++) {
+                    line+=" "+words[k];
+                }
+                while (line.size()<maxWidth) {
+                    line+=" ";
+                }
+            }
+            else {
+                int whites=maxWidth-leng;
+                int spaces=j-i-1;
+                if (spaces==0) {
+                    while (line.size()<maxWidth) {
+                        line+=" ";
+                    }
+                }
+                else {
+                    for (int k=i+1; k<j; k++) {
+                        line+=" ";
+                        for (int p=0; p<whites/spaces; p++) {
+                            line+=" ";
+                        }
+                        if (k-i<=whites%spaces) {
+                            line+=" ";
+                        }
+                        line+=words[k];
+                    }
+                }
+            }
+            result.push_back(line);
+            i=j;
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution190 {
+//    Valid Number
+//    Validate if a given string is numeric.
+//        Input:  “0”    Output: true
+//        Input:  “ 0.1 ” Output: true
+//        Input:  “abc”   Output: false
+//        Input:  “1 a”   Output: false
+//        Input:  “2e10”    Output: true
 public:
+    bool isNumber(string s) {
+        int i=0;
+        for (; s[i]==' '; i++) {}
+        if (s[i]=='+' || s[i]=='-') {
+            i++;
+        }
+        int nums, pots;
+        for (nums=0, pots=0; (s[i]<='9' && s[i]>='0') || (s[i]=='.'); i++) {
+            if (s[i]=='.') {
+                pots++;
+            }
+            else {
+                nums++;
+            }
+        }
+        if (nums<1 || pots>1) {
+            return false;
+        }
+        if (s[i]=='e') {
+            i++;
+            if (s[i]=='+'||s[i]=='-') {
+                i++;
+            }
+            int tails=0;
+            for (; s[i]>='0' && s[i]<='9'; i++, tails++) {}
+            if (tails<1) {
+                return false;
+            }
+        }
+        for (; s[i]==' '; i++) {}
+        return s[i]==0;
+    }
 private:
     
 };
 
 
 class Solution191 {
+//    Largest Product Of Length
+//    Given a dictionary containing many words, find the largest product of two words’ lengths, such that the two words do not share any common characters.
+//        
+//        Assumptions
+//        The words only contains characters of 'a' to 'z'
+//        The dictionary is not null and does not contains null string, and has at least two strings
+//        If there is no such pair of words, just return 0
+//        Examples
+//        dictionary = [“abcde”, “abcd”, “ade”, “xy”], the largest product is 5 * 2 = 10 (by choosing “abcde” and “xy”)
 private:
     class comphelper {
     public:
@@ -8125,12 +8845,23 @@ public:
 };
 
 class Solution192 {
-    //    0 0
-    //    1 0
-    //    0 1
-    //    2 0
-    //    1 1
-    //    3 0
+//    Kth Smallest With Only 2, 3 As Factors
+//    Find the Kth smallest number s such that s = 2 ^ x * 3 ^ y, x >= 0 and y >= 0, x and y are all integers.
+//    Assumptions
+//    K >= 1
+//    Examples
+//    the smallest is 1
+//    the 2nd smallest is 2
+//    the 3rd smallest is 3
+//    the 5th smallest is 2 * 3 = 6
+//    the 6th smallest is 2 ^ 3 * 3 ^ 0 = 8
+    //    2^0*3^0  2^0*3^0
+    //    2^1*3^0  2^0*3^0
+    //    2^1*3^0  2^0*3^1
+    //    2^2*3^0  2^0*3^1
+    //    2^2*3^0  2^1*3^1
+    //    2^2*3^0  2^1*3^1
+    //    2^3*3^0  2^1*3^1
 public:
     int kth(int k) {
         if(k<=0) {
@@ -8159,6 +8890,16 @@ public:
 
 
 class Solution193 {
+//    Kth Smallest With Only 3, 5, 7 As Factors
+//    Find the Kth smallest number s such that s = 3 ^ x * 5 ^ y * 7 ^ z, x > 0 and y > 0 and z > 0, x, y, z are all integers.
+//    
+//    Assumptions
+//    K >= 1
+//    Examples
+//    the smallest is 3 * 5 * 7 = 105
+//    the 2nd smallest is 3 ^ 2 * 5 * 7 = 315
+//    the 3rd smallest is 3 * 5 ^ 2 * 7 = 525
+//    the 5th smallest is 3 ^ 3 * 5 * 7 = 945
 public:
     long kth(int k) {
         priority_queue<long, vector<long>, greater<long>> mypq;
@@ -8188,6 +8929,23 @@ public:
 };
 
 class Solution194 {
+//    Kth Closest Point To <0,0,0>
+//    Given three arrays sorted in ascending order. Pull one number from each array to form a coordinate <x,y,z> in a 3D space. Find the coordinates of the points that is k-th closest to <0,0,0>.
+//    
+//    We are using euclidean distance here.
+//    
+//    Assumptions
+//    The three given arrays are not null or empty
+//    K >= 1 and K <= a.length * b.length * c.length
+//    Return
+//    a size 3 integer list, the first element should be from the first array, the second element should be from the second array and the third should be from the third array
+//    Examples
+//    
+//    A = {1, 3, 5}, B = {2, 4}, C = {3, 6}
+//    
+//    The closest is <1, 2, 3>, distance is sqrt(1 + 4 + 9)
+//    
+//    The 2nd closest is <3, 2, 3>, distance is sqrt(9 + 4 + 9)
 private:
     class comphelper {
     public:
@@ -8225,6 +8983,20 @@ public:
 };
 
 class Solution195 {
+//    Place To Put The Chair I
+//    Given a gym with k pieces of equipment and some obstacles.  We bought a chair and wanted to put this chair into the gym such that  the sum of the shortest path cost from the chair to the k pieces of equipment is minimal. The gym is represented by a char matrix, ‘E’ denotes a cell with equipment, ‘O’ denotes a cell with an obstacle, 'C' denotes a cell without any equipment or obstacle. You can only move to neighboring cells (left, right, up, down) if the neighboring cell is not an obstacle. The cost of moving from one cell to its neighbor is 1. You can not put the chair on a cell with equipment or obstacle.
+//        
+//        Assumptions
+//        There is at least one equipment in the gym
+//        The given gym is represented by a char matrix of size M * N, where M >= 1 and N >= 1, it is guaranteed to be not null
+//        It is guaranteed that each 'C' cell is reachable from all 'E' cells.
+//        If there does not exist such place to put the chair, just return null (Java) empty vector (C++)
+//        Examples
+//        
+//      { { 'E', 'O', 'C' },
+//        {  'C', 'E',  'C' },
+//        {  'C',  'C',  'C' } }
+//        we should put the chair at (1, 0), so that the sum of cost from the chair to the two equipment is 1 + 1 = 2, which is minimal.
 private:
     vector<pair<int, int>> getNeis(pair<int, int> curr, vector<vector<char>>& gym) {
         vector<pair<int, int>> result;
@@ -8309,6 +9081,18 @@ public:
 
 
 class Solution196 {
+//    Place To Put The Chair II
+//    Given a gym with k pieces of equipment without any obstacles.  Let’s say we bought a chair and wanted to put this chair into the gym such that the sum of the shortest path cost from the chair to the k pieces of equipment is minimal. The gym is represented by a char matrix, ‘E’ denotes a cell with equipment, ' ' denotes a cell without equipment. The cost of moving from one cell to its neighbor(left, right, up, down) is 1. You can put chair on any cell in the gym.
+//    
+//    Assumptions
+//    
+//    There is at least one equipment in the gym
+//    The given gym is represented by a char matrix of size M * N, where M >= 1 and N >= 1, it is guaranteed to be not null
+//    ​Examples
+//      { { 'E', ' ', ' ' },
+//        {  ' ', 'E',  ' ' },
+//        {  ' ',  ' ', 'E' } }
+//    we should put the chair at (1, 1), so that the sum of cost from the chair to the two equipments is 2 + 0 + 2 = 4, which is minimal.
 private:
     vector<pair<int, int>> getNeis(int x, int y, int rows, int cols) {
         vector<pair<int, int>> result;
@@ -8399,6 +9183,25 @@ public:
 };
 
 class Solution197 {
+//    ReOrder Array
+//    Given an array of elements, reorder it as follow:
+//    { N1, N2, N3, …, N2k } → { N1, Nk+1, N2, Nk+2, N3, Nk+3, … , Nk, N2k }
+//    { N1, N2, N3, …, N2k+1 } → { N1, Nk+1, N2, Nk+2, N3, Nk+3, … , Nk, N2k, N2k+1 }
+//    
+//    Try to do it in place.
+//        
+//        Assumptions
+//        
+//        The given array is not null
+//        Examples
+//        
+//    { 1, 2, 3, 4, 5, 6} → { 1, 4, 2, 5, 3, 6 }
+//    
+//    { 1, 2, 3, 4, 5, 6, 7, 8 } → { 1, 5, 2, 6, 3, 7, 4, 8 }
+//    
+//    { 1, 2, 3, 4, 5, 6, 7 } → { 1, 4, 2, 5, 3, 6, 7 }
+    
+
 private:
     void reorderHelper(vector<int>& array, int left, int right) {
         if (right - left <= 1) {
@@ -8444,7 +9247,6 @@ class Solution198 {
      2  3  4
      2*1  2*(1-0+1)  3*1 3*(3-2+1) 4*()
      */
-    
 public:
     int largest(vector<int> array) {
         int area=0;
@@ -8613,6 +9415,13 @@ public:
 };
 
 class Solution201 {
+//    Largest Container
+//    Given an array of non-negative integers, each of them representing the height of a board perpendicular to the horizontal line, the distance between any two adjacent boards is 1. Consider selecting two boards such that together with the horizontal line they form a container. Find the volume of the largest such container.
+//    
+//    Assumptions
+//    The given array is not null and has size of at least 2
+//    Examples
+//    { 2, 1, 3, 1, 2, 1 }, the largest container is formed by the two boards of height 2, the volume of the container is 2 * 4 = 8.
 public:
     int largest(vector<int> array) {
         int result=0;
@@ -8637,41 +9446,266 @@ public:
 
 
 class Solution202 {
+//    Kth Smallest In Two Sorted Arrays
+//    Given two sorted arrays of integers, find the Kth smallest number.
+//    
+//    Assumptions
+//    The two given arrays are not null and at least one of them is not empty
+//    K >= 1, K <= total lengths of the two sorted arrays
+//    Examples
+//    A = {1, 4, 6}, B = {2, 3}, the 3rd smallest number is 3.
+//    A = {1, 2, 3, 4}, B = {}, the 2nd smallest number is 2.
 public:
+    int kth(vector<int> a, vector<int> b, int k) {
+        return helper(a, 0, b, 0, k);
+    }
 private:
-    
+    int helper(vector<int>& a, int ai, vector<int>& b, int bi, int k) {
+        if (ai>=a.size()) {
+            return b[bi+k-1];
+        }
+        if (bi>=b.size()) {
+            return a[ai+k-1];
+        }
+        if (k==1) {
+            return min(a[ai], b[bi]);
+        }
+        int amid=ai+k/2-1;
+        int bmid=bi+k/2-1;
+        int aval=amid>=a.size()?INT_MAX:a[amid];
+        int bval=bmid>=b.size()?INT_MAX:b[bmid];
+        if (aval<=bval) {
+            return helper(a, amid+1, b, bi, k-k/2);
+        }
+        else {
+            return helper(a, ai, b, bmid+1, k-k/2);
+        }
+    }
 };
 
 class Solution203 {
+//    Median Of Two Arrays
+//    Given two arrays of integers, find the median value.
+//    Assumptions
+//    The two given array are not null and at least one of them is not empty
+//    The two given array are not guaranteed to be sorted
+//    Examples
+//    A = {4, 1, 6}, B = {2, 3}, median is 3
+//    A = {1, 4}, B = {3, 2}, median is 2.5
 public:
+    double median(vector<int> a, vector<int> b) {
+        sort(a.begin(), a.end());
+        sort(b.begin(), b.end());
+        int total=a.size()+b.size();
+        if (total%2!=0) {
+            return (double)findKth(a, 0, b, 0, total/2+1);
+        }
+        else {
+            return (double)(findKth(a, 0, b, 0, total/2) + \
+                            findKth(a, 0, b, 0, total/2+1))/2.0;
+        }
+    }
 private:
-    
+    int findKth(vector<int> a, int ai, vector<int> b, int bi, int k) {
+        if (ai>=a.size()) {
+            return b[bi+k-1];
+        }
+        if (bi>=b.size()) {
+            return a[ai+k-1];
+        }
+        if (k==1) {
+            return min(a[ai], b[bi]);
+        }
+        int amid=ai+k/2-1;
+        int bmid=ai+k/2-1;
+        int aval=amid>=a.size()?INT_MAX:a[amid];
+        int bval=amid>=b.size()?INT_MAX:b[bmid];
+        if(aval<=bval) {
+            return findKth(a, amid+1, b, bi, k-k/2);
+        }
+        else {
+            return findKth(a, ai, b, bmid+1, k-k/2);
+        }
+    }
 };
 
 class Solution204 {
+//    Maximum Values Of Size K Sliding Windows
+//    Given an integer array A and a sliding window of size K, find the maximum value of each window as it slides from left to right.
+//    Assumptions
+//    The given array is not null and is not empty
+//    
+//    K >= 1, K <= A.length
+//    Examples
+    //    A = {1, 2, 3, 2, 4, 2, 1}, K = 3, the windows are {{1,2,3}, {2,3,2}, {3,2,4}, {2,4,2}, {4,2,1}},
+//    1 2 3 2 4 2 1
+//    1
+//		2
+//        3
+//        2 3
+//            4
+//            2 4
+//            1 2 4
+//    and the maximum values of each K-sized sliding window are [3, 3, 4, 4, 4]
 public:
+    vector<int> maxWindows(vector<int> array, int k) {
+        vector<int> max;
+        deque<int> mydeq;
+        for (int i=0; i<array.size(); i++) {
+            while (!mydeq.empty() && array[mydeq.back()]<=array[i]) {
+                mydeq.pop_back();
+            }
+            while (!mydeq.empty() && mydeq.front()<=i-k) {
+                mydeq.pop_front();
+            }
+            mydeq.push_back(i);
+            if (i>=k-1) {
+                max.push_back(array[mydeq.front()]);
+            }
+        }
+        return max;
+    }
 private:
     
 };
 
 class Solution205 {
+//    Implement LRU Cache
+//    Implement a least recently used cache. It should provide set(), get() operations. If not exists, return null (Java), false (C++).
 public:
-private:
+    class Node {
+    public:
+        Node* next;
+        Node* prev;
+        int key;
+        int value;
+        Node(int key, int value) {
+            this->key=key;
+            this->value=value;
+        }
+        void update(int key, int value) {
+            this->key=key;
+            this->value=value;
+        }
+    };
     
+    Solution205(int leng) {
+        this->leng=leng;
+    }
+    
+    void set(int key, int value) {
+        Node* node=NULL;
+        if (dict.find(key)!=dict.end()) {
+            node=dict[key];
+            node->value=value;
+            remove(node);
+        }
+        else if (dict.size()<leng) {
+            node=new Node(key, value);
+        }
+        else {
+            node=tail;
+            remove(tail);
+            node->update(key, value);
+        }
+        append(node);
+    }
+    
+    int get(int key) {
+        Node* node=dict[key];
+        if(node==NULL) {
+            return -1;
+        }
+        remove(node);
+        append(node);
+        return node->value;
+    }
+    
+private:
+    int leng;
+    Node* head;
+    Node* tail;
+    unordered_map<int, Node*> dict;
+    
+    Node* remove(Node* node) {
+        dict.erase(node->key);
+        if (node->prev!=NULL) {
+            node->prev->next=node->next;
+        }
+        if (node->next!=NULL) {
+            node->next->prev=node->prev;
+        }
+        if (node==head) {
+            head=head->next;
+        }
+        if (node==tail) {
+            tail=tail->prev;
+        }
+        return node;
+    }
+    
+    Node* append(Node* node) {
+        dict[node->key]=node;
+        if (head==NULL) {
+            head=node;
+            tail=node;
+        }
+        else {
+            node->next=head;
+            head->prev=node;
+            head=node;
+        }
+        return node;
+    }
 };
 
 class Solution206 {
+//    Majority Number I
+//    Given an integer array of length L, find the number that occurs more than 0.5 * L times.
+//    
+//    Assumptions
+//    
+//    The given array is not null or empty
+//    It is guaranteed there exists such a majority number
+//    Examples
+//    
+//    A = {1, 2, 1, 2, 1}, return 1
 public:
+    int majority(vector<int> array) {
+        int result=array[0];
+        int count=1;
+        for(int i=1;i<array.size();i++) {
+            if(count==0) {
+                result=array[i];
+                count++;
+            }
+            else if(array[i]==result) {
+                count++;
+            }
+            else {
+                count--;
+            }
+        }
+        return result;
+    }
 private:
     
 };
 
-
-
 class Solution207 {
+//    Majority Number II
+//    Given an integer array of length L, find all numbers that occur more than 1/3 * L times if any exist.
+//        
+//        Assumptions
+//        
+//        The given array is not null
+//        Examples
+//        
+//        A = {1, 2, 1, 2, 1}, return [1, 2]
+//    A = {1, 2, 1, 2, 3, 3, 1}, return [1]
+//    A = {1, 2, 2, 3, 1, 3}, return []
 public:
     vector<int> majority(vector<int> array) {
-        // write your solution here
         int counta=0, countb=0;
         int leng=array.size();
         int a = 0, b = 0;
@@ -8723,6 +9757,18 @@ public:
 };
 
 class Solution208 {
+//    Majority Number III
+//    Given an integer array of length L, find all numbers that occur more than 1/K * L times if any exist.
+//        
+//        Assumptions
+//        
+//        The given array is not null or empty
+//        K >= 2
+//        Examples
+//        
+//    A = {1, 2, 1, 2, 1}, K = 3, return [1, 2]
+//    A = {1, 2, 1, 2, 3, 3, 1}, K = 4, return [1, 2, 3]
+//    A = {2, 1}, K = 2, return []
 public:
     vector<int> majority(vector<int> array, int k) {
         if (k<2) {
@@ -8747,7 +9793,7 @@ public:
                 }
             }
             //所有都比较了才可以抵消
-            if(comptime==ks.size()-1) {
+            if(comptime==ks.size()) {
                 for (auto k:ks) {
                     if(k.second>0) {
                         k.second--;
@@ -8778,6 +9824,8 @@ public:
 };
 
 class Solution210 {
+//    Reconstruct Binary Search Tree With Preorder Traversal
+//    Given the preorder traversal sequence of a binary search tree, reconstruct the original tree
 private:
     TreeNode* reconstructHelper(vector<int>& pre, int left, int right) {
         if (left>right) {
@@ -8805,6 +9853,11 @@ public:
 };
 
 class Solution211 {
+//    Reconstruct Binary Search Tree With Postorder Traversal
+//    Given the postorder traversal sequence of a binary search tree, reconstruct the original tree.
+//    Assumptions
+//    The given sequence is not null
+//    There are no duplicate keys in the binary search tree
 private:
     TreeNode* reconstructHelper(vector<int> post, int left, int right) {
         if (left>right) {
@@ -8838,6 +9891,13 @@ public:
 };
 
 class Solution212 {
+//    Reconstruct Binary Search Tree With Level Order Traversal
+//    Given the levelorder traversal sequence of a binary search tree, reconstruct the original tree.
+//    
+//    Assumptions
+//    
+//    The given sequence is not null
+//    There are no duplicate keys in the binary search tree
 private:
     TreeNode* reconstructHelper(vector<int>& level, vector<int>& inorder, int left, int right, unordered_map<int, int>& dict) {
         if (left>right) {
@@ -8875,6 +9935,13 @@ public:
 };
 
 class Solution213 {
+//    Reconstruct Binary Tree With Preorder And Inorder
+//    Given the preorder and inorder traversal sequence of a binary tree, reconstruct the original tree.
+//    
+//    Assumptions
+//    
+//    The given sequences are not null and they have the same length
+//    There are no duplicate keys in the binary tree
 private:
     TreeNode* reconstructHelper(vector<int>& in, int inleft, int inright, \
                                 vector<int>& pre, int preleft, int preright) {
@@ -8914,6 +9981,13 @@ public:
 };
 
 class Solution214 {
+//    Reconstruct Binary Tree With Postorder And Inorder
+//    Given the postorder and inorder traversal sequence of a binary tree, reconstruct the original tree.
+//    
+//    Assumptions
+//    
+//    The given sequences are not null and they have the same length
+//    There are no duplicate keys in the binary tree
 private:
     TreeNode* helper(vector<int>& in, int inleft, int inright,
                      vector<int>& post, int postleft, int postright,
@@ -8943,6 +10017,14 @@ public:
 };
 
 class Solution215 {
+//    Reconstruct Binary Tree With Levelorder And Inorder
+//    Given the levelorder and inorder traversal sequence of a binary tree, reconstruct the original tree.
+//    
+//    Assumptions
+//    
+//    The given sequences are not null and they have the same length
+//    There are no duplicate keys in the binary tree
+
 private:
     TreeNode* reconstructHelper(vector<int>& in, int inleft, int inright, vector<int>& level, unordered_map<int, int>& indict) {
         if (inleft>inright) {
@@ -8990,24 +10072,190 @@ public:
 };
 
 class Solution216 {
+//    Most Points On A Line
+//    Given an array of 2D coordinates of points (all the coordinates are integers), find the largest number of points that can be crossed by a single line in 2D space.
+//    
+//    Assumptions
+//    
+//    The given array is not null and it has at least 2 points
+//    Examples
+//    
+//    <0, 0>, <1, 1>, <2, 3>, <3, 3>, the maximum number of points on a line is 3(<0, 0>, <1, 1>, <3, 3> are on the same line)
 public:
+    int most(vector<Point> points) {
+        int result=0;
+        for (int i=0; i<points.size(); i++) {
+            Point seed = points[i];
+            int same=1, sameX=0, most=0;
+            unordered_map<double, int> dict;
+            for (int j=0; j<points.size(); j++) {
+                if (i==j) {
+                    continue;
+                }
+                Point temp=points[j];
+                if (temp.x==seed.x && temp.y==seed.y) {
+                    same++;
+                }
+                else if (temp.x==seed.x) {
+                    sameX++;
+                }
+                else {
+                    double slope = (double)(temp.y-seed.y)/(temp.x-seed.x);
+                    dict[slope]++;
+                    most = max(sameX, dict[slope]);
+                }
+            }
+            most = max(most, sameX)+same;
+            result = max(most, result);
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution217 {
+//    Largest Set Of Points With Positive Slope
+//    Given an array of 2D coordinates of points (all the coordinates are integers), find the largest number of points that can form a set such that any pair of points in the set can form a line with positive slope. Return the size of such a maximal set.
+//    
+//    Assumptions
+//    The given array is not null
+//Note: if there does not even exist 2 points can form a line with positive slope, should return 0.
+//    Examples
+//    <0, 0>, <1, 1>, <2, 3>, <3, 3>, the maximum set of points are {<0, 0>, <1, 1>, <2, 3>}, the size is 3.
 public:
+    struct myoperator {
+        bool operator()(Point p1, Point p2) {
+            if(p1.y>p2.y || p1.x>p2.x) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    } myoperator;
+    
+    int largest(vector<Point> points) {
+        sort(points.begin(), points.end(), myoperator);
+        int result=0;
+        vector<int> longest(points.size(), 0);
+        for (int i=0; i<longest.size(); i++) {
+            for (int j=0; j<i; j++) {
+                if (points[j].x<points[i].x && points[j].y<points[i].y) {
+                    longest[i]=max(longest[j], longest[i]);
+                }
+            }
+            longest[i]++;
+            result=max(result, longest[i]);
+        }
+        return result==1?0:result;
+    }
 private:
     
 };
 
 class Solution218 {
+//    Generate Random Maze
+//    Randomly generate a maze of size N * N (where N = 2K + 1) whose corridor and wall’s width are both 1 cell. For each pair of cells on the corridor, there must exist one and only one path between them. (Randomly means that the solution is generated randomly, and whenever the program is executed, the solution can be different.). The wall is denoted by 1 in the matrix and corridor is denoted by 0.
+//    
+//    Assumptions
+//    
+//    N = 2K + 1 and K >= 0
+//    the top left corner must be corridor
+//    there should be as many corridor cells as possible
+//    for each pair of cells on the corridor, there must exist one and only one path between them
+//        Examples
+//        
+//        N = 5, one possible maze generated is
+//        0  0  0  1  0
+//        1  1  0  1  0
+//        0  1  0  0  0
+//        0  1  1  1  0
+//        0  0  0  0  0
 public:
-private:
+    class Dir {
+    public:
+        int dx, dy;
+        Dir(int dx, int dy) {
+            this->dx=dx;
+            this->dx=dy;
+        }
+        int moveX(int x, int times) {
+            return x+times*dx;
+        }
+        int moveY(int y, int times) {
+            return y+times*dy;
+        }
+    };
     
+    Solution218() {
+        Dir* north = new Dir(0, 1);
+        Dir* south = new Dir(0, -1);
+        Dir* east = new Dir(1, 0);
+        Dir* west = new Dir(-1, 0);
+        this->dirs.push_back(north);
+        this->dirs.push_back(south);
+        this->dirs.push_back(east);
+        this->dirs.push_back(west);
+    }
+    
+    vector<vector<int>> maze(int n) {
+        vector<vector<int>> result;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (i==0 && j==0) {
+                    result[i][j]=0;
+                }
+                else {
+                    result[i][j]=1;
+                }
+            }
+        }
+        generate(result, 0, 0);
+        return result;
+    }
+private:
+    vector<Dir*> dirs;
+    void generate(vector<vector<int>>& result, int x, int y) {
+        random_shuffle(dirs.begin(), dirs.end());
+        for (Dir* dir:dirs) {
+            int nextX=dir->moveX(x, 2);
+            int nextY=dir->moveY(y, 2);
+            if (isValidWall(result, nextX, nextY)) {
+                result[dir->moveX(x, 1)][dir->moveY(y, 1)]=0;
+                result[nextX][nextY]=0;
+                generate(result, nextX, nextY);
+            }
+        }
+    }
+    
+    bool isValidWall(vector<vector<int>>& result, int x, int y) {
+        return x>=0 && x<result.size() && y>=0 && y<result[0].size() && result[x][y]==1;
+    }
 };
 
 class Solution219 {
+//    Disjoint White Objects
+//    In a 2D black image there are some disjoint white objects with arbitrary shapes, find the number of disjoint white objects in an efficient way.
+//    
+//    By disjoint, it means there is no white pixels that can connect the two objects, there are four directions to move to a neighbor pixel (left, right, up, down).
+//    
+//    Black is represented by 1’s and white is represented by 0’s.
+//    
+//    Assumptions
+//    
+//    The given image is represented by a integer matrix and all the values in the matrix are 0 or 1
+//    The given matrix is not null
+//    Examples
+//    
+//    the given image is
+//    
+//    0  0  0  1
+//    1  0  1  1
+//    1  1  0  0
+//    0  1  0  0
+//    
+//    there are 3 disjoint white objects.
 private:
     void dfsHelper(vector<vector<int>>& matrix, int rows, int cols, int i, int j, vector<vector<bool>>& visited) {
         visited[i][j]=true;
@@ -9043,63 +10291,278 @@ public:
 };
 
 class Solution220 {
+//    Largest Sum Of Valid Numbers
+//    Given a 2D array A[8][8] with all integer numbers if we take a number a[i][j], then we cannot take its 8 neighboring cells. How should we take the numbers to make their sum as large as possible.
+//    Assumptions
+//        
+//  The given matrix is 8 * 8
+//    4 3 2 1 9 6 5 2
+//    5 8 7 6 7 4 3 1
+//    8 7 6 5 4 3 2 1
+//    5 6 7 8 9 4 3 8
+//    8 7 6 5 3 4 8 9
+//    2 3 4 5 6 5 2 8
+//    6 5 8 9 5 4 2 3
+//    5 8 7 1 4 3 5 8
 public:
-private:
-    
-};
-
-class Solution221 {
-public:
-private:
-    
-};
-
-class Solution222 {
-public:
+    int largestSum(vector<vector<int>> matrix) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution223 {
+//    Add Two Numbers
+//    You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+//    
+//    Example
+//    
+//Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+//    
+//Output: 7 -> 0 -> 8
 public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy=new ListNode(-1);
+        ListNode* p=dummy;
+        int sum=0;
+        while(l1!=NULL || l2!=NULL) {
+            if (l1!=NULL) {
+                sum+=l1->value;
+            }
+            if (l2!=NULL) {
+                sum+=l2->value;
+            }
+            if (l1!=NULL) {
+                l1->value=(sum%10);
+                p->next=l1;
+                l1=l1->next;
+                if(l2!=NULL) {
+                    l2=l2->next;
+                }
+            }
+            else {
+                l2->value=(sum%10);
+                p->next=l2;
+                l2=l2->next;
+            }
+            sum=sum/10;
+            p=p->next;
+        }
+        if(sum) {
+            p->next=new ListNode(sum);
+        }
+        
+        return dummy->next;
+    }
 private:
     
 };
 
 class Solution224 {
+//    Reverse Integer
+//    Reverse digits of an integer.
+//    
+//    Assumptions
+//    If the integer's last digit is 0, what should the output be? ie, cases such as 10, 100.
+//    Did you notice that the reversed integer might overflow? Assume the input is a 32-bit integer, then the reverse of 1000000003 overflows. How should you handle such cases?
+//    For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.
+//    Examples
+//Input:      23
+//Output:   32
+//    
+//Input:     -14
+//Output:  -41
 public:
+    int reverse(int x) {
+        int result=0, newone;
+        while(x!=0) {
+            int now=x%10;
+            int newone=result*10+now;
+            if((newone-now)/10!=result)
+                return 0;
+            result=newone;
+            x=x/10;
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution225 {
+//    Implement atoi to convert a string to an integer.
+//    
+//Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+//    
+//    Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
 public:
+    int myAtoi(string str) {
+        int result=0, sign=1, i=str.find_first_not_of(' '), base=INT_MAX/10;
+        if (str[i]=='+') {
+            sign=1;
+            i++;
+        }
+        else if (str[i]=='-') {
+            sign=-1;
+            i++;
+        }
+        while (isdigit(str[i])) {
+            if (result>base || (result==base || str[i]>'7')) {
+                if (sign==1) {
+                    return INT_MAX;
+                }
+                else
+                    return INT_MIN;
+            }
+            result=result*10+str[i]-'0';
+            i++;
+        }
+        return result;
+    }
 private:
     
 };
 
 class Solution226 {
+//    Multiply Strings
+//    Given two numbers represented as strings, return multiplication of the numbers as a string. The numbers can be arbitrarily large and are non-negative.
+//    
+//    Example
+//    
+//Input: "19", "20"
+//    
+//Output: "380"
 public:
+    string multiply(string num1, string num2) {
+        string sum(num1.size()+num2.size(), 0);
+        for (int i=num1.size(); i>=0; i--) {
+            int carry=0;
+            for (int j=num2.size(); j>=0; j--) {
+                int temp = sum[i+j+1]+num1[i]-'0';
+                carry = temp/10;
+                sum[i+j+1]=temp-carry*10;
+            }
+            sum[i]=carry;
+        }
+        size_t startpos=sum.find_first_not_of('\0');
+        if (string::npos!=startpos) {
+            for (int i=startpos; i<sum.size(); i++) {
+                sum[i]+='0';
+            }
+            return sum.substr(startpos);
+        }
+        return "0";
+    }
 private:
     
 };
 
 class Solution227 {
+//    First Missing Positive II
+//    Given an unsorted integer array, find the first missing positive integer.
+//    
+//    Example
+//    Given [0, 2, 3, 1], return 4,
+//    and [3, 4, -2, 1, -4] return 2.
 public:
+    int firstMissingPositive(vector<int> input) {
+        int m=input.size();
+        for (int i=0; i<m; ) {
+            while (input[i]<=m && input[i]>=1 && input[i]!=i+1) {
+                swap(input[i], input[input[i]-1]);
+            }
+            i++;
+        }
+        for (int i=0; i<m; i++) {
+            if (input[i]!=i+1) {
+                return i+1;
+            }
+        }
+        return m+1;
+    }
 private:
     
 };
 
 class Solution231 {
+//    Combination Sum II
+//    Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums toT. Each number in C may only be used once in the combination.
+//    
+//    All numbers (including target) will be positive integers.
+//    Elements in a combination (a1, a2, … , ak) must be in non-descending order.
+//    The solution set must not contain duplicate combinations.
+//    
+//    Example
+//    given candidate set 10,1,2,7,6,1,5 and target 8,
+//    A solution set is:
+//    
+//    [1, 7]
+//    [1, 2, 5]
+//    [2, 6]
+//    [1, 1, 6]
 public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> result;
+        vector<int> combo;
+        helper(candidates, result, combo, 0, target);
+        return result;
+    }
 private:
-    
+    void helper(vector<int>& candidates, vector<vector<int>>& result, vector<int> combo, int start, int remain) {
+        if (remain==0) {
+            result.push_back(combo);
+            return;
+        }
+        for(int i=start; i!=candidates.size(); i++) {
+            if (i==start || candidates[i]!=candidates[i+1]) {
+                combo.push_back(candidates[i]);
+                helper(candidates, result, combo, i+1, remain-candidates[i]);
+                combo.pop_back();
+            }
+        }
+    }
 };
 
 class Solution232 {
+//    Combination Sum
+//    Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums toT. The same repeated number may be chosen from C unlimited number of times.
+//    
+//    All numbers (including target) will be positive integers.
+//    
+//    Elements in a combination (a1, a2, … , ak) must be in non-descending order.
+//    
+//    The solution set must not contain duplicate combinations.
+//    
+//    Example
+//    
+//    given candidate set 2,3,6,7 and target 7,
+//    
+//    A solution set is:
+//    
+//    [7]
+//    [2, 2, 3]
 public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> result;
+        vector<int> combo;
+        helper(candidates, result, combo, 0, target);
+        return result;
+    }
 private:
-    
+    void helper(vector<int>& candidates, vector<vector<int>>& result, vector<int>& combo, int start, int remain) {
+        if (remain==0) {
+            result.push_back(combo);
+            return;
+        }
+        for (int i=start; i!=candidates.size() && remain>=candidates[i]; i++) {
+            combo.push_back(candidates[i]);
+            helper(candidates, result, combo, i, remain-candidates[i]);
+            combo.pop_back();
+        }
+    }
 };
 
 class Solution233 {
@@ -9139,13 +10602,56 @@ public:
 };
 
 class Solution234 {
+//    N-Queen II
+//    Follow up for N-Queens problem. Now, instead outputting board configurations, return the total number of distinct solutions.
 public:
+    int totalNQueens(int n) {
+        int count=0;
+        vector<int> columns(n);
+        helper(n, count, columns, 0);
+        return count;
+    }
 private:
+    void helper(int n, int& count, vector<int>& columns, int rows) {
+        if (rows==n) {
+            count++;
+        }
+        else {
+            for (int col=0; col<n; col++) {
+                if (valid(columns, rows, col)) {
+                    columns[rows]=col;
+                    helper(n, count, columns, rows+1);
+                }
+            }
+        }
+    }
     
+    bool valid(vector<int>& columns, int rows, int col) {
+        for (int p=0; p<rows; p++) {
+            int queen=columns[p];
+            if (col==queen || abs(rows-p)==abs(col-queen)) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 
 class Solution235 {
+//    Count and Say
+//    Given a sequence of number: 1, 11, 21, 1211, 111221, …
+//    
+//    The rule of generating the number in the sequence is as follow:
+//    
+//    1 is "one 1" so 11.
+//    11 is "two 1s" so 21.
+//    21 is "one 2 followed by one 1" so 1211.
+//    
+//    Find the nth number in this sequence.
+//Assumptions:
+//    
+//    n starts from 1, the first number is "1", the second number is "11"
 public:
     string countAndSay(int n) {
         if (n<=0) {
@@ -9175,103 +10681,299 @@ public:
 };
 
 class Solution236 {
+//    Search Insert Position
+//    Given a sorted array and a target value, return the index where it would be if it were inserted in order.
+//        Assumptions
+//        If there are multiple elements with value same as target, we should insert the target before the first existing element.
+//        
+//        Examples
+//        [1,3,5,6], 5 → 2
+//        [1,3,5,6], 2 → 1
+//        [1,3,5,6], 7 → 4
+//        [1,3,3,3,5,6], 3 → 1
+//        [1,3,5,6], 0 → 0
 public:
+    int searchInsert(vector<int>& nums, int target) {
+        int low=0, high=nums.size()-1;
+        while (low<=high) {
+            int mid=low+(high-low)/2;
+            if (nums[mid]<target) {
+                low=mid+1;
+            }
+            else if(nums[mid]>target) {
+                high=mid-1;
+            }
+            else {
+                return mid;
+            }
+        }
+        return low;
+    }
 private:
     
 };
 
 class Solution237 {
+//    Longest Valid Parentheses
+//    Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+//    
+//    Example
+//    
+//    ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
 public:
+    int longestValidParentheses(string s) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution238 {
+//    Next Permutation
+//    Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers. If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+//    The replacement must be in-place, do not allocate extra memory.
+//        
+//        Example
+//        1,2,3 → 1,3,2
+//        3,2,1 → 1,2,3
+//        1,1,5 → 1,5,1
 public:
+    vector<int> nextPermutation(vector<int> num) {
+        return num;
+    }
 private:
     
 };
 
 class Solution240 {
+//    Remove Element
+//    Given an array and a value, remove all instances of that value in place and return the new length. The order of elements can not be changed.
+//    
+//    Examples
+//Input:     [1,2,3,1]
+//value:      1
+//Output:   [2,3]
 public:
+    vector<int> removeElement(vector<int> input, int value) {
+        return input;
+    }
 private:
     
 };
 
 class Solution241 {
+//    Reverse Nodes in k-Group
+//    Given a linked list, reverse the nodes of a linked list k at a time and return its modified list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is. You may not alter the values in the nodes, only nodes itself may be changed.
+//    
+//    Example
+//    
+//    Given this linked list: 1->2->3->4->5
+//    
+//    For k = 2, you should return: 2->1->4->3->5
+//    
+//    For k = 3, you should return: 3->2->1->4->5
 public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        return head;
+    }
 private:
     
 };
 
 
 class Solution242 {
+//    Valid Parentheses
+//    Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. The brackets must close in the correct order.
+//        
+//        Examples
+//        
+//        "()" and "()[]{}", "[{()}()]" are all valid but "(]" and "([)]" are not.
 public:
+    bool isValid(string s) {
+        return false;
+    }
 private:
     
 };
 
 class Solution243 {
+//    Remove Nth Node From End of List
+//    Given a linked list, remove the nth node from the end of list and return its head.
+//    
+//    Assumptions
+//    If n is not valid, you do not need to do anything to the original list.
+//        Try to do this in one pass.
+//            
+//            Examples
+//            
+//            Given linked list: 1->2->3->4->5, and n = 2.
+//            
+//            After removing the second node from the end, the linked list becomes 1->2->3->5.
 public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        return head;
+    }
 private:
     
 };
 
 class Solution244 {
+//    3Sum Closest
+//    Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+//    
+//    Example
+//    
+//    For example, given array S = {-1 2 1 -4}, and target = 1.
+//    
+//    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
 public:
+    int threeSumClosest(vector<int> num, int target) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution245 {
+//    Longest Common Prefix
+//    Write a function to find the longest common prefix string amongst an array of strings.
 public:
+    string longestCommonPrefix(vector<string> strs) {
+        return "";
+    }
 private:
     
 };
 
 class Solution246 {
+//    Roman to Integer
+//    Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
 public:
+    int romanToInt(string s) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution247 {
+//    Integer to Roman
+//    Given an integer, convert it to a roman numeral. Input is guaranteed to be within the range from 1 to 3999.
 public:
+    string intToRoman(int num) {
+        return "";
+    }
 private:
     
 };
 
 class Solution248 {
+//    Container With Most Water
+//    Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water. Note: You may not slant the container.
 public:
+    int maxArea(vector<int> height) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution249 {
+//    Regular Expression Matching
+//    Implement regular expression matching with support for '.' and '*'. '.' Matches any single character. '*' Matches zero or more of the preceding element. The matching should cover the entire input string (not partial).
+//        
+//        Example
+//        isMatch("aa","a") → false
+//        isMatch("aa","aa") → true
+//        isMatch("aaa","aa") → false
+//        isMatch("aa", "a*") → true
+//        isMatch("aa", ".*") → true
+//        isMatch("ab", ".*") → true
+//        isMatch("aab", "c*a*b") → true
 public:
+    bool isMatch(string input, string pattern) {
+        return false;
+    }
 private:
     
 };
 
 class Solution250 {
+//    Palindrome Number
+//    Determine whether an integer is a palindrome.
+//    
+//    Assumptions
+//    
+//    Could negative integers be palindromes? (ie, -1) No.
+//    
+//    If you are thinking of converting the integer to string, note the restriction of using extra space.You could also try reversing an integer. However, if you have solved the problem "Reverse Integer", you know that the reversed integer might overflow. How would you handle such case? There is a more generic way of solving this problem.
 public:
+    bool isPalindrome(int x) {
+        return false;
+    }
 private:
     
 };
 
 class Solution251 {
+//    ZigZag Conversion
+//    The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility).
+//    
+//    And then read line by line: "PAHNAPLSIIGYIR". Write the code that will take a string and make this conversion given a number of rows. convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
 public:
+    string convert(string s, int nRows) {
+        return "";
+    }
 private:
     
 };
 
 class Solution252 {
+//    Longest Palindromic Substring
+//    Given a string S, find the longest palindromic substring in S.
+//    
+//    Assumptions
+//    There exists one unique longest palindromic substring.
+//    The input S is not null.
+//    Examples
+//Input:     "abbc"
+//Output:  "bb"
+//    
+//Input:     "abcbcbd"
+//Output:  "bcbcb"
 public:
+    string longestPalindrome(string s) {
+    int leng=s.size();
+    int dist=0;
+    string result="";
+    if(leng==0) {
+        return s;
+    }
+    vector<vector<bool>> isP(leng+1, vector<bool>(leng+1, 0));
+    vector<int> minCuts(leng+1, 0);
+    for(int end=1;end<=leng;end++) {
+        minCuts[end]=end;
+        for(int start=end;start>=1;start--) {
+            if(s[start-1]==s[end-1]) {
+                isP[start][end]=end-start<2||isP[start+1][end-1];
+            }
+            if(isP[start][end] && end-start>=dist) {
+                result=s.substr(start-1, end-start);
+                dist=end-start;
+            }
+        }
+    }
+    return result;
+}
 private:
     
 };
 
 class Solution253 {
+//    Longest Substring Without Repeating Characters
+//    Given a string, find the longest substring without any repeating characters and return the length of it. The input string is guaranteed to be not null.
+//    
+//    For example, the longest substring without repeating letters for "bcdfbd" is "bcdf", we should return 4 in this case.
 public:
     int longest(string input) {
         //efhrgsayekasdanfev
@@ -9298,30 +11000,117 @@ public:
 };
 
 class Solution254 {
+//    Binary Tree Level Order Traversal II
+//    Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+//    
+//Example:
+//    Given the below binary tree
+//            5
+//        /        \
+//        3          8
+//    /    \           \
+//    
+//    1       4         11
+//    return its bottom-up level order traversal as:
+//    
+//    [
+//     [1, 4, 11],
+//     [3, 8],
+//     [5]
+//     ]
 public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        return {};
+    }
 private:
     
 };
 
 class Solution255 {
+//    Sorted Array To Binary Search Tree
+//    Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+//    
+//Example:
+//    Given ascending order array: [1, 3, 4, 5, 8, 11]
+//    
+//    return Binary Search Tree is
+//    
+//    4
+//    
+//    /        \
+//    
+//    1          8
+//    
+//    \      /     \
+//    
+//    3     5    11
 public:
+    TreeNode* sortedArrayToBST(vector<int> num) {
+        return nullptr;
+    }
 private:
     
 };
 
 class Solution256 {
+//    Sorted List to Binary Search Tree
+//    Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+//    
+//Example:
+//    Given ascending order list: 1→3→4→5→8→11
+//    
+//    return Binary Search Tree is
+//    
+//    4
+//    
+//    /        \
+//    
+//    1          8
+//    
+//    \      /     \
+//    
+//    3    5     11
 public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        return nullptr;
+    }
 private:
     
 };
 
 class Solution257 {
+//    Minimum Depth of Binary Tree
+//    Given a binary tree, find its minimum depth. The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+//    
+//Example:
+//    Given the below binary tree
+//    5
+//    /       \
+//    3         8
+//    \
+//    4
+//    minimum depth is 2,path is 5→8.
 public:
+    int minDepth(TreeNode* root) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution258 {
+//    Move 0s To The End I
+//    Given an array of integers, move all the 0s to the right end of the array.
+//    
+//    The relative order of the elements in the original array does not need to be maintained.
+//    
+//Assumptions:
+//    
+//    The given array is not null.
+//Examples:
+//    
+//    {1} --> {1}
+//    {1, 0, 3, 0, 1} --> {1, 3, 1, 0, 0} or {1, 1, 3, 0, 0} or {3, 1, 1, 0, 0}
 public:
     vector<int> moveZero(vector<int> array) {
         int leng = (int)array.size();
@@ -9345,6 +11134,18 @@ public:
 };
 
 class Solution259 {
+//    Move 0s To The End II
+//    Given an array of integers, move all the 0s to the right end of the array.
+//    
+//    The relative order of the elements in the original array need to be maintained.
+//    
+//Assumptions:
+//    
+//    The given array is not null.
+//Examples:
+//    
+//    {1} --> {1}
+//    {1, 0, 3, 0, 1} --> {1, 3, 1, 0, 0}
 public:
     vector<int> moveZero(vector<int> array) {
         // 0 3 1 0 1
@@ -9370,12 +11171,57 @@ public:
 
 
 class Solution260 {
+//    Interleave Positive And Negative Elements
+//    Given an array with both positive and negative numbers in random order. Shuffle the array so that positive and negative numbers are put in position with even and odd indices, respectively.
+//    
+//    If there are more positive/negative numbers, put them at the end of the array. The ordering of positive/negative numbers does not matter.
+//    
+//Assumptions:
+//    
+//    The given array is not null.
+//    There is no 0 in the array.
+//Examples:
+//    
+//    {1, 2, 3, 4, 5, -1, -1, -1} --> {1, -1, 2, -1, 3, -1, 4, 5}  (The ordering of positive/negative numbers do not matter)
 public:
+    vector<int> interleave(vector<int> array) {
+//        1 -1 2 -2 3 -3 5 -4 4 -5 6
+//   posi                             |
+//   negi                        |
+        if (array.empty()) {
+            return array;
+        }
+        int j=0;
+        for (int i=0; i<array.size(); i++) {
+            if (array[i]<0) {
+                swap(array[j++], array[i]);
+            }
+        }
+        int posi=j, negi=0;
+        while (posi<array.size() && negi<posi && array[negi]<0) {
+            swap(array[posi], array[negi]);
+            posi++;
+            negi+=2;
+        }
+        return array;
+    }
 private:
     
 };
 
 class Solution261 {
+//    Sort In Specified Order
+//    Given two integer arrays A1 and A2, sort A1 in such a way that the relative order among the elements will be same as those are in A2.
+//    
+//    For the elements that are not in A2, append them in the right end of the A1 in an ascending order.
+//    
+//Assumptions:
+//    
+//    A1 and A2 are both not null.
+//    There are no duplicate elements in A2.
+//Examples:
+//    
+//    A1 = {2, 1, 2, 5, 7, 1, 9, 3}, A2 = {2, 1, 3}, A1 is sorted to {2, 2, 1, 1, 3, 5, 7, 9}
 private:
     struct data {
         int value;
@@ -9424,37 +11270,266 @@ public:
 };
 
 class Solution262 {
+//    Sort In Pair
+//    Given an array A with integers, sort the array such that  A[0] < A[1]  > A[2] < A[3] >  A[4] < A[5] > … A[N-1].
+//    
+//Assumptions:
+//    
+//    A is guaranteed to be not null.
+//    There are no duplicate elements in A.
+//Examples:
+//    
+//    {1, 4, 2, 3, 5, 6} --> {1, 4, 2, 5, 3, 6}
+//    {1, 2, 3, 4, 5} --> {1, 3, 2, 5, 4}
+//           m
 public:
-private:
+    void sortInPair(vector<int> & array) {
+        // Traverse all even elements
+        if(array.empty() || array.size()==1) {
+            return;
+        }
+        int n=array.size();
+        for (int i = 0; i < n; i+=2)
+        {
+            // If current even element is smaller than previous
+            if (i>0 && array[i-1] < array[i] )
+                swap(array[i], array[i-1]);
+            
+            // If current even element is smaller than next
+            if (i<n-1 && array[i] > array[i+1] )
+                swap(array[i], array[i + 1]);
+        }
+    }
     
+    void test() {
+        vector<int> array = {12, 3, 5, 7, 4, 19, 26};
+        sortInPair(array);
+        cout<<kthSmallest(array, 0, array.size()-1, array.size()/2)<<endl;
+        array = {1, 5, 3, 2, 4};
+        cout<<kthSmallest(array, 0, array.size()-1, array.size()/2)<<endl;
+        array = {5,4,3,2,1};
+        cout<<kthSmallest(array, 0, array.size()-1, array.size()/2)<<endl;
+    }
+private:
+    int findMedian(vector<int>& array, int left, int leng) {
+        sort(array.begin()+left,  array.begin()+left+leng-1);
+        return array[left+leng/2];
+    }
+    // Returns k'th smallest element in arr[l..r] in worst case linear time.
+    int kthSmallest(vector<int>& array, int l, int r, int k) {
+        if (k>0 && k<=r-l+1) {
+            int n=r-l+1;
+            // Divide array in groups of size 5, calculate median
+            // of every group and store it in median array.
+            int i;
+            vector<int> median((n+4)/5, -1);
+            for (i=0; i<n/5; i++) {
+                median[i]=findMedian(array, l+i*5, 5);
+            }
+            if (i*5<n) {
+                //For last group with less than 5 elements
+                median[i]=findMedian(array, l+i*5, n%5);
+                i++;
+            }
+            // Find median of all medians using recursive call.
+            // If median has only one element, then no need
+            // of recursive call
+            int medOfMed=(i==1)?median[i-1]:kthSmallest(median, 0, i-1, i/2);
+            // Partition the array around a random element and
+            // get position of pivot element in sorted array
+            int pos = partition(array, l, r, medOfMed);
+            
+            if (pos-l == k-1) {
+                // If position is same as k
+                return array[pos];
+            }
+            else if (pos-l > k-1) {
+                // If position is more, recur for left
+                return kthSmallest(array, l, pos-1, k);
+            }
+            else {
+                // Else recur for right subarray
+                return kthSmallest(array, pos+1, r, k-pos+l-1);
+            }
+        }
+        
+        return INT_MAX;
+    }
+    
+    int partition(vector<int>& array, int l, int r, int x) {
+        int i;
+        for (i=1; i<r; i++) {
+            if (array[i]==x) {
+                break;
+            }
+        }
+        swap(array[i], array[r]);
+        i=l;
+        for (int j=l; j<=r-1; j++) {
+            if (array[j]<=x) {
+                swap(array[i], array[j]);
+                i++;
+            }
+        }
+        swap(array[i], array[r]);
+        return i;
+    }
 };
 
 class Solution263 {
+//    Two Subsets With Min Difference
+//    Given a set of n integers, divide the set in two subsets of n/2 sizes each such that the difference of the sum of two subsets is as minimum as possible.
+//    
+//    Return the minimum difference(absolute value).
+//    
+//Assumptions:
+//    
+//    The given integer array is not null and it has length of >= 2.
+//Examples:
+//    
+//    {1, 3, 2} can be divided into {1, 2} and {3}, the minimum difference is 0
 public:
-private:
+    int minDifference(vector<int> array) {
+        int sum=0;
+        int n=array.size();
+        for (int i=0; i<n; i++) {
+            sum+=array[i];
+        }
+        // Compute result using recursive function
+        return findMinRec(array, n, 0, sum);
+    }
     
+    void test() {
+        cout<<minDifference({3, 1, 4, 2, 2, 1})<<endl;
+    }
+private:
+    int findMinRec(vector<int>& array, int i, int curr, int sum) {
+        // If we have reached last element.  Sum of one
+        // subset is curr, sum of other subset is
+        // sum-curr.  Return absolute difference
+        // of two sums.
+        if (i==0) {
+            return abs(sum-curr - curr);
+        }
+        // For every item array[i], we have two choices
+        // (1) We do not include it first set
+        // (2) We include it in first set
+        // We return minimum of two choices
+        return min(findMinRec(array, i-1, curr+array[i-1], sum),
+                   findMinRec(array, i-1, curr, sum));
+    }
 };
 
 class Solution264 {
+//    Keep Distance For Identical Elements
+//    Given an integer k, arrange the sequence of integers [1, 1, 2, 2, 3, 3, ...., k - 1, k - 1, k, k], such that the output integer array satisfy this condition:
+//    
+//    Between each two i's, they are exactly i integers (for example: between the two 1s, there is one number, between the two 2's there are two numbers).
+//    
+//    If there does not exist such sequence, return null.
+//    
+//Assumptions:
+//    
+//    k is guaranteed to be > 0
+//Examples:
+//    
+//    k = 3, The output = { 2, 3, 1, 2, 1, 3 }.
 public:
+    vector<int> keepDistance(int k) {
+        
+        return {};
+    }
 private:
     
 };
 
 class Solution265 {
+//    Subarray Sum To Target
+//    Given an array of integers, determine whether there exists a contiguous sub-array in the array, which sums to a target number.
+//    
+//Assumptions:
+//    
+//    The given array is not null and its length is > 0.
+//Examples:
+//    
+//    array = {1, 5, 2, 3}, target = 10, return true since the sum of subarray {5, 2, 3} is 10.
+//    array = {1, 5, 2,e 3}, target = 4, return false.
 public:
+    bool sumToTarget(vector<int> array, int target) {
+        return false;
+    }
 private:
     
 };
 
 class Solution266 {
+//    Merge Intervals
+//    Given a set of time intervals in any order, return the total length of the area covered by those intervals.
+//    
+//Assumptions:
+//    
+//    The given array of intervals is not null.
+//    None of the intervals in the array is null.
+//Examples:
+//    
+//    {<1,3>, <2,4>, <5,7>, <6,8> }. The total length returned is 6(<1,4> is covered and <5,8> is covered).
 public:
+    struct Interval {
+        int start;
+        int end;
+        Interval() : start(0), end(0) {}
+        Interval(int s, int e) : start(s), end(e) {}
+    };
+    vector<Interval> merge(vector<Interval>& intervals) {
+        if (intervals.empty()) {
+            return vector<Interval>{};
+        }
+        vector<Interval> result;
+        int leng=intervals.size();
+        if (leng==1) {
+            return intervals;
+        }
+        vector<int> starts={};
+        vector<int> ends={};
+        for (int i=0; i<leng; i++) {
+            starts.push_back(intervals[i].start);
+            ends.push_back(intervals[i].end);
+        }
+        sort(starts.begin(), starts.end());
+        sort(ends.begin(), ends.end());
+        int starti=0, endi=0;
+        while (endi<leng) {
+            while (endi+1<leng && starts[endi+1]<=ends[endi]) {
+                endi+=1;
+            }
+            while (ends[endi]==ends[endi+1]) {
+                endi+=1;
+            }
+            result.push_back(Interval(starts[starti], ends[endi]));
+            endi+=1;
+            starti=endi;
+        }
+        return result;
+    }
 private:
     
 };
 
 
 class Solution267 {
+//    Search In Sorted Matrix I
+//    Given a 2D matrix that contains integers only, which each row is sorted in an ascending order. The first element of next row is larger than (or equal to) the last element of previous row.
+//    
+//    Given a target number, returning the position that the target locates within the matrix. If the target number does not exist in the matrix, return {-1, -1}.
+//    
+//Assumptions:
+//    
+//    The given matrix is not null, and has size of N * M, where N >= 0 and M >= 0.
+//Examples:
+//    
+//    matrix = { {1, 2, 3}, {4, 5, 7}, {8, 9, 10} }
+//    target = 7, return {1, 2}
+//    target = 6, return {-1, -1} to represent the target number does not exist in the matrix.
 public:
     vector<int> search(vector<vector<int>> matrix, int target) {
         int row = (int)matrix.size(), col = (int)matrix[0].size();
@@ -9497,83 +11572,247 @@ public:
 };
 
 class Solution268 {
+//    Search In Sorted Matrix II
+//    Given a 2D matrix that contains integers only, which each row is sorted in ascending order and each column is also sorted in ascending order.
+//    
+//    Given a target number, returning the position that the target locates within the matrix. If the target number does not exist in the matrix, return {-1, -1}.
+//    
+//Assumptions:
+//    
+//    The given matrix is not null.
+//Examples:
+//    
+//    matrix = { {1, 2, 3}, {2, 4, 5}, {6, 8, 10} }
+//    target = 5, return {1, 2}
+//    target = 7, return {-1, -1}
 public:
+    vector<int> search(vector<vector<int>> matrix, int target) {
+        
+        return {-1, -1};
+    }
 private:
     
 };
 
 class Solution269 {
+//    Total Area Of Skyline
+//    Given n houses on the ground with each house represented by a rectangle. The i-th rectangle is represented as [start_i, end_i, height_i], where  0 <= i < n. The rectangles may overlap with each other.  How can we calculate the total area that these rectangles cover.
+//Assumptions:
+//    The given array of buildings is not null, the buildings are not null.
+//Examples:
+//    buildings = {<1,3,1>, <2,4,2>},  output = 5.
 public:
+    class Building {
+    public:
+        int start;
+        int end;
+        int height;
+        Building(int start, int end, int height) {
+            this->start = start;
+            this->end = end;
+            this->height = height;
+        }
+    };
+    int totalArea(vector<Building> buildings) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution270 {
+//    Max Sum Of Two Indices
+//    Given an array with integers, find two indices i and j  (j>=i),  such that the value of A[i]+A[j]+ (j - i) is maximized.
+//    Return (i, j).
+//Assumptions:
+//    The given array is not null and it has length of > 0.
+//Examples
+//    array = {1, 5, 3}, the max sum is array[1] + array[1] + (1 - 1) = 10, return {1, 1}
 public:
+    vector<int> maxSum(vector<int> array) {
+        return {0, 0};
+    }
 private:
     
 };
 class Solution271 {
+//    Smallest Non-Existed Subsequence Sum
+//    Given a sorted array of positive numbers in ascending order, find the smallest positive integer value that cannot be represented as sum of elements of any sub-sequence of the input array.
+//Assumptions:
+//    The given array is not null.
+//Examples:
+//    array = {1, 3, 6, 10, 11, 15}, result is 2
+//    array = {1, 1, 1, 1}, result is 5
 public:
+    int firstMissing(vector<int> array) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution272 {
+//    Combinations For Telephone Pad I
+//    Given a telephone keypad, and an int number, print all words which are possible by pressing these numbers, the output strings should be sorted.
+//    
+//    {0 : "", 1 : "", 2 : "abc", 3 : "def", 4 : "ghi", 5 : "jkl", 6 : "mno", 7 : "pqrs", 8 : "tuv", 9 : "wxyz"}
+//    
+//Assumptions:
+//    
+//    The given number >= 0
+//Examples:
+//    
+//    if input number is 231, possible words which can be formed are:
+//        [ad, ae, af, bd, be, bf, cd, de, df]
 public:
+    vector<string> combinations(int number) {
+        return vector<string>();
+    }
 private:
     
 };
 
 class Solution273 {
+//    Number Of Valid Triangles
+//    Given an unsorted array of positive integers. Find the number of triangles that can be formed with three different array elements as three sides of triangles.
+//    
+//Assumptions:
+//    The given array is not null and has length of at least 3.
+//Exmaples:
+//    array = {4, 6, 3, 7}, the output should be 3. There are three triangles possible {3, 4, 6}, {4, 6, 7} and {3, 6, 7}. Note that {3, 4, 7} is impossible.
+//    Preferred time complexity O(n ^ 2).
 public:
+    int numOfTriangles(vector<int> array) {
+        // Write your solution here.
+        return 0;
+    }
 private:
     
 };
 
 class Solution274 {
+//    All Factors Of A Number
+//    Get all possible combinations of factors that can multiply to a target number.
+//    
+//Assumptions:
+//    The given number is guaranteed to be >= 2.
+//Examples:
+//    12 -->  [ [2, 2, 3], [2, 6], [3, 4], [12] ]
+//    5 --> [ [5] ]
 public:
+    vector<vector<int>> factors(int n) {
+        return {};
+    }
 private:
     
 };
 
 class Solution275 {
+//    Longest Subarray With Equal Number Of 1s And 0s
+//    Given an unsorted array with all 0 or 1s. Return the length of the longest contiguous sub-array that contains equal numbers of 0s and 1s.
+//Assumptions:
+//    The given array is not null.
+//Examples:
+//    array = {1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0}, the answer is 6 (the subarray is highlighted).
 public:
+    int longest(vector<int> array) {
+        return 0;
+    }
 private:
     
 };
 
 class Solution276 {
+//    Get Count Array
+//    Given an array A with all positive integers from [1...N]. How to get an array B such that B[i] represents how many elements A[j] (j > i) in array A that are smaller than A[i].
+//Assumptions:
+//    The given array A is not null.
+//Examples:
+//    A = { 4, 1, 3, 2 }, we should get B = { 3, 0, 1, 0 }.
+//Requirement:
+//    time complexity = O(nlogn).
 public:
+    vector<int> countArray(vector<int> array) {
+        return array;
+    }
 private:
     
 };
 
 class Solution277 {
+//    Restore From Count Array
+//    Given an original unsorted array A of size n that contains all integers from  [1….n] (no duplicated numbers) but we do not know A. Instead, we only know a count-array B, in which B[i] represents the number of elements A[j]  (i < j) that are smaller than A[i]. How can we re-store A based on B?
+//        Assumptions:
+//        The given array is not null.
+//        Examples:
+//        Given B = { 3, 0, 1, 0 }, then we can restore the original array A = { 4, 1, 3, 2 },
+//Requirement:
+//    time complexity = O(nlogn).
 public:
 private:
     
 };
 
 class Solution278 {
+//    2 Difference In Sorted Array
+//    Given a sorted array A, find a pair (i, j) such that A[j] - A[i] is identical to a target number(i != j).
+//    If there does not exist such pair, return a zero length array.
+//Assumptions:
+//    The given array is not null and has length of at least 2.
+//Examples:
+//    A = {1, 2, 3, 6, 9}, target = 2, return {0, 2} since A[2] - A[0] == 2.
+//    A = {1, 2, 3, 6, 9}, target = -2, return {2, 0} since A[0] - A[2] == 2.
 public:
+    vector<int> twoDiff(vector<int> array, int target) {
+        return {};
+    }
 private:
     
 };
 
 class Solution279 {
+//    Sort With 3 Stacks
+//    Given one stack with integers, sort it with two additional stacks (total 3 stacks).
+//    
+//    After sorting the original stack should contain the sorted integers and from top to bottom the integers are sorted in ascending order.
+//Assumptions:
+//    The given stack is not null.
+//Requirements:
+//    No additional memory, time complexity = O(nlog(n)).
 public:
+    void sort(stack<int>& s1) {
+        stack<int> s2;
+        stack<int> s3;
+    }
 private:
     
 };
 
 class Solution280 {
+//    Sort With 2 Stacks
+//    Given an array that is initially stored in one stack, sort it with one additional stacks (total 2 stacks).
+//    After sorting the original stack should contain the sorted integers and from top to bottom the integers are sorted in ascending order.
+//    
+//Assumptions:
+//    The given stack is not null.
+//Requirements:
+//    No additional memory, time complexity = O(n ^ 2).
 public:
+    void sort(vector<int> s1) {
+        return;
+    }
 private:
     
 };
 
 class Solution281 {
+//    Remove Spaces
+//    Given a string, remove all leading/trailing/duplicated empty spaces.
+//Assumptions:
+//    The given string is not null.
+//Examples:
+//    “  a” --> “a”
+//    “   I     love MTV ” --> “I love MTV
 public:
     string removeSpaces(string input) {
         if (input.size() == 0) {
@@ -9599,7 +11838,17 @@ public:
 };
 
 class Solution282 {
+//    Number Of Words
+//    Given a string, count number of words in it. The delimiters can be the following characters: space (‘ ‘) or new line (‘\n’) or tab (‘\t’) or a combination/duplication of these.
+//    
+//Assumptions:
+//    The given string is not null.
+//Examples:
+//    "I love \t\n google", there are 3 words in it.
 public:
+    int numOfWords(string input) {
+        return 0;
+    }
 private:
     
 };
@@ -10916,7 +13165,271 @@ private:
 
 class Solution999 {
 public:
+    void heapify(vector<int>& array, int n, int i) {
+        int max=i;
+        int left=2*i+1;
+        int right=2*i+2;
+        if (left<n && array[left]>array[max]) {
+            max=left;
+        }
+        if (right<n && array[right]>array[max]) {
+            max=right;
+        }
+        if (max!=i) {
+            swap(array[max], array[i]);
+            heapify(array, n, max);
+        }
+    }
     
+    void heapsort(vector<int>& array, int n) {
+        for (int i=n/2-1; i>=0; i--) {
+            heapify(array, n, i);
+        }
+        for (int i=n-1; i>=0; i--) {
+            swap(array[i], array[0]);
+            heapify(array, n, 0);
+        }
+    }
+//    class Server {
+//    private:
+//        unordered_set<Client*> _clients;
+//        
+//    public:
+//        void registerClient(Client* client) {
+//            _clients.insert(client);
+//        }
+//        
+//        void unregisterClient(Client* client) {
+//            if (_clients.count(client)) _clients.erase(client);
+//        }
+//        
+//        void update(string ticker) {
+//            for (auto c:_clients) c->update(ticker);
+//        }
+//    };
+//    
+//    struct Comp {
+//        bool operator()(const pair<string,int>& a, const pair<string,int>& b) {
+//            return a.second > b.second;
+//        }
+//    };
+//    
+//    class Client {
+//    private:
+//        string _id;
+//        unordered_map<string, int> _freq;
+//        set<pair<string,int>, Comp> _top10freq;
+//        Server* _server;
+//        
+//    public:
+//        Client(string id, Server* server)
+//        :_id(id), _server(server) {
+//            if (_server) _server->registerClient(this);
+//        }
+//        
+//        void registerTicker(string ticker) {
+//            if (!_freq.count(ticker)) _freq[ticker] = 0;
+//        }
+//        
+//        void update(string ticker) {
+//            if (!_freq.count(ticker)) return;
+//            _freq[ticker]++;
+//            for (auto& x:_top10freq) {
+//                if (x.first == ticker) {
+//                    _top10freq.erase(x); break;
+//                }
+//            }
+//            if (_top10freq.size() < 10) _top10freq.emplace(ticker, _freq[ticker]);
+//            else if (_top10freq.rbegin()->second < _freq[ticker]) {
+//                _top10freq.erase(*_top10freq.rbegin());
+//                _top10freq.emplace(ticker, _freq[ticker]);
+//            }
+//        }
+//        
+//        vector<string> getTop10freq() {
+//            vector<string> top10;
+//            for (auto& x:_top10freq) top10.push_back(x.first);
+//            return top10;
+//        }
+//    };
+//    int lengthOfLongestSubstringKDistinct(String s, int k) {
+//        if(k==0 || s==null || s.length()==0)
+//            return 0;
+//        
+//        if(s.length()<k)
+//            return s.length();
+//        
+//        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+//        
+//        int maxLen=k;
+//        int left=0;
+//        for(int i=0; i<s.length(); i++){
+//            char c = s.charAt(i);
+//            if(map.containsKey(c)){
+//                map.put(c, map.get(c)+1);
+//            }else{
+//                map.put(c, 1);
+//            }
+//            
+//            if(map.size()>k){
+//                maxLen=Math.max(maxLen, i-left);
+//                
+//                while(map.size()>k){
+//                    
+//                    char fc = s.charAt(left);
+//                    if(map.get(fc)==1){
+//                        map.remove(fc);
+//                    }else{
+//                        map.put(fc, map.get(fc)-1);
+//                    }
+//                    
+//                    left++;
+//                }
+//            }
+//            
+//        }
+//        
+//        maxLen = Math.max(maxLen, s.length()-left);
+//        
+//        return maxLen;
+//    }
+//    class Singleton
+//    {
+//    private:
+//        /* Here will be the instance stored. */
+//        static Singleton* instance;
+//        
+//        /* Private constructor to prevent instancing. */
+//        Singleton();
+//        
+//    public:
+//        /* Static access method. */
+//        static Singleton* getInstance() {
+//            
+//            if (instance == 0)
+//            {
+//                instance = new Singleton();
+//            }
+//            
+//            return instance;
+//        }
+//        
+//    };
+//
+//    class prodcons {
+//        
+//        vector<int> buffer;
+//
+//        uint64_t produced_count = 0;
+//        uint64_t consumed_count = 0;
+//        mutex counts_mutex;
+//        condition_variable counts_cv;
+//
+//        void producer()
+//        {
+//            while (true) {
+//                unique_lock<mutex> counts_lock(counts_mutex);
+//                while (produced_count - consumed_count == buffer.size()) {
+//                    counts_cv.wait(counts_lock);
+//                }
+//
+//                int product = rand();
+//                buffer[produced_count++ % buffer.size()] = product;
+//                cout << "produced: " << product << "\n";
+//
+//                counts_cv.notify_all();
+//            }
+//        }
+//
+//        void consumer()
+//        {
+//            while (true) {
+//                unique_lock<mutex> counts_lock(counts_mutex);
+//                while (produced_count - consumed_count == 0) {
+//                    counts_cv.wait(counts_lock);
+//                }
+//
+//                int product = buffer[consumed_count++ % buffer.size()];
+//                cout << "consumed: " <<  product << "\n";
+//
+//                counts_cv.notify_all();
+//            }
+//        }
+//
+//        int test()
+//        {
+//            buffer.resize(16, 0);
+//             to handle the uint64_t counts overflow, the following must be true:
+//             (0xffffffffffffffff + 1) % buffer.size() == 0
+//    
+//            vector<thread> threads;
+//            for (int i = 0; i < 3; ++i) {
+//                threads.push_back(producer());
+//            }
+//            sleep(3);
+//            for (int i = 0; i < 3; ++i) {
+//                threads.push_back(consumer());
+//            }
+//            for (int i = 0; i < threads.size(); ++i) {
+//                threads[i].join();
+//            }
+//            return 0;
+//        }
+//    };
+//    int solution() {
+//        vector<int> first_3_digit(27, 0);
+//        vector<int> last_3_digit(27, 0);
+//        unordered_map<int, int> single_zero_set;
+//        for (int i=100; i<1000; i++) {
+//            int first_sum, zero_count, non_zero_num;
+//            sum_count_zero(i, first_sum, zero_count, non_zero_num);
+//            int last_3_combo=1;
+//            if (zero_count==1) {
+//                if (single_zero_set[non_zero_num]>0) {
+//                    last_3_combo=0;
+//                }
+//                else {
+//                    single_zero_set[non_zero_num]=1;
+//                }
+//                last_3_combo=3;
+//            }
+//            else if (zero_count==2) {
+//                last_3_combo=3;
+//            }
+//            first_3_digit+=1;
+//            last_3_digit+=last_3_combo;
+//        }
+//        int result=0;
+//        for (int i=0; i<27; i++) {
+//            result+=first_3_digit[i]*last_3_digit[i];
+//        }
+//        return result;
+//    }
+//    
+//    class Employee {
+//    public:
+//        int id_;
+//        vector<Employee*> reporters_;
+//    };
+//    void GetReporters(Employee *e, int id, vector<Employee*> &reporters, bool found = false, bool processed = false)
+//    {
+//        if (!processed &&
+//            e)
+//        {
+//            if (found) {
+//                reporters.push_back(e);
+//            }
+//            if (e->id_ == id) {
+//                found = true;
+//            }
+//            for (auto reporter : e->reporters_) {
+//                GetReporters(reporter, id, reporters, found, processed);
+//            }
+//            if (e->id_ == id) {
+//                processed = true;
+//            }        
+//        }
+//    }
 };
 
 
@@ -11385,6 +13898,15 @@ int main() {
 	//    cout<<new505->count(t1)<<endl;
 	//    t1=new TreeNode(10);
 	//    cout<<new505->count(t1)<<endl;
+//    Solution205* s205 = new Solution205(3);
+//    s205->set(1, 2);
+//    s205->set(3, 4);
+//    s205->set(5, 6);
+//    s205->get(1);
+//    s205->get(5);
+//    s205->get(3);
+//    Solution204* s204 = new Solution204();
+//    s204->maxWindows({1, 2, 3, 2, 4, 2, 1}, 3);
 	//    Solution201* new201 = new Solution201();
 	//    int result=new201->largest({ 2, 1, 3, 1, 2, 1 });
 	//    cout<<result<<endl;
@@ -11526,14 +14048,21 @@ int main() {
 		//    Solution171* new171 = new Solution171();
 		//    vector<int> result171 = new171->common({1,2,3,3}, {2,3,4,4,5}, {1,1,3,3});
 		//    printintArray(result171);
-
-	Solution158* s158 = new Solution158();
-	s158->setZero({ { 1, 1, 1, 1, 0 },{ 0, 1, 1, 0, 1 },{ 1, 1, 1, 0, 1 },{ 1, 1, 1, 1, 1 } });
-	Solution156* s156 = new Solution156();
-	string ss = "adobecodebanc", tt = "abc";
-	ss = s156->minWindow(ss, tt);
-	Solution155* s155 = new Solution155();
-	s155->combine1(4, 2);
+//    Solution169* s169 = new Solution169();
+//    s169->graycode(2);
+//    Solution167* s167 = new Solution167();
+//    s167->getPermutation(3, 2);
+//    Solution159* s159 = new Solution159();
+//    string o159 = s159->simplify("/a/./b/../../c/");
+//    o159 = s159->simplify("/home/");
+//  Solution158* s158 = new Solution158();
+//	s158->setZero({ { 1, 1, 1, 1, 0 },{ 0, 1, 1, 0, 1 },{ 1, 1, 1, 0, 1 },{ 1, 1, 1, 1, 1 } });
+//	Solution156* s156 = new Solution156();
+//	string ss = "adobecodebanc";
+//    string tt = "abc";
+//	ss = s156->minWindow(ss, tt);
+//	Solution155* s155 = new Solution155();
+//	s155->combine1(4, 2);
 		//    Solution63* new63 = new Solution63();
 		//    vector<string> result63 = new63->solve("abb");
 		//    vector<string> result632 = new63->solve2("abb");
@@ -11938,9 +14467,15 @@ int main() {
 //	t14->left = t31;
 //	int result138 = new138->maxPathSum(t51);
 //	cout << result138 << endl;
+    Solution263* s263 = new Solution263();
+    s263->test();
+//    Solution262* s262 = new Solution262();
+//    s262->test();
 	//    Solution261* new261 = new Solution261();
 	//    vector<int> result261 = new261->sortSpecial({4,2,1,3}, {});
 	//    printintArray(result261);
+//    Solution260* s260 = new Solution260();
+//    s260->interleave({-1,1,1,1,1,1,1,-1});
 	//    Solution259* new259 = new Solution259();
 	//    vector<int> result259 = new259->moveZero({1,0,2,0,1});
 	//    printintArray(result259);

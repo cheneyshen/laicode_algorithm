@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "laicode/main.cpp"
-            timestampString = "523824787.679834"
+            timestampString = "524611915.516641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "9837"
-            endingLineNumber = "9837"
-            landmarkName = "main()"
-            landmarkType = "9">
+            startingLineNumber = "11813"
+            endingLineNumber = "11813"
+            landmarkName = "dedup(vector&lt;int&gt; array)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

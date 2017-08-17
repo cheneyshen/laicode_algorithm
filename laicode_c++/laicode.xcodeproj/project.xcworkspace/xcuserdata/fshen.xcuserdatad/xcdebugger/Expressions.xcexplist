@@ -3,7 +3,33 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "Solution204::maxWindows(std::__1::vector&lt;int, std::__1::allocator&lt;int&gt; &gt;, int):main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution167::helper(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;&amp;, int, int&amp;):main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution205::get(int):main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution205::push2front(std::__1::__hash_map_iterator&lt;std::__1::__hash_iterator&lt;std::__1::__hash_node&lt;std::__1::__hash_value_type&lt;int, std::__1::pair&lt;int, std::__1::__list_iterator&lt;int, void*&gt; &gt; &gt;, void*&gt;*&gt; &gt;):main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "it-&gt;second">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "main:main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution167::helper(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;&amp;, int, int, int&amp;):main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution205::set(int, int):main.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "Solution169::graycode(int):main.cpp">
       </ContextState>
       <ContextState
          contextName = "Solution506::doesCircleExist(std::__1::vector&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, std::__1::allocator&lt;std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; &gt; &gt;):main.cpp">
