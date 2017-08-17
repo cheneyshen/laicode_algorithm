@@ -11854,59 +11854,205 @@ private:
 };
 
 class Solution283 {
+/*String Distance
+	Given an array of strings, and two different string s and t.We need to return the smallest indices difference between the two given strings.
+
+	Return - 1 if we can not find s or t in the array.
+
+	Assumptions:
+
+The given array is not null, none of the strings in the array is null.
+	s and t are different and they are not null.
+	Examples :
+
+	array = { "this", "is", "a", "is", "fox", "happy" }, the distance of "fox" and "is" is 1.*/
 public:
+	int distance(vector<string> array, string s, string t) {
+		return -1;
+	}
 private:
     
 };
 
 class Solution284 {
+	//Nested Value
+	//	Given a string, calcualte the nested integer weighted sum.
+	//	Weight is + 1 for each deeper level of "{}".
+	//	Assumptions:
+	//The given string is not null
+	//	The only characters in the string is either '0' - '9' or '{', '}'
+	//	Each digit character is calculated separately.
+	//	Examples :
+	//	input = “{ 2{4{6}} }”.output = 2×1 + 4×2 + 6×3 = 28.
+	//	input = "{34{5}6}".output = 3 + 4 + 5x2 + 6 = 23.
 public:
+	int value(string input) {
+		return 0;
+	}
 private:
     
 };
 
 class Solution285 {
+/*Longest Substring With K Typed Characters
+	Given a string, return the longest contiguous substring that contains exactly k type of characters.
+	Return null if there does not exist such substring.
+	Assumptions:
+The given string is not null.
+	k >= 0.
+	Examples :
+	input = "aabcc", k = 3, output = "aabcc".
+	input = "aabcccc", k = 2, output = "bcccc".*/
 public:
+	string longest(string input, int k) {
+		return input;
+	}
 private:
-    
 };
 
 class Solution286 {
+/*Form A Ring With Words
+	Given an array of strings, find if the strings can be concatenated to form a ring.The two strings s1 and s2 can be concatenated iff the the last char of s1 is identical to the first char of s2.The first char of the first string in the array must be identical to the last char of the last string.The ring must contain every string in the input once and only once.
+	Assumptions:
+The given array is not null or empty.
+	None of the strings in the array is null or empty.
+	Examples :
+	input = { "aaa", "bbb", "baa", "aab" }, return true since it can be re - arranged to{ "aaa", "aab", "bbb"  and "baa" }
+	input = { "aaa", "bbb" }, return false*/
 public:
+	bool formRing(vector<string> input) {
+		return false;
+	}
 private:
     
 };
 
 class Solution287 {
+/*Form Largest Number
+	Given an array of numbers in string type, sort them in a way that the concatenation of them yields the largest value.Return the largest number in string type.
+	Assumptions:
+The given array is not null.
+	Each of the strings in the array is not null and they are all numbers.
+	Examples :
+{“54”, “546”, “648”, “88”}, the arrangement “8864854654” gives the largest value.*/
 public:
+	string largestNumber(vector<string> input) {
+		return "";
+	}
 private:
     
 };
 
 class Solution288 {
+/*First Non - Repeating Character In Stream
+		Given a stream of characters, find the first non - repeating character from stream.You need to tell the first non - repeating character in O(1) time at any moment.
+		Implement two methods of the class :
+		read() - read one character from the stream
+		firstNonRepeating() - return the first non - repoeating character from the stream at any time when calling the method, return null if there does not exist such characters
+		Examples :
+read:
+	a   b   c   a   c   c    b
+		firstNonRepeating :
+	a   a   a   b   b   b   null*/
 public:
+	Solution288() {
+		// Initialize the class.
+	}
+
+	void read(char ch) {
+		// Implement this method here.
+	}
+
+	char firstNonRepeating() {
+		// Implement this method here.
+		return ' ';
+	}
 private:
     
 };
 
 class Solution289 {
+/*String Frequency In Windows
+	Given a string containing only 'A', 'B', 'C', 'D', return the number of occurrences of substring which has length 4 and includes all of the characters from 'A', 'B', 'C', 'D' with in descending sorted order.
+	Assumptions:
+The given string is not null and has length of >= 4.
+	In the output, if two substrings have the same frequency, then they should be sorted by the their natural order.
+	Examples :
+	“ABCDABCDD”, --> {"ABCD" : 2, "BCDA" : 1, "CDAB" : 1, "DABC" : 1}*/
 public:
+	class Frequency {
+		string str;
+		int freq;
+		Frequency(string str, int freq) {
+			this->str = str;
+			this->freq = freq;
+		}
+	};
+	vector<Frequency> frequency(string input) {
+		return {};
+	}
 private:
     
 };
 
 class Solution290 {
+/*Wildcard Matching
+	Given two strings where first string is a normal string and second string may contain wild card characters.Write a function that returns true if the two strings match.The following are allowed wildcard characters in first string.
+	* --> Matches with 0 or more instances of any character or set of characters.
+	? --> Matches with any one character.
+	Assumptions:
+The two strings are both not null.
+	Assume there is no more than one '*' adjacent to each other.
+	Examples :
+	input = "abc", pattern = "?*", return true.*/
 public:
+	bool match(string input, string pattern) {
+		return false;
+	}
 private:
     
 };
 
 class Solution291 {
+/*Ternary Expression Tree
+	Implement a solution to parse a ternary expression into a tree.
+	Assumptions:
+The input ternary expression is a string, and it is guaranteed to be valid.
+	Examples :
+	a ? b : c-->
+	a
+	/ \
+	b     c
+	a ? b ? c : d : e-->
+	a
+	/ \
+	b       e
+	/ \
+	c    d*/
 public:
+	class ExpNode {
+	public:
+		char symbol;
+		ExpNode* left;
+		ExpNode* right;
+		ExpNode(char symbol) {
+			this->symbol = symbol;
+		}
+	}
+	ExpNode* tree(String exp) {
+		return null;
+	}
 private:
 };
 
 class Solution292 {
+/*String Abbreviation Matching
+	Word “book” can be abbreviated to 4, b3, b2k, etc.Given a string and an abbreviation, return if the string matches the abbreviation.
+	Assumptions:
+The original string only contains alphabetic characters.
+	Both input and pattern are not null.
+	Examples :
+	pattern “s11d” matches input “sophisticated” since “11” matches eleven chars “ophisticate”.*/
 private:
     bool matchHelper(string& input, int id, string& pattern, int ip) {
         if (id == input.size() && ip == pattern.size()) {
@@ -11945,42 +12091,164 @@ public:
 };
 
 class Solution293 {
+/*Smallest Substring Containing All Characters Of Another String
+	Given two strings s1 and s2, find the shortest substring in s1 containing all characters in s2.
+	If there does not exist such substring in s1, return an empty string.
+	Assumptions:
+s1 and s2 are not null or empty.
+	Examples :
+	s1 = “The given test strings”
+	s2 : “itsst”
+	Output string : “st stri”*/
 public:
+	string smallest(string s1, string s2) {
+		return "";
+	}
 private:
 };
 
 class Solution294 {
+//Levelorder Reconstruct Complete Binary Tree
+//	How to re construct a complete binary tree from its level - order traversal sequence only.
+//	Assumptions:
+//The given level - order is not null.
+//	Examples :
+//{1, 2, 3} -->
+//	1
+//	/ \
+//	2     3
 public:
+	TreeNode* construct(vector<int> level) {
+		return nullptr;
+	}
 private:
 };
 
 class Solution295 {
+//Cousins In Binary Tree
+//	Given a binary Tree and the two keys, determine whether the two nodes are cousins of each other or not.Two nodes are cousins of each other if they are at the same level and have different parents.
+//	Assumptions:
+//It is not guranteed the two keys are all in the binary tree.
+//	There are no duplicate keys in the binary tree.
+//	Examples :
+//	6
+//	/ \
+//	3     5
+//	/ \ / \
+//	7   8 1   3
+//	7 and 1, result is true.
+//	3 and 5, result is false.
+//	7 and 5, result is false.
 public:
+	bool isCousin(TreeNode* root, int a, int b) {
+		return false;
+	}
 private:
 };
 
 class Solution296 {
+/*Right View Of Binary Tree
+	Given a Binary Tree, return the right view of it.Right view of a Binary Tree is list of nodes visible when tree is visited from Right side, the order of the nodes in the list should be from top to bottom level of the original tree.
+	Examples:
+		1
+	   / \
+	 2     3
+	/ \    / \
+	4   5   6  7
+	/       \
+	9        8
+	/ \
+	10  11
+	the right view = [1, 3, 7, 8, 11]*/
 public:
+	vector<int> rightView(TreeNode* root) {
+		return {};
+	}
 private:
 };
 
 class Solution297 {
+/*Top View Of Binary Tree
+	Given a binary tree, get the top view of it.The nodes in the output list should be from left to right.A node x belongs to the output if x is the topmost node at its column.
+	Examples:
+	1
+	/ \
+	2     3
+	/ \ / \
+	4  (5, 6)  7
+	the top view is[4, 2, 1, 3, 7]*/
 public:
+	vector<int> topView(TreeNode* root) {
+		return {};
+	}
 private:
 };
 
 class Solution298 {
+	//Vertical List Of Binary Tree
+	//	Given a binary tree, get the vertically representation of it as a list of lists.
+	//	The columns should be from left to right, and for each column the nodes should be placed from top to bottom, from left to right.
+	//	The following example illustrates vertical order traversal.Input:
+	//		1
+	//	   / \
+	//	  2     3
+	//	 / \    / \
+	//	4   5, 6   7
+	//	     \     \
+	//	      8     9
+	//	Output:
+	//[[4],         // left most column
+	//	[2],         // 2nd left-most column
+	//	[1, 5, 6], // 3rd left-most column, top->bottom, left->right
+	//	[3, 8],
+	//	[7],
+	//	[9]]
 public:
+	vector<vector<int>> verticalPrint(TreeNode* root) {
+		return {};
+	}
 private:
 };
 
 class Solution299 {
+//Distance Of Two Nodes In Binary Tree
+//	Find distance between two given keys of a Binary Tree, no parent pointers are given.Distance between two nodes is the minimum number of edges to be traversed to reach one node from other.
+//	Assumptions:
+//There are no duplicate keys in the binary tree.
+//	The given two keys are guaranteed to be in the binary tree.
+//	Examples :
+//	1
+//	/ \
+//	2    3
+//	/ \ / \
+//	4   5 6   7
+//	\
+//	8
+//	distance(4, 5) = 2
+//	distance(4, 6) = 4
 public:
+	int distance(TreeNode* root, int k1, int k2) {
+		return 0;
+	}
 private:
 };
 
 class Solution300 {
+/*Convert Binary Tree To Doubly Linked List I
+ Given a binary tree, convert it to a doubly linked list in place(use the left pointer as previous, use the right pointer as next).
+ The values in the nodes of the doubly linked list should follow the in - order traversal sequence of the binary tree.
+ Examples:
+		10
+		/ \
+	   5    15
+	  /
+	 2
+	Output:  2 <-> 5 <-> 10 <-> 15
+*/
 public:
+	TreeNode* toDoubleLinkedList(TreeNode* root) {
+		return root;
+	}
 private:
 };
 
