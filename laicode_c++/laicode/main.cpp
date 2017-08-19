@@ -12038,9 +12038,9 @@ public:
 		ExpNode(char symbol) {
 			this->symbol = symbol;
 		}
-	}
-	ExpNode* tree(String exp) {
-		return null;
+    };
+	ExpNode* tree(string exp) {
+		return NULL;
 	}
 private:
 };
@@ -12253,77 +12253,311 @@ private:
 };
 
 class Solution301 {
+//    Get Post-order Sequence By Pre-order and In-order
+//    Given Inorder and Preorder traversals of a binary tree, get the Postorder traversal without reconstructing a binary tree.
+//Assumptions:
+//    The given Inorder and Preorder traversals are guaranteed to be valid.
+//Examples:
+//Input:
+//    
+//    Inorder traversal in[] = {4, 2, 5, 1, 3, 6}
+//    Preorder traversal pre[] = {1, 2, 4, 5, 3, 6}
+//    
+//Output:
+//    Postorder traversal is {4, 5, 2, 6, 3, 1}
 public:
+    vector<int> postOrder(vector<int> pre, vector<int> in) {
+        return {};
+    }
 private:
 };
 
 class Solution302 {
+//    Transform Binary Search Tree To Greater Sum Tree
+//    Given a BST, change each node’s value, such that its value is equal to the sum of all nodes greater than itself.
+//    
+//Examples:
+//        11
+//       /  \
+//     2     29
+//    /  \  /  \
+//    1   7 15  40
+//         /
+//        35
+//    is transformed to
+//         119
+//         /  \
+//      137    75
+//     /  \    /  \
+//    139 130 104  0
+//    /
+//   40
 public:
+    TreeNode* greaterSum(TreeNode* root) {
+        return root;
+    }
 private:
 };
 
 class Solution303 {
+//    Connect Right Pointer To Successor
+//    Connect the node whose right child is NULL to the successor node in in-order sequence.
+//Examples:
+//        11
+//       /  \
+//     2     29
+//    /  \  /  \
+//    1   7 15  40
+//   /
+//  35
+//   the added edges are:
+//    1.right = 2
+//    7.right = 11
+//    15.right = 29
+//    35.right = 40
 public:
+    void connect(TreeNode* root) {
+        // Write your solution here.
+    
+    }
 private:
 };
 
 class Solution304 {
+//    Valid Post-order Traversal Of Binary Search Tree
+//    Given an array with integers, determine whether the array contains a valid postorder traversal sequence a BST.
+//    
+//Assumptions:
+//    The given postorder traversal array is not null.
+//Examples:
+//    { 3, 5, 4 }  is valid
+//    { 3,  6,  2,  5,  4} is not valid
 public:
+    bool validPostOrder(vector<int> post) {
+        // Write your solution here.
+        return false;
+    }
 private:
 };
 
 class Solution305 {
+//    Reverse Alternate Nodes
+//    Given a linked list, reverse alternate nodes and append at the end.
+//    
+//Examples:
+//    Input List:    1 -> 2 -> 3 -> 4 -> 5 -> 6
+//    Output List: 1 -> 3 -> 5 -> 6 -> 4 -> 2
+//    Input List:    1 -> 2 -> 3 -> 4 -> 5
+//    Output List: 1 -> 3 -> 5 -> 4 -> 2
 public:
+    ListNode* reverseAlternate(ListNode* head) {
+        // Write your solution here.
+        return head;
+    }
 private:
 };
 
 class Solution306 {
+//    Check If Linked List Is Palindrome
+//    Given a linked list, check whether it is a palindrome.
+//    
+//Examples:
+//    
+//Input:   1 -> 2 -> 3 -> 2 -> 1 -> null
+//    
+//output: true.
+//    
+//Input:   1 -> 2 -> 3 -> null
+//    
+//output: false.
+//    
+//Requirements:
+//    
+//    Space complexity must be O(1)
 public:
+    bool isPalindrome(ListNode* head) {
+        // Write your solution here.
+        return false;
+    }
 private:
 };
 
 class Solution307 {
+//    Max Weights Sum Of Intervals
+//    Given a list of intervals, each interval has (start, end, weight). find a subset of the intervals, such that there is no overlap, and the sum of weight is maximized.
+//    
+//    Return the max weights sum.
+//    
+//Assumptions:
+//    
+//    The given array of intervals is not null and has length of > 0
 public:
+    struct IntervalW {
+    int start;
+    int end;
+    int weight;
+    IntervalW(int start, int end, int weight) {
+        this->start = start;
+        this->end = end;
+        this->weight = weight;
+    }
+};
+    int maxWeightSum(vector<IntervalW> intervals) {
+        // Write your solution here.
+        return 0;
+    }
 private:
 };
 
 class Solution308 {
+//    Least Insertions To Form A Palindrome
+//    Insert the least number of characters to a string in order to make the new string a palindrome. Return the least number of characters should be inserted.
+//    
+//Assumptions:
+//    
+//    The given string is not null.
 public:
+    int leastInsertion(string input) {
+        // Write your solution here.
+        return 0;
+    }
 private:
 };
 
 class Solution309 {
+//    Longest Bitonic Sequence
+//    Given an array with all integers,  a sub-sequence of it is called Bitonic if it is first sorted in an ascending order, then sorted in a descending order. How can you find the length of the longest bitonic subsequence.
+//        
+//        Assumptions:
+//        
+//        The given array is not null.
+//        Corner Cases:
+//        
+//        A subsequence, sorted in increasing order is considered Bitonic with the decreasing part as empty. Similarly, decreasing order sequence is considered Bitonic with the increasing part as empty.
+//        Examples:
+//        
+//    {1, 3, 2, 1, 4, 6, 1}, the longest bitonic sub sequence is {1, 3, 4, 6, 1}, length is 5.
 public:
+    int longestBitonic(vector<int> array) {
+        // Write your solution here.
+        return 0;
+    }
 private:
 };
 
 class Solution310 {
+//    Max Subarray Sum Difference
+//    Given an array of integers. Find two disjoint contiguous subarrays in it such that the absolute value of the difference between the sums of two subarray is maximum.  Return the maximum difference.
+//    
+//Assumptions:
+//    
+//    The given array is not null and has length of at least 2.
+//Examples:
+//    
+//Input: { 1, -3, 1, -4, 3, 4 }
+//    
+//    Two subarrays: {-3, 1, -4 }, { 3, 4 }
+//    
+//    Maximum difference = 13
 public:
+    int maxDiff(vector<int> array) {
+        // Write your solution here.
+        return 0;
+    }
 private:
 };
 
 class Solution311 {
+    
+//    Prime Factors
+//    Each positive integer larger than 1 is the production of several prime numbers. Return the list of prime factors in ascending order.
+//    
+//Assumptions:
+//    
+//    The given number is >= 2.
+//Examples:
+//    
+//    12 = 2 * 2 * 3, return [2, 2, 3]
+//    5 = 5, return [5]
 public:
+    vector<int> factors(int target) {
+        // Write your solution here.
+        return {};
+    }
 private:
 };
 
 class Solution312 {
+//    Primes
+//    Return the primes less than or equals to target in ascending order.
+//    
+//Assumptions:
+//    
+//    The given target is >= 2.
+//Examples:
+//    
+//    target = 3,  return [2, 3]
+//    target = 10, return [2, 3, 5, 7]
 public:
+    vector<int> primes(int target) {
+        // Write your solution here.
+        return {};
+    }
 private:
 };
 
 class Solution313 {
+//    Greatest Common Factor
+//    Find the greatest common factor of two positive integers.
+//    
+//Examples:
+//    
+//    a = 12, b = 18, the greatest common factor is 6, since 12 = 6 * 2, 18 = 6 * 3.
+//    a = 5, b = 16, the greatest common factor is 1.
 public:
+    int gcf(int a, int b) {
+        // Write your solution here.
+        return 1;
+    }
 private:
 };
 
 class Solution314 {
+    
+//    A + B + C = D
+//    Determine if there exist 4 elements in an given positive integer array, such that A + B + C = D.
+//        
+//        Assumptions:
+//        
+//        The given array is not null and has length of >= 4.
+//        All the elements in the given array are positive integers.
+//        Examples:
+//        
+//        array = {1, 4, 3, 2}, there does not exist such elements, return false.
+//    array = {5, 1, 4, 0, 2, 1}, since 1 + 4 + 0 = 5, return true.
+
 public:
+    bool exist(vector<int> array) {
+        // Write your solution here.
+        return false;
+    }
 private:
 };
 
 
 class Solution315 {
+    
+//    Array Deduplication V
+//    Given an integer array(not guaranteed to be sorted), remove adjacent repeated elements. For each group of elements with the same value keep at most two of them. Do this in-place, using the left side of the original array and maintain the relative order of the elements of the array. Return the final array.
+//    
+//    Assumptions
+//    
+//    The given array is not null
+//    Examples
+//    
+//    {1, 2, 2, 3, 3, 3} --> {1, 2, 2, 3, 3}
+//    
+//    {2, 1, 2, 2, 2, 3} --> {2, 1, 2, 2, 3}
 public:
     vector<int> dedup(vector<int> array) {
         int leng=array.size();
@@ -12357,136 +12591,837 @@ public:
 };
 
 class Solution316 {
-public:
-private:
-};
+//    
+//    Border View Of Binary Tree
+//    Given a binary tree, return its border view. The border view is defined as follow: first get all the border nodes at left side(from root and always go to the left subtree, from top to bottom), then get all the leaf nodes(from left to right), at last get all the border nodes at right side(from bottom to top), the list of border view should not contain duplicate nodes.
+//    
+//Examples:
+//    1
+//    /    \
+//    2      3
+//    / \    /  \
+//    4   5   6  7
+//    /            \
+//    9             8
+//    
+//    \
+//    
+//    11
+//    
+//    the border view =  [1, 2, 4, 9, 11, 5, 6, 8, 7, 3]
+//    
+//    1, 2, 4, 9 are the left border, 11, 5, 6, 8 are the leaf nodes, 8, 7, 3, 1 are the right border.
 
-class Solution317 {
 public:
+    vector<int> borderView(TreeNode* root) {
+        // Write your solution here.
+        return {};
+    }
 private:
 };
 
 class Solution318 {
+    
+//    Compact Divide
+//    Given two integers a and b, return the result of a / b in String with compact format. The repeated decimal part should be identified and enclosed by "()".
+//    
+//    Examples
+//    
+//    0 / 2 = "0"
+//    
+//    4 / 2 = "2"
+//    
+//    1 / 2 = "0.5"
+//    
+//    -14 / 12 = "-1.1(6)"
+//    
+//    1 / 11 = "0.(09)"
+//    
+//    1 / 0 = "NaN"
+//    
+//    -1 / 0 = "NaN"
+
 public:
+    string divide(int a, int b) {
+        // Write your solution here.
+        return "0";
+    }
 private:
 };
 
 class Solution319 {
+//    Delete Node At Index
+//    Delete the node at the given index for the given linked list.
+//        
+//        Examples
+//        
+//        [1, 2, 3], delete at 1 --> [1, 3]
+//        
+//        [1, 2, 3], delete at 4 --> [1, 2, 3]
+//        
+//        [1, 2, 3], delete at 0 --> [2, 3]
 public:
+    ListNode* deleteNode(ListNode* head, int index) {
+        // Write your solution here.
+        return head;
+    }
 private:
 };
 
 class Solution320 {
+//    Delete Nodes At Indices
+//    Given a linked list and an sorted array of integers as the indices in the list. Delete all the nodes at the indices in the original list.
+//    
+//    Examples
+//    
+//    1 -> 2 -> 3 -> 4 -> NULL, indices = {0, 3, 5}, after deletion the list is 2 -> 3 -> NULL.
+//    
+//    Assumptions
+//    
+//    the given indices array is not null and it is guaranteed to contain non-negative integers sorted in ascending order.
+
 public:
+    ListNode* deleteNodes(ListNode* head, vector<int> indices) {
+        // Write your solution here.
+        return head;
+    }
 private:
 };
 
 class Solution321 {
+//    Divide Two Integers With Restrictions
+//    Given two integers a and b, calculate a / b without using divide/mod operations.
+//    
+//Examples:
+//    
+//    0 / 1 = 0
+//    
+//    1 / 0 = Integer.MAX_VALUE
+//    
+//    -1 / 0 = Integer.MAX_VALUE
+//    
+//    11 / 2 = 5
+//    
+//    -11 / 2 = -5
+//    
+//    11 / -2 = -5
+//    
+//    -11 / -2 = -5
 public:
+    int divide(int a, int b) {
+        // Write your solution here.
+        return 0;
+    }
 private:
 };
 
 class Solution322 {
+//    Delete Zero Nodes From Leaf
+//    Given a binary tree, delete the nodes only if it is 0 and all the nodes on the paths from the node to any leaf nodes are all 0.
+//        
+//        In another word, delete the leaf nodes with 0 recursively until there are no such nodes in the tree.
+//        
+//        You only need to return the final tree after deletion.
+//        
+//        Examples:
+//        
+//        0
+//        /    \
+//        0      3
+//        / \    / \
+//        0   0   0  7
+//        /            \
+//        0             0
+//        
+//        \
+//        
+//        0
+//        
+//        After first round, deleting all the leaf nodes with 0, the tree becomes:
+//        
+//        0
+//        /   \
+//        0     3
+//        /     / \
+//        0     0   7
+//        /
+//        0
+//        
+//        After second round, deleting all the leaf nodes with 0, the tree becomes:
+//        
+//        0
+//        /   \
+//        0     3
+//        /       \
+//        0         7
+//        
+//        After third round, deleting all the leaf nodes with 0, the tree becomds:
+//        
+//        0
+//        /   \
+//        0     3
+//        \
+//        7
+//        
+//        After another round, deleting all the leaf nodes with 0, the tree becomds:
+//        
+//        0
+//        \
+//        3
+//        \
+//        7   
+//        
+//        The deletion end at this step since there are no more nodes to delete.
+//        
+//        You only need to return the final binary tree after deletion.
 public:
+    TreeNode* deleteNode(TreeNode* root) {
+        // Write your solution here.
+        return root;
+    }
 private:
 };
 
 class Solution323 {
+//    Depth Of Forest
+//    Given an integer array A representing a forest, such that, A[i] means the parent index of index i, if A[i] == -1, it means index i is a root.
+//        
+//        Determine what is the depth of the forest, the depth of the forest is the maximum depth of the trees in the forest.
+//        
+//        Examples:
+//        
+//        A = {2, 2, -1, 5, 5, -1, 3}, represnts the forest:
+//    
+//    2
+//    
+//    / \
+//    
+//    0   1
+//    
+//    and
+//    
+//    5
+//    
+//    /  \
+//    
+//    3    4
+//    
+//    /
+//    
+//    6
+//    
+//    The depth of the forest is 3(the depth of the second tree).
+//    
+//Assumptions:
+//    
+//    The given array is not null or empty, all the elements in the array are in the range of [-1, N - 1] where N is the length of the array.
+//    Corner Cases:
+//    
+//    You should be able to identify that there could be a cycle in the forest, what if that is the case? Return -1
 public:
+    int depth(vector<int> forest) {
+        // Write your solution here.
+        return -1;
+    }
 private:
 };
 
 class Solution324 {
-public:
+    
+//    Different Elements In Two Sorted Arrays
+//    Given two sorted arrays a and b containing only integers, return two list of elements: the elements only in a but not in b, and the elements only in b but not in a.
+//    
+//    Do it in one pass.
+//    
+//Assumptions:
+//    
+//    The two given arrays are not null.
+//Examples:
+//    
+//    a = {1, 2, 2, 3, 4, 5}
+//    
+//    b = {2, 2, 2, 4, 4, 6}
+//    
+//    The returned two lists are:
+//    
+//    [
+//     
+//     [1, 3, 5],
+//     
+//     [2, 4, 6]  // there are two 2s in a, so there is one 2 in b not in a
+//     
+//     ]
+public:vector<vector<int>> diff(vector<int> a, vector<int> b) {
+    // Write your solution here.
+    return {};
+}
 private:
 };
 
 class Solution325 {
+//    K Sorted Array
+//    Given an unsorted integer array, each element is at most k step from its position after the array is sorted.
+//    
+//    Can you sort this array with time complexity better than O(nlogn)?
+//    
+//Assumptions:
+//    
+//    The given array is not null and length is n, k < n and k >= 0
 public:
+    vector<int> ksort(vector<int> array, int k) {
+        // Write your solution here.
+        return array;
+    }
 private:
 };
 
 class Solution326 {
+//    Heapify
+//    Heapify an unsorted array to min heap.
+    
 public:
+    vector<int> heapify(vector<int> array) {
+    // Write your solution here.
+    return array;
+}
 private:
 };
 
 class Solution327 {
+    
+//    Find Local Minimum
+//    Given an unsorted integer array, return any of the local minimum's index.
+//    
+//    An element at index i is defined as local minimum when it is smaller than all its possible two neighbors a[i - 1] and a[i + 1]
+//    
+//    (you can think a[-1] = -infinite, and a[a.length] = +infinite)
+//    
+//Assumptions:
+//    
+//    The given array is not null or empty.
+//    There are no duplicate elements in the array.
+
 public:
+    int localMinimum(vector<int> array) {
+    // Write your solution here.
+    return -1;
+}
 private:
 };
 
 class Solution328 {
+//    Heap Sort
+//    Heap Sort is a comparison based sorting algorithm with O(nlogn) time and O(1) space.
+//    
+//Requirements:
+//    
+//    You have to do it in place, extra space used is no more than O(1).
+//        Time complexity is O(nlogn).
 public:
+    vector<int> heapsort(vector<int> array) {
+        // Write your solution here.
+        return array;
+    }
 private:
 };
 
 class Solution329 {
+//    Number Of Negative Numbers In Sorted Matrix
+//    Given an matrix of integers, each row is sorted in ascending order from left to right, each column is also sorted in ascending order from top to bottom.
+//    
+//    Determine how many negative numbers in the matrix.
+//    
+//Assumptions:
+//    
+//    The given matrix is not null.
+//Examples:
+//    
+//    { {-5, -3, 0, 0, 1},
+//        
+//        {-3, -2, 1, 1, 3}
+//        
+//        {-2, 0,  3, 5, 6} }
+//    
+//    The number of negative elements in the matrix is 5.
 public:
+    int negNumber(vector<vector<int>> matrix) {
+    // Write your solution here.
+    return 0;
+}
 private:
 };
 
 class Solution330 {
+    
+//    One Edit Distance
+//    Determine if two given Strings are one edit distance.
+//        
+//        One edit distance means you can only insert one character/delete one character/replace one character to another character in one of the two given Strings and they will become identical.
+//        
+//        Assumptions:
+//        
+//        The two given Strings are not null
+//        Examples:
+//        
+//        s = "abc", t = "ab" are one edit distance since you can remove the trailing 'c' from s so that s and t are identical
+//        
+//        s = "abc", t = "bcd" are not one edit distance
 public:
+    bool oneEditDistance(string s, string t) {
+    // Write your solution here.
+    return false;
+}
 private:
 };
 
 class Solution331 {
+//    Determine The Intersection Of Two Linked Lists
+//    Given two singly linked list, determine the intersection node. If there does not exist one, return null.
 public:
+    ListNode* intersect(ListNode* h1, ListNode* h2) {
+        // Write your solution here.
+        return NULL;
+    }
 private:
 };
 
 class Solution332 {
+//    Ways Of Expressions To Target
+//    Given an expression as a String array, the only possible elements are "0", "1", "|", "&", "^".
+//    
+//    You can add parentheses to let the execution sequence be changed.
+//    
+//    Given a target number(either 0 or 1), how many different ways of execution sequence are there to let the result be the target number?
+//    
+//Assumptions:
+//    
+//    The given String array is not null or empty, and it is guaranteed to be valid.
+//Examples:
+//    
+//    {"0", "&", "1", "|", "1"}, if target is 1, there is only one way (0 & 1) | 1 == 1
+//        
+
 public:
+    int ways(vector<string> exp, int target) {
+    // Write you solution here.
+    return 0;
+}
 private:
 };
 
 class Solution333 {
+//    Check If Undirected Graph Has Cycle
+//    Given an undirected graph, determine if it has cycle.
 public:
+    bool isCyclic(GraphNode* node) {
+        return false;
+    }
 private:
 };
 
 class Solution334 {
+//    Check If Directed Graph Has Cycle
+//    Determine if a directed graph has cycle.
 public:
+    bool isCyclic(vector<GraphNode*> graph) {
+        if(graph.empty()) {
+            return false;
+        }
+        int n=graph.size();
+        
+        unordered_map<GraphNode*, bool> visited;
+        unordered_map<GraphNode*, bool> recStack;
+        for (int i=0; i<n; i++) {
+            visited[graph[i]]=false;
+            recStack[graph[i]]=false;
+        }
+        for (int i=0; i<n; i++) {
+            if(isCyclicHelper(graph[i], visited, recStack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    void test() {
+        GraphNode* g1=new GraphNode(1);
+        GraphNode* g2=new GraphNode(2);
+        GraphNode* g3=new GraphNode(3);
+        GraphNode* g4=new GraphNode(4);
+        
+        g1->neighbors.push_back(g2);
+        g1->neighbors.push_back(g3);
+        g2->neighbors.push_back(g3);
+        g3->neighbors.push_back(g1);
+        g3->neighbors.push_back(g4);
+        g4->neighbors.push_back(g4);
+        bool result=isCyclic({g1, g2, g3, g4});
+    }
 private:
+    bool isCyclicHelper(GraphNode*& i, unordered_map<GraphNode*, bool>& visited, unordered_map<GraphNode*, bool>& recStack) {
+        if(visited[i]==false) {
+            visited[i]=true;
+            recStack[i]=true;
+            for (int j=0; j<i->neighbors.size(); j++) {
+                GraphNode* nei=i->neighbors[j];
+                if(visited[nei]==false && isCyclicHelper(nei, visited, recStack)) {
+                    return true;
+                }
+                else if (recStack[nei]) {
+                    return true;
+                }
+            }
+        }
+        recStack[i]=false;
+        return false;
+    }
 };
 
 class Solution335 {
+//    Largest SubArray Sum II
+//    Given an unsorted integer circular array with length n (the next element of index n - 1 is index 0), find the subarray that has the greatest sum and return the sum, the subarray at least should contains 1 element.
+//    
+//    Assumptions
+//    The given array is not null and has length of at least 1.
+//    Examples
+//    {2, -1, 4, -2, 1}, the largest subarray sum is 1 + 2 + (-1) + 4 = 6
+//    {-2, -1, -3}, the largest subarray sum is -1
 public:
+    int subarraySum(vector<int> nums){
+        int leng = (int)nums.size();
+        if (leng <= 0) {
+            return 0;
+        }
+        else if (leng == 1) {
+            return nums[0];
+        }
+        int output=INT_MIN;
+        for (int i=0; i<leng; i++) {
+            vector<int> msum(leng, INT_MIN);
+            
+            msum[0] = nums[i];
+            int result = msum[0];
+            for (int j = 1; j<leng; j++) {
+                if (msum[j - 1] <= 0) {
+                    msum[j] = nums[(j+i)%leng];
+                }
+                else {
+                    msum[j] = msum[j-1] + nums[(j+i)%leng];
+                }
+                result = max(result, msum[j]);
+            }
+            output=max(result, output);
+        }
+        return output;
+    }
+    
+    void test() {
+        cout<<subarraySum({2, -1, 4, -2, 1})<<endl;
+        cout<<subarraySum({-2, -1, -3})<<endl;
+    }
 private:
 };
 
 class Solution336 {
+//    Anagrams With Only Lower Case Letters
+//    Find all the anagrams with only lower case letters 'a' - 'z' for a given String, the other characters are not changed.
+//        
+//        Examples:
+//        
+//        "AbcbD" --> ["AbbcD", "AbcbD", "AcbbD"]
+//        
+//        Assumptions:
+//        
+//        The given String is not null.
 public:
+    vector<string> anagrams(string input) {
+        if (input.empty()) {
+            return {};
+        }
+        vector<string> result;
+        vector<int> positions;
+        for (int i=0; i<input.size(); i++) {
+            if (input[i]>='a' && input[i]<='z') {
+                positions.push_back(i);
+            }
+        }
+        if (positions.size()<=1) {
+            return {input};
+        }
+        dfsHelper(input, positions, 0, result);
+        return result;
+    }
+    
+    void test() {
+        anagrams("AbcDe");
+    }
 private:
+    void dfsHelper(string& input, vector<int>& positions, int i, vector<string>& result) {
+        if (i==positions.size()) {
+            result.push_back(input);
+            return;
+        }
+        for (int j=i; j<positions.size(); j++) {
+            swap(input[positions[j]], input[positions[i]]);
+            dfsHelper(input, positions, i+1, result);
+            swap(input[positions[j]], input[positions[i]]);
+        }
+    }
 };
 
 class Solution337 {
+//    Prefix To Postfix Expression
+//    Transfer the given prefix expression to postfix expression. The given prefix expression is in String format and each of the tokens are separated by a space character (There could be 5 types of tokens: an integer number, +, -, *, /).
+//    
+//Assumptions:
+//    The given expression in String is not null or empty and it is guaranteed to be valid.
+//Examples:
+//    "* + 1 2 3" --> "1 2 + 3 *"
 public:
+    string transfer(string prefix) {
+        string postfix;
+        stack<string> st;
+        int leng=prefix.length();
+        for (int i=leng-1; i>=0; i--) {
+            string t1="", t2="";
+            if (isOperator(prefix[i])) {
+                if(!st.empty()) {
+                    t1=st.top(); st.pop();
+                }
+                if(!st.empty()) {
+                    t2=st.top(); st.pop();
+                }
+                t2.push_back(' ');
+                t2.push_back(prefix[i]);
+                st.push(t1+' '+t2);
+            }
+            else if(prefix[i]!= ' ') {
+                t1=prefix[i];
+                st.push(t1);
+            }
+        }
+        postfix=st.top();
+        st.pop();
+        return postfix;
+    }
+    void test() {
+        string result=transfer("* + 1 2 3");
+        cout<<result<<endl;
+    }
 private:
+    bool isOperator(char c) {
+        if (c=='+' || c=='-' || c=='*' || c=='/') {
+            return true;
+        }
+        return false;
+    }
 };
 
 class Solution338 {
+//    Reverse Odd Groups Of K Nodes
+//    Given a singly linked list, group the nodes for each k nodes, reverse only the odd groups (the group number starts from 0).
+//        Assumptions:
+//        k >= 1
+//        Examples:
+//        1 -> 2 -> 3 -> 4 -> 5 -> 6 -> null, k = 2. After reverse the list is:
+//        1 -> 2 -> 4 -> 3 -> 5 -> 6 -> null
 public:
+    ListNode* reverseKOddGroup(ListNode* head, int k) {
+        if (head==NULL || head->next==NULL) {
+            return head;
+        }
+        int count=0;
+        ListNode* curr=head;
+        ListNode* here=NULL;
+        ListNode* prev=NULL;
+        while (curr!=NULL && count!=2*k) {
+            if(count<k) {
+                prev=curr;
+            }
+            if(count==k) {
+                here=curr;
+            }
+            curr=curr->next;
+            count++;
+        }
+        if (count==2*k) {
+            curr=reverseKOddGroup(curr, k);
+            while(count>k) {
+                ListNode* temp=here->next;
+                here->next=curr;
+                curr=here;
+                here=temp;
+                count--;
+            }
+            prev->next=curr;
+        }
+        return head;
+    }
+    
+    void test() {
+        ListNode* a1= new ListNode(1);
+        ListNode* a2= new ListNode(2);
+        ListNode* a3= new ListNode(3);
+        ListNode* a4= new ListNode(4);
+        ListNode* a5= new ListNode(5);
+        ListNode* a6= new ListNode(6);
+        ListNode* a7= new ListNode(7);
+        ListNode* a8= new ListNode(8);
+        ListNode* a9= new ListNode(9);
+        ListNode* a10= new ListNode(10);
+        a1->next=a2;
+        a2->next=a3;
+        a3->next=a4;
+        a4->next=a5;
+        a5->next=a6;
+        a6->next=a7;
+        a7->next=a8;
+        a8->next=a9;
+        a9->next=a10;
+        ListNode* result=reverseKOddGroup(a1, 2);
+    }
 private:
 };
 
 class Solution339 {
+//    Largest Different Zero/One Numbers
+//    Given an integer array containing only 0 and 1. Find the subarray such that the absolute value of difference between number of 0s and number of 1s is the largest.
+//    
+//    Return the absolute difference.
+//Assumptions:
+//    The given array is not null. It is guaranteed the elements are all 0 or 1.
+//Examples:
+//    {1, 1, 1, 0, 1, 0}, the largest difference is 3 (in subarray of {1, 1, 1, 0, 1}, there are 4 elements of 1 and 1 element of 0)
 public:
+    int diff(vector<int> array) {
+        if (array.empty() || array.size()==1) {
+            return 0;
+        }
+        //1, 0, 0, 1, 0, 1, 1
+        int result=0;
+        for (int i=0; i<array.size(); i++) {
+            int zeros=0, ones=0;
+            for (int j=i; j>=0; j--) {
+                if (array[j]==0) {
+                    zeros++;
+                }
+                else {
+                    ones++;
+                }
+            }
+            if (zeros && ones) {
+                result=max(result, abs(zeros-ones));
+            }
+        }
+        return result;
+    }
 private:
 };
 
 class Solution340 {
+//    Insertion Sort
+//    Given an array of integers, sort the elements in the array in ascending order. The insertion sort algorithm should be used to solve this problem.
+//    
+//    Examples
+//    
+//    {1, 2, 3} is sorted to {1, 2, 3}
+//    {4, 2, -3, 6, 1} is sorted to {-3, 1, 2, 4, 6}
+//    Corner Cases
+//    
+//    What if the given array is null? In this case, we do not need to do anything.
+//        What if the given array is of length zero? In this case, we do not need to do anything.
+
 public:
+    vector<int> sort(vector<int> array) {
+        int i, j;
+        int temp;
+        for (i=1; i<array.size(); i++) {
+            temp=array[i];
+            j=i-1;
+            for (;j>=0 && array[j]>temp;j--) {
+                array[j+1]=array[j];
+            }
+            array[j+1]=temp;
+        }
+        return array;
+    }
 private:
 };
 
 class Solution341 {
+//    Insertion Sort Linked List
+//    Given a singly-linked list, where each node contains an integer value, sort it in ascending order. The insertion sort algorithm should be used to solve this problem.
+//    
+//    Examples
+//    
+//    null, is sorted to null
+//    1 -> null, is sorted to 1 -> null
+//    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
+//    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to -3 -> 2 -> 4 -> 5 -> 6
 public:
+    ListNode* sort(ListNode* head) {
+        ListNode* result=head;
+        if (head==NULL || head->next==NULL) {
+            return result;
+        }
+        ListNode *t1=head->next;
+        result->next=NULL;
+        while (t1!=NULL) {
+            ListNode *t2=result;
+            if(t1->value>t2->value) {
+                ListNode *prev=NULL;
+                while (t2!=NULL && t1->value>t2->value) {
+                    prev=t2;
+                    t2=t2->next;
+                }
+                if(t2==NULL) {
+                    prev->next=t1;
+                    t1=t1->next;
+                    prev=prev->next;
+                    prev->next=NULL;
+                }
+                else {
+                    ListNode* temp=t1;
+                    t1=t1->next;
+                    prev->next=temp;
+                    temp->next=t2;
+                }
+            }
+            else {
+                ListNode* temp=t1;
+                t1=t1->next;
+                temp->next=t2;
+                result=temp;
+            }
+
+        }
+        return result;
+    }
+    
+    void test() {
+        ListNode* a1= new ListNode(4);
+        ListNode* a2= new ListNode(2);
+        ListNode* a3= new ListNode(6);
+        ListNode* a4= new ListNode(-3);
+        ListNode* a5= new ListNode(5);
+        a1->next=a2;
+        a2->next=a3;
+        a3->next=a4;
+        a4->next=a5;
+        a5->next=NULL;
+        ListNode* result=sort(a1);
+    }
 private:
 };
 
 class Solution342 {
+//    Isomorphic String I
+//    Two Strings are called isomorphic if the letters in one String can be remapped to get the second String. Remapping a letter means replacing all occurrences of it with another letter. The ordering of the letters remains unchanged. The mapping is two way and no two letters may map to the same letter, but a letter may map to itself. Determine if two given String are isomorphic.
+//        Assumptions:
+//        The two given Strings are not null.
+//        Examples:
+//        "abca" and "xyzx" are isomorphic since the mapping is 'a' <-> 'x', 'b' <-> 'y', 'c' <-> 'z'.
+//        "abba" and "cccc" are not isomorphic.
 public:
     bool isomorphic(string s, string t) {
         int sleng=s.size(), tleng=t.size();
@@ -12516,31 +13451,239 @@ public:
 };
 
 class Solution343 {
+//    Number Of Pairs Diff To Target
+//    Given an integer array, determine how many pairs of elements, the absolute value of the difference between the two elements is the given target value.
+//Assumptions:
+//    There could be elements with duplicate value in the array, and each of the elements is considered different.
+//    The given array is not null and has length >= 2.
+//Examples:
+//    array = {3, 1, 2, 1}, target = 2, there are 2 pairs { (3, 1), (3, 1) }
 public:
+    int pairs(vector<int> array, int target) {
+        if (array.empty() || array.size()<2) {
+            return 0;
+        }
+        int count=0;
+        unordered_map<int, bool> hashmap;
+        for (int i=0; i<array.size(); i++) {
+            hashmap[array[i]]=true;
+        }
+        for (int i=0; i<array.size(); i++) {
+            int x=array[i];
+            if (hashmap[x-target]) {
+                count++;
+            }
+            if (hashmap[target+x]) {
+                count++;
+            }
+            hashmap[x]=false;
+        }
+        return count;
+    }
 private:
 };
 
 class Solution344 {
+//    Celebrity Problem
+//    Given an binary matrix of N * N (the only elements in the matrix are 0s and 1s), each of the indices represents one person.
+//    matrix[i][j] = 1 if and only if person i knows person j (this is single direction, only if matrix[j][i] = 1 such that person j knows person i).
+//        Determine if there is one celebrity among all N persons, a celebrity is defined as
+//            He does not know any other person.
+//            All the other persons know him.
+//            Return the celebrity's index if there exist one (there could be at most one celebrity, why?), return -1 otherwise.
+//     Assumptions:
+//     The given matrix is not null and N >= 2.
+//     Examples:
+//     matrix = { { 0, 1, 1 },
+//                { 0, 0, 0 },
+//                { 1, 1, 0 } }
+//    The celebrity is person 1, since person 0 and person 2 all know him, but person 1 does not know person 0 or person 2.
 public:
+    int celebrity(vector<vector<int>> matrix) {
+        if (matrix.empty() || matrix.size()<2) {
+            return -1;
+        }
+        int a=0, b=matrix[0].size()-1;
+//        The idea is to use two pointers, one from start and one from the end. Assume the start person is A, and the end person is B. If A knows B, then A must not be the celebrity. Else, B must not be the celebrity. We will find a celebrity candidate at the end of the loop. Go through each person again and check whether this is the celebrity.
+        while (a<b) {
+            if (matrix[a][b]==1) {
+                a++;
+            }
+            else {
+                b--;
+            }
+        }
+        for (int i=0; i<matrix[0].size(); i++) {
+            if (i!=a && (matrix[a][i]==1 || matrix[i][a]==0)) {
+                return -1;
+            }
+        }
+        return a;
+    }
 private:
 };
 
 class Solution345 {
+//    Boggle Game I
+//    Given a char matrix of M * N, and a target String, determine if there exist one path in the matrix such that the string constructed by concatenating the characters on the path, equals to the target.
+//        
+//        From any cell of the matrix, you can go to the neighbor cells of 4 directions(up, down, left, right), the same cell should not be visited more than once on the same path.
+//        
+//        Return the list of cells if such path exists, or null otherwise.
+//            
+//            Assumptions:
+//            The given matrix is not null, M, N >= 1
+//            The target String is not null or empty
+//            Examples:
+//            matrix = { { 'a', 'b', 'c' },
+//                { 'p', 'p', 'q' },
+//                { 'i' , 'l', 'e' } }
+//    
+//    if the target is "apple", then there exists a path [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2]] to form "apple".
 public:
+    vector<vector<int>> boggle(vector<vector<char>> matrix, string target) {
+        if (matrix.empty()) {
+            return {};
+        }
+        int rows=matrix.size(), cols=matrix[0].size();
+        if (target.size()>rows*cols) {
+            return {};
+        }
+        vector<vector<int>> result;
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                if (matrix[i][j]==target[0]) {
+                    dfshelper(matrix, rows, cols, i, j, target, 0, result);
+                }
+            }
+        }
+        return result;
+    }
+    void dfshelper(vector<vector<char>>& matrix, int rows, int cols, int x, int y, string target, int i, vector<vector<int>>& result) {
+        if (x<0 || x>=rows || y<0 || y>=cols || matrix[x][y]==' ') {
+            return;
+        }
+        if (target[i]==matrix[x][y]) {
+            result.push_back({x, y});
+            if (i==target.size()-1) {
+                return;
+            }
+            char curr=matrix[x][y];
+            matrix[x][y]=' ';
+            dfshelper(matrix, rows, cols, x+1, y, target, i+1, result);
+            dfshelper(matrix, rows, cols, x-1, y, target, i+1, result);
+            dfshelper(matrix, rows, cols, x, y+1, target, i+1, result);
+            dfshelper(matrix, rows, cols, x, y-1, target, i+1, result);
+            matrix[x][y]=curr;
+        }
+    }
+    
+    void test() {
+        vector<vector<char>> matrix={ { 'a', 'b', 'c' },
+                            { 'p', 'p', 'q' },
+                            { 'i' , 'l', 'e' } };
+        string target="apple";
+        vector<vector<int>> result=boggle(matrix, target);
+        for (auto i:result) {
+            cout<<i[0]<<" "<<i[1]<<endl;
+        }
+    }
 private:
 };
 
 class Solution346 {
+//    Closest Taller Person On The Right Side
+//    Given an integer array representing the heights of N persons, now determine for each of the N persons, which person is the closet taller person on the right side.
+//        
+//        Return another integer array of size N, each element is the closest taller person's index in the original array.
+//        If there is no taller person at right side, then use -1 to mark such case.
+//        Assumptions:
+//        The given array is not null.
+//        Examples:
+//        array = {3, 2, 7, 5, 6}, result is {2, 2, -1, 4, -1}
 public:
+    vector<int> closetTaller(vector<int> array) {
+        if(array.empty()) {
+            return {};
+        }
+        int maxv=array.size()-1;
+        vector<int> result(array.size(), 0);
+        for (int i=array.size()-1; i>=0; i--) {
+            if (array[i]<array[maxv]) {
+                result[i]=maxv;
+            }
+            else if(array[i]>=array[maxv]) {
+                result[i]=-1;
+                maxv=i;
+            }
+        }
+        return result;
+    }
+
+    void test() {
+        vector<int> array={3, 2, 7, 5, 6};
+        array = closetTaller(array);
+        for (auto i:array) {
+            cout<<i<<" ";
+        }
+    }
 private:
 };
 
 class Solution347 {
+//    Second Largest In Binary Search Tree
+//    Find the second largest key in the given binary search tree.
+//    
+//    If there does not exist the second largest key, return Integer.MIN_VALUE.
+//    
+//Assumptions:
+//    
+//    The given binary search tree is not null.
+//Examples:
+//    
+//    2
+//    
+//    /   \
+//    
+//    1     4
+//    
+//    /
+//    
+//    3
+//    
+//    the second largest key is 3.
 public:
+    int secondLargest(TreeNode* root) {
+        int result=0, index=0;
+        helper(root, index, result);
+        return result;
+    }
+    
+    void helper(TreeNode* root, int& index, int& result) {
+        if (root==NULL || index>=2) {
+            return;
+        }
+        helper(root->right, index, result);
+        index++;
+        if (index==2) {
+            result=root->value;
+            return;
+        }
+        helper(root->left, index, result);
+    }
 private:
 };
 
 class Solution348 {
+//    Reverse Only Vowels
+//    Only reverse the vowels('a', 'e', 'i', 'o', 'u') in a given string, the other characters should not be moved or changed.
+//    
+//Assumptions:
+//    
+//    The given string is not null, and only contains lower case letters.
+//Examples:
+//    
+//    "abbegi" --> "ibbega"
 public:
     string reverse(string s) {
         int leng=s.size();
@@ -12560,12 +13703,127 @@ public:
 };
 
 class Solution349 {
+//    Smallest Range
+//    Given k sorted integer arrays, pick k elements (one element from each of sorted arrays), what is the smallest range.
+//Assumptions:
+//    k >= 2
+//    None of the k arrays is null or empty
+//Examples:
+//      { { 1, 4, 6 },
+//        { 2, 5 },
+//        { 8, 10, 15} }
+//    
+//    pick one element from each of 3 arrays, the smallest range is {5, 8} (pick 6 from the first array, pick 5 from the second array and pick 8 from the third array).
 public:
+    struct minHeapNode {
+        int value;
+        int i,j;
+    };
+    class minHeap {
+        vector<minHeapNode*> harr;
+        int heap_size;
+    public:
+        minHeap(vector<minHeapNode*> a, int size) {
+            heap_size=size;
+            harr=a;
+            int i=(heap_size-1)/2;
+            while (i>=0) {
+                minHeapify(i);
+                i--;
+            }
+        }
+        
+        void minHeapify(int i) {
+            int l=left(i);
+            int r=right(i);
+            int smallest=i;
+            if (l<heap_size && harr[l]->value<harr[i]->value) {
+                smallest=l;
+            }
+            if (r<heap_size && harr[r]->value<harr[i]->value) {
+                smallest=r;
+            }
+            if (smallest!=i) {
+                swap(harr[i]->value, harr[smallest]->value);
+                minHeapify(smallest);
+            }
+        }
+        
+        int left(int i) {
+            return (2*i+1);
+        }
+        
+        int right(int i) {
+            return (2*i+2);
+        }
+        
+        minHeapNode* getMin() {
+            return harr[0];
+        }
+        
+        void replaceMin(minHeapNode* x) {
+            harr[0]=x;
+            minHeapify(0);
+        }
+    };
+    
+    vector<int> smallestRange(vector<vector<int>> arrays) {
+        int range=INT_MAX;
+        int minv=INT_MAX, maxv=INT_MIN;
+        int start=0, end=0;
+        if(arrays.empty()) {
+            return {};
+        }
+        int rows=arrays.size(), cols=arrays[0].size();
+        vector<minHeapNode*> harr(rows, 0);
+        for (int i=0; i<rows; i++) {
+            harr[i]->value=arrays[i][0];
+            harr[i]->i=i;
+            harr[i]->j=1;
+            
+            if(harr[i]->value>maxv) {
+                maxv=harr[i]->value;
+            }
+        }
+        minHeap hp(harr, rows);
+        while (true) {
+            minHeapNode* root=hp.getMin();
+            minv=root->value;
+            if (range>maxv-minv+1) {
+                range=maxv-minv+1;
+                start=minv;
+                end=maxv;
+            }
+            if (root->j<arrays[root->i].size()) {
+                root->value=arrays[root->i][root->j];
+                root->j+=1;
+                if (root->value>maxv) {
+                    maxv=root->value;
+                }
+            }
+            else {
+                break;
+            }
+            hp.replaceMin(root);
+        }
+        return {start, end};
+    }
 private:
 };
 
 
 class Solution350 {
+//    Replacements Of A And B
+//    Given a string with only character 'a' and 'b', replace some of the characters such that the string becomes in the forms of all the 'b's are on the right side of all the 'a's.
+//    
+//    Determine what is the minimum number of replacements needed.
+//    
+//Assumptions:
+//    
+//    The given string is not null.
+//Examples:
+//    
+//    "abaab", the minimum number of replacements needed is 1 (replace the first 'b' with 'a' so that the string becomes "aaaab").
 public:
     int minReplacements(string input) {
         int leng = input.size();
@@ -14074,10 +15332,26 @@ int main() {
 	//    r350 = s350->minReplacements("aaaaaaaa");
 	//    Solution348* s348 = new Solution348();
 	//    s348->reverse("abbegi");
+//    Solution346* s346 = new Solution346();
+//    s346->test();
+//    Solution345* s345 = new Solution345();
+//    s345->test();
 	//    Solution342* s342 = new Solution342();
 	//    cout<<s342->isomorphic("aba", "aaa")<<endl;
 	//    cout<<s342->isomorphic("hhkkhhkkk", "ccddcceee")<<endl;
 	//    cout<<s342->isomorphic( "fgh","ghf" )<<endl;
+//    Solution341* s341 = new Solution341();
+//    s341->test();
+//    Solution338* s338 = new Solution338();
+//    s338->test();
+//    Solution337* s337 = new Solution337();
+//    s337->test();
+//    Solution336* s336 = new Solution336();
+//    s336->test();
+//    Solution335* s335 = new Solution335();
+//    s335->test();
+    Solution334* s334 = new Solution334();
+    s334->test();
 	//    Solution315* s315 = new Solution315();
 	//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
 	//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
@@ -14643,17 +15917,17 @@ int main() {
 		//    Solution211* new211 = new Solution211();
 		//    TreeNode* result211 = new211->reconstruct( {1, 4, 3, 11, 8, 5});
 		//    cout<<result211->left->right->value<<endl;
-	Solution154* s154 = new Solution154();
-	vector<vector<char>> board = { {'A','B','C','E'},
-	{'S', 'F', 'E', 'S' },
-	{'A', 'D', 'E', 'E'} };
-	string word = "ABCESEEEFS";
-	bool o154 = s154->isWord(board, word);
-	word = "ABCB";
-	o154 = s154->isWord(board, word);
-	board = { {'a'} };
-	word = "a";
-	o154 = s154->isWord(board, word);
+//	Solution154* s154 = new Solution154();
+//	vector<vector<char>> board = { {'A','B','C','E'},
+//	{'S', 'F', 'E', 'S' },
+//	{'A', 'D', 'E', 'E'} };
+//	string word = "ABCESEEEFS";
+//	bool o154 = s154->isWord(board, word);
+//	word = "ABCB";
+//	o154 = s154->isWord(board, word);
+//	board = { {'a'} };
+//	word = "a";
+//	o154 = s154->isWord(board, word);
 	//ListNode* l1 = new ListNode(1);
 	//ListNode* l2 = new ListNode(2);
 	//ListNode* l3 = new ListNode(3);
@@ -14735,8 +16009,8 @@ int main() {
 //	t14->left = t31;
 //	int result138 = new138->maxPathSum(t51);
 //	cout << result138 << endl;
-    Solution263* s263 = new Solution263();
-    s263->test();
+//    Solution263* s263 = new Solution263();
+//    s263->test();
 //    Solution262* s262 = new Solution262();
 //    s262->test();
 	//    Solution261* new261 = new Solution261();
@@ -14930,8 +16204,8 @@ int main() {
 	//    if (result124.size()>0) {
 	//        cout<<result124[0][0]<<endl;
 	//    }
-    Solution123* s123 = new Solution123();
-    s123->solve(3);
+//    Solution123* s123 = new Solution123();
+//    s123->solve(3);
 	//    Solution122* new122 = new Solution122();
 	//    vector<int> result122 = new122->spiral({{1}});
 	//    cout<<result122[0]<<endl;

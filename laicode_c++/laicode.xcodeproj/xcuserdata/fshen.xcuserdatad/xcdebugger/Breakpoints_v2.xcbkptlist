@@ -15,8 +15,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "11813"
             endingLineNumber = "11813"
-            landmarkName = "dedup(vector&lt;int&gt; array)"
-            landmarkType = "7">
+            landmarkName = "class Solution281"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
