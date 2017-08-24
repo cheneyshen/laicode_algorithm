@@ -4677,7 +4677,6 @@ class Solution106 {
     //    Given a matrix that contains integers, find the submatrix with the largest sum.
     //
     //    Return the sum of the submatrix.
-    //
     //    Assumptions
     //
     //    The given matrix is not null and has size of M * N, where M >= 1 and N >= 1
@@ -12468,21 +12467,41 @@ private:
 };
 
 class Solution311 {
-    
 //    Prime Factors
 //    Each positive integer larger than 1 is the production of several prime numbers. Return the list of prime factors in ascending order.
 //    
 //Assumptions:
-//    
 //    The given number is >= 2.
 //Examples:
-//    
 //    12 = 2 * 2 * 3, return [2, 2, 3]
 //    5 = 5, return [5]
 public:
     vector<int> factors(int target) {
-        // Write your solution here.
-        return {};
+        if (target<2) {
+            return {};
+        }
+        vector<int> result;
+        int temp=target;
+        while (temp%2==0) {
+            result.push_back(2);
+            temp=temp/2;
+        }
+        for (int i=3; i<=sqrt(temp); i+=2) {
+            while (temp%i==0) {
+                result.push_back(i);
+                temp=temp/i;
+            }
+        }
+        if (temp>2) {
+            result.push_back(temp);
+        }
+        return result;
+    }
+    
+    void test() {
+        factors(12);
+        factors(5);
+        factors(1024);
     }
 private:
 };
@@ -12500,8 +12519,28 @@ class Solution312 {
 //    target = 10, return [2, 3, 5, 7]
 public:
     vector<int> primes(int target) {
-        // Write your solution here.
-        return {};
+        if (target<=1) {
+            return {};
+        }
+        vector<bool> nonPrime(target+1, false);
+        for (int i=2; i<=sqrt(target); i++) {
+            if (nonPrime[i]==false) {
+                for (int j=i*2; j<=target; j+=i) {
+                    nonPrime[j]=true;
+                }
+            }
+        }
+        vector<int> result;
+        for (int i=2; i<=target; i++) {
+            if (nonPrime[i]==false) {
+                result.push_back(i);
+            }
+        }
+        return result;
+    }
+    
+    void test() {
+        primes(10);
     }
 private:
 };
@@ -12511,24 +12550,34 @@ class Solution313 {
 //    Find the greatest common factor of two positive integers.
 //    
 //Examples:
-//    
 //    a = 12, b = 18, the greatest common factor is 6, since 12 = 6 * 2, 18 = 6 * 3.
 //    a = 5, b = 16, the greatest common factor is 1.
 public:
     int gcf(int a, int b) {
-        // Write your solution here.
-        return 1;
+        if (a<0 || b<0) {
+            return INT_MIN;
+        }
+        if (a==b) {
+            return a;
+        }
+        else if (a<b) {
+            return gcf(a, b-a);
+        }
+        else {
+            return gcf(b, a-b);
+        }
+    }
+    
+    void test() {
+        cout<<gcf(12, 18)<<" "<<gcf(5, 16)<<" "<<gcf(90, 99)<<endl;
     }
 private:
 };
 
 class Solution314 {
-    
 //    A + B + C = D
 //    Determine if there exist 4 elements in an given positive integer array, such that A + B + C = D.
-//        
 //        Assumptions:
-//        
 //        The given array is not null and has length of >= 4.
 //        All the elements in the given array are positive integers.
 //        Examples:
@@ -12537,16 +12586,54 @@ class Solution314 {
 //    array = {5, 1, 4, 0, 2, 1}, since 1 + 4 + 0 = 5, return true.
 
 public:
+    class Element {
+    public:
+        int i, j;
+        Element(int i, int j) {
+            this->i=i;
+            this->j=j;
+        }
+    };
     bool exist(vector<int> array) {
-        // Write your solution here.
+        unordered_map<int, Element*> dict;
+        for (int i=0; i<array.size()-1; i++) {
+            for (int j=i+1; j<array.size(); j++) {
+                Element* e = new Element(i, j);
+                dict[array[i]+array[j]]=e;
+            }
+        }
+        for (int i=0; i<array.size()-1; i++) {
+            for (int j=i+1; j<array.size(); j++) {
+                if (dict.find(array[i]-array[j])!=dict.end()) {
+                    if (dict[array[i]-array[j]]->i==i || dict[array[i]-array[j]]->j==j) {
+                        continue;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                if (dict.find(array[j]-array[i])!=dict.end()) {
+                    if (dict[array[j]-array[i]]->i==i || dict[array[j]-array[i]]->j==j) {
+                        continue;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
+    }
+    
+    void test() {
+        cout<<exist({1, 4, 3, 2})<<endl;
+        cout<<exist({5, 1, 4, 0, 2, 1})<<endl;
     }
 private:
 };
 
 
 class Solution315 {
-    
 //    Array Deduplication V
 //    Given an integer array(not guaranteed to be sorted), remove adjacent repeated elements. For each group of elements with the same value keep at most two of them. Do this in-place, using the left side of the original array and maintain the relative order of the elements of the array. Return the final array.
 //    
@@ -12554,9 +12641,7 @@ class Solution315 {
 //    
 //    The given array is not null
 //    Examples
-//    
 //    {1, 2, 2, 3, 3, 3} --> {1, 2, 2, 3, 3}
-//    
 //    {2, 1, 2, 2, 2, 3} --> {2, 1, 2, 2, 3}
 public:
     vector<int> dedup(vector<int> array) {
@@ -12591,60 +12676,134 @@ public:
 };
 
 class Solution316 {
-//    
 //    Border View Of Binary Tree
 //    Given a binary tree, return its border view. The border view is defined as follow: first get all the border nodes at left side(from root and always go to the left subtree, from top to bottom), then get all the leaf nodes(from left to right), at last get all the border nodes at right side(from bottom to top), the list of border view should not contain duplicate nodes.
 //    
 //Examples:
-//    1
-//    /    \
-//    2      3
-//    / \    /  \
+//         1
+//       /    \
+//      2      3
+//     / \    /  \
 //    4   5   6  7
 //    /            \
 //    9             8
-//    
-//    \
-//    
-//    11
-//    
+//     \
+//      11
 //    the border view =  [1, 2, 4, 9, 11, 5, 6, 8, 7, 3]
 //    
 //    1, 2, 4, 9 are the left border, 11, 5, 6, 8 are the leaf nodes, 8, 7, 3, 1 are the right border.
 
 public:
     vector<int> borderView(TreeNode* root) {
-        // Write your solution here.
-        return {};
+        if (root==NULL) {
+            return {};
+        }
+        vector<int> result;
+        result.push_back(root->value);
+        borderLeft(root->left, result);
+        borderLeaves(root->left, result);
+        borderLeaves(root->right, result);
+        borderRight(root->right, result);
+        return result;
+    }
+    
+    void test() {
+        TreeNode *root            = new TreeNode(20);
+        root->left                = new TreeNode(8);
+        root->left->left          = new TreeNode(4);
+        root->left->right         = new TreeNode(12);
+        root->left->right->left   = new TreeNode(10);
+        root->left->right->right  = new TreeNode(14);
+        root->right               = new TreeNode(22);
+        root->right->right        = new TreeNode(25);
+        vector<int> result=borderView(root);
     }
 private:
+    void borderLeft(TreeNode* root, vector<int>& result) {
+        if (root) {
+            if (root->left) {
+                result.push_back(root->value);
+                borderLeft(root->left, result);
+            }
+            else if (root->right) {
+                result.push_back(root->value);
+                borderLeft(root->right, result);
+            }
+        }
+    }
+    void borderLeaves(TreeNode* root, vector<int>& result) {
+        if (root) {
+            borderLeaves(root->left, result);
+            if (root->left==NULL && root->right==NULL) {
+                result.push_back(root->value);
+            }
+            borderLeaves(root->right, result);
+        }
+    }
+    void borderRight(TreeNode* root, vector<int>& result) {
+        if (root) {
+            if (root->right) {
+                borderRight(root->right, result);
+                result.push_back(root->value);
+            }
+            else if (root->left) {
+                borderRight(root->left, result);
+                result.push_back(root->value);
+            }
+        }
+    }
 };
 
 class Solution318 {
-    
 //    Compact Divide
 //    Given two integers a and b, return the result of a / b in String with compact format. The repeated decimal part should be identified and enclosed by "()".
-//    
 //    Examples
 //    
 //    0 / 2 = "0"
-//    
 //    4 / 2 = "2"
-//    
 //    1 / 2 = "0.5"
-//    
 //    -14 / 12 = "-1.1(6)"
-//    
 //    1 / 11 = "0.(09)"
-//    
 //    1 / 0 = "NaN"
-//    
 //    -1 / 0 = "NaN"
-
 public:
     string divide(int a, int b) {
-        // Write your solution here.
-        return "0";
+        if (a==0) {
+            return "0";
+        }
+        if (b==0) {
+            return "NaN";
+        }
+        string result;
+        if (a<0 ^ b<0) {
+            result+="-";
+        }
+        long long int m=abs(a), n=abs(b);
+        result+=to_string(m/n);
+        long long int r=m%n;
+        if (r==0) {
+            return result;
+        }
+        else {
+            result+=".";
+        }
+        unordered_map<int, int> map;
+        while (r) {
+            if (map[r]>0) {
+                result.insert(map[r], 1, '(');
+                result+=')';
+                break;
+            }
+            map[r]=result.size();
+            r=r*10;
+            result+=to_string(r/n);
+            r=r%n;
+        }
+        return result;
+    }
+    
+    void test() {
+        cout<<divide(-14, 12)<<endl;
     }
 private:
 };
@@ -12652,65 +12811,161 @@ private:
 class Solution319 {
 //    Delete Node At Index
 //    Delete the node at the given index for the given linked list.
-//        
 //        Examples
-//        
 //        [1, 2, 3], delete at 1 --> [1, 3]
-//        
 //        [1, 2, 3], delete at 4 --> [1, 2, 3]
-//        
 //        [1, 2, 3], delete at 0 --> [2, 3]
 public:
     ListNode* deleteNode(ListNode* head, int index) {
-        // Write your solution here.
-        return head;
+        if (head==NULL || index<0) {
+            return head;
+        }
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        deleteHelper(dummy, index+1);
+        return dummy->next;
+    }
+    
+    void push(ListNode** head_ref, int new_data)
+    {
+        ListNode* new_node = new ListNode(new_data);
+        new_node->next = (*head_ref);
+        (*head_ref) = new_node;
+    }
+    
+    void test() {
+        ListNode* head=NULL;
+        push(&head, 4);
+        push(&head, 3);
+        push(&head, 2);
+        push(&head, 1);
+        head = deleteNode(head, 5);
+        head = deleteNode(head, 4);
+        head = deleteNode(head, 0);
+        head = deleteNode(head, 1);
     }
 private:
+    void deleteHelper(ListNode* dummy, int index) {
+        ListNode* prev=NULL;
+        ListNode* curr=dummy;
+        ListNode* next=NULL;
+        while (index>0 && curr!=NULL) {
+            prev=curr;
+            curr=curr->next;
+            index--;
+        }
+        if (curr!=NULL) {
+            next=curr->next;
+            prev->next=next;
+            delete(curr);
+        }
+    }
 };
 
 class Solution320 {
 //    Delete Nodes At Indices
 //    Given a linked list and an sorted array of integers as the indices in the list. Delete all the nodes at the indices in the original list.
-//    
 //    Examples
-//    
 //    1 -> 2 -> 3 -> 4 -> NULL, indices = {0, 3, 5}, after deletion the list is 2 -> 3 -> NULL.
-//    
 //    Assumptions
-//    
 //    the given indices array is not null and it is guaranteed to contain non-negative integers sorted in ascending order.
 
 public:
     ListNode* deleteNodes(ListNode* head, vector<int> indices) {
-        // Write your solution here.
-        return head;
+        if (head==NULL) {
+            return NULL;
+        }
+        int j=0;
+        vector<pair<ListNode*, ListNode*>> positions;
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        ListNode *prev=dummy, *curr=head;
+        for (int i=0; i<indices.size(); i++) {
+            findHelper(prev, curr, j, indices[i], positions);
+        }
+        deleteHelper(positions);
+        return dummy->next;
+    }
+    
+    void push(ListNode** head_ref, int new_data)
+    {
+        ListNode* new_node = new ListNode(new_data);
+        new_node->next = (*head_ref);
+        (*head_ref) = new_node;
+    }
+
+    void test() {
+        ListNode* head=NULL;
+        push(&head, 4);
+        push(&head, 3);
+        push(&head, 2);
+        push(&head, 1);
+        head = deleteNodes(head, {0, 1, 3, 4, 5});
     }
 private:
+    void findHelper(ListNode*& prev, ListNode*& curr, int& j, int index, vector<pair<ListNode*, ListNode*>>& positions) {
+        if (curr==NULL) {
+            return;
+        }
+        while (curr!=NULL && j!=index) {
+            prev=curr;
+            curr=curr->next;
+            j++;
+        }
+        if (j>index) {
+            positions.push_back(make_pair(curr, curr));
+        }
+        else {
+            positions.push_back(make_pair(prev, curr));
+        }
+    }
+    void deleteHelper(vector<pair<ListNode*, ListNode*>>& positions) {
+        if (positions.empty()) {
+            return;
+        }
+        int leng=positions.size();
+        for (int i=leng-1; i>=0; i--) {
+            if (positions[i].second==NULL) {
+                continue;
+            }
+            else {
+                ListNode* temp = positions[i].second;
+                positions[i].first->next = temp->next;
+                delete temp;
+            }
+        }
+    }
 };
 
 class Solution321 {
 //    Divide Two Integers With Restrictions
 //    Given two integers a and b, calculate a / b without using divide/mod operations.
-//    
 //Examples:
-//    
 //    0 / 1 = 0
-//    
 //    1 / 0 = Integer.MAX_VALUE
-//    
 //    -1 / 0 = Integer.MAX_VALUE
-//    
 //    11 / 2 = 5
-//    
 //    -11 / 2 = -5
-//    
 //    11 / -2 = -5
-//    
 //    -11 / -2 = -5
 public:
     int divide(int a, int b) {
-        // Write your solution here.
-        return 0;
+        if (b==0 || (a==INT_MIN && b==-1)) {
+            return INT_MAX;
+        }
+        long long aa=abs(a), bb=abs(b);
+        int result=0;
+        while (a>=b) {
+            long long temp=bb, shift=1;
+            while (a>=(temp<<1)) {
+                temp<<=1;
+                shift<=1;
+            }
+            aa=aa-temp;
+            result=result+shift;
+        }
+        int sign=(a<0)^(b<0)?-1:1;
+        return sign==1?result:-result;
     }
 private:
 };
@@ -12718,27 +12973,19 @@ private:
 class Solution322 {
 //    Delete Zero Nodes From Leaf
 //    Given a binary tree, delete the nodes only if it is 0 and all the nodes on the paths from the node to any leaf nodes are all 0.
-//        
 //        In another word, delete the leaf nodes with 0 recursively until there are no such nodes in the tree.
-//        
 //        You only need to return the final tree after deletion.
-//        
 //        Examples:
-//        
-//        0
-//        /    \
-//        0      3
-//        / \    / \
+//            0
+//          /    \
+//         0      3
+//         / \    / \
 //        0   0   0  7
 //        /            \
 //        0             0
-//        
-//        \
-//        
-//        0
-//        
+//         \
+//          0
 //        After first round, deleting all the leaf nodes with 0, the tree becomes:
-//        
 //        0
 //        /   \
 //        0     3
@@ -12746,38 +12993,51 @@ class Solution322 {
 //        0     0   7
 //        /
 //        0
-//        
 //        After second round, deleting all the leaf nodes with 0, the tree becomes:
-//        
-//        0
+//          0
 //        /   \
 //        0     3
 //        /       \
 //        0         7
-//        
 //        After third round, deleting all the leaf nodes with 0, the tree becomds:
-//        
-//        0
+//          0
 //        /   \
 //        0     3
-//        \
-//        7
-//        
+//               \
+//                7
 //        After another round, deleting all the leaf nodes with 0, the tree becomds:
-//        
 //        0
-//        \
-//        3
-//        \
-//        7   
-//        
+//         \
+//          3
+//           \
+//            7
 //        The deletion end at this step since there are no more nodes to delete.
 //        
 //        You only need to return the final binary tree after deletion.
 public:
     TreeNode* deleteNode(TreeNode* root) {
-        // Write your solution here.
+        if (root==NULL) {
+            return root;
+        }
+        root->left=deleteNode(root->left);
+        root->right=deleteNode(root->right);
+        if (root->left==NULL && root->right==NULL && root->value==0) {
+            return NULL;
+        }
         return root;
+    }
+    
+    void test() {
+        TreeNode* t1=new TreeNode(0);
+        TreeNode* t2=new TreeNode(0);
+        TreeNode* t3=new TreeNode(0);
+        TreeNode* t4=new TreeNode(0);
+        TreeNode* t5=new TreeNode(3);
+        TreeNode* t6=new TreeNode(7);
+        t1->left=t2;    t1->right=t5;
+        t2->left=t3;    t3->right=t4;
+        t5->left=t6;
+        TreeNode* result=deleteNode(t1);
     }
 private:
 };
@@ -12785,113 +13045,219 @@ private:
 class Solution323 {
 //    Depth Of Forest
 //    Given an integer array A representing a forest, such that, A[i] means the parent index of index i, if A[i] == -1, it means index i is a root.
-//        
 //        Determine what is the depth of the forest, the depth of the forest is the maximum depth of the trees in the forest.
-//        
 //        Examples:
-//        
 //        A = {2, 2, -1, 5, 5, -1, 3}, represnts the forest:
 //    
-//    2
-//    
+//     2
 //    / \
-//    
 //    0   1
 //    
 //    and
-//    
-//    5
-//    
+//     5
 //    /  \
-//    
 //    3    4
-//    
 //    /
-//    
 //    6
 //    
 //    The depth of the forest is 3(the depth of the second tree).
 //    
 //Assumptions:
-//    
 //    The given array is not null or empty, all the elements in the array are in the range of [-1, N - 1] where N is the length of the array.
 //    Corner Cases:
 //    
 //    You should be able to identify that there could be a cycle in the forest, what if that is the case? Return -1
 public:
     int depth(vector<int> forest) {
-        // Write your solution here.
-        return -1;
+        if (forest.empty()) {
+            return 0;
+        }
+        int leng=forest.size();
+        if (leng==1) {
+            if (forest[0]==-1) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+        int result=0;
+        vector<bool> visited(leng, false);
+        for (int i=0; i<leng; i++) {
+            if (forest[i]==-1) {
+                int height=1;
+                int current=height;
+                helper(forest, i, height, current, visited);
+                if (current<0) {
+                    return current;
+                }
+                else {
+                    result=max(result, current);
+                }
+            }
+        }
+        return result;
+    }
+    
+    void test() {
+        cout<<depth({2, 2, -1, 5, 5, -1, 3})<<endl;
     }
 private:
+    void helper(vector<int>& forest, int root, int height, int& result, vector<bool>& visited) {
+        if (visited[root]==true) {
+            result=-1;
+            return;
+        }
+        visited[root]=true;
+        result=max(result, height);
+        for (int i=0; i<forest.size(); i++) {
+            if (forest[i]==root) {
+                helper(forest, i, height+1, result, visited);
+            }
+        }
+    }
 };
 
 class Solution324 {
-    
 //    Different Elements In Two Sorted Arrays
 //    Given two sorted arrays a and b containing only integers, return two list of elements: the elements only in a but not in b, and the elements only in b but not in a.
-//    
 //    Do it in one pass.
-//    
 //Assumptions:
-//    
 //    The two given arrays are not null.
 //Examples:
-//    
 //    a = {1, 2, 2, 3, 4, 5}
-//    
 //    b = {2, 2, 2, 4, 4, 6}
-//    
 //    The returned two lists are:
-//    
 //    [
-//     
 //     [1, 3, 5],
-//     
 //     [2, 4, 6]  // there are two 2s in a, so there is one 2 in b not in a
-//     
 //     ]
-public:vector<vector<int>> diff(vector<int> a, vector<int> b) {
-    // Write your solution here.
-    return {};
-}
+public:
+    vector<vector<int>> diff(vector<int> a, vector<int> b) {
+        unordered_map<int, int> commons;
+        intersection(a, b, commons);
+        vector<vector<int>> result(2, {});
+        for (int i=0; i<a.size(); i++) {
+            unordered_map<int, int> copy=commons;
+            if (copy.find(a[i])==copy.end()) {
+                result[0].push_back(a[i]);
+            }
+            else if(copy[a[i]]>0) {
+                copy[a[i]]--;
+            }
+            else if(copy[a[i]]==0) {
+                result[0].push_back(a[i]);
+            }
+        }
+        for (int i=0; i<b.size(); i++) {
+            if (commons.find(b[i])==commons.end()) {
+                result[1].push_back(b[i]);
+            }
+            else if(commons[b[i]]>0) {
+                commons[b[i]]--;
+            }
+            else if(commons[b[i]]==0) {
+                result[1].push_back(b[i]);
+            }
+        }
+        return result;
+    }
+    
+    void test() {
+        vector<vector<int>> result=diff({1, 2, 2, 3, 4, 5}, {2, 2, 2, 4, 4, 6});
+        for (auto i:result) {
+            for (auto j:i) {
+                cout<<j<<" ";
+            }
+            cout<<endl;
+        }
+    }
+    void intersection(vector<int>& a, vector<int>& b, unordered_map<int, int>& commons) {
+        int i=0, j=0;
+        vector<int> result;
+        while (i<a.size() && j<b.size()) {
+            if (a[i]<b[j]) {
+                i++;
+            }
+            else if (a[i]>b[j]) {
+                j++;
+            }
+            else {
+                commons[a[i]]++;
+                i++; j++;
+            }
+        }
+        return;
+    }
 private:
 };
 
 class Solution325 {
 //    K Sorted Array
 //    Given an unsorted integer array, each element is at most k step from its position after the array is sorted.
-//    
 //    Can you sort this array with time complexity better than O(nlogn)?
-//    
 //Assumptions:
-//    
 //    The given array is not null and length is n, k < n and k >= 0
 public:
     vector<int> ksort(vector<int> array, int k) {
-        // Write your solution here.
+        priority_queue<int, vector<int>, greater<int>> min_heap;
+        int leng=array.size();
+        for (int i=0; i<=k && i<leng; i++) {
+            min_heap.push(array[i]);
+        }
+        for (int i=k+1, ti=0; ti<leng; i++, ti++) {
+            if (i<leng) {
+                int temp=min_heap.top();
+                min_heap.pop();
+                min_heap.push(array[i]);
+                array[ti]=temp;
+            }
+            else {
+                array[ti]=min_heap.top();
+                min_heap.pop();
+            }
+        }
         return array;
+    }
+    
+    void test() {
+        vector<int> result=ksort({3, 2, 8, 6, 56, 32}, 1);
     }
 private:
 };
 
 class Solution326 {
 //    Heapify
-//    Heapify an unsorted array to min heap.
-    
+//    Heapify an unsorted array to min heap
 public:
     vector<int> heapify(vector<int> array) {
-    // Write your solution here.
-    return array;
-}
+        int leng=array.size();
+        for (int i=leng/2-1; i>=0; i--) {
+            heapHelper(array, leng, i);
+        }
+        return array;
+    }
 private:
+    void heapHelper(vector<int>& array, int leng, int i) {
+        int smallest=i;
+        int left=2*smallest+1;
+        int right=2*smallest+2;
+        if (left<leng && array[left]<array[smallest]) {
+            smallest=left;
+        }
+        if (right<leng && array[right]<array[smallest]) {
+            smallest=right;
+        }
+        if (smallest!=i) {
+            swap(array[i], array[smallest]);
+            heapHelper(array, leng, smallest);
+        }
+    }
 };
 
 class Solution327 {
-    
 //    Find Local Minimum
 //    Given an unsorted integer array, return any of the local minimum's index.
-//    
 //    An element at index i is defined as local minimum when it is smaller than all its possible two neighbors a[i - 1] and a[i + 1]
 //    
 //    (you can think a[-1] = -infinite, and a[a.length] = +infinite)
@@ -12903,26 +13269,63 @@ class Solution327 {
 
 public:
     int localMinimum(vector<int> array) {
-    // Write your solution here.
-    return -1;
-}
+        int left=0, leng=array.size(), right=leng-1;
+        return localMinHelper(array, left, right, leng);
+    }
 private:
+    int localMinHelper(vector<int>& array, int left, int right, int leng) {
+        int mid=left+(right-left)/2;
+        if ((mid==0 || array[mid-1]>array[mid]) &&
+            (mid==leng-1 || array[mid+1]>array[mid])) {
+            return mid;
+        }
+        else if (mid>0 && array[mid-1] < array[mid]) {
+            return localMinHelper(array, left, mid-1, leng);
+        }
+        else {
+            return localMinHelper(array, mid+1, right, leng);
+        }
+    }
 };
 
 class Solution328 {
 //    Heap Sort
 //    Heap Sort is a comparison based sorting algorithm with O(nlogn) time and O(1) space.
-//    
 //Requirements:
-//    
 //    You have to do it in place, extra space used is no more than O(1).
 //        Time complexity is O(nlogn).
 public:
     vector<int> heapsort(vector<int> array) {
-        // Write your solution here.
+        vector<int> result=array;
+        int leng=array.size();
+        for (int i=leng/2-1; i>=0; i--) {
+            heapify(array, leng, i);
+        }
+        for (int i=leng-1; i>=0; i--) {
+            swap(array[i], array[0]);
+            heapify(array, i, 0);
+        }
         return array;
     }
+    
+    void test() {
+        heapsort({12, 11, 13, 5, 6, 7});
+    }
 private:
+    void heapify(vector<int>& array, int leng, int i) {
+        int largest=i;
+        int l=largest*2+1, r=largest*2+2;
+        if (l<leng && array[l]>array[largest]) {
+            largest=l;
+        }
+        if (r<leng && array[l]>array[largest]) {
+            largest=r;
+        }
+        if (largest!=i) {
+            swap(array[i], array[largest]);
+            heapify(array, leng, largest);
+        }
+    }
 };
 
 class Solution329 {
@@ -12930,47 +13333,82 @@ class Solution329 {
 //    Given an matrix of integers, each row is sorted in ascending order from left to right, each column is also sorted in ascending order from top to bottom.
 //    
 //    Determine how many negative numbers in the matrix.
-//    
 //Assumptions:
-//    
 //    The given matrix is not null.
 //Examples:
-//    
-//    { {-5, -3, 0, 0, 1},
-//        
+//      { {-5, -3, 0, 0, 1},
 //        {-3, -2, 1, 1, 3}
-//        
 //        {-2, 0,  3, 5, 6} }
-//    
 //    The number of negative elements in the matrix is 5.
 public:
     int negNumber(vector<vector<int>> matrix) {
-    // Write your solution here.
-    return 0;
-}
+        int count=0;
+        int i=0, j=matrix[0].size()-1;
+        while (j>=0 && i<matrix.size()-1) {
+            if (matrix[i][j]<0) {
+                count+=j+1;
+                i+=1;
+            }
+            else {
+                j-=1;
+            }
+        }
+        return count;
+    }
 private:
 };
 
 class Solution330 {
-    
 //    One Edit Distance
 //    Determine if two given Strings are one edit distance.
-//        
 //        One edit distance means you can only insert one character/delete one character/replace one character to another character in one of the two given Strings and they will become identical.
-//        
 //        Assumptions:
-//        
 //        The two given Strings are not null
 //        Examples:
-//        
 //        s = "abc", t = "ab" are one edit distance since you can remove the trailing 'c' from s so that s and t are identical
-//        
 //        s = "abc", t = "bcd" are not one edit distance
 public:
     bool oneEditDistance(string s, string t) {
-    // Write your solution here.
-    return false;
-}
+        int m=s.size(), n=t.size();
+//        a) If current characters don't match, then
+//        (i)   Increment count of edits
+//        (ii)  If count becomes more than 1, return false
+//        (iii) If length of one string is more, then only
+//        possible  edit is to remove a character.
+//        Therefore, move ahead in larger string.
+//        (iv)  If length is same, then only possible edit
+//        is to  change a character. Therefore, move
+//        ahead in both strings.
+//        b) Else, move ahead in both strings.
+        if (abs(n-m)>1) {
+            return false;
+        }
+        int count=0;
+        int i=0, j=0;
+        while (i<m && j<n) {
+            if (s[i]!=t[j]) {
+                if (count==1) {
+                    return false;
+                }
+                if (m>n) {
+                    i++; count++;
+                }
+                else if (m<n) {
+                    j++; count++;
+                }
+                else {
+                    i++; j++; count++;
+                }
+            }
+            else {
+                i++; j++;
+            }
+        }
+        if (i<m || j<n) {
+            count++;
+        }
+        return count==1;
+    }
 private:
 };
 
@@ -12979,44 +13417,213 @@ class Solution331 {
 //    Given two singly linked list, determine the intersection node. If there does not exist one, return null.
 public:
     ListNode* intersect(ListNode* h1, ListNode* h2) {
-        // Write your solution here.
-        return NULL;
+        int c1=getCount(h1);
+        int c2=getCount(h2);
+        int d;
+        if (c1>c2) {
+            d=c1-c2;
+            return intersectHelper(d, h1, h2);
+        }
+        else {
+            d=c2-c1;
+            return intersectHelper(d, h2, h1);
+        }
     }
 private:
+    ListNode* intersectHelper(int d, ListNode* h1, ListNode* h2) {
+        int i;
+        ListNode* curr1=h1, * curr2=h2;
+        for (i=0; i<d; i++) {
+            if (curr1==NULL) {
+                return NULL;
+            }
+            curr1=curr1->next;
+        }
+        while (curr1!=NULL && curr2!=NULL) {
+            if (curr1==curr2) {
+                return curr1;
+            }
+            curr1=curr1->next;
+            curr2=curr2->next;
+        }
+        return NULL;
+    }
+    
+    int getCount(ListNode* head) {
+        ListNode* curr=head;
+        int count=0;
+        while (curr) {
+            count++;
+            curr=curr->next;
+        }
+        return count;
+    }
 };
 
 class Solution332 {
 //    Ways Of Expressions To Target
 //    Given an expression as a String array, the only possible elements are "0", "1", "|", "&", "^".
-//    
 //    You can add parentheses to let the execution sequence be changed.
 //    
 //    Given a target number(either 0 or 1), how many different ways of execution sequence are there to let the result be the target number?
 //    
 //Assumptions:
-//    
 //    The given String array is not null or empty, and it is guaranteed to be valid.
 //Examples:
-//    
 //    {"0", "&", "1", "|", "1"}, if target is 1, there is only one way (0 & 1) | 1 == 1
 //        
-
+    
 public:
+    class ETreeNode {
+    public:
+        string value;
+        ETreeNode* left;
+        ETreeNode* right;
+        ETreeNode(string value) {
+            this->value=value;
+            this->left=NULL;
+            this->right=NULL;
+        }
+    };
+    
     int ways(vector<string> exp, int target) {
-    // Write you solution here.
-    return 0;
-}
+        vector<ETreeNode*> trees;
+        trees=buildBST(exp, 0, exp.size()-1);
+        int result=0;
+        for (int i=0; i<trees.size(); i++) {
+            int curr = computeHelper(trees[i]);
+            if (curr==target) {
+                result++;
+            }
+        }
+        return result;
+    }
+    
+    void test() {
+        int result= ways({"0", "&", "1", "|", "1"}, 1);
+        cout<<result<<endl;
+    }
+    
 private:
+    vector<ETreeNode*> buildBST(vector<string>& exp, int start, int end) {
+        vector<ETreeNode*> result;
+        if (start>end) {
+            result.push_back(NULL);
+            return result;
+        }
+        else if(start==end) {
+            string curr=exp[start];
+            result.push_back(new ETreeNode(curr));
+            return result;
+        }
+        for (int i=start; i<=end; i++) {
+            if (exp[i]=="|" || exp[i]=="&" | exp[i]=="^") {
+                vector<ETreeNode*> lefts=buildBST(exp, start, i-1);
+                vector<ETreeNode*> rights=buildBST(exp, i+1, end);
+                for (auto ileft:lefts) {
+                    for (auto iright:rights) {
+                        ETreeNode* ti=new ETreeNode(exp[i]);
+                        ti->left=ileft;
+                        ti->right=iright;
+                        result.push_back(ti);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    int computeHelper(ETreeNode* root) {
+        int result=INT_MIN;
+        if (root==NULL) {
+            return result;
+        }
+        if (root->left==NULL && root->right==NULL) {
+            return root->value[0]-'0';
+        }
+        int left=computeHelper(root->left);
+        int right=computeHelper(root->right);
+        switch (root->value[0]) {
+            case '&':
+                result=left&right;
+                break;
+            case '|':
+                result=left|right;
+                break;
+            case '^':
+                result=left^right;
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 };
 
 class Solution333 {
 //    Check If Undirected Graph Has Cycle
 //    Given an undirected graph, determine if it has cycle.
 public:
-    bool isCyclic(GraphNode* node) {
+    bool isCyclic(vector<GraphNode*> graph) {
+        if(graph.empty()) {
+            return false;
+        }
+        int n=graph.size();
+        unordered_map<GraphNode*, bool> visited;
+        for (int i=0; i<n; i++) {
+            visited[graph[i]]=false;
+        }
+        for (int u=0; u<n; u++) {
+            if (!visited[graph[u]]) {
+                if (hasCycle(graph[u], visited, NULL)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
+    
+    void test() {
+        GraphNode* n0=new GraphNode(0);
+        GraphNode* n1=new GraphNode(1);
+        GraphNode* n2=new GraphNode(2);
+        GraphNode* n3=new GraphNode(3);
+        GraphNode* n4=new GraphNode(4);
+        n0->neighbors.push_back(n1);
+        n0->neighbors.push_back(n2);
+        n0->neighbors.push_back(n3);
+        n1->neighbors.push_back(n0);
+        n1->neighbors.push_back(n2);
+        n2->neighbors.push_back(n0);
+        n2->neighbors.push_back(n1);
+        n3->neighbors.push_back(n0);
+        n3->neighbors.push_back(n4);
+        n4->neighbors.push_back(n3);
+        cout<<isCyclic({n0, n1, n2, n3, n4})<<endl;
+        GraphNode* n5=new GraphNode(5);
+        GraphNode* n6=new GraphNode(6);
+        GraphNode* n7=new GraphNode(7);
+        n5->neighbors.push_back(n6);
+        n6->neighbors.push_back(n5);
+        n6->neighbors.push_back(n7);
+        cout<<isCyclic({n5, n6, n7})<<endl;
+    }
 private:
+    bool hasCycle(GraphNode*& i, unordered_map<GraphNode*, bool>& visited, GraphNode* parent) {
+        visited[i]=true;
+        for (int j=0; j<i->neighbors.size(); j++) {
+            GraphNode* nei=i->neighbors[j];
+            if (!visited[nei]) {
+                if (hasCycle(nei, visited, i)) {
+                    return true;
+                }
+            }
+            else if (nei!=parent) {
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 class Solution334 {
@@ -14691,31 +15298,1621 @@ private:
 
 class Solution999 {
 public:
-    void heapify(vector<int>& array, int n, int i) {
-        int max=i;
-        int left=2*i+1;
-        int right=2*i+2;
-        if (left<n && array[left]>array[max]) {
-            max=left;
+    class vector2D {
+    public:
+        vector2D(vector<vector<int>>& vec2d) {
+            if (vec2d.size()==0) {
+                return;
+            }
+            it1=vec2d.begin();
+            ite=vec2d.end();
+            it2=(*it1).begin();
+            
         }
-        if (right<n && array[right]>array[max]) {
-            max=right;
+        int next() {
+            return *it2++;
         }
-        if (max!=i) {
-            swap(array[max], array[i]);
-            heapify(array, n, max);
+        
+        bool hasNext() {
+            while (it1!=ite && it2==(*it1).end()) {
+                it1++;
+                it2=(*it1).begin();
+                
+            }
+            return it1!=ite;
+        }
+        
+    private:
+        vector<vector<int>>::iterator it1, ite;
+        vector<int>::iterator it2;
+    };
+//    Given a sorted integer array without duplicates, return the summary of its ranges
+//    For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+    
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> ans;
+        for(int i=0;i<nums.size();)
+        {
+            int start = i;
+            while(i+1<nums.size() && nums[i+1]-nums[i]==1) {
+                i++;
+            }
+            if(nums[i]>nums[start]) {
+                //cout<<to_string(nums[start])+"->"+to_string(nums[i]);
+                ans.push_back(to_string(nums[start])+"->"+to_string(nums[i]));
+            }
+            else if(nums[i]==nums[start]) {
+                //cout<<to_string(nums[i]);
+                ans.push_back(to_string(nums[i]));
+            }
+            i++;
+        }
+        return ans;
+    }
+//    intersection A: [ {name: "road1", cost: 3, destination: "intersection B"}, {name: "road2", cost: 2, destination: "intersection B"}, {name: "road3", cost: 1, destination: "intersection B"} ]
+//    intersection B: [ {name: "road4", cost: 4, destination: "intersection C"} ]
+//    intersection C: []. more info on 1point3acres.com
+//    
+//    最短路径从A到C：road3 -> road4
+    vector<string> getPath(unordered_map<string, unordered_map<string, pair<string, int> > >& mp, const string& start, const string& end) {
+        unordered_map<string, int> dist;
+        unordered_set<string> q;
+        for (const auto& p: mp) {
+            dist[p.first] = INT_MAX;
+            q.insert(p.first);
+        }
+        dist[start] = 0;
+        unordered_map<string, string> previous;
+        if (mp.count(start) == 0 || start == end) {
+            return {};
+        }
+        while (not q.empty()) {
+            string cur;
+            int curDist = INT_MAX;
+            for (const string& s: q) {
+                if (dist[s] < curDist) {
+                    curDist = dist[s];
+                    cur = s;
+                }
+            }
+            for (auto p: mp[cur]) {
+                if (dist[p.first]> dist[cur] + p.second.second) {
+                    dist[p.first] = dist[cur] + p.second.second;
+                    previous[p.first] = cur;
+                }
+            }
+            q.erase(cur);
+        }
+        vector<string> res;
+        string tmp = end;
+        while (tmp != start) {
+            res.push_back(mp[previous[tmp]][tmp].first);
+            tmp = previous[tmp];
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+
+    //Insert Into Cycle Linked List
+    ListNode* insertNode(ListNode* head, int val) {
+        // 如果原本head为空，添加新的节点，next指向自己
+        if (head == NULL) {
+            ListNode *node = new ListNode(val);
+            node->next = node;
+            return node;
+        }
+        
+        ListNode *cur = head;
+        
+        do {
+            //如果val的值正好介于两个节点之间，结束循环，等号是有必要的
+            if (val >= cur->value && val <= cur->next->value)
+                break;
+            // 如果正好是排序链断开处
+            if (cur->value > cur->next->value && (val < cur->next->value || val > cur->value))
+                break;
+            // 否则继续往下找
+            cur = cur->next;
+        } while (cur != head);
+        // 循环直到又到head
+        
+        //插入新节点
+        ListNode *newNode = new ListNode(val);
+        newNode->next = cur->next;
+        cur->next = newNode;
+        return newNode;
+    }
+//  meeting overlap
+//  The number of minutes in a day is constant. Create an array of size 60*24 minutes in a day. Mark true on meeting schedules.
+    bool meetingOverlap(vector<vector<int>> meetings) {
+        vector<bool> schedule(24*60, false);
+        for (auto time: meetings) {
+            for (int i=time[0]; i<time[1]; i++) {
+                if (schedule[i]==true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    void subset_sum(vector<int>& s, vector<int>& t, int sizes, int sizet, int sum, int ite, int target, int& nodes) {
+        nodes++;
+        if (target==sum) {
+            //handle t
+            if (ite+1<sizes && sum-s[ite]+s[ite+1]<=target) {
+                subset_sum(s, t, sizes, sizet-1, sum-s[ite], ite+1, target, nodes);
+            }
+            return;
+        }
+        else {
+            if (ite<sizes && sum+s[ite]<=target) {
+                for (int i=ite; i<sizes; i++) {
+                    t[sizet]=s[i];
+                    if (sum+s[i]<=target) {
+                        subset_sum(s, t, sizes, sizet+1, sum+s[i], i+1, target, nodes);
+                    }
+                }
+            }
         }
     }
     
-    void heapsort(vector<int>& array, int n) {
-        for (int i=n/2-1; i>=0; i--) {
-            heapify(array, n, i);
+//  Subset sum. Follow-up: Optimize the solution.
+    void generateSubsets(vector<int>& s, int size, int target) {
+        vector<int> tuplet(size, 0);
+        int total=0;
+        sort(s.begin(), s.end(), [](int a, int b){return a>b;});
+        for (int i=0; i<size; i++) {
+            total+=s[i];
         }
-        for (int i=n-1; i>=0; i--) {
-            swap(array[i], array[0]);
-            heapify(array, n, 0);
+        int nodes=0;
+        if (s[0] <= target && total >= target) {
+            subset_sum(s, tuplet, size, 0, 0, 0, target, nodes);
         }
     }
+//  Given a 2D array of either '\' or '/', find out how many pieces this rectangle is divided into graphically.
+//  For a 2X2 matrix with
+//    /\
+//    \/
+//  The matrix split into 5 pieces - the diamond in middle and the four corners. Return 5 as the answer.
+
+    int segmentCount(vector<vector<char>> m) {
+        int rows=m.size(), cols=m[0].size();
+        vector<bool> upperHalf(rows*cols);
+        vector<bool> lowerHalf(rows*cols);
+        int count=0;
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                if (!upperHalf[i*rows+j]) {
+                    count++;
+                    dfs(m, upperHalf, lowerHalf, i, j, 0);
+                }
+                if (!lowerHalf[i*rows+j]) {
+                    count++;
+                    dfs(m, upperHalf, lowerHalf, i, j, 0);
+                }
+            }
+        }
+        return count;
+    }
+    // position:upper:0, lower:1, left:2, right:3
+    void dfs(vector<vector<char>>& m, vector<bool>& upperHalf, vector<bool>& lowerHalf, int i, int j, int position) {
+        if (i<0 || i>m.size() || j<0 || j>m[0].size()) {
+            return;
+        }
+        if ((position==2 && m[i][j]=='\\') || (position==3 && m[i][j]=='/')) {
+            position=1;
+        }
+        if ((position==2 && m[i][j]=='/') || (position==3 && m[i][j]=='\\')) {
+            position=0;
+        }
+        int id=i*m[0].size()+j;
+        if ((position==0 && upperHalf[id]) || (position==1 && lowerHalf[id])) {
+            return;
+        }
+        if (position==0) {
+            upperHalf[id]=true;
+        }
+        else {
+            lowerHalf[id]=true;
+        }
+        if (position==0 && m[i][j]=='\\') {
+            dfs(m, upperHalf, lowerHalf, i, j+1, 2);    //go right
+            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up
+        }
+        if (position==0 && m[i][j]=='/') {
+            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
+            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up;
+        }
+        if (position==1 && m[i][j]=='\\') {
+            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
+            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
+        }
+        if (position==1 && m[i][j]=='/') {
+            dfs(m, upperHalf, lowerHalf, i, j+1, 3);    //go right
+            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
+        }
+    }
+//    bool wordBreak(string s, unordered_set<string>& wordDict) {
+//        if (wordDict.size() == 0) {
+//            return false;
+//        }
+//        vector<bool> dp(s.size()+1, false);
+//        dp[0] = true;
+//        for (int i = 1; i <= s.size(); ++i) {
+//            for (int j = i-1; j >= 0; --j) {
+//                if (dp[j]) {
+//                    string word=s.substr(j, i-j);
+//                    if (wordDict.count(word)>0) {
+//                        
+//                        dp[i] = true;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        for(int i = 0; i < dp.size(); ++i) {
+//            cout<<dp[i]<<" ";
+//        }
+//        return dp.back();
+//    }
+//    
+//    
+//    vector<string> wordBreak(string s, vector<string>& wordDict) {
+//        if (wordDict.size() == 0) {
+//            return {};
+//        }
+//        unordered_set<string> lookup;
+//        for (auto i:wordDict) {
+//            lookup.insert(i);
+//        }
+//        vector<string> result;
+//        string combo="";
+//        wordBreakHelper(s, 0, combo, lookup, result);
+//        return result;
+//    }
+//    
+//    void wordBreakHelper(string s, int index, string& combo, unordered_set<string>& lookup, vector<string>& result) {
+//        if (index == s.size()) {
+//            combo.pop_back();   //delete last space
+//            result.push_back(combo);
+//            combo.clear();  //restart new backtracking
+//            return;
+//        }
+//        for (int i = index+1; i <= s.size(); ++i) {
+//            string word=s.substr(index, i-index);
+//            if (lookup.count(word)>0) {
+//                combo += word;
+//                combo += " ";
+//                wordBreakHelper(s, i, combo, lookup, result);
+//            }
+//        }
+//    }
+//    
+//    void sortColors(vector<int>& A, int n) {
+//        int red = 0, blue = n-1;
+//        int i = 0;
+//        while (i <= blue) {
+//            if(A[i] == 0) {//red
+//                swap(A[red], A[i]);
+//                red++;
+//                i++;
+//                
+//            }
+//            else if(A[i]==2) {//blue
+//                swap(A[blue], A[i]);
+//                blue--;
+//            }
+//            else {
+//                i++;
+//            }
+//        }
+//    }
+//    
+//    void sortColors(vector<vector<int>>& A, int m, int n) {
+//        int red=0, blue=m*n-1, i=0;
+//        while (i<=blue) {
+//            int row=i/m, col=i%n;
+//            if(A[row][col] == 0) {
+//                //red
+//                swap(A[red/m][red%n], A[row][col]);
+//                i++;
+//                red++;
+//            }
+//            else if(A[row][col] == 2) {
+//                //blue
+//                swap(A[blue/m][blue%n], A[row][col]);
+//                blue--;
+//            }
+//            else {
+//                i++;
+//            }
+//        }
+//    }
+//    
+//    
+//    int findOptimal(int n) {
+//        if (n<=6) {
+//            return n;
+//        }
+//        int result=0;
+//        int b=0;
+//        for (b = n-3-1; b >= 1; --b) {
+//            int curr=(n-b-1)*findOptimal(b);
+//            if (curr > result) {
+//                result = curr;
+//            }
+//        }
+//        return result;
+//    }
+//    // Only +, - ,(, ), empty
+//    int Calculate1(string s) {
+//        int sign=-1, result=0;
+//        stack<int> stk;
+//        for (int i = 0; i < s.size(); ++i) {
+//            if (isdigit(s[i])) {
+//                int sum=s[i]-'0';
+//                while (i+1 < s.size() && isdigit(s[i+1])) {
+//                    sum = sum * 10 + s[i+1] - '0';
+//                    i++;
+//                }
+//                result = result + sum * sign;
+//            }
+//            else if (s[i] == '+') {
+//                sign = 1;
+//            }
+//            else if (s[i] == '-') {
+//                sign = -1;
+//            }
+//            else if (s[i] == '(') {
+//                stk.push(result);
+//                stk.push(sign);
+//                result = 0;
+//                sign = 1;
+//            }
+//            else if (s[i] == ')') {
+//                result = result*stk.top();
+//                stk.pop();
+//                result += stk.top();
+//                stk.pop();
+//            }
+//        }
+//        return result;
+//    }
+//    
+//    // Only +, - , *, /, empty
+//    int Calculate2(string s) {
+//        if (s.size()<=0) {
+//            return 0;
+//        }
+//        stack<int> stk;
+//        int num=0;
+//        char sign='+';
+//        for (int i=0; i<s.size(); ++i) {
+//            if (isdigit(s[i])) {
+//                num = num*10 + s[i] - '0';
+//                if (num > INT_MAX) {
+//                    num = INT_MAX;
+//                }
+//            }
+//            if ((!isdigit(s[i]) && s[i] != ' ' ) || i == s.size()-1) {
+//                if (sign == '+') {
+//                    stk.push(num);
+//                }
+//                else if (sign == '-') {
+//                    stk.push(-num);
+//                }
+//                else if (sign == '*') {
+//                    int top=stk.top();
+//                    stk.pop();
+//                    stk.push(top * num);
+//                }
+//                else if (sign == '/') {
+//                    int top=stk.top();
+//                    stk.pop();
+//                    stk.push(top / num);
+//                }
+//                //reset
+//                sign = s[i];
+//                num = 0;
+//            }
+//        }
+//        //sum up
+//        int res=0;
+//        while (!stk.empty()) {
+//            res += stk.top();
+//            stk.pop();
+//        }
+//        return res;
+//    }
+//    
+//    //    int Calculate3(string s) {
+//    //        if (s.size() <= 0) {
+//    //            return 0;
+//    //        }
+//    //        stack<int> stk;
+//    //        int num = 0;
+//    //        char sign = '+';
+//    //        int res = 0;
+//    //        for (int i = 0; i < s.size(); ++i) {
+//    //            char cur = s[i];
+//    //            if (isdigit(cur)) {
+//    //                num = num * 10 + cur - '0';
+//    //                if (num > INT_MAX) {
+//    //                    num = INT_MAX;
+//    //                }
+//    //            }
+//    //            if (cur == '+' || cur == '-' || cur == '*' || cur == '/' || i == s.size()-1) {
+//    //                if (sign == '+' || sign == '-') {
+//    //                    int tmp = sign == '+' ? num : -num;
+//    //                    stk.push(tmp);
+//    //                    res += tmp;
+//    //                }
+//    //                else {
+//    //                    res = res - stk.top();
+//    //                    stk.pop();
+//    //                    int tmp = sign == '*' ? res * stk.top() : stk.top() / num;
+//    //                    stk.pop();
+//    //                    stk.push(tmp);
+//    //                    res = res + tmp;
+//    //                }
+//    //                sign = cur;
+//    //                num = 0;
+//    //            }
+//    //        }
+//    //        return res;
+//    //    }
+//    
+//    //+, -, *, /, allowed negative after sign
+//    int Calculate4(string s) {
+//        if (s.size()<=0) {
+//            return 0;
+//        }
+//        int num = 0;
+//        char sign = '+';
+//        int negative = 1;
+//        stack<int> stk;
+//        for (int i = 0; i < s.size(); ++i) {
+//            if (isdigit(s[i])) {
+//                num = num * 10 + s[i] - '0';
+//                if (num > INT_MAX) {
+//                    num =INT_MAX;
+//                }
+//            }
+//            if (s[i] != ' ' && (i == s.size() -1  || !isdigit(s[i]))) {
+//                //Handle 3+-10 => 3+(-10) case
+//                if (s[i] == '-' && (i==0 || !isdigit(s[i-1]))) {
+//                    negative = -1;
+//                    continue;
+//                }
+//                if (sign == '+') {
+//                    stk.push(negative * num);
+//                }
+//                else if (sign == '-') {
+//                    stk.push(negative * -1 * num);
+//                }
+//                else if (sign == '*') {
+//                    int tmp = stk.top();
+//                    stk.pop();
+//                    stk.push(tmp * num * negative);
+//                }
+//                else if (sign == '/') {
+//                    int tmp = stk.top();
+//                    stk.pop();
+//                    stk.push(tmp / (negative * num));
+//                }
+//                //reset
+//                num = 0;
+//                negative = 1;
+//                sign = s[i];
+//            }
+//        }
+//        //sum up
+//        int res = 0;
+//        while (!stk.empty()) {
+//            res += stk.top();
+//            stk.pop();
+//        }
+//        return res;
+//    }
+//    
+//    //Case 4 +，-， *， /， (, ) Case
+//    int Calculate5(string s) {
+//        if (s.size() <= 0) {
+//            return 0;
+//        }
+//        stack<int> stk;
+//        int num = 0;
+//        char sign = '+';
+//        int negative = 1;
+//        for (int i = 0; i < s.size(); ++i) {
+//            if (isdigit(s[i])) {
+//                num = num * 10 + s[i] - '0';
+//                if (num > INT_MAX) {
+//                    num = INT_MAX;
+//                }
+//            }
+//            if (s[i] != ' ' && (i == s.size() - 1 || !isdigit(s[i]))) {
+//                //Handle 3+-10 => 3+(-10) case
+//                if (s[i] == '-' && (i == 0 || !isdigit(s[i-1]))) {
+//                    negative = -1;
+//                    continue;
+//                }
+//                if (s[i] == '(') {
+//                    int count = 1;
+//                    int start = i;
+//                    int leng = 0;
+//                    i++;
+//                    while (i < s.size() && count > 0) {
+//                        if (s[i] == '(') {
+//                            count++;
+//                        }
+//                        else if (s[i] == ')') {
+//                            count--;
+//                        }
+//                        i++;
+//                        leng++;
+//                    }
+//                    //excute last ')'
+//                    i = i - 1;
+//                    leng--;
+//                    string curr= s.substr(start+1, leng);
+//                    num = Calculate5(curr);
+//                    if (i == s.size() - 1) {
+//                        i = i - 1;
+//                    }
+//                    continue;
+//                }
+//                if (sign == '+') {
+//                    stk.push(negative * num);
+//                }
+//                else if (sign == '-') {
+//                    stk.push(negative * -1 * num);
+//                }
+//                else if (sign == '*') {
+//                    int tmp = stk.top();
+//                    stk.pop();
+//                    stk.push(tmp * negative * num);
+//                }
+//                else if (sign == '/') {
+//                    int tmp = stk.top();
+//                    stk.pop();
+//                    stk.push(tmp / (negative * num));
+//                }
+//                
+//                //reset
+//                num = 0;
+//                negative = 1;
+//                sign = s[i];
+//            }
+//        }
+//        int res = 0;
+//        while (!stk.empty()) {
+//            res += stk.top();
+//            stk.pop();
+//        }
+//        return res;
+//    }
+//    
+//    void helper(stack<int>& nums, stack<char>& oprs) {
+//        int a = nums.top(); nums.pop();
+//        int b = nums.top(); nums.pop();
+//        char p = oprs.top(); oprs.pop();
+//        if (p == '+') {
+//            nums.push(b + a);
+//        }
+//        else if (p == '-') {
+//            nums.push(b - a);
+//        }
+//        else if (p == '*') {
+//            nums.push(b * a);
+//        }
+//        else if (p == '/') {
+//            nums.push(b / a);
+//        }
+//        else if (p == '^') {
+//            nums.push(pow(b, a));
+//        }
+//        return;
+//    }
+//    
+//    //Case 5  Only +, -, *, / and ^
+//    int Calculate6(string s) {
+//        if (s.size()<=0) {
+//            return 0;
+//        }
+//        int num = 0;
+//        stack<int> nums;
+//        stack<char> oprs;
+//        unordered_map<char, int> dict;
+//        dict['+']=1;
+//        dict['-']=1;
+//        dict['*']=2;
+//        dict['/']=2;
+//        dict['^']=3;
+//        for (int i = 0; i < s.size(); ++i) {
+//            if (isdigit(s[i])) {
+//                num = num * 10 + s[i] - '0';
+//            }
+//            else if(s[i] != ' ') {
+//                nums.push(num);
+//                num = 0;
+//                //Empty case or Curr operator's level > top of opStack
+//                if (oprs.size() == 0 || dict[s[i]] > dict[oprs.top()]) {
+//                    oprs.push(s[i]);
+//                }
+//                else {
+//                    while (!oprs.empty() && dict[s[i]] <= dict[oprs.top()]) {
+//                        helper(nums, oprs);
+//                    }
+//                    oprs.push(s[i]);
+//                }
+//            }
+//        }
+//        nums.push(num);
+//        while (!oprs.empty()) {
+//            helper(nums, oprs);
+//        }
+//        return nums.top();
+//    }
+//    //Medean of 2 sorted array
+//    double findMedian(vector<int>& a, vector<int>& b) {
+//        int m = a.size(), n = b.size();
+//        int total = m + n;
+//        if (total % 2 != 0) {
+//            return findKth(a, 0, b, 0, total/2 + 1);
+//        }
+//        else {
+//            return (findKth(a, 0, b, 0, total/2) +
+//                    findKth(a, 0, b, 0, total/2 + 1)) / 2.0;
+//        }
+//    }
+//    
+//    double findKth(vector<int>& a, int m, vector<int>& b, int n, int k) {
+//        if (m >= a.size()) {
+//            return b[n+k-1];
+//        }
+//        if (n >= b.size()) {
+//            return a[m+k-1];
+//        }
+//        if (k == 1) {
+//            return min(a[m], b[n]);
+//        }
+//        int ap=m + k/2 - 1 >= a.size() ? INT_MAX : a[m+k/2-1];
+//        int bp=n + k/2 - 1 >= b.size() ? INT_MAX : b[n+k/2-1];
+//        if (ap<bp) {
+//            return findKth(a, m+k/2, b, n, k-k/2);
+//        }
+//        else {
+//            return findKth(a, m, b, n+k/2, k-k/2);
+//        }
+//    }
+//    //second largest in BST
+//    void inOrder(struct TreeNode* root, int& pre, int& prepre) {
+//        if (root == NULL) {
+//            return;
+//        }
+//        else {
+//            inOrder(root->left, pre, prepre);
+//            prepre = pre;
+//            cout<<root->val<<" ";
+//            pre = root->val;
+//            inOrder(root->right, pre, prepre);
+//        }
+//    }
+//    
+//    //Kth largest in BST with space
+//    void inOrder(struct TreeNode* root, vector<int>& pres, int& i) {
+//        if (root == NULL) {
+//            return;
+//        }
+//        else {
+//            inOrder(root->left, pres, i);
+//            cout<<root->val<<" ";
+//            pres[(i++)%3]=root->val;
+//            inOrder(root->right, pres, i);
+//        }
+//    }
+//    
+//    void secondLargestHelper(struct TreeNode* root, int& c) {
+//        if (root == NULL || c >= 2) {
+//            return;
+//        }
+//        secondLargestHelper(root->right, c);
+//        c++;
+//        if (c == 2) {
+//            cout<<"2nd largest element is "<<root->val<<endl;
+//            return;
+//        }
+//        secondLargestHelper(root->left, c);
+//    }
+//    
+//    void secondLargest(struct TreeNode* root) {
+//        int c = 0;
+//        secondLargestHelper(root, c);
+//    }
+//    
+//    //Say the node for whose inorder suc­ces­sor needs to be find is p.
+//    
+//    //Case 1 : If the p has a right child then its inorder suc­ces­sor will the left most ele­ment in the right sub tree of p.
+//    
+//    //Case 2: If the p doesnt have a right child then its inorder suc­ces­sor will the one of its ances­tors, using par­ent link keep trav­el­ing up till you get the node which is the left child of its par­ent. Then this par­ent node will be the inorder successor.
+//    
+//    //Case 3: if p is the right most node in the tree then its inorder suc­ces­sor will be NULL.
+//    
+//    TreeNode* leftMost(TreeNode* p) {
+//        while (p->left) {
+//            p = p->left;
+//        }
+//        return p;
+//    }
+//    
+//    TreeNode* inOrderSuccessor(TreeNode* p) {
+//        if (p->right) {
+//            return leftMost(p->right);
+//        }
+//        TreeNode* parent = p->parent;
+//        while (parent && p == parent->right) {
+//            p = parent;
+//            parent = parent->parent;
+//        }
+//        
+//        return parent;
+//    }
+//    
+//    //Find Successor, no parent point, no value to compare, but give the root of tree
+//    void inOrderTraverse(TreeNode* root, vector<TreeNode*>& inorders) {
+//        if (root == NULL) {
+//            return;
+//        }
+//        inOrderTraverse(root->left, inorders);
+//        inorders.push_back(root);
+//        inOrderTraverse(root->right, inorders);
+//    }
+//    
+//    TreeNode* inOrderSuccessor(TreeNode* root, TreeNode* p) {
+//        if (p->right) {
+//            return leftMost(p);
+//        }
+//        vector<TreeNode*> inorders;
+//        inOrderTraverse(root, inorders);
+//        for (int i = 0; i < inorders.size(); ++i) {
+//            if (inorders[i] == p && i+1 < inorders.size()) {
+//                return inorders[i+1];
+//            }
+//        }
+//        return NULL;
+//    }
+//    
+//    void dfs(TreeNode* root, TreeNode* p, vector<TreeNode*>& array, vector<TreeNode*>& res) {
+//        if (root == NULL) {
+//            return;
+//        }
+//        array.push_back(root);
+//        if (root == p) {
+//            res.insert(res.end(), array.begin(), array.end());
+//            return;
+//        }
+//        dfs(root->left, p, array, res);
+//        dfs(root->right, p, array, res);
+//        array.pop_back();
+//    }
+//    
+//    vector<TreeNode*> getAncestors(TreeNode* root, TreeNode* p) {
+//        vector<TreeNode*> res;
+//        vector<TreeNode*> array;
+//        dfs(root, p, array, res);
+//        return res;
+//    }
+//    
+//    //第二个使用了DFS Backtracking, 来寻找p到root的路径， 而且修改了找不到返回本身，
+//    //如果需要返回Null的话， 删掉temp,。总体来说跟前面差不多，少许少了些无用功
+//    TreeNode* inOrderSuccessorWithRoot(TreeNode* root, TreeNode* p) {
+//        TreeNode* temp = p;
+//        if (p != NULL && p->right != NULL) {
+//            return leftMost(p->right);
+//        }
+//        vector<TreeNode*> ancestors = getAncestors(root, p);
+//        int i = 1;
+//        while (ancestors.size() - i > 0) {
+//            TreeNode* parent = ancestors[ancestors.size()-1-i];
+//            if (parent->left == p) {
+//                return parent;
+//            }
+//            p = parent;
+//            i++;
+//        }
+//        return temp;
+//    }
+//    
+//    TreeNode* rightMost(TreeNode* root) {
+//        if (root == NULL) {
+//            return NULL;
+//        }
+//        while (root->right != NULL) {
+//            root = root->right;
+//        }
+//        return root;
+//    }
+//    //Find predecessor with parent, no root
+//    TreeNode* inOrderPredecessor(TreeNode* p) {
+//        if (p==NULL) {
+//            return NULL;
+//        }
+//        if (p->left!=NULL) {
+//            return rightMost(p->left);
+//        }
+//        TreeNode* parent = p->parent;
+//        TreeNode* curr = p;
+//        while (parent != NULL && curr == parent->left) {
+//            curr = parent;
+//            parent = parent->parent;
+//        }
+//        return parent;
+//    }
+//    
+//    //Inorder Successor(Predecessor) in BST
+//    //With Value and Root
+//    TreeNode* inOrderSuccessorWithRootAndValue(TreeNode* root, TreeNode* p) {
+//        TreeNode* successor = NULL;
+//        while (root!=NULL) {
+//            if (p->val < root->val) {
+//                successor = root;
+//                root = root->left;
+//            }
+//            else {
+//                root = root->right;
+//            }
+//        }
+//        return successor;
+//    }
+//    
+//    TreeNode* predeccessor(TreeNode* root, TreeNode* p) {
+//        if (root == NULL) {
+//            return NULL;
+//        }
+//        if (root->val >= p->val) {
+//            return predeccessor(root->left, p);
+//        }
+//        else {
+//            TreeNode* right = predeccessor(root->right, p);
+//            return right == NULL ? root : right;
+//        }
+//    }
+//    //Array Update and Query
+//    
+//    //Naive
+//    class numArrayNaive {
+//    private:
+//        vector<int> nums;
+//    public:
+//        numArrayNaive(vector<int>& nums) {
+//            this->nums = nums;
+//        }
+//        void update(int i, int val) {
+//            this->nums[i] = val;
+//        }
+//        int sumRange(int i, int j) {
+//            int sum = 0;
+//            for (int low = i; low <= j; ++low) {
+//                sum += nums[low];
+//            }
+//            return sum;
+//        }
+//    };
+//    
+//    
+//    void testNaive(int i) {
+//        vector<int> array;
+//        for (int j=0; j<i; ++j) {
+//            array.push_back(j);
+//        }
+//        numArrayNaive* nan = new numArrayNaive(array);
+//        cout<<nan->sumRange(3, 7);
+//    }
+//    
+//    //Naive with Buffer
+//    class numArrayBuffer {
+//    private:
+//        vector<int> nums;
+//        vector<long> sums;
+//        vector<pair<int, int>> buffer;
+//    public:
+//        numArrayBuffer(vector<int>& nums) {
+//            this->nums = nums;
+//            this->sums = vector<long>(nums.size() + 1);
+//            for (int i=0; i<nums.size()-1; ++i) {
+//                sums[i+1]=nums[i]+sums[i];
+//            }
+//        }
+//        
+//        void update(int i, int val) {
+//            buffer.push_back(make_pair(i, val-nums[i]));
+//            nums[i] = val;
+//            if (buffer.size() > 300) {
+//                for (int j = 0; j<nums.size()-1; ++j) {
+//                    sums[j+1] = nums[j] + sums[j];
+//                }
+//            }
+//        }
+//        
+//        int sumRange(int i, int j) {
+//            long res = sums[j+1] - sums[i];
+//            for (int m = 0; m < buffer.size(); ++m) {
+//                if (buffer[m].first <= j && buffer[m].first >= i) {
+//                    res += buffer[m].second;
+//                }
+//            }
+//            if (res >= INT_MAX || res <= INT_MIN) {
+//                throw out_of_range("error");
+//            }
+//            else {
+//                return (int)res;
+//            }
+//        }
+//    };
+//    
+//    void testBuffer(int n) {
+//        vector<int> array;
+//        for (int j=0; j<n; ++j) {
+//            array.push_back(j);
+//        }
+//        numArrayBuffer* nan = new numArrayBuffer(array);
+//        cout<<nan->sumRange(3, 7);
+//    }
+//    
+//    
+//    //Segment Tree
+//    struct segmentTree {
+//        int start, end;
+//        segmentTree *left, *right;
+//        int sum;
+//        segmentTree(int s, int e): start(s), end(e) {
+//            left=NULL;
+//            right=NULL;
+//            sum=0;
+//        }
+//    };
+//    
+//    
+//    class numArrayTree {
+//    private:
+//        segmentTree* root;
+//        
+//        int sumRange(segmentTree* root, int i, int j) {
+//            if(root==NULL) {
+//                return 0;
+//            }
+//            if (root->start == i && root->end == j) {
+//                return root->sum;
+//            }
+//            else {
+//                int mid = root->start + (root->end-root->start)/2;
+//                if (j <= mid) {
+//                    return sumRange(root->left, i, j);
+//                }
+//                else if (i >= mid + 1) {
+//                    return sumRange(root->right, i, j);
+//                }
+//                else {
+//                    return sumRange(root->right, mid+1, j) +
+//                    sumRange(root->left, i, mid);
+//                }
+//            }
+//        }
+//        void updateTree(segmentTree* root, int i, int val) {
+//            if (root->start == root->end) {
+//                root->sum = val;
+//            }
+//            else {
+//                int mid = root->start + (root->end - root->start)/2;
+//                if (i <= mid) {
+//                    updateTree(root->left, i, val);
+//                }
+//                else {
+//                    updateTree(root->right, i, val);
+//                }
+//                root->sum = root->left->sum + root->right->sum;
+//            }
+//        }
+//        
+//        segmentTree* buildTree(vector<int>& nums, int start, int end) {
+//            if (start>end) {
+//                return NULL;
+//            }
+//            else {
+//                segmentTree* p = new segmentTree(start, end);
+//                if (start == end) {
+//                    p->sum = nums[start];
+//                }
+//                else {
+//                    int mid = start + (end - start)/2;
+//                    p->left = buildTree(nums, start, mid);
+//                    p->right = buildTree(nums, mid+1, end);
+//                    if (p->left!=NULL && p->right!=NULL) {
+//                        p->sum = p->left->sum + p->right->sum;
+//                    }
+//                    else if (p->left!=NULL) {
+//                        p->sum = p->left->sum;
+//                    }
+//                    else if (p->right!=NULL) {
+//                        p->sum = p->right->sum;
+//                    }
+//                    else {
+//                        p->sum = 0;
+//                    }
+//                }
+//                return p;
+//            }
+//        }
+//    public:
+//        numArrayTree(vector<int>& array) {
+//            this->root = buildTree(array, 0, array.size()-1);
+//        }
+//        int sumRange(int start, int end) {
+//            return sumRange(root, start, end);
+//        }
+//        
+//        void updateTree(int i, int val) {
+//            updateTree(root, i, val);
+//        }
+//    };
+//    
+//    void testSegmentTree(int i) {
+//        vector<int> array;
+//        for (int j=0; j<i; ++j) {
+//            array.push_back(j);
+//        }
+//        numArrayTree* nat = new numArrayTree(array);
+//        nat->updateTree(3, 10);
+//        cout<<nat->sumRange(3, 7)<<endl;
+//    }
+//    
+//    class numArrayBIT {
+//    private:
+//        vector<int> nums;
+//        vector<int> bits;
+//        int n;
+//        
+//        void init(int i, int val) {
+//            i++;
+//            while (i<=n)  {
+//                bits[i] += val;
+//                i += (i & -i);
+//            }
+//        }
+//        
+//        int getSum(int i) {
+//            int sum=0;
+//            i++;
+//            while (i>0) {
+//                sum += bits[i];
+//                i = i - (i&-i);
+//            }
+//            return sum;
+//        }
+//    public:
+//        numArrayBIT(vector<int> nums) {
+//            this->nums = nums;
+//            n = nums.size();
+//            bits = vector<int>(n+1, 0);
+//            for (int i=0; i<n; ++i) {
+//                init(i, nums[i]);
+//            }
+//        }
+//        
+//        void update(int i, int val) {
+//            int diff = val - nums[i];
+//            nums[i] = val;
+//            init(i, diff);
+//        }
+//        
+//        int sumRange(int i, int j) {
+//            return getSum(j) - getSum(i-1);
+//        }
+//    };
+//    
+//    void testBits(int i) {
+//        vector<int> array;
+//        for (int j=0; j<i; ++j) {
+//            array.push_back(j);
+//        }
+//        numArrayBIT* nab = new numArrayBIT(array);
+//        nab->update(3, 10);
+//        cout<<nab->sumRange(3, 7)<<endl;;
+//    }
+    //Calculator series II
+    //Most General Case: Can handle +, -, *, /, ^, (, ) and Negative sign
+    int Calculate(string s) {
+        if (s.size()<=0) {
+            return 0;
+        }
+        int num = 0;
+        int negative = 1;
+        stack<int> nums;
+        stack<char> oprs;
+        unordered_map<char, int> dict;
+        dict['+'] = 1; dict['-'] = 1;
+        dict['*'] = 2; dict['/'] = 2;
+        dict['^'] = 3;
+        
+        for (int i=0; i<s.size(); ++i) {
+            char cur = s[i];
+            if (isdigit(cur)) {
+                num = num * 10 + cur - '0';
+            }
+            else if (cur != ' ') {
+                if (cur == '(') {
+                    int count = 1;
+                    int j = i + 1;
+                    int leng = 0;
+                    while (j<s.size()) {
+                        char now = s[j];
+                        if (now == '(') {
+                            count++;
+                        }
+                        else if (now == ')') {
+                            count--;
+                        }
+                        if (count==0) {
+                            break;
+                        }
+                        j++;
+                        leng++;
+                    }
+                    int temp = Calculate(s.substr(i+1, leng)); //recursive process
+                    num = temp;
+                    i = j;
+                    continue;
+                }
+                
+                if (cur == '-') {
+                    if (i == 0 || !isdigit(s[i-1]) && s[i-1] != ')') {
+                        negative = -1;
+                        continue;
+                    }
+                }
+                nums.push(negative*num);
+                num = 0;
+                negative = 1;
+                
+                if (oprs.size() == 0 || dict[cur] > dict[oprs.top()]) {
+                    oprs.push(cur);
+                }
+                else {
+                    while (!oprs.empty() && dict[cur] <= dict[oprs.top()]) {
+                        helper(nums, oprs);
+                    }
+                    oprs.push(cur);
+                }
+            }
+        }
+        nums.push(num);
+        while (!oprs.empty()) {
+            helper(nums, oprs);
+        }
+        cout<<nums.top()<<endl;
+        return nums.top();
+    }
+    
+    void helper(stack<int>& nums, stack<char>& oprs) {
+        int b = nums.top(); nums.pop();
+        int a = nums.top(); nums.pop();
+        char p = oprs.top(); oprs.pop();
+        
+        if (p == '+') {
+            nums.push(a+b);
+        }
+        else if (p == '-') {
+            nums.push(a-b);
+        }
+        else if (p == '*') {
+            nums.push(a*b);
+        }
+        else if (p == '/') {
+            nums.push(a/b);
+        }
+        else if (p == '^') {
+            nums.push(pow(a, b));
+        }
+        return;
+    }
+
+//    GraphNode* dfsClone(GraphNode* node) {
+//        if (node == NULL) {
+//            return NULL;
+//        }
+//        GraphNode* root = new GraphNode(node->val);
+//        unordered_map<GraphNode*, GraphNode*> dict;
+//        dict[node] = root;
+//        dfsHelper(node, root, dict);
+//        return root;
+//    }
+//    
+//    GraphNode* bfsClone(GraphNode* node) {
+//        if (node == NULL) {
+//            return NULL;
+//        }
+//        GraphNode* root = new GraphNode(node->val);
+//        unordered_map<GraphNode*, GraphNode*> dict;
+//        dict[node] = root;
+//        deque<GraphNode*> dq;
+//        dq.push_back(node);
+//        while (!dq.empty()) {
+//            GraphNode* curr = dq.front();
+//            dq.pop_front();
+//            for (int i=0; i<curr->neighbors.size(); ++i) {
+//                if (dict.count(curr->neighbors[i])==0) {
+//                    GraphNode* now = new GraphNode(curr->neighbors[i]->val);
+//                    dict[curr->neighbors[i]]=now;
+//                    dq.push_back(curr->neighbors[i]);
+//                }
+//                else {
+//                    dict[curr]->neighbors.push_back(dict[curr->neighbors[i]]);
+//                }
+//            }
+//        }
+//        return root;
+//    }
+//    void dfsHelper(GraphNode* node, GraphNode* root, unordered_map<GraphNode*, GraphNode*>& dict) {
+//        for (int i=0; i<(node->neighbors).size(); ++i) {
+//            if (dict[node->neighbors[i]]==NULL) {
+//                GraphNode* child = new GraphNode((node->neighbors)[i]->val);
+//                (root->neighbors).push_back(child);
+//                dict[node->neighbors[i]]=child;
+//                dfsHelper(node->neighbors[i], child, dict);
+//            }
+//            else {
+//                root->neighbors.push_back(dict[node->neighbors[i]]);
+//            }
+//        }
+//    }
+
+//    //Dijkstra: Shortest path from a source
+//    //If Given is a distance, source and total vertices's
+//    //First Missing Positive
+//    void dijkstra(vector<vector<int>>& graph, int source, int vertices) {
+//        vector<int> distance(vertices, INT_MAX);
+//        vector<bool> shortpath(vertices, false);
+//        distance[source] = 0;
+//        //Find shortest path for all vertices
+//        for (int count=0; count<vertices-1; ++count) {
+//            int u = minDistance(distance, shortpath, vertices);
+//            shortpath[u] = true;
+//            for (int v=0; v<vertices; ++v) {
+//                if (!shortpath[v] && graph[u][v]>0 && \
+//                    distance[u] != INT_MAX && distance[u]+graph[u][v] < distance[v]) {
+//                    distance[v] = distance[u] + graph[u][v];
+//                }
+//            }
+//        }
+//        output(distance, vertices);
+//    }
+//    
+//    int minDistance(vector<int>& distance, vector<bool>& shortpath, int vertices) {
+//        int min = INT_MAX;
+//        int idx= 0;
+//        for (int v=0; v<vertices; ++v) {
+//            if (shortpath[v] == false && distance[v]<=min) {
+//                min = distance[v];
+//                idx = v;
+//            }
+//        }
+//        return idx;
+//    }
+//    
+//    void output(vector<int>& distance, int vertices) {
+//        cout<<"Vertex        Distance from source"<<endl;
+//        for (int i=0; i<vertices; ++i) {
+//            cout<<i<<"\t   "<<distance[i]<<endl;
+//        }
+//    }
+//
+//    int firstMissingPositive(vector<int>& nums) {
+//        for (int i=0; i<nums.size();) {
+//            //1. nums[i] = i + 1 Normal case
+//            //2. nums[i] < 1; Negative number
+//            //3. nums[i] > nums.size()  Greatest value
+//            //4. nums[i == nums[nums[i] - 1] => n = nums[n+1]
+//            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=nums.size() && nums[i] != nums[nums[i]-1]) {
+//                swap(nums[nums[i]-1], nums[i]);
+//            }
+//            i++;
+//            
+//        }
+//        for (int i=0; i<nums.size(); ++i) {
+//            if (nums[i]!=i+1) {
+//                return i+1;
+//            }
+//        }
+//        return nums.size()+1;
+//    }
+//    
+//    
+//    int firstMissingPositive(vector<int>& nums, int n) {
+//        int result=n;
+//        for (int i=n-1; i>=0; --i) {
+//            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=n && nums[i] != nums[nums[i]-1]) {
+//                swap(nums[nums[i]-1], nums[i]);
+//            }
+//            if (nums[i]!=i+1) {
+//                result=i;
+//            }
+//        }
+//        return result+1;
+//    }
+
+//    void heapify(vector<int>& array, int n, int i) {
+//        int max=i;
+//        int left=2*i+1;
+//        int right=2*i+2;
+//        if (left<n && array[left]>array[max]) {
+//            max=left;
+//        }
+//        if (right<n && array[right]>array[max]) {
+//            max=right;
+//        }
+//        if (max!=i) {
+//            swap(array[max], array[i]);
+//            heapify(array, n, max);
+//        }
+//    }
+//    
+//    void heapsort(vector<int>& array, int n) {
+//        for (int i=n/2-1; i>=0; i--) {
+//            heapify(array, n, i);
+//        }
+//        for (int i=n-1; i>=0; i--) {
+//            swap(array[i], array[0]);
+//            heapify(array, n, 0);
+//        }
+//    }
+//    //Kth Largest Element
+//    //naive
+//    int findKthLargest(vector<int>& nums, int k) {
+//        int leng = nums.size();
+//        sort(nums.begin(), nums.end());
+//        return nums[leng-k];
+//    }
+//    
+//    //use maxHeap
+//    int findKthLargestInHeap(vector<int>& nums, int k) {
+//        priority_queue<int, vector<int>, greater<int>> min_heap;
+//        for (int i=0; i<nums.size(); ++i) {
+//            if (min_heap.size()<k) {
+//                min_heap.push(nums[i]);
+//            }
+//            else {
+//                if (nums[i]>=min_heap.top()) {
+//                    min_heap.pop();
+//                    min_heap.push(nums[i]);
+//                }
+//            }
+//        }
+//        return min_heap.top();
+//    }
+//    //quick select
+//    int findKthLargestQuick(vector<int>& nums, int k) {
+//        if (nums.size()==1) {
+//            return nums[0];
+//        }
+//        int left=0, right=nums.size()-1;
+//        while (left<=right) {
+//            int mid = partition(nums, left, right);
+//            if (mid - left + 1 < k) {
+//                k = k - (mid - left +1);
+//                left = mid+1;
+//            }
+//            else if (mid - left + 1 > k) {
+//                right = mid - 1;
+//            }
+//            else {
+//                return nums[mid];
+//            }
+//        }
+//        return 0;
+//    }
+//    int partition(vector<int>& nums, int left, int right) {
+//        int mid = left + (right - left) / 2;
+//        int now = nums[mid];
+//        swap(nums[mid], nums[right]);
+//        int leftb = left;
+//        int rightb = right - 1;
+//        while (leftb <= rightb) {
+//            if (nums[leftb]>now) {
+//                leftb++;
+//            }
+//            else if (nums[rightb]<now) {
+//                rightb--;
+//            }
+//            else {
+//                swap(nums[leftb], nums[rightb]);
+//                leftb++;
+//                rightb--;
+//            }
+//        }
+//        swap(nums[leftb], nums[right]);
+//        return leftb;
+//    }
+    
+//    //Longest Increasing Subsequence
+//    int lengthOfLIS(vector<int>& nums) {
+//        return findLength(nums, INT_MIN, 0);
+//    }
+//    
+//    int dplengthOfLIS(vector<int>& nums) {
+//        int leng = nums.size();
+//        if (leng<=1) {
+//            return leng;
+//        }
+//        vector<int> dp(leng, 0);
+//        int curr=0;
+//        for (int i=0; i<leng; ++i) {
+//            dp[i]=1;
+//            for (int j=0; j<i; ++j) {
+//                if (nums[i]>nums[j]) {
+//                    dp[i]=dp[j]+1;
+//                }
+//            }
+//            curr=max(curr, dp[i]);
+//        }
+//        return curr;
+//    }
+//    
+//    int dplogLengthOfLIS(vector<int>& nums) {
+//        int leng = nums.size();
+//        if (leng<=0) {
+//            return 0;
+//        }
+//        vector<int> table(leng+1, 0);
+//        int result=1;
+//        for (int i=1; i<leng; ++i) {
+//            int index=findLargestSmaller(table, 1, result, nums[i]);
+//            if (index==result) {
+//                table[++result]=nums[i];
+//            }
+//            else {
+//                table[index+1]=nums[i];
+//            }
+//        }
+//        return result;
+//    }
+//    int findLength(vector<int>& nums, int prev, int curr) {
+//        if (curr == nums.size()) {
+//            return 0;
+//        }
+//        int taken=0;
+//        if (nums[curr] > prev) {
+//            taken = 1 + findLength(nums, nums[curr], curr+1);
+//        }
+//        int notTaken = findLength(nums, prev, curr+1);
+//        return max(taken, notTaken);
+//    }
+//    
+//    int findLargestSmaller(vector<int>& table, int left, int right, int target) {
+//        while (left<=right) {
+//            int mid=left+(right-left)/2;
+//            if (table[mid]>=target) {
+//                right=mid-1;
+//            }
+//            else {
+//                left=mid+1;
+//            }
+//        }
+//        return right;
+//    }
+//    struct Tuple {
+//    public:
+//        string name;
+//        int value;
+//        int maximum_stack_size;
+//        Tuple(string name, int value, int maximum_stack_size) {
+//            this->name = name;
+//            this->value = value;
+//            this->maximum_stack_size = maximum_stack_size;
+//        }
+//    };
+//    int maxValue(int n, vector<string>& stuff, vector<Tuple*>& items) {
+//        unordered_map<string, int> cnt_dict;
+//        for (auto s:stuff) {
+//            cnt_dict[s]++;
+//        }
+//        priority_queue<int, vector<int>, less<int>> max_heap;
+//        unordered_map<string, Tuple*> item_map;
+//        for (auto item:items) {
+//            item_map[item->name]=item;
+//        }
+//        for (auto it=cnt_dict.begin(); it!=cnt_dict.end(); ++it) {
+//            string key = it->first;
+//            int amt = it->second;
+//            int maxstack = item_map[key]->maximum_stack_size;
+//            int value = item_map[key]->value;
+//            if (amt>maxstack) {
+//                max_heap.push(value*maxstack);
+//                max_heap.push(value*(amt-maxstack));
+//            }
+//            else {
+//                max_heap.push(value*amt);
+//            }
+//        }
+//        int t=0, result=0;
+//        while (t<n) {
+//            result+=max_heap.top();
+//            max_heap.pop();
+//            t++;
+//        }
+//        return result;
+//    }
+//    int maxPathSum(TreeNode* root) {
+//        if (root==NULL) {
+//            return INT_MIN;
+//        }
+//        int maxsum=INT_MIN;
+//        helper(root, maxsum);
+//        return maxsum;
+//    }
+//    
+//    TreeNode* buildTree(string a) {
+//        if(a.size()==0) {
+//            return NULL;
+//        }
+//        int leng = a.size();
+//        stack<TreeNode*> stk;
+//        
+//        TreeNode* root=new TreeNode(a[0]);
+//        TreeNode* output=root;
+//        //   Ex 1: "a?b?c:d:e"
+//        //                |
+//        //   a
+//        // b   c
+//        bool flag=true;
+//        for(int i=1;i<leng;++i) {
+//            if(a[i]>='a' && a[i]<='z') {
+//                if(flag) {
+//                    stk.top()->left = new TreeNode(a[i]);
+//                    root=stk.top()->left;
+//                }
+//                else {
+//                    if(stk.empty()) {
+//                        stk.push(root);
+//                    }
+//                    stk.top()->right=new TreeNode(a[i]);
+//                    root=stk.top()->right;
+//                }
+//            }
+//            else if(a[i]=='?') {
+//                stk.push(root);
+//                flag=true;
+//            }
+//            else if(a[i]==':') {
+//                flag=false;
+//            }
+//        }
+//        return output;
+//    }
+//    int helper(TreeNode* root, int& maxsum) {
+//        if (root==NULL) {
+//            return 0;
+//        }
+//        int leftsum=0, rightsum=0;
+//        if (root->left!=NULL) {
+//            leftsum = helper(root->left, maxsum);
+//        }
+//        if (root->right!=NULL) {
+//            rightsum = helper(root->right, maxsum);
+//        }
+//        if (root->left && root->right) {
+//            maxsum = max(maxsum, root->val + leftsum + rightsum);
+//            return max(leftsum, rightsum) + root->val;
+//        }
+//        else if(root->left){
+//            return leftsum+root->val;
+//        }
+//        else {
+//            return rightsum+root->val;
+//        }
+//    }
+
 //    class Server {
 //    private:
 //        unordered_set<Client*> _clients;
@@ -15350,8 +17547,38 @@ int main() {
 //    s336->test();
 //    Solution335* s335 = new Solution335();
 //    s335->test();
-    Solution334* s334 = new Solution334();
-    s334->test();
+//    Solution334* s334 = new Solution334();
+//    s334->test();
+//    Solution333* s333 = new Solution333();
+//    s333->test();
+//    Solution332* s332 = new Solution332();
+//    s332->test();
+//    Solution328* s328 = new Solution328();
+//    s328->test();
+//    Solution325* s325 = new Solution325();
+//    s325->test();
+//    Solution324* s324 = new Solution324();
+//    s324->test();
+//    Solution323* s323 = new Solution323();
+//    s323->test();
+//    Solution322* s322 = new Solution322();
+//    s322->test();
+//    Solution320* s320 = new Solution320();
+//    s320->test();
+//    Solution318* s318 = new Solution318();
+//    s318->test();
+//    Solution316* s316 = new Solution316();
+//    s316->test();
+//    Solution314* s314 = new Solution314();
+//    s314->test();
+//    Solution313* s313 = new Solution313();
+//    s313->test();
+//    Solution312* s312 = new Solution312();
+//    s312->test();
+    Solution311* s311 = new Solution311();
+    s311->test();
+//    Solution319* s319 = new Solution319();
+//    s319->test();
 	//    Solution315* s315 = new Solution315();
 	//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
 	//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
