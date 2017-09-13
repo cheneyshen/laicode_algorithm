@@ -6550,7 +6550,7 @@ class Solution143 {
     //        “a | babbbab | bab | aba” is a palindrome partitioning of “ababbbabbababa”.
     //
     //        The minimum number of cuts needed is 3.
-public:
+private:
     int getMinHelper(string input) {
         int leng = (int)input.size();
         if (leng <= 1) {
@@ -6577,6 +6577,9 @@ public:
 public:
     int minCuts(string input) {
         return getMinHelper(input);
+    }
+    void test() {
+        cout<<minCuts("ababbbabbababa")<<endl;
     }
 };
 
@@ -6792,19 +6795,12 @@ private:
 class Solution148 {
     /*Decode Ways
      A message containing letters from A - Z is being encoded to numbers using the following ways :
-     
      ‘A’ = 1
-     
      ‘B’ = 2
-     
      …
-     
      ‘Z’ = 26
-     
      Given an encoded message containing digits, determine the total number of ways to decode it.
-     
      Input:    “212”
-     
      It can be either decoded as 2, 1, 2("BAB") or 2, 12("BL") or 21, 2("UB"), return 3.*/
 public:
     int numDecodeWay(string s) {
@@ -7141,7 +7137,7 @@ private:
             visited[row][col] = true;
             if (row+1<board.size() && board[row+1][col]==word[i+1] && visited[row+1][col]==false)
             {
-wordSearch(board, word, row + 1, col, i + 1, visited, result);
+                wordSearch(board, word, row + 1, col, i + 1, visited, result);
 			}
 			if (result == false && col + 1 < board[0].size() && board[row][col + 1] == word[i + 1] && visited[row][col + 1] == false) {
 				wordSearch(board, word, row, col + 1, i + 1, visited, result);
@@ -7506,7 +7502,6 @@ public:
         return result;
     }
 private:
-    
 };
 
 class Solution164 {
@@ -10878,23 +10873,68 @@ private:
 };
 
 class Solution249 {
-//    Regular Expression Matching
+//  Regular Expression Matching
 //    Implement regular expression matching with support for '.' and '*'. '.' Matches any single character. '*' Matches zero or more of the preceding element. The matching should cover the entire input string (not partial).
-//        
-//        Example
-//        isMatch("aa","a") → false
-//        isMatch("aa","aa") → true
-//        isMatch("aaa","aa") → false
-//        isMatch("aa", "a*") → true
-//        isMatch("aa", ".*") → true
-//        isMatch("ab", ".*") → true
-//        isMatch("aab", "c*a*b") → true
+//
+//  Example
+//  isMatch("aa","a") → false
+//  isMatch("aa","aa") → true
+//  isMatch("aaa","aa") → false
+//  isMatch("aa", "a*") → true
+//  isMatch("aa", ".*") → true
+//  isMatch("ab", ".*") → true
+//  isMatch("aab", "c*a*b") → true
 public:
     bool isMatch(string input, string pattern) {
-        return false;
+        if (input.empty() && pattern.empty()) {
+            return true;
+        }
+        if (input.empty() || pattern.empty()) {
+            return false;
+        }
+        int sleng=input.size(), pleng=pattern.size();
+        vector<vector<bool>> dp(sleng+1, vector<bool>(pleng+1, false));
+        for (int i=0; i<=sleng; i++) {
+            for (int j=0; j<=pleng; j++) {
+                if (i==0 && j==0) {
+                    dp[i][j]=true;
+                }
+                else if (j==0) {
+                    dp[i][j]=false;
+                }
+                else if (i==0) {
+                    if (j>1 && pattern[j-1]=='*' && dp[0][j-2]) {
+                        dp[i][j]=true;
+                    }
+                    else {
+                        dp[i][j]=false;
+                    }
+                }
+                else if (pattern[j-1]==input[i-1] || pattern[j-1]=='.') {
+                    dp[i][j]=dp[i-1][j-1];
+                }
+                else if (pattern[j-1]=='*') {
+                    dp[i][j]=dp[i][j-2];
+                    if (pattern[j-2]==input[i-1] || pattern[j-2]=='.') {
+                        dp[i][j]=true;
+                    }
+                    dp[i][j]=dp[i][j]&&dp[i-1][j];
+                }
+            }
+        }
+        return dp[sleng][pleng];
+    }
+    
+    void test() {
+        cout<<isMatch("aa","a")<<endl;
+        cout<<isMatch("aa","aa")<<endl;
+        cout<<isMatch("aaa","aa")<<endl;
+        cout<<isMatch("aa", "a*")<<endl;
+        cout<<isMatch("aa", ".*")<<endl;
+        cout<<isMatch("ab", ".*")<<endl;
+        cout<<isMatch("aab", "c*a*b")<<endl;
     }
 private:
-    
 };
 
 class Solution250 {
@@ -11653,22 +11693,84 @@ private:
 class Solution272 {
 //    Combinations For Telephone Pad I
 //    Given a telephone keypad, and an int number, print all words which are possible by pressing these numbers, the output strings should be sorted.
-//    
 //    {0 : "", 1 : "", 2 : "abc", 3 : "def", 4 : "ghi", 5 : "jkl", 6 : "mno", 7 : "pqrs", 8 : "tuv", 9 : "wxyz"}
-//    
 //Assumptions:
-//    
 //    The given number >= 0
 //Examples:
-//    
 //    if input number is 231, possible words which can be formed are:
-//        [ad, ae, af, bd, be, bf, cd, de, df]
+//        [ad, ae, af, bd, be, bf, cd, ce, cf]
 public:
     vector<string> combinations(int number) {
-        return vector<string>();
+        if (number<=0) {
+            return vector<string>();
+        }
+        string digits=to_string(number);
+        vector<string> dict={"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        vector<string> result;
+        queue<string> que;
+        que.push("");
+        for (int i=0; i<digits.size(); i++) {
+            int x=digits[i]-'0';
+            int leng=que.size();
+            while (!que.empty() && leng>0 && que.front().size()==i ) {
+                string t=que.front(); que.pop();
+                if (dict[x].size()==0) {
+                    que.push(t);
+                }
+                else {
+                    for (char s:dict[x]) {
+                        que.push(t+s);
+                    }
+                }
+                leng--;
+            }
+        }
+        while (!que.empty()) {
+            result.push_back(que.front());
+            que.pop();
+        }
+        return result;
+    }
+    
+    vector<string> combinations1(int number) {
+        if (number<=0) {
+            return vector<string>();
+        }
+        string digits=to_string(number);
+        vector<string> dict={"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        vector<string> result;
+        dfsHelper("", digits, 0, dict, result);
+        return result;
+    }
+    
+    void dfsHelper(string prefix, string digits, int start, vector<string>& dict, vector<string>& result) {
+        if (start>=digits.size()) {
+            result.push_back(prefix);
+            return;
+        }
+        int curr=digits[start]-'0';
+        if (dict[curr].size()==0) {
+            dfsHelper(prefix+"", digits, start+1, dict, result);
+        }
+        else {
+            for (int i=0; i<dict[curr].size(); i++) {
+                dfsHelper(prefix+dict[curr][i], digits, start+1, dict, result);
+            }
+        }
+    }
+    
+    void test() {
+        vector<string> result;
+        result=combinations(231);
+        for (auto i : result) {
+            cout<<i<<" ";
+        }
+        result=combinations1(231);
+        for (auto i : result) {
+            cout<<i<<" ";
+        }
     }
 private:
-    
 };
 
 class Solution273 {
@@ -12386,9 +12488,7 @@ class Solution307 {
 //    Given a list of intervals, each interval has (start, end, weight). find a subset of the intervals, such that there is no overlap, and the sum of weight is maximized.
 //    
 //    Return the max weights sum.
-//    
 //Assumptions:
-//    
 //    The given array of intervals is not null and has length of > 0
 public:
     struct IntervalW {
@@ -12411,16 +12511,77 @@ private:
 class Solution308 {
 //    Least Insertions To Form A Palindrome
 //    Insert the least number of characters to a string in order to make the new string a palindrome. Return the least number of characters should be inserted.
-//    
 //Assumptions:
-//    
 //    The given string is not null.
 public:
     int leastInsertion(string input) {
-        // Write your solution here.
-        return 0;
+        if (input.empty() || input.size()==0) {
+            return 0;
+        }
+        int leng=input.size();
+        if (leng==1) {
+            return 0;
+        }
+        else if (leng==2) {
+            if (input[0]!=input[1]) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        }
+        else {
+            if (input[0]==input[leng-1]) {
+                return leastInsertion(input.substr(1, leng-2));
+            }
+            int result=INT_MAX;
+            string aa=input.substr(0, leng-1);
+            string bb=input.substr(1);
+            result = min(leastInsertion(aa), result);
+            result = min(leastInsertion(bb), result);
+            return result+1;
+        }
+    }
+    int leastInsertion1(string input, int leng) {
+        vector<vector<int>> table(leng, vector<int>(leng, 0));
+        int l, h, gap;
+        for (gap=1; gap<leng; gap++) {
+            for (l=0, h=gap+l; h<leng; l++, h++) {
+                table[l][h]=(input[l]==input[h]) ? table[l+1][h-1] : \
+                min(table[l][h-1]+1, table[l+1][h]+1);
+            }
+        }
+        return table[0][leng-1];
+    }
+    
+    void test() {
+        cout<<leastInsertion("ab")<<endl;
+        cout<<leastInsertion("aa")<<endl;
+        cout<<leastInsertion("abcd")<<endl;
+        cout<<leastInsertion("abcda")<<endl;
+        cout<<leastInsertion("abcde")<<endl;
+        cout<<leastInsertion1("abcde", 5)<<endl;
+        cout<<leastInsertion("a")<<endl;
     }
 private:
+    int findMinInsertions(string& input, int left, int right) {
+        if (left>right) {
+            return INT_MAX;
+        }
+        if (left==right) {
+            return 0;
+        }
+        if (left==right-1) {
+            return input[left]==input[right]?0:1;
+        }
+        if (input[left]==input[right]) {
+            return findMinInsertions(input, left+1, right-1);
+        }
+        else {
+            return min(findMinInsertions(input, left, right-1),
+                       findMinInsertions(input, left+1, right))+1;
+        }
+    }
 };
 
 class Solution309 {
@@ -12428,18 +12589,141 @@ class Solution309 {
 //    Given an array with all integers,  a sub-sequence of it is called Bitonic if it is first sorted in an ascending order, then sorted in a descending order. How can you find the length of the longest bitonic subsequence.
 //        
 //        Assumptions:
-//        
 //        The given array is not null.
 //        Corner Cases:
-//        
 //        A subsequence, sorted in increasing order is considered Bitonic with the decreasing part as empty. Similarly, decreasing order sequence is considered Bitonic with the increasing part as empty.
 //        Examples:
-//        
 //    {1, 3, 2, 1, 4, 6, 1}, the longest bitonic sub sequence is {1, 3, 4, 6, 1}, length is 5.
 public:
+    int longestBitonic1(vector<int> array) {
+        int result=0;
+        vector<int> aa=longestAs(array);
+        vector<int> bb=longestDs(array);
+        for (int i=0; i<array.size(); i++) {
+            result=max(result, aa[i]+bb[i]-1);
+        }
+        return result;
+    }
+    
     int longestBitonic(vector<int> array) {
-        // Write your solution here.
-        return 0;
+        if (array.empty() || array.size()==0) {
+            return 0;
+        }
+        int n=array.size();
+        int i, j;
+        
+        /* Allocate memory for LIS[] and initialize LIS values as 1 for
+         all indexes */
+        vector<int> lis(n, 1);
+        
+        /* Compute LIS values from left to right */
+        for (i = 1; i < n; i++)
+            for (j = 0; j < i; j++)
+                if (array[i] > array[j] && lis[i] < lis[j] + 1)
+                    lis[i] = lis[j] + 1;
+        
+        /* Allocate memory for lds and initialize LDS values for
+         all indexes */
+        vector<int> lds(n, 1);
+        
+        /* Compute LDS values from right to left */
+        for (i = n-2; i >= 0; i--)
+            for (j = n-1; j > i; j--)
+                if (array[i] > array[j] && lds[i] < lds[j] + 1)
+                    lds[i] = lds[j] + 1;
+        
+        
+        /* Return the maximum value of lis[i] + lds[i] - 1*/
+        int max = lis[0] + lds[0] - 1;
+        for (i = 1; i < n; i++)
+            if (lis[i] + lds[i] - 1 > max)
+                max = lis[i] + lds[i] - 1;
+        return max;
+    }
+    
+    void test() {
+        cout<<longestBitonic1({1, 3, 2, 1, 4, 6, 1})<<endl;
+        cout<<longestBitonic({1, 3, 2, 1, 4, 6, 1})<<endl;
+        
+        cout<<longestBitonic1({1, 11, 2, 10, 4, 5, 2, 1})<<endl;
+        cout<<longestBitonic({1, 11, 2, 10, 4, 5, 2, 1})<<endl;
+    }
+    
+    int findBigger(vector<int>& table, int left, int right, int target) {
+        while (left<=right) {
+            int mid=left+(right-left)/2;
+            if(table[mid]==target) {
+                right=mid-1;
+            }
+            else if(table[mid]>target) {
+                right=mid-1;
+            }
+            else {
+                left=mid+1;
+            }
+        }
+        return right;
+    }
+    
+    vector<int> longestAs(vector<int>& array) {
+        if(array.empty()) {
+            return {};
+        }
+        vector<int> table(array.size()+1, 0);
+        vector<int> output(array.size(), 0);
+        int result=1;
+        table[1]=array[0];
+        output[0]=1;
+        for (int i=1; i<array.size(); i++) {
+            int index=findBigger(table, 1, result, array[i]);
+            if(index==result) {
+                table[++result]=array[i];
+            }
+            else {
+                table[index+1]=array[i];
+            }
+            output[i]=index+1;
+        }
+        return output;
+    }
+    
+    int findSmaller(vector<int>& table, int left, int right, int target) {
+        while (left<=right) {
+            int mid =left+(right-left)/2;
+            if (table[mid]==target) {
+                left=mid+1;
+            }
+            else if(table[mid]>target) {
+                left=mid+1;
+            }
+            else {
+                right=mid-1;
+            }
+        }
+        return left;
+    }
+    
+    vector<int> longestDs(vector<int>& array) {
+        if (array.empty()) {
+            return {};
+        }
+        int leng=array.size();
+        vector<int> table(leng+1, 0);
+        vector<int> output(array.size(), 0);
+        int result=leng;
+        table[leng]=array[leng-1];
+        output[leng-1]=1;
+        for (int i=leng-2; i>=0; i--) {
+            int index=findSmaller(table, result, leng, array[i]);
+            if (index==result) {
+                table[--result]=array[i];
+            }
+            else {
+                table[index-1]=array[i];
+            }
+            output[i]=leng+1-index+1;
+        }
+        return output;
     }
 private:
 };
@@ -12449,21 +12733,85 @@ class Solution310 {
 //    Given an array of integers. Find two disjoint contiguous subarrays in it such that the absolute value of the difference between the sums of two subarray is maximum.  Return the maximum difference.
 //    
 //Assumptions:
-//    
 //    The given array is not null and has length of at least 2.
 //Examples:
-//    
 //Input: { 1, -3, 1, -4, 3, 4 }
-//    
 //    Two subarrays: {-3, 1, -4 }, { 3, 4 }
-//    
 //    Maximum difference = 13
 public:
     int maxDiff(vector<int> array) {
-        // Write your solution here.
-        return 0;
+        if (array.empty() || array.size()==0) {
+            return 0;
+        }
+        int leng=array.size();
+        int minSum, maxSum;
+        vector<int> minLeft(leng, 0);
+        vector<int> maxLeft(leng, 0);
+        minSum = maxSum = minLeft[0] = maxLeft[0] = array[0];
+        for (int i=1; i<leng; i++) {
+            minSum = min(array[i], minSum+array[i]);
+            minLeft[i] = min(minLeft[i-1], minSum);
+            maxSum = max(array[i], maxSum+array[i]);
+            maxLeft[i] = max(maxLeft[i-1], maxSum);
+        }
+        vector<int> minRight(leng, 0);
+        vector<int> maxRight(leng, 0);
+        minSum = maxSum = minRight[leng-1] = maxRight[leng-1] = array[leng-1];
+        for (int i=leng-2; i>=0; i--) {
+            minSum = min(array[i], minSum+array[i]);
+            minRight[i] = min(minSum, minRight[i+1]);
+            maxSum = max(array[i], array[i]+maxSum);
+            maxRight[i] = max(maxSum, maxRight[i+1]);
+        }
+        
+        int result=INT_MIN;
+        for (int i=0; i<leng-1; i++) {
+            result=max(result, max(abs(minLeft[i]-maxRight[i+1]), abs(maxLeft[i]-minRight[i+1])));
+        }
+        return result;
+    }
+    
+    int maxDiff1(vector<int> array) {
+        int result=INT_MIN;
+        for (int i=1; i<array.size(); i++) {
+            vector<int> a(array.begin(), array.begin()+i);
+            vector<int> b(array.begin()+i, array.end());
+            maxDiffHelper(a, b, result);
+        }
+        return result;
+    }
+    
+    
+    void test() {
+        cout<<maxDiff1({ 1, -3, 1, -4, 3, 4 })<<endl;
+        cout<<maxDiff({ 1, -3, 1, -4, 3, 4 })<<endl;
     }
 private:
+    void maxDiffHelper(vector<int>& a, vector<int>& b, int& result) {
+        long suma=0;
+        long sumb=0;
+        for (int i=0; i<a.size(); i++) {
+            suma+=a[i];
+        }
+        for (int i=0; i<b.size(); i++) {
+            sumb+=b[i];
+        }
+        if (result<abs(suma-sumb)) {
+            result=abs(suma-sumb);
+        }
+        for (int i=1; i<a.size(); i++) {
+            vector<int> aa(a.begin(), a.begin()+i);
+            vector<int> ab(a.begin()+i, a.end());
+            for (int j=1; j<b.size(); j++) {
+                vector<int> ba(b.begin(), b.begin()+j);
+                vector<int> bb(b.begin(), b.end());
+                maxDiffHelper(aa, ba, result);
+                maxDiffHelper(aa, bb, result);
+                maxDiffHelper(ab, ba, result);
+                maxDiffHelper(ab, bb, result);
+            }
+        }
+    }
 };
 
 class Solution311 {
@@ -15283,12 +15631,10 @@ private:
 
 class Solution480 {
 public:
-private:
 };
 
 class Solution481 {
 public:
-private:
 };
 
 class Solution482 {
@@ -15296,1863 +15642,176 @@ public:
 private:
 };
 
-class Solution999 {
-public:
-    class vector2D {
-    public:
-        vector2D(vector<vector<int>>& vec2d) {
-            if (vec2d.size()==0) {
-                return;
+class Solution500 {
+private:
+    const char flag='1';
+    void dfsHelper(vector<string>& zombies, vector<bool>& visited, int index, const char& target) {
+        for(int cursor=0;cursor<zombies.size();cursor++) {
+            const char& refchar = zombies[index].at(cursor);
+            if(refchar==target && visited[cursor]==false) {
+                visited[cursor]=true;
+                dfsHelper(zombies, visited, cursor, target);
             }
-            it1=vec2d.begin();
-            ite=vec2d.end();
-            it2=(*it1).begin();
-            
         }
-        int next() {
-            return *it2++;
-        }
-        
-        bool hasNext() {
-            while (it1!=ite && it2==(*it1).end()) {
-                it1++;
-                it2=(*it1).begin();
-                
-            }
-            return it1!=ite;
-        }
-        
-    private:
-        vector<vector<int>>::iterator it1, ite;
-        vector<int>::iterator it2;
-    };
-//    Given a sorted integer array without duplicates, return the summary of its ranges
-//    For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+        return;
+    }
     
-    vector<string> summaryRanges(vector<int>& nums) {
-        vector<string> ans;
-        for(int i=0;i<nums.size();)
-        {
-            int start = i;
-            while(i+1<nums.size() && nums[i+1]-nums[i]==1) {
-                i++;
-            }
-            if(nums[i]>nums[start]) {
-                //cout<<to_string(nums[start])+"->"+to_string(nums[i]);
-                ans.push_back(to_string(nums[start])+"->"+to_string(nums[i]));
-            }
-            else if(nums[i]==nums[start]) {
-                //cout<<to_string(nums[i]);
-                ans.push_back(to_string(nums[i]));
-            }
-            i++;
+public:
+    int zombieCluster(vector<string> zombies) {
+        int n=(int)zombies.size();
+        if(n<=1) {
+            return n;
         }
-        return ans;
+        vector<bool> visited(n, false);
+        int result=0;
+        for(int zombie=0;zombie<n;zombie++) {
+            if(visited[zombie]==false) {
+                result++;
+                dfsHelper(zombies, visited, zombie, flag);
+            }
+        }
+        return result;
     }
-//    intersection A: [ {name: "road1", cost: 3, destination: "intersection B"}, {name: "road2", cost: 2, destination: "intersection B"}, {name: "road3", cost: 1, destination: "intersection B"} ]
-//    intersection B: [ {name: "road4", cost: 4, destination: "intersection C"} ]
-//    intersection C: []. more info on 1point3acres.com
-//    
-//    最短路径从A到C：road3 -> road4
-    vector<string> getPath(unordered_map<string, unordered_map<string, pair<string, int> > >& mp, const string& start, const string& end) {
-        unordered_map<string, int> dist;
-        unordered_set<string> q;
-        for (const auto& p: mp) {
-            dist[p.first] = INT_MAX;
-            q.insert(p.first);
-        }
-        dist[start] = 0;
-        unordered_map<string, string> previous;
-        if (mp.count(start) == 0 || start == end) {
-            return {};
-        }
-        while (not q.empty()) {
-            string cur;
-            int curDist = INT_MAX;
-            for (const string& s: q) {
-                if (dist[s] < curDist) {
-                    curDist = dist[s];
-                    cur = s;
-                }
-            }
-            for (auto p: mp[cur]) {
-                if (dist[p.first]> dist[cur] + p.second.second) {
-                    dist[p.first] = dist[cur] + p.second.second;
-                    previous[p.first] = cur;
-                }
-            }
-            q.erase(cur);
-        }
-        vector<string> res;
-        string tmp = end;
-        while (tmp != start) {
-            res.push_back(mp[previous[tmp]][tmp].first);
-            tmp = previous[tmp];
-        }
-        reverse(res.begin(), res.end());
-        return res;
-    }
+    
+};
 
-    //Insert Into Cycle Linked List
-    ListNode* insertNode(ListNode* head, int val) {
-        // 如果原本head为空，添加新的节点，next指向自己
-        if (head == NULL) {
-            ListNode *node = new ListNode(val);
-            node->next = node;
-            return node;
+class Solution501 {
+private:
+    void dfsHelper(string& input, int i, int leng, string& combo, vector<string>& result) {
+        if(i==leng-1) {
+            combo+=input[i];
+            result.push_back(combo);
+            combo.pop_back();
+            return;
         }
-        
-        ListNode *cur = head;
-        
-        do {
-            //如果val的值正好介于两个节点之间，结束循环，等号是有必要的
-            if (val >= cur->value && val <= cur->next->value)
-                break;
-            // 如果正好是排序链断开处
-            if (cur->value > cur->next->value && (val < cur->next->value || val > cur->value))
-                break;
-            // 否则继续往下找
-            cur = cur->next;
-        } while (cur != head);
-        // 循环直到又到head
-        
-        //插入新节点
-        ListNode *newNode = new ListNode(val);
-        newNode->next = cur->next;
-        cur->next = newNode;
-        return newNode;
+        combo+=input[i];
+        combo+=" ";
+        dfsHelper(input, i+1, leng, combo, result);
+        combo.pop_back();
+        dfsHelper(input, i+1, leng, combo, result);
+        combo.pop_back();
     }
-//  meeting overlap
-//  The number of minutes in a day is constant. Create an array of size 60*24 minutes in a day. Mark true on meeting schedules.
-    bool meetingOverlap(vector<vector<int>> meetings) {
-        vector<bool> schedule(24*60, false);
-        for (auto time: meetings) {
-            for (int i=time[0]; i<time[1]; i++) {
-                if (schedule[i]==true) {
+    
+public:
+    vector<string> listspace(string input) {
+        int leng=(int)input.size();
+        vector<string> result;
+        if(leng<=0) {
+            return result;
+        }
+        string combo="";
+        dfsHelper(input, 0, leng, combo, result);
+        return result;
+    }
+};
+
+
+class Solution502 {
+public:
+    bool isCousions(TreeNode* root, TreeNode* one, TreeNode* two) {
+        if(root==nullptr) {
+            return false;
+        }
+        if(one==two) {
+            return false;
+        }
+        vector<TreeNode*> path;
+        TreeNode* lparent=NULL;
+        TreeNode* rparent=NULL;
+        int lHeight=getHeight(root, one, path, &lparent);
+        path.clear();
+        int rHeight=getHeight(root, two, path, &rparent);
+        if(lHeight!=rHeight) {
+            return false;
+        }
+        if(lparent==rparent) {
+            return false;
+        }
+        return true;
+    }
+private:
+    int getHeight(TreeNode* root, TreeNode* target, vector<TreeNode*>& path, TreeNode** parent) {
+        if(root==NULL) {
+            return 0;
+        }
+        if(root==target) {
+            *parent=path[path.size()-1];
+            return 1;
+        }
+        path.push_back(root);
+        int left=getHeight(root->left, target, path, parent);
+        int right=getHeight(root->right, target, path, parent);
+        path.pop_back();
+        return max(left, right)+1;
+    }
+};
+
+class Solution503 {
+public:
+    int minCut(int n) {
+        int result=minCutHelper(n);
+        return result;
+    }
+private:
+    int minCutHelper(int n) {
+        if(n<=0) {
+            return 0;
+        }
+        for(int i=n/2+1;i>=1;i--) {
+            if(i*i==n) {
+                return 1;
+            }
+            else if(i*i<n) {
+                return 1+minCutHelper(n-i*i);
+            }
+        }
+        return n;
+    }
+};
+
+class Solution504 {
+public:
+    bool cycle(vector<string> array) {
+        int leng=(int)array.size();
+        if(leng<=0) {
+            return false;
+        }
+        vector<string> result;
+        result.push_back(array[0]);
+        vector<bool> visited(leng, false);
+        return dfsHelper(array, leng, result, visited, array[0][0]);
+    }
+private:
+    bool dfsHelper(vector<string>& array, int leng, vector<string>& result, vector<bool>& visited, char sign) {
+        if(result.size()==leng) {
+            if(result[leng-1][result[leng-1].length()-1]==sign) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        string str=result[result.size()-1];
+        char lastsign=str[str.length()-1];
+        for(int i=1;i<leng;i++) {
+            if(visited[i]==true) {
+                continue;
+            }
+            if(lastsign==array[i][0]) {
+                visited[i]=true;
+                result.push_back(array[i]);
+                bool curr=dfsHelper(array, leng, result, visited, lastsign);
+                if(curr) {
                     return true;
+                }
+                else {
+                    visited[i]=false;
+                    result.pop_back();
                 }
             }
         }
         return false;
     }
-    
-    void subset_sum(vector<int>& s, vector<int>& t, int sizes, int sizet, int sum, int ite, int target, int& nodes) {
-        nodes++;
-        if (target==sum) {
-            //handle t
-            if (ite+1<sizes && sum-s[ite]+s[ite+1]<=target) {
-                subset_sum(s, t, sizes, sizet-1, sum-s[ite], ite+1, target, nodes);
-            }
-            return;
-        }
-        else {
-            if (ite<sizes && sum+s[ite]<=target) {
-                for (int i=ite; i<sizes; i++) {
-                    t[sizet]=s[i];
-                    if (sum+s[i]<=target) {
-                        subset_sum(s, t, sizes, sizet+1, sum+s[i], i+1, target, nodes);
-                    }
-                }
-            }
-        }
-    }
-    
-//  Subset sum. Follow-up: Optimize the solution.
-    void generateSubsets(vector<int>& s, int size, int target) {
-        vector<int> tuplet(size, 0);
-        int total=0;
-        sort(s.begin(), s.end(), [](int a, int b){return a>b;});
-        for (int i=0; i<size; i++) {
-            total+=s[i];
-        }
-        int nodes=0;
-        if (s[0] <= target && total >= target) {
-            subset_sum(s, tuplet, size, 0, 0, 0, target, nodes);
-        }
-    }
-//  Given a 2D array of either '\' or '/', find out how many pieces this rectangle is divided into graphically.
-//  For a 2X2 matrix with
-//    /\
-//    \/
-//  The matrix split into 5 pieces - the diamond in middle and the four corners. Return 5 as the answer.
-
-    int segmentCount(vector<vector<char>> m) {
-        int rows=m.size(), cols=m[0].size();
-        vector<bool> upperHalf(rows*cols);
-        vector<bool> lowerHalf(rows*cols);
-        int count=0;
-        for (int i=0; i<rows; i++) {
-            for (int j=0; j<cols; j++) {
-                if (!upperHalf[i*rows+j]) {
-                    count++;
-                    dfs(m, upperHalf, lowerHalf, i, j, 0);
-                }
-                if (!lowerHalf[i*rows+j]) {
-                    count++;
-                    dfs(m, upperHalf, lowerHalf, i, j, 0);
-                }
-            }
-        }
-        return count;
-    }
-    // position:upper:0, lower:1, left:2, right:3
-    void dfs(vector<vector<char>>& m, vector<bool>& upperHalf, vector<bool>& lowerHalf, int i, int j, int position) {
-        if (i<0 || i>m.size() || j<0 || j>m[0].size()) {
-            return;
-        }
-        if ((position==2 && m[i][j]=='\\') || (position==3 && m[i][j]=='/')) {
-            position=1;
-        }
-        if ((position==2 && m[i][j]=='/') || (position==3 && m[i][j]=='\\')) {
-            position=0;
-        }
-        int id=i*m[0].size()+j;
-        if ((position==0 && upperHalf[id]) || (position==1 && lowerHalf[id])) {
-            return;
-        }
-        if (position==0) {
-            upperHalf[id]=true;
-        }
-        else {
-            lowerHalf[id]=true;
-        }
-        if (position==0 && m[i][j]=='\\') {
-            dfs(m, upperHalf, lowerHalf, i, j+1, 2);    //go right
-            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up
-        }
-        if (position==0 && m[i][j]=='/') {
-            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
-            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up;
-        }
-        if (position==1 && m[i][j]=='\\') {
-            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
-            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
-        }
-        if (position==1 && m[i][j]=='/') {
-            dfs(m, upperHalf, lowerHalf, i, j+1, 3);    //go right
-            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
-        }
-    }
-//    bool wordBreak(string s, unordered_set<string>& wordDict) {
-//        if (wordDict.size() == 0) {
-//            return false;
-//        }
-//        vector<bool> dp(s.size()+1, false);
-//        dp[0] = true;
-//        for (int i = 1; i <= s.size(); ++i) {
-//            for (int j = i-1; j >= 0; --j) {
-//                if (dp[j]) {
-//                    string word=s.substr(j, i-j);
-//                    if (wordDict.count(word)>0) {
-//                        
-//                        dp[i] = true;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//        for(int i = 0; i < dp.size(); ++i) {
-//            cout<<dp[i]<<" ";
-//        }
-//        return dp.back();
-//    }
-//    
-//    
-//    vector<string> wordBreak(string s, vector<string>& wordDict) {
-//        if (wordDict.size() == 0) {
-//            return {};
-//        }
-//        unordered_set<string> lookup;
-//        for (auto i:wordDict) {
-//            lookup.insert(i);
-//        }
-//        vector<string> result;
-//        string combo="";
-//        wordBreakHelper(s, 0, combo, lookup, result);
-//        return result;
-//    }
-//    
-//    void wordBreakHelper(string s, int index, string& combo, unordered_set<string>& lookup, vector<string>& result) {
-//        if (index == s.size()) {
-//            combo.pop_back();   //delete last space
-//            result.push_back(combo);
-//            combo.clear();  //restart new backtracking
-//            return;
-//        }
-//        for (int i = index+1; i <= s.size(); ++i) {
-//            string word=s.substr(index, i-index);
-//            if (lookup.count(word)>0) {
-//                combo += word;
-//                combo += " ";
-//                wordBreakHelper(s, i, combo, lookup, result);
-//            }
-//        }
-//    }
-//    
-//    void sortColors(vector<int>& A, int n) {
-//        int red = 0, blue = n-1;
-//        int i = 0;
-//        while (i <= blue) {
-//            if(A[i] == 0) {//red
-//                swap(A[red], A[i]);
-//                red++;
-//                i++;
-//                
-//            }
-//            else if(A[i]==2) {//blue
-//                swap(A[blue], A[i]);
-//                blue--;
-//            }
-//            else {
-//                i++;
-//            }
-//        }
-//    }
-//    
-//    void sortColors(vector<vector<int>>& A, int m, int n) {
-//        int red=0, blue=m*n-1, i=0;
-//        while (i<=blue) {
-//            int row=i/m, col=i%n;
-//            if(A[row][col] == 0) {
-//                //red
-//                swap(A[red/m][red%n], A[row][col]);
-//                i++;
-//                red++;
-//            }
-//            else if(A[row][col] == 2) {
-//                //blue
-//                swap(A[blue/m][blue%n], A[row][col]);
-//                blue--;
-//            }
-//            else {
-//                i++;
-//            }
-//        }
-//    }
-//    
-//    
-//    int findOptimal(int n) {
-//        if (n<=6) {
-//            return n;
-//        }
-//        int result=0;
-//        int b=0;
-//        for (b = n-3-1; b >= 1; --b) {
-//            int curr=(n-b-1)*findOptimal(b);
-//            if (curr > result) {
-//                result = curr;
-//            }
-//        }
-//        return result;
-//    }
-//    // Only +, - ,(, ), empty
-//    int Calculate1(string s) {
-//        int sign=-1, result=0;
-//        stack<int> stk;
-//        for (int i = 0; i < s.size(); ++i) {
-//            if (isdigit(s[i])) {
-//                int sum=s[i]-'0';
-//                while (i+1 < s.size() && isdigit(s[i+1])) {
-//                    sum = sum * 10 + s[i+1] - '0';
-//                    i++;
-//                }
-//                result = result + sum * sign;
-//            }
-//            else if (s[i] == '+') {
-//                sign = 1;
-//            }
-//            else if (s[i] == '-') {
-//                sign = -1;
-//            }
-//            else if (s[i] == '(') {
-//                stk.push(result);
-//                stk.push(sign);
-//                result = 0;
-//                sign = 1;
-//            }
-//            else if (s[i] == ')') {
-//                result = result*stk.top();
-//                stk.pop();
-//                result += stk.top();
-//                stk.pop();
-//            }
-//        }
-//        return result;
-//    }
-//    
-//    // Only +, - , *, /, empty
-//    int Calculate2(string s) {
-//        if (s.size()<=0) {
-//            return 0;
-//        }
-//        stack<int> stk;
-//        int num=0;
-//        char sign='+';
-//        for (int i=0; i<s.size(); ++i) {
-//            if (isdigit(s[i])) {
-//                num = num*10 + s[i] - '0';
-//                if (num > INT_MAX) {
-//                    num = INT_MAX;
-//                }
-//            }
-//            if ((!isdigit(s[i]) && s[i] != ' ' ) || i == s.size()-1) {
-//                if (sign == '+') {
-//                    stk.push(num);
-//                }
-//                else if (sign == '-') {
-//                    stk.push(-num);
-//                }
-//                else if (sign == '*') {
-//                    int top=stk.top();
-//                    stk.pop();
-//                    stk.push(top * num);
-//                }
-//                else if (sign == '/') {
-//                    int top=stk.top();
-//                    stk.pop();
-//                    stk.push(top / num);
-//                }
-//                //reset
-//                sign = s[i];
-//                num = 0;
-//            }
-//        }
-//        //sum up
-//        int res=0;
-//        while (!stk.empty()) {
-//            res += stk.top();
-//            stk.pop();
-//        }
-//        return res;
-//    }
-//    
-//    //    int Calculate3(string s) {
-//    //        if (s.size() <= 0) {
-//    //            return 0;
-//    //        }
-//    //        stack<int> stk;
-//    //        int num = 0;
-//    //        char sign = '+';
-//    //        int res = 0;
-//    //        for (int i = 0; i < s.size(); ++i) {
-//    //            char cur = s[i];
-//    //            if (isdigit(cur)) {
-//    //                num = num * 10 + cur - '0';
-//    //                if (num > INT_MAX) {
-//    //                    num = INT_MAX;
-//    //                }
-//    //            }
-//    //            if (cur == '+' || cur == '-' || cur == '*' || cur == '/' || i == s.size()-1) {
-//    //                if (sign == '+' || sign == '-') {
-//    //                    int tmp = sign == '+' ? num : -num;
-//    //                    stk.push(tmp);
-//    //                    res += tmp;
-//    //                }
-//    //                else {
-//    //                    res = res - stk.top();
-//    //                    stk.pop();
-//    //                    int tmp = sign == '*' ? res * stk.top() : stk.top() / num;
-//    //                    stk.pop();
-//    //                    stk.push(tmp);
-//    //                    res = res + tmp;
-//    //                }
-//    //                sign = cur;
-//    //                num = 0;
-//    //            }
-//    //        }
-//    //        return res;
-//    //    }
-//    
-//    //+, -, *, /, allowed negative after sign
-//    int Calculate4(string s) {
-//        if (s.size()<=0) {
-//            return 0;
-//        }
-//        int num = 0;
-//        char sign = '+';
-//        int negative = 1;
-//        stack<int> stk;
-//        for (int i = 0; i < s.size(); ++i) {
-//            if (isdigit(s[i])) {
-//                num = num * 10 + s[i] - '0';
-//                if (num > INT_MAX) {
-//                    num =INT_MAX;
-//                }
-//            }
-//            if (s[i] != ' ' && (i == s.size() -1  || !isdigit(s[i]))) {
-//                //Handle 3+-10 => 3+(-10) case
-//                if (s[i] == '-' && (i==0 || !isdigit(s[i-1]))) {
-//                    negative = -1;
-//                    continue;
-//                }
-//                if (sign == '+') {
-//                    stk.push(negative * num);
-//                }
-//                else if (sign == '-') {
-//                    stk.push(negative * -1 * num);
-//                }
-//                else if (sign == '*') {
-//                    int tmp = stk.top();
-//                    stk.pop();
-//                    stk.push(tmp * num * negative);
-//                }
-//                else if (sign == '/') {
-//                    int tmp = stk.top();
-//                    stk.pop();
-//                    stk.push(tmp / (negative * num));
-//                }
-//                //reset
-//                num = 0;
-//                negative = 1;
-//                sign = s[i];
-//            }
-//        }
-//        //sum up
-//        int res = 0;
-//        while (!stk.empty()) {
-//            res += stk.top();
-//            stk.pop();
-//        }
-//        return res;
-//    }
-//    
-//    //Case 4 +，-， *， /， (, ) Case
-//    int Calculate5(string s) {
-//        if (s.size() <= 0) {
-//            return 0;
-//        }
-//        stack<int> stk;
-//        int num = 0;
-//        char sign = '+';
-//        int negative = 1;
-//        for (int i = 0; i < s.size(); ++i) {
-//            if (isdigit(s[i])) {
-//                num = num * 10 + s[i] - '0';
-//                if (num > INT_MAX) {
-//                    num = INT_MAX;
-//                }
-//            }
-//            if (s[i] != ' ' && (i == s.size() - 1 || !isdigit(s[i]))) {
-//                //Handle 3+-10 => 3+(-10) case
-//                if (s[i] == '-' && (i == 0 || !isdigit(s[i-1]))) {
-//                    negative = -1;
-//                    continue;
-//                }
-//                if (s[i] == '(') {
-//                    int count = 1;
-//                    int start = i;
-//                    int leng = 0;
-//                    i++;
-//                    while (i < s.size() && count > 0) {
-//                        if (s[i] == '(') {
-//                            count++;
-//                        }
-//                        else if (s[i] == ')') {
-//                            count--;
-//                        }
-//                        i++;
-//                        leng++;
-//                    }
-//                    //excute last ')'
-//                    i = i - 1;
-//                    leng--;
-//                    string curr= s.substr(start+1, leng);
-//                    num = Calculate5(curr);
-//                    if (i == s.size() - 1) {
-//                        i = i - 1;
-//                    }
-//                    continue;
-//                }
-//                if (sign == '+') {
-//                    stk.push(negative * num);
-//                }
-//                else if (sign == '-') {
-//                    stk.push(negative * -1 * num);
-//                }
-//                else if (sign == '*') {
-//                    int tmp = stk.top();
-//                    stk.pop();
-//                    stk.push(tmp * negative * num);
-//                }
-//                else if (sign == '/') {
-//                    int tmp = stk.top();
-//                    stk.pop();
-//                    stk.push(tmp / (negative * num));
-//                }
-//                
-//                //reset
-//                num = 0;
-//                negative = 1;
-//                sign = s[i];
-//            }
-//        }
-//        int res = 0;
-//        while (!stk.empty()) {
-//            res += stk.top();
-//            stk.pop();
-//        }
-//        return res;
-//    }
-//    
-//    void helper(stack<int>& nums, stack<char>& oprs) {
-//        int a = nums.top(); nums.pop();
-//        int b = nums.top(); nums.pop();
-//        char p = oprs.top(); oprs.pop();
-//        if (p == '+') {
-//            nums.push(b + a);
-//        }
-//        else if (p == '-') {
-//            nums.push(b - a);
-//        }
-//        else if (p == '*') {
-//            nums.push(b * a);
-//        }
-//        else if (p == '/') {
-//            nums.push(b / a);
-//        }
-//        else if (p == '^') {
-//            nums.push(pow(b, a));
-//        }
-//        return;
-//    }
-//    
-//    //Case 5  Only +, -, *, / and ^
-//    int Calculate6(string s) {
-//        if (s.size()<=0) {
-//            return 0;
-//        }
-//        int num = 0;
-//        stack<int> nums;
-//        stack<char> oprs;
-//        unordered_map<char, int> dict;
-//        dict['+']=1;
-//        dict['-']=1;
-//        dict['*']=2;
-//        dict['/']=2;
-//        dict['^']=3;
-//        for (int i = 0; i < s.size(); ++i) {
-//            if (isdigit(s[i])) {
-//                num = num * 10 + s[i] - '0';
-//            }
-//            else if(s[i] != ' ') {
-//                nums.push(num);
-//                num = 0;
-//                //Empty case or Curr operator's level > top of opStack
-//                if (oprs.size() == 0 || dict[s[i]] > dict[oprs.top()]) {
-//                    oprs.push(s[i]);
-//                }
-//                else {
-//                    while (!oprs.empty() && dict[s[i]] <= dict[oprs.top()]) {
-//                        helper(nums, oprs);
-//                    }
-//                    oprs.push(s[i]);
-//                }
-//            }
-//        }
-//        nums.push(num);
-//        while (!oprs.empty()) {
-//            helper(nums, oprs);
-//        }
-//        return nums.top();
-//    }
-//    //Medean of 2 sorted array
-//    double findMedian(vector<int>& a, vector<int>& b) {
-//        int m = a.size(), n = b.size();
-//        int total = m + n;
-//        if (total % 2 != 0) {
-//            return findKth(a, 0, b, 0, total/2 + 1);
-//        }
-//        else {
-//            return (findKth(a, 0, b, 0, total/2) +
-//                    findKth(a, 0, b, 0, total/2 + 1)) / 2.0;
-//        }
-//    }
-//    
-//    double findKth(vector<int>& a, int m, vector<int>& b, int n, int k) {
-//        if (m >= a.size()) {
-//            return b[n+k-1];
-//        }
-//        if (n >= b.size()) {
-//            return a[m+k-1];
-//        }
-//        if (k == 1) {
-//            return min(a[m], b[n]);
-//        }
-//        int ap=m + k/2 - 1 >= a.size() ? INT_MAX : a[m+k/2-1];
-//        int bp=n + k/2 - 1 >= b.size() ? INT_MAX : b[n+k/2-1];
-//        if (ap<bp) {
-//            return findKth(a, m+k/2, b, n, k-k/2);
-//        }
-//        else {
-//            return findKth(a, m, b, n+k/2, k-k/2);
-//        }
-//    }
-//    //second largest in BST
-//    void inOrder(struct TreeNode* root, int& pre, int& prepre) {
-//        if (root == NULL) {
-//            return;
-//        }
-//        else {
-//            inOrder(root->left, pre, prepre);
-//            prepre = pre;
-//            cout<<root->val<<" ";
-//            pre = root->val;
-//            inOrder(root->right, pre, prepre);
-//        }
-//    }
-//    
-//    //Kth largest in BST with space
-//    void inOrder(struct TreeNode* root, vector<int>& pres, int& i) {
-//        if (root == NULL) {
-//            return;
-//        }
-//        else {
-//            inOrder(root->left, pres, i);
-//            cout<<root->val<<" ";
-//            pres[(i++)%3]=root->val;
-//            inOrder(root->right, pres, i);
-//        }
-//    }
-//    
-//    void secondLargestHelper(struct TreeNode* root, int& c) {
-//        if (root == NULL || c >= 2) {
-//            return;
-//        }
-//        secondLargestHelper(root->right, c);
-//        c++;
-//        if (c == 2) {
-//            cout<<"2nd largest element is "<<root->val<<endl;
-//            return;
-//        }
-//        secondLargestHelper(root->left, c);
-//    }
-//    
-//    void secondLargest(struct TreeNode* root) {
-//        int c = 0;
-//        secondLargestHelper(root, c);
-//    }
-//    
-//    //Say the node for whose inorder suc­ces­sor needs to be find is p.
-//    
-//    //Case 1 : If the p has a right child then its inorder suc­ces­sor will the left most ele­ment in the right sub tree of p.
-//    
-//    //Case 2: If the p doesnt have a right child then its inorder suc­ces­sor will the one of its ances­tors, using par­ent link keep trav­el­ing up till you get the node which is the left child of its par­ent. Then this par­ent node will be the inorder successor.
-//    
-//    //Case 3: if p is the right most node in the tree then its inorder suc­ces­sor will be NULL.
-//    
-//    TreeNode* leftMost(TreeNode* p) {
-//        while (p->left) {
-//            p = p->left;
-//        }
-//        return p;
-//    }
-//    
-//    TreeNode* inOrderSuccessor(TreeNode* p) {
-//        if (p->right) {
-//            return leftMost(p->right);
-//        }
-//        TreeNode* parent = p->parent;
-//        while (parent && p == parent->right) {
-//            p = parent;
-//            parent = parent->parent;
-//        }
-//        
-//        return parent;
-//    }
-//    
-//    //Find Successor, no parent point, no value to compare, but give the root of tree
-//    void inOrderTraverse(TreeNode* root, vector<TreeNode*>& inorders) {
-//        if (root == NULL) {
-//            return;
-//        }
-//        inOrderTraverse(root->left, inorders);
-//        inorders.push_back(root);
-//        inOrderTraverse(root->right, inorders);
-//    }
-//    
-//    TreeNode* inOrderSuccessor(TreeNode* root, TreeNode* p) {
-//        if (p->right) {
-//            return leftMost(p);
-//        }
-//        vector<TreeNode*> inorders;
-//        inOrderTraverse(root, inorders);
-//        for (int i = 0; i < inorders.size(); ++i) {
-//            if (inorders[i] == p && i+1 < inorders.size()) {
-//                return inorders[i+1];
-//            }
-//        }
-//        return NULL;
-//    }
-//    
-//    void dfs(TreeNode* root, TreeNode* p, vector<TreeNode*>& array, vector<TreeNode*>& res) {
-//        if (root == NULL) {
-//            return;
-//        }
-//        array.push_back(root);
-//        if (root == p) {
-//            res.insert(res.end(), array.begin(), array.end());
-//            return;
-//        }
-//        dfs(root->left, p, array, res);
-//        dfs(root->right, p, array, res);
-//        array.pop_back();
-//    }
-//    
-//    vector<TreeNode*> getAncestors(TreeNode* root, TreeNode* p) {
-//        vector<TreeNode*> res;
-//        vector<TreeNode*> array;
-//        dfs(root, p, array, res);
-//        return res;
-//    }
-//    
-//    //第二个使用了DFS Backtracking, 来寻找p到root的路径， 而且修改了找不到返回本身，
-//    //如果需要返回Null的话， 删掉temp,。总体来说跟前面差不多，少许少了些无用功
-//    TreeNode* inOrderSuccessorWithRoot(TreeNode* root, TreeNode* p) {
-//        TreeNode* temp = p;
-//        if (p != NULL && p->right != NULL) {
-//            return leftMost(p->right);
-//        }
-//        vector<TreeNode*> ancestors = getAncestors(root, p);
-//        int i = 1;
-//        while (ancestors.size() - i > 0) {
-//            TreeNode* parent = ancestors[ancestors.size()-1-i];
-//            if (parent->left == p) {
-//                return parent;
-//            }
-//            p = parent;
-//            i++;
-//        }
-//        return temp;
-//    }
-//    
-//    TreeNode* rightMost(TreeNode* root) {
-//        if (root == NULL) {
-//            return NULL;
-//        }
-//        while (root->right != NULL) {
-//            root = root->right;
-//        }
-//        return root;
-//    }
-//    //Find predecessor with parent, no root
-//    TreeNode* inOrderPredecessor(TreeNode* p) {
-//        if (p==NULL) {
-//            return NULL;
-//        }
-//        if (p->left!=NULL) {
-//            return rightMost(p->left);
-//        }
-//        TreeNode* parent = p->parent;
-//        TreeNode* curr = p;
-//        while (parent != NULL && curr == parent->left) {
-//            curr = parent;
-//            parent = parent->parent;
-//        }
-//        return parent;
-//    }
-//    
-//    //Inorder Successor(Predecessor) in BST
-//    //With Value and Root
-//    TreeNode* inOrderSuccessorWithRootAndValue(TreeNode* root, TreeNode* p) {
-//        TreeNode* successor = NULL;
-//        while (root!=NULL) {
-//            if (p->val < root->val) {
-//                successor = root;
-//                root = root->left;
-//            }
-//            else {
-//                root = root->right;
-//            }
-//        }
-//        return successor;
-//    }
-//    
-//    TreeNode* predeccessor(TreeNode* root, TreeNode* p) {
-//        if (root == NULL) {
-//            return NULL;
-//        }
-//        if (root->val >= p->val) {
-//            return predeccessor(root->left, p);
-//        }
-//        else {
-//            TreeNode* right = predeccessor(root->right, p);
-//            return right == NULL ? root : right;
-//        }
-//    }
-//    //Array Update and Query
-//    
-//    //Naive
-//    class numArrayNaive {
-//    private:
-//        vector<int> nums;
-//    public:
-//        numArrayNaive(vector<int>& nums) {
-//            this->nums = nums;
-//        }
-//        void update(int i, int val) {
-//            this->nums[i] = val;
-//        }
-//        int sumRange(int i, int j) {
-//            int sum = 0;
-//            for (int low = i; low <= j; ++low) {
-//                sum += nums[low];
-//            }
-//            return sum;
-//        }
-//    };
-//    
-//    
-//    void testNaive(int i) {
-//        vector<int> array;
-//        for (int j=0; j<i; ++j) {
-//            array.push_back(j);
-//        }
-//        numArrayNaive* nan = new numArrayNaive(array);
-//        cout<<nan->sumRange(3, 7);
-//    }
-//    
-//    //Naive with Buffer
-//    class numArrayBuffer {
-//    private:
-//        vector<int> nums;
-//        vector<long> sums;
-//        vector<pair<int, int>> buffer;
-//    public:
-//        numArrayBuffer(vector<int>& nums) {
-//            this->nums = nums;
-//            this->sums = vector<long>(nums.size() + 1);
-//            for (int i=0; i<nums.size()-1; ++i) {
-//                sums[i+1]=nums[i]+sums[i];
-//            }
-//        }
-//        
-//        void update(int i, int val) {
-//            buffer.push_back(make_pair(i, val-nums[i]));
-//            nums[i] = val;
-//            if (buffer.size() > 300) {
-//                for (int j = 0; j<nums.size()-1; ++j) {
-//                    sums[j+1] = nums[j] + sums[j];
-//                }
-//            }
-//        }
-//        
-//        int sumRange(int i, int j) {
-//            long res = sums[j+1] - sums[i];
-//            for (int m = 0; m < buffer.size(); ++m) {
-//                if (buffer[m].first <= j && buffer[m].first >= i) {
-//                    res += buffer[m].second;
-//                }
-//            }
-//            if (res >= INT_MAX || res <= INT_MIN) {
-//                throw out_of_range("error");
-//            }
-//            else {
-//                return (int)res;
-//            }
-//        }
-//    };
-//    
-//    void testBuffer(int n) {
-//        vector<int> array;
-//        for (int j=0; j<n; ++j) {
-//            array.push_back(j);
-//        }
-//        numArrayBuffer* nan = new numArrayBuffer(array);
-//        cout<<nan->sumRange(3, 7);
-//    }
-//    
-//    
-//    //Segment Tree
-//    struct segmentTree {
-//        int start, end;
-//        segmentTree *left, *right;
-//        int sum;
-//        segmentTree(int s, int e): start(s), end(e) {
-//            left=NULL;
-//            right=NULL;
-//            sum=0;
-//        }
-//    };
-//    
-//    
-//    class numArrayTree {
-//    private:
-//        segmentTree* root;
-//        
-//        int sumRange(segmentTree* root, int i, int j) {
-//            if(root==NULL) {
-//                return 0;
-//            }
-//            if (root->start == i && root->end == j) {
-//                return root->sum;
-//            }
-//            else {
-//                int mid = root->start + (root->end-root->start)/2;
-//                if (j <= mid) {
-//                    return sumRange(root->left, i, j);
-//                }
-//                else if (i >= mid + 1) {
-//                    return sumRange(root->right, i, j);
-//                }
-//                else {
-//                    return sumRange(root->right, mid+1, j) +
-//                    sumRange(root->left, i, mid);
-//                }
-//            }
-//        }
-//        void updateTree(segmentTree* root, int i, int val) {
-//            if (root->start == root->end) {
-//                root->sum = val;
-//            }
-//            else {
-//                int mid = root->start + (root->end - root->start)/2;
-//                if (i <= mid) {
-//                    updateTree(root->left, i, val);
-//                }
-//                else {
-//                    updateTree(root->right, i, val);
-//                }
-//                root->sum = root->left->sum + root->right->sum;
-//            }
-//        }
-//        
-//        segmentTree* buildTree(vector<int>& nums, int start, int end) {
-//            if (start>end) {
-//                return NULL;
-//            }
-//            else {
-//                segmentTree* p = new segmentTree(start, end);
-//                if (start == end) {
-//                    p->sum = nums[start];
-//                }
-//                else {
-//                    int mid = start + (end - start)/2;
-//                    p->left = buildTree(nums, start, mid);
-//                    p->right = buildTree(nums, mid+1, end);
-//                    if (p->left!=NULL && p->right!=NULL) {
-//                        p->sum = p->left->sum + p->right->sum;
-//                    }
-//                    else if (p->left!=NULL) {
-//                        p->sum = p->left->sum;
-//                    }
-//                    else if (p->right!=NULL) {
-//                        p->sum = p->right->sum;
-//                    }
-//                    else {
-//                        p->sum = 0;
-//                    }
-//                }
-//                return p;
-//            }
-//        }
-//    public:
-//        numArrayTree(vector<int>& array) {
-//            this->root = buildTree(array, 0, array.size()-1);
-//        }
-//        int sumRange(int start, int end) {
-//            return sumRange(root, start, end);
-//        }
-//        
-//        void updateTree(int i, int val) {
-//            updateTree(root, i, val);
-//        }
-//    };
-//    
-//    void testSegmentTree(int i) {
-//        vector<int> array;
-//        for (int j=0; j<i; ++j) {
-//            array.push_back(j);
-//        }
-//        numArrayTree* nat = new numArrayTree(array);
-//        nat->updateTree(3, 10);
-//        cout<<nat->sumRange(3, 7)<<endl;
-//    }
-//    
-//    class numArrayBIT {
-//    private:
-//        vector<int> nums;
-//        vector<int> bits;
-//        int n;
-//        
-//        void init(int i, int val) {
-//            i++;
-//            while (i<=n)  {
-//                bits[i] += val;
-//                i += (i & -i);
-//            }
-//        }
-//        
-//        int getSum(int i) {
-//            int sum=0;
-//            i++;
-//            while (i>0) {
-//                sum += bits[i];
-//                i = i - (i&-i);
-//            }
-//            return sum;
-//        }
-//    public:
-//        numArrayBIT(vector<int> nums) {
-//            this->nums = nums;
-//            n = nums.size();
-//            bits = vector<int>(n+1, 0);
-//            for (int i=0; i<n; ++i) {
-//                init(i, nums[i]);
-//            }
-//        }
-//        
-//        void update(int i, int val) {
-//            int diff = val - nums[i];
-//            nums[i] = val;
-//            init(i, diff);
-//        }
-//        
-//        int sumRange(int i, int j) {
-//            return getSum(j) - getSum(i-1);
-//        }
-//    };
-//    
-//    void testBits(int i) {
-//        vector<int> array;
-//        for (int j=0; j<i; ++j) {
-//            array.push_back(j);
-//        }
-//        numArrayBIT* nab = new numArrayBIT(array);
-//        nab->update(3, 10);
-//        cout<<nab->sumRange(3, 7)<<endl;;
-//    }
-    //Calculator series II
-    //Most General Case: Can handle +, -, *, /, ^, (, ) and Negative sign
-    int Calculate(string s) {
-        if (s.size()<=0) {
-            return 0;
-        }
-        int num = 0;
-        int negative = 1;
-        stack<int> nums;
-        stack<char> oprs;
-        unordered_map<char, int> dict;
-        dict['+'] = 1; dict['-'] = 1;
-        dict['*'] = 2; dict['/'] = 2;
-        dict['^'] = 3;
-        
-        for (int i=0; i<s.size(); ++i) {
-            char cur = s[i];
-            if (isdigit(cur)) {
-                num = num * 10 + cur - '0';
-            }
-            else if (cur != ' ') {
-                if (cur == '(') {
-                    int count = 1;
-                    int j = i + 1;
-                    int leng = 0;
-                    while (j<s.size()) {
-                        char now = s[j];
-                        if (now == '(') {
-                            count++;
-                        }
-                        else if (now == ')') {
-                            count--;
-                        }
-                        if (count==0) {
-                            break;
-                        }
-                        j++;
-                        leng++;
-                    }
-                    int temp = Calculate(s.substr(i+1, leng)); //recursive process
-                    num = temp;
-                    i = j;
-                    continue;
-                }
-                
-                if (cur == '-') {
-                    if (i == 0 || !isdigit(s[i-1]) && s[i-1] != ')') {
-                        negative = -1;
-                        continue;
-                    }
-                }
-                nums.push(negative*num);
-                num = 0;
-                negative = 1;
-                
-                if (oprs.size() == 0 || dict[cur] > dict[oprs.top()]) {
-                    oprs.push(cur);
-                }
-                else {
-                    while (!oprs.empty() && dict[cur] <= dict[oprs.top()]) {
-                        helper(nums, oprs);
-                    }
-                    oprs.push(cur);
-                }
-            }
-        }
-        nums.push(num);
-        while (!oprs.empty()) {
-            helper(nums, oprs);
-        }
-        cout<<nums.top()<<endl;
-        return nums.top();
-    }
-    
-    void helper(stack<int>& nums, stack<char>& oprs) {
-        int b = nums.top(); nums.pop();
-        int a = nums.top(); nums.pop();
-        char p = oprs.top(); oprs.pop();
-        
-        if (p == '+') {
-            nums.push(a+b);
-        }
-        else if (p == '-') {
-            nums.push(a-b);
-        }
-        else if (p == '*') {
-            nums.push(a*b);
-        }
-        else if (p == '/') {
-            nums.push(a/b);
-        }
-        else if (p == '^') {
-            nums.push(pow(a, b));
-        }
-        return;
-    }
-
-//    GraphNode* dfsClone(GraphNode* node) {
-//        if (node == NULL) {
-//            return NULL;
-//        }
-//        GraphNode* root = new GraphNode(node->val);
-//        unordered_map<GraphNode*, GraphNode*> dict;
-//        dict[node] = root;
-//        dfsHelper(node, root, dict);
-//        return root;
-//    }
-//    
-//    GraphNode* bfsClone(GraphNode* node) {
-//        if (node == NULL) {
-//            return NULL;
-//        }
-//        GraphNode* root = new GraphNode(node->val);
-//        unordered_map<GraphNode*, GraphNode*> dict;
-//        dict[node] = root;
-//        deque<GraphNode*> dq;
-//        dq.push_back(node);
-//        while (!dq.empty()) {
-//            GraphNode* curr = dq.front();
-//            dq.pop_front();
-//            for (int i=0; i<curr->neighbors.size(); ++i) {
-//                if (dict.count(curr->neighbors[i])==0) {
-//                    GraphNode* now = new GraphNode(curr->neighbors[i]->val);
-//                    dict[curr->neighbors[i]]=now;
-//                    dq.push_back(curr->neighbors[i]);
-//                }
-//                else {
-//                    dict[curr]->neighbors.push_back(dict[curr->neighbors[i]]);
-//                }
-//            }
-//        }
-//        return root;
-//    }
-//    void dfsHelper(GraphNode* node, GraphNode* root, unordered_map<GraphNode*, GraphNode*>& dict) {
-//        for (int i=0; i<(node->neighbors).size(); ++i) {
-//            if (dict[node->neighbors[i]]==NULL) {
-//                GraphNode* child = new GraphNode((node->neighbors)[i]->val);
-//                (root->neighbors).push_back(child);
-//                dict[node->neighbors[i]]=child;
-//                dfsHelper(node->neighbors[i], child, dict);
-//            }
-//            else {
-//                root->neighbors.push_back(dict[node->neighbors[i]]);
-//            }
-//        }
-//    }
-
-//    //Dijkstra: Shortest path from a source
-//    //If Given is a distance, source and total vertices's
-//    //First Missing Positive
-//    void dijkstra(vector<vector<int>>& graph, int source, int vertices) {
-//        vector<int> distance(vertices, INT_MAX);
-//        vector<bool> shortpath(vertices, false);
-//        distance[source] = 0;
-//        //Find shortest path for all vertices
-//        for (int count=0; count<vertices-1; ++count) {
-//            int u = minDistance(distance, shortpath, vertices);
-//            shortpath[u] = true;
-//            for (int v=0; v<vertices; ++v) {
-//                if (!shortpath[v] && graph[u][v]>0 && \
-//                    distance[u] != INT_MAX && distance[u]+graph[u][v] < distance[v]) {
-//                    distance[v] = distance[u] + graph[u][v];
-//                }
-//            }
-//        }
-//        output(distance, vertices);
-//    }
-//    
-//    int minDistance(vector<int>& distance, vector<bool>& shortpath, int vertices) {
-//        int min = INT_MAX;
-//        int idx= 0;
-//        for (int v=0; v<vertices; ++v) {
-//            if (shortpath[v] == false && distance[v]<=min) {
-//                min = distance[v];
-//                idx = v;
-//            }
-//        }
-//        return idx;
-//    }
-//    
-//    void output(vector<int>& distance, int vertices) {
-//        cout<<"Vertex        Distance from source"<<endl;
-//        for (int i=0; i<vertices; ++i) {
-//            cout<<i<<"\t   "<<distance[i]<<endl;
-//        }
-//    }
-//
-//    int firstMissingPositive(vector<int>& nums) {
-//        for (int i=0; i<nums.size();) {
-//            //1. nums[i] = i + 1 Normal case
-//            //2. nums[i] < 1; Negative number
-//            //3. nums[i] > nums.size()  Greatest value
-//            //4. nums[i == nums[nums[i] - 1] => n = nums[n+1]
-//            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=nums.size() && nums[i] != nums[nums[i]-1]) {
-//                swap(nums[nums[i]-1], nums[i]);
-//            }
-//            i++;
-//            
-//        }
-//        for (int i=0; i<nums.size(); ++i) {
-//            if (nums[i]!=i+1) {
-//                return i+1;
-//            }
-//        }
-//        return nums.size()+1;
-//    }
-//    
-//    
-//    int firstMissingPositive(vector<int>& nums, int n) {
-//        int result=n;
-//        for (int i=n-1; i>=0; --i) {
-//            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=n && nums[i] != nums[nums[i]-1]) {
-//                swap(nums[nums[i]-1], nums[i]);
-//            }
-//            if (nums[i]!=i+1) {
-//                result=i;
-//            }
-//        }
-//        return result+1;
-//    }
-
-//    void heapify(vector<int>& array, int n, int i) {
-//        int max=i;
-//        int left=2*i+1;
-//        int right=2*i+2;
-//        if (left<n && array[left]>array[max]) {
-//            max=left;
-//        }
-//        if (right<n && array[right]>array[max]) {
-//            max=right;
-//        }
-//        if (max!=i) {
-//            swap(array[max], array[i]);
-//            heapify(array, n, max);
-//        }
-//    }
-//    
-//    void heapsort(vector<int>& array, int n) {
-//        for (int i=n/2-1; i>=0; i--) {
-//            heapify(array, n, i);
-//        }
-//        for (int i=n-1; i>=0; i--) {
-//            swap(array[i], array[0]);
-//            heapify(array, n, 0);
-//        }
-//    }
-//    //Kth Largest Element
-//    //naive
-//    int findKthLargest(vector<int>& nums, int k) {
-//        int leng = nums.size();
-//        sort(nums.begin(), nums.end());
-//        return nums[leng-k];
-//    }
-//    
-//    //use maxHeap
-//    int findKthLargestInHeap(vector<int>& nums, int k) {
-//        priority_queue<int, vector<int>, greater<int>> min_heap;
-//        for (int i=0; i<nums.size(); ++i) {
-//            if (min_heap.size()<k) {
-//                min_heap.push(nums[i]);
-//            }
-//            else {
-//                if (nums[i]>=min_heap.top()) {
-//                    min_heap.pop();
-//                    min_heap.push(nums[i]);
-//                }
-//            }
-//        }
-//        return min_heap.top();
-//    }
-//    //quick select
-//    int findKthLargestQuick(vector<int>& nums, int k) {
-//        if (nums.size()==1) {
-//            return nums[0];
-//        }
-//        int left=0, right=nums.size()-1;
-//        while (left<=right) {
-//            int mid = partition(nums, left, right);
-//            if (mid - left + 1 < k) {
-//                k = k - (mid - left +1);
-//                left = mid+1;
-//            }
-//            else if (mid - left + 1 > k) {
-//                right = mid - 1;
-//            }
-//            else {
-//                return nums[mid];
-//            }
-//        }
-//        return 0;
-//    }
-//    int partition(vector<int>& nums, int left, int right) {
-//        int mid = left + (right - left) / 2;
-//        int now = nums[mid];
-//        swap(nums[mid], nums[right]);
-//        int leftb = left;
-//        int rightb = right - 1;
-//        while (leftb <= rightb) {
-//            if (nums[leftb]>now) {
-//                leftb++;
-//            }
-//            else if (nums[rightb]<now) {
-//                rightb--;
-//            }
-//            else {
-//                swap(nums[leftb], nums[rightb]);
-//                leftb++;
-//                rightb--;
-//            }
-//        }
-//        swap(nums[leftb], nums[right]);
-//        return leftb;
-//    }
-    
-//    //Longest Increasing Subsequence
-//    int lengthOfLIS(vector<int>& nums) {
-//        return findLength(nums, INT_MIN, 0);
-//    }
-//    
-//    int dplengthOfLIS(vector<int>& nums) {
-//        int leng = nums.size();
-//        if (leng<=1) {
-//            return leng;
-//        }
-//        vector<int> dp(leng, 0);
-//        int curr=0;
-//        for (int i=0; i<leng; ++i) {
-//            dp[i]=1;
-//            for (int j=0; j<i; ++j) {
-//                if (nums[i]>nums[j]) {
-//                    dp[i]=dp[j]+1;
-//                }
-//            }
-//            curr=max(curr, dp[i]);
-//        }
-//        return curr;
-//    }
-//    
-//    int dplogLengthOfLIS(vector<int>& nums) {
-//        int leng = nums.size();
-//        if (leng<=0) {
-//            return 0;
-//        }
-//        vector<int> table(leng+1, 0);
-//        int result=1;
-//        for (int i=1; i<leng; ++i) {
-//            int index=findLargestSmaller(table, 1, result, nums[i]);
-//            if (index==result) {
-//                table[++result]=nums[i];
-//            }
-//            else {
-//                table[index+1]=nums[i];
-//            }
-//        }
-//        return result;
-//    }
-//    int findLength(vector<int>& nums, int prev, int curr) {
-//        if (curr == nums.size()) {
-//            return 0;
-//        }
-//        int taken=0;
-//        if (nums[curr] > prev) {
-//            taken = 1 + findLength(nums, nums[curr], curr+1);
-//        }
-//        int notTaken = findLength(nums, prev, curr+1);
-//        return max(taken, notTaken);
-//    }
-//    
-//    int findLargestSmaller(vector<int>& table, int left, int right, int target) {
-//        while (left<=right) {
-//            int mid=left+(right-left)/2;
-//            if (table[mid]>=target) {
-//                right=mid-1;
-//            }
-//            else {
-//                left=mid+1;
-//            }
-//        }
-//        return right;
-//    }
-//    struct Tuple {
-//    public:
-//        string name;
-//        int value;
-//        int maximum_stack_size;
-//        Tuple(string name, int value, int maximum_stack_size) {
-//            this->name = name;
-//            this->value = value;
-//            this->maximum_stack_size = maximum_stack_size;
-//        }
-//    };
-//    int maxValue(int n, vector<string>& stuff, vector<Tuple*>& items) {
-//        unordered_map<string, int> cnt_dict;
-//        for (auto s:stuff) {
-//            cnt_dict[s]++;
-//        }
-//        priority_queue<int, vector<int>, less<int>> max_heap;
-//        unordered_map<string, Tuple*> item_map;
-//        for (auto item:items) {
-//            item_map[item->name]=item;
-//        }
-//        for (auto it=cnt_dict.begin(); it!=cnt_dict.end(); ++it) {
-//            string key = it->first;
-//            int amt = it->second;
-//            int maxstack = item_map[key]->maximum_stack_size;
-//            int value = item_map[key]->value;
-//            if (amt>maxstack) {
-//                max_heap.push(value*maxstack);
-//                max_heap.push(value*(amt-maxstack));
-//            }
-//            else {
-//                max_heap.push(value*amt);
-//            }
-//        }
-//        int t=0, result=0;
-//        while (t<n) {
-//            result+=max_heap.top();
-//            max_heap.pop();
-//            t++;
-//        }
-//        return result;
-//    }
-//    int maxPathSum(TreeNode* root) {
-//        if (root==NULL) {
-//            return INT_MIN;
-//        }
-//        int maxsum=INT_MIN;
-//        helper(root, maxsum);
-//        return maxsum;
-//    }
-//    
-//    TreeNode* buildTree(string a) {
-//        if(a.size()==0) {
-//            return NULL;
-//        }
-//        int leng = a.size();
-//        stack<TreeNode*> stk;
-//        
-//        TreeNode* root=new TreeNode(a[0]);
-//        TreeNode* output=root;
-//        //   Ex 1: "a?b?c:d:e"
-//        //                |
-//        //   a
-//        // b   c
-//        bool flag=true;
-//        for(int i=1;i<leng;++i) {
-//            if(a[i]>='a' && a[i]<='z') {
-//                if(flag) {
-//                    stk.top()->left = new TreeNode(a[i]);
-//                    root=stk.top()->left;
-//                }
-//                else {
-//                    if(stk.empty()) {
-//                        stk.push(root);
-//                    }
-//                    stk.top()->right=new TreeNode(a[i]);
-//                    root=stk.top()->right;
-//                }
-//            }
-//            else if(a[i]=='?') {
-//                stk.push(root);
-//                flag=true;
-//            }
-//            else if(a[i]==':') {
-//                flag=false;
-//            }
-//        }
-//        return output;
-//    }
-//    int helper(TreeNode* root, int& maxsum) {
-//        if (root==NULL) {
-//            return 0;
-//        }
-//        int leftsum=0, rightsum=0;
-//        if (root->left!=NULL) {
-//            leftsum = helper(root->left, maxsum);
-//        }
-//        if (root->right!=NULL) {
-//            rightsum = helper(root->right, maxsum);
-//        }
-//        if (root->left && root->right) {
-//            maxsum = max(maxsum, root->val + leftsum + rightsum);
-//            return max(leftsum, rightsum) + root->val;
-//        }
-//        else if(root->left){
-//            return leftsum+root->val;
-//        }
-//        else {
-//            return rightsum+root->val;
-//        }
-//    }
-
-//    class Server {
-//    private:
-//        unordered_set<Client*> _clients;
-//        
-//    public:
-//        void registerClient(Client* client) {
-//            _clients.insert(client);
-//        }
-//        
-//        void unregisterClient(Client* client) {
-//            if (_clients.count(client)) _clients.erase(client);
-//        }
-//        
-//        void update(string ticker) {
-//            for (auto c:_clients) c->update(ticker);
-//        }
-//    };
-//    
-//    struct Comp {
-//        bool operator()(const pair<string,int>& a, const pair<string,int>& b) {
-//            return a.second > b.second;
-//        }
-//    };
-//    
-//    class Client {
-//    private:
-//        string _id;
-//        unordered_map<string, int> _freq;
-//        set<pair<string,int>, Comp> _top10freq;
-//        Server* _server;
-//        
-//    public:
-//        Client(string id, Server* server)
-//        :_id(id), _server(server) {
-//            if (_server) _server->registerClient(this);
-//        }
-//        
-//        void registerTicker(string ticker) {
-//            if (!_freq.count(ticker)) _freq[ticker] = 0;
-//        }
-//        
-//        void update(string ticker) {
-//            if (!_freq.count(ticker)) return;
-//            _freq[ticker]++;
-//            for (auto& x:_top10freq) {
-//                if (x.first == ticker) {
-//                    _top10freq.erase(x); break;
-//                }
-//            }
-//            if (_top10freq.size() < 10) _top10freq.emplace(ticker, _freq[ticker]);
-//            else if (_top10freq.rbegin()->second < _freq[ticker]) {
-//                _top10freq.erase(*_top10freq.rbegin());
-//                _top10freq.emplace(ticker, _freq[ticker]);
-//            }
-//        }
-//        
-//        vector<string> getTop10freq() {
-//            vector<string> top10;
-//            for (auto& x:_top10freq) top10.push_back(x.first);
-//            return top10;
-//        }
-//    };
-//    int lengthOfLongestSubstringKDistinct(String s, int k) {
-//        if(k==0 || s==null || s.length()==0)
-//            return 0;
-//        
-//        if(s.length()<k)
-//            return s.length();
-//        
-//        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-//        
-//        int maxLen=k;
-//        int left=0;
-//        for(int i=0; i<s.length(); i++){
-//            char c = s.charAt(i);
-//            if(map.containsKey(c)){
-//                map.put(c, map.get(c)+1);
-//            }else{
-//                map.put(c, 1);
-//            }
-//            
-//            if(map.size()>k){
-//                maxLen=Math.max(maxLen, i-left);
-//                
-//                while(map.size()>k){
-//                    
-//                    char fc = s.charAt(left);
-//                    if(map.get(fc)==1){
-//                        map.remove(fc);
-//                    }else{
-//                        map.put(fc, map.get(fc)-1);
-//                    }
-//                    
-//                    left++;
-//                }
-//            }
-//            
-//        }
-//        
-//        maxLen = Math.max(maxLen, s.length()-left);
-//        
-//        return maxLen;
-//    }
-//    class Singleton
-//    {
-//    private:
-//        /* Here will be the instance stored. */
-//        static Singleton* instance;
-//        
-//        /* Private constructor to prevent instancing. */
-//        Singleton();
-//        
-//    public:
-//        /* Static access method. */
-//        static Singleton* getInstance() {
-//            
-//            if (instance == 0)
-//            {
-//                instance = new Singleton();
-//            }
-//            
-//            return instance;
-//        }
-//        
-//    };
-//
-//    class prodcons {
-//        
-//        vector<int> buffer;
-//
-//        uint64_t produced_count = 0;
-//        uint64_t consumed_count = 0;
-//        mutex counts_mutex;
-//        condition_variable counts_cv;
-//
-//        void producer()
-//        {
-//            while (true) {
-//                unique_lock<mutex> counts_lock(counts_mutex);
-//                while (produced_count - consumed_count == buffer.size()) {
-//                    counts_cv.wait(counts_lock);
-//                }
-//
-//                int product = rand();
-//                buffer[produced_count++ % buffer.size()] = product;
-//                cout << "produced: " << product << "\n";
-//
-//                counts_cv.notify_all();
-//            }
-//        }
-//
-//        void consumer()
-//        {
-//            while (true) {
-//                unique_lock<mutex> counts_lock(counts_mutex);
-//                while (produced_count - consumed_count == 0) {
-//                    counts_cv.wait(counts_lock);
-//                }
-//
-//                int product = buffer[consumed_count++ % buffer.size()];
-//                cout << "consumed: " <<  product << "\n";
-//
-//                counts_cv.notify_all();
-//            }
-//        }
-//
-//        int test()
-//        {
-//            buffer.resize(16, 0);
-//             to handle the uint64_t counts overflow, the following must be true:
-//             (0xffffffffffffffff + 1) % buffer.size() == 0
-//    
-//            vector<thread> threads;
-//            for (int i = 0; i < 3; ++i) {
-//                threads.push_back(producer());
-//            }
-//            sleep(3);
-//            for (int i = 0; i < 3; ++i) {
-//                threads.push_back(consumer());
-//            }
-//            for (int i = 0; i < threads.size(); ++i) {
-//                threads[i].join();
-//            }
-//            return 0;
-//        }
-//    };
-//    int solution() {
-//        vector<int> first_3_digit(27, 0);
-//        vector<int> last_3_digit(27, 0);
-//        unordered_map<int, int> single_zero_set;
-//        for (int i=100; i<1000; i++) {
-//            int first_sum, zero_count, non_zero_num;
-//            sum_count_zero(i, first_sum, zero_count, non_zero_num);
-//            int last_3_combo=1;
-//            if (zero_count==1) {
-//                if (single_zero_set[non_zero_num]>0) {
-//                    last_3_combo=0;
-//                }
-//                else {
-//                    single_zero_set[non_zero_num]=1;
-//                }
-//                last_3_combo=3;
-//            }
-//            else if (zero_count==2) {
-//                last_3_combo=3;
-//            }
-//            first_3_digit+=1;
-//            last_3_digit+=last_3_combo;
-//        }
-//        int result=0;
-//        for (int i=0; i<27; i++) {
-//            result+=first_3_digit[i]*last_3_digit[i];
-//        }
-//        return result;
-//    }
-//    
-//    class Employee {
-//    public:
-//        int id_;
-//        vector<Employee*> reporters_;
-//    };
-//    void GetReporters(Employee *e, int id, vector<Employee*> &reporters, bool found = false, bool processed = false)
-//    {
-//        if (!processed &&
-//            e)
-//        {
-//            if (found) {
-//                reporters.push_back(e);
-//            }
-//            if (e->id_ == id) {
-//                found = true;
-//            }
-//            for (auto reporter : e->reporters_) {
-//                GetReporters(reporter, id, reporters, found, processed);
-//            }
-//            if (e->id_ == id) {
-//                processed = true;
-//            }        
-//        }
-//    }
 };
 
 
@@ -17335,183 +15994,2834 @@ public:
         sort(result.begin(), result.end(), mycompare);
         return result;
     }
-
+    
 };
 
-class Solution500 {
-private:
-    const char flag='1';
-    void dfsHelper(vector<string>& zombies, vector<bool>& visited, int index, const char& target) {
-        for(int cursor=0;cursor<zombies.size();cursor++) {
-            const char& refchar = zombies[index].at(cursor);
-            if(refchar==target && visited[cursor]==false) {
-                visited[cursor]=true;
-                dfsHelper(zombies, visited, cursor, target);
+class Solution509 {
+public:
+    long dotProduct(vector<pair<int, int>> a1, vector<pair<int, int>> a2) {
+        if (a1.empty() || a1.size()==0 || a2.empty() || a2.size()==0) {
+            return 0;
+        }
+        //  0 1 2 3 4 5
+        //  0 4 0 0 2 3
+        //  0 7 6 0 0 1
+        unordered_map<int, int> vector1;
+        for(int i=0; i<a1.size(); i++) {
+            vector1[a1[i].first]=a1[i].second;
+        }
+        long result=0;
+        for (int i=0; i<a2.size(); i++) {
+            if (vector1[a2[i].first]!=0) {
+                result+=vector1[a2[i].first]*a2[i].second;
             }
         }
-        return;
+        return result;
+    }
+    void test() {
+        vector<pair<int, int>> a1;
+        a1.push_back({1, 4});
+        a1.push_back({4, 2});
+        a1.push_back({5, 3});
+        vector<pair<int, int>> a2;
+        a2.push_back({1, 7});
+        a2.push_back({2, 6});
+        a2.push_back({5, 1});
+        cout<<dotProduct(a1, a2);
+    }
+};
+
+class Solution510 {
+public:
+//    碰到这种相邻是重复的问题应该用stack
+    int getCompleteTime(string list, int k) {
+        string curr;
+        stack<char> stk;
+        for (int i=0; i<list.size(); i++) {
+            if (!stk.empty()) {
+                if (stk.top()==list[i]) {
+                    for (int j=0; j<k; j++) {
+                        curr+=stk.top();
+                    }
+                }
+            }
+            curr+=list[i];
+            stk.push(list[i]);
+        }
+        return curr.size();
     }
     
+    void test() {
+        cout<<getCompleteTime("AAAA", 3)<<endl;
+        cout<<getCompleteTime("ABCD", 3)<<endl;
+        cout<<getCompleteTime("ABAD", 3)<<endl;
+    }
+};
+
+class Solution511 {
 public:
-    int zombieCluster(vector<string> zombies) {
-        int n=(int)zombies.size();
-        if(n<=1) {
-            return n;
-        }
-        vector<bool> visited(n, false);
+//Maximum Size Subarray Sum Equals k
+    int maxSubArrayLen(vector<int> nums, int k) {
+        int sum=0;
         int result=0;
-        for(int zombie=0;zombie<n;zombie++) {
-            if(visited[zombie]==false) {
-                result++;
-                dfsHelper(zombies, visited, zombie, flag);
+        unordered_map<int, int> dict;
+        for(int i=0;i<nums.size();i++) {
+            sum+=nums[i];
+            if (sum==k) {
+                result=max(result, i+1);
+            }
+            int diff=sum-k;
+            if (dict.find(diff)!=dict.end()) {
+                result=max(result, i-dict[diff]);
+            }
+            if (dict.find(sum)==dict.end()) {
+                dict[sum]=i;
             }
         }
         return result;
     }
     
+    void test() {
+        cout<<maxSubArrayLen({1, -1, 5, -2, 3}, 3)<<endl;
+        cout<<maxSubArrayLen({-2, -1, 2, 1}, 1)<<endl;
+    }
 };
 
-class Solution501 {
-private:
-    void dfsHelper(string& input, int i, int leng, string& combo, vector<string>& result) {
-        if(i==leng-1) {
-            combo+=input[i];
-            result.push_back(combo);
-            combo.pop_back();
-            return;
-        }
-        combo+=input[i];
-        combo+=" ";
-        dfsHelper(input, i+1, leng, combo, result);
-        combo.pop_back();
-        dfsHelper(input, i+1, leng, combo, result);
-        combo.pop_back();
-    }
-    
+class Solution512 {
+//  Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+//Note: The input string may contain letters other than the parentheses ( and ).
+//Examples:
+//  "()())()" -> ["()()()", "(())()"]
+//  "(a)())()" -> ["(a)()()", "(a())()"]
+//  ")(" -> [""]
 public:
-    vector<string> listspace(string input) {
-        int leng=(int)input.size();
+    vector<string> removeInvalidParentheses(string s) {
         vector<string> result;
-        if(leng<=0) {
+        dfsHelper(result, s, 0, ')');
+        return result;
+    }
+    vector<string> removeInvalidParentheses1(string s) {
+        vector<string> result;
+        set<string> visit;
+        if (s.empty()) {
             return result;
         }
-        string combo="";
-        dfsHelper(input, 0, leng, combo, result);
+        queue<string> que;
+        string temp;
+        que.push(s);
+        visit.insert(s);
+        bool level=false;
+        while (!que.empty()) {
+            s=que.front(); que.pop();
+            if (isValidString(s)) {
+                result.push_back(s);
+                level=true;
+            }
+            if (level) {
+                continue;
+            }
+            for (int i=0; i<s.size(); i++) {
+                if (s[i]!='(' && s[i]!=')') {
+                    continue;
+                }
+                temp=s.substr(0, i) + s.substr(i+1);
+                if (visit.find(temp)==visit.end()) {
+                    que.push(temp);
+                    visit.insert(temp);
+                }
+            }
+            
+        }
         return result;
     }
-};
-
-
-class Solution502 {
-public:
-    bool isCousions(TreeNode* root, TreeNode* one, TreeNode* two) {
-        if(root==nullptr) {
-            return false;
-        }
-        if(one==two) {
-            return false;
-        }
-        vector<TreeNode*> path;
-        TreeNode* lparent=NULL;
-        TreeNode* rparent=NULL;
-        int lHeight=getHeight(root, one, path, &lparent);
-        path.clear();
-        int rHeight=getHeight(root, two, path, &rparent);
-        if(lHeight!=rHeight) {
-            return false;
-        }
-        if(lparent==rparent) {
-            return false;
-        }
-        return true;
-    }
-private:
-    int getHeight(TreeNode* root, TreeNode* target, vector<TreeNode*>& path, TreeNode** parent) {
-        if(root==NULL) {
-            return 0;
-        }
-        if(root==target) {
-            *parent=path[path.size()-1];
-            return 1;
-        }
-        path.push_back(root);
-        int left=getHeight(root->left, target, path, parent);
-        int right=getHeight(root->right, target, path, parent);
-        path.pop_back();
-        return max(left, right)+1;
-    }
-};
-
-class Solution503 {
-public:
-    int minCut(int n) {
-        int result=minCutHelper(n);
-        return result;
-    }
-private:
-    int minCutHelper(int n) {
-        if(n<=0) {
-            return 0;
-        }
-        for(int i=n/2+1;i>=1;i--) {
-            if(i*i==n) {
-                return 1;
+    
+    bool isValidString(string s) {
+        int cnt=0;
+        for (int i=0; i<s.size(); i++) {
+            if (s[i]=='(') {
+                cnt++;
             }
-            else if(i*i<n) {
-                return 1+minCutHelper(n-i*i);
+            else if (s[i]==')') {
+                cnt--;
             }
-        }
-        return n;
-    }
-};
-
-class Solution504 {
-public:
-    bool cycle(vector<string> array) {
-        int leng=(int)array.size();
-        if(leng<=0) {
-            return false;
-        }
-        vector<string> result;
-        result.push_back(array[0]);
-        vector<bool> visited(leng, false);
-        return dfsHelper(array, leng, result, visited, array[0][0]);
-    }
-private:
-    bool dfsHelper(vector<string>& array, int leng, vector<string>& result, vector<bool>& visited, char sign) {
-        if(result.size()==leng) {
-            if(result[leng-1][result[leng-1].length()-1]==sign) {
-                return true;
-            }
-            else {
+            if (cnt<0) {
                 return false;
             }
         }
-        string str=result[result.size()-1];
-        char lastsign=str[str.length()-1];
-        for(int i=1;i<leng;i++) {
-            if(visited[i]==true) {
+        return cnt==0;
+    }
+    
+    void dfsHelper(vector<string>& result, string s, int start, char right) {
+        for (int i=0, cnt=0; i<s.size(); i++) {
+            if (s[i]=='(' || s[i]==')') {
+                s[i]==right?cnt++:cnt--;
+            }
+            if (cnt<=0) {
                 continue;
             }
-            if(lastsign==array[i][0]) {
-                visited[i]=true;
-                result.push_back(array[i]);
-                bool curr=dfsHelper(array, leng, result, visited, lastsign);
-                if(curr) {
+            for (int j=start; j<=i; j++) {
+                if (s[j]==right && (j==start || s[j-1]!=right)) {
+                    dfsHelper(result, s.substr(0, j)+s.substr(j+1), j, right);
+                }
+            }
+            return;
+        }
+        reverse(s.begin(), s.end());
+        if (right==')') {
+            return dfsHelper(result, s, 0, '(');
+        }
+        result.push_back(s);
+    }
+    
+    void test() {
+        vector<string> result;
+        result=removeInvalidParentheses("()())()");
+        for (auto i : result) {
+            cout<<i<<endl;
+        }
+        result=removeInvalidParentheses("(a)())()");
+        for (auto i : result) {
+            cout<<i<<endl;
+        }
+        result=removeInvalidParentheses(")(");
+        for (auto i : result) {
+            cout<<i<<endl;
+        }
+        result=removeInvalidParentheses1("(a)())()");
+        for (auto i : result) {
+            cout<<i<<endl;
+        }
+    }
+};
+
+class Solution513 {
+public:
+//     Sparse Matrix Multiplication
+    vector<vector<int>> multiply(vector<vector<int>>& A, vector<vector<int>>& B) {
+        int m=A.size(), n=A[0].size(), nb=B[0].size();
+        vector<vector<int>> C(m, vector<int>(nb, 0));
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (A[i][j]!=0) {
+                    for (int k=0; k<nb; k++) {
+                        if (B[j][k]!=0) {
+                            C[i][k]+=A[i][j]*B[j][k];
+                        }
+                    }
+                }
+            }
+        }
+        return C;
+    }
+};
+
+class Solution514 {
+public:
+    void printVertical(TreeNode* root, int dist, multimap<int, int>& map) {
+        if (root==nullptr)
+        {
+            return;
+        }
+        map.insert({dist, root->value});
+        printVertical(root->left, dist-1, map);
+        printVertical(root->right, dist+1, map);
+    }
+    
+    void printVertical(TreeNode* root) {
+        multimap<int, int> map;
+        printVertical(root, 0, map);
+        int temp=0;
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            if (temp!=it->first)
+            {
+                cout<<endl;
+                temp=it->first;
+            }
+            cout<<it->second<<" ";
+        }
+    }
+    
+    void test() {
+        TreeNode* t1= new TreeNode(1);
+        TreeNode* t2= new TreeNode(2);
+        TreeNode* t3= new TreeNode(3);
+        TreeNode* t8= new TreeNode(8);
+        TreeNode* t5= new TreeNode(5);
+        TreeNode* t6= new TreeNode(6);
+        TreeNode* t7= new TreeNode(7);
+        t1->left=t2;
+        t1->right=t3;
+        t3->left=t5;
+        t3->right=t6;
+        t5->left=t7;
+        t5->right=t8;
+        printVertical(t1);
+    }
+};
+
+class Solution515 {
+public:
+//    Integer to English Words
+    string num2str(int num) {
+        string result="";
+        vector<string> LESS_THAN_20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        vector<string> TENS = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        vector<string> THOUSANDS = {"", "Thousands", "Millions", "Billions"};
+        int offset=0;
+        while (num) {
+            result = helper(num%1000, LESS_THAN_20, TENS, THOUSANDS)+result;
+            num/=1000;
+            if (num>0) {
+                offset++;
+                result = " "+THOUSANDS[offset]+" "+result;
+            }
+        }
+        return result;
+    }
+    
+    string helper(int num, vector<string>& less_than_20,
+                  vector<string>& tens, vector<string>& thousands) {
+        if (num==0) {
+            return "";
+        }
+        else if (num<20) {
+            return less_than_20[num]+"";
+        }
+        else if (num<100) {
+            return tens[num/10]+" "+helper(num%10, less_than_20, tens, thousands);
+        }
+        else {
+            return less_than_20[num/100]+" Hundred " + helper(num%100, less_than_20, tens, thousands);
+        }
+    }
+    
+    void test() {
+        cout<<num2str(2133939203)<<endl;
+        cout<<num2str(100103)<<endl;
+        cout<<num2str(19)<<endl;
+    }
+};
+
+class Solution516 {
+public:
+//  First Bad Version
+    int firstBadVersion(int n) {
+        return bsHelper(1, n);
+    }
+    
+    bool isBadVersion(int n) {
+        return true;
+    }
+    
+    int bsHelper(int left, int right) {
+        int middle=left+(right-left)/2;
+        if (!isBadVersion(middle)) {
+            if (isBadVersion(middle-1)) {
+                return middle;
+            }
+            return bsHelper(left, middle-1);
+        }
+        else {
+            return bsHelper(middle+1, right);
+        }
+    }
+};
+
+class Solution517 {
+public:
+    class Interval {
+    public:
+        int start, end;
+        Interval(int start, int end) {
+            this->start=start;
+            this->end=end;
+        }
+    };
+    //Meeting Rooms II;
+    int minMeetingRooms(vector<Interval>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](Interval& a, Interval& b){return a.start<b.start;});
+        priority_queue<int, vector<int>, greater<int>> mpq;
+        for (int i=0; i<intervals.size(); i++) {
+            if (!mpq.empty() && mpq.top()<=intervals[i].start) {
+                mpq.pop();
+            }
+            mpq.push(intervals[i].end);
+        }
+        return mpq.size();
+    }
+    
+    void test() {
+        vector<Interval> data;
+        data.push_back({0, 30});
+        data.push_back({10, 15});
+        data.push_back({15, 20});
+        cout<<minMeetingRooms(data)<<endl;
+    }
+};
+
+class Solution518 {
+public:
+    long getPowerNumber(long index) {
+        long x=2;
+        long n=2;
+        priority_queue<long, vector<long>, greater<long>> mpq;
+        unordered_map<long, int> dict;
+        for (x=2; x <= index + 3; x++) {
+            for (n=2; pow(x, n)<LONG_MAX; n++) {
+                long curr=pow(x, n);
+                if (dict[curr]==0) {
+                    dict[curr]++;
+                    mpq.push(curr);
+                }
+            }
+        }
+        long idx=0;
+        while (idx<index && !mpq.empty()) {
+            mpq.pop();
+            idx++;
+        }
+        if (mpq.empty()) {
+            return -1;
+        }
+        return mpq.top();
+    }
+
+    void test() {
+        cout<<getPowerNumber(0)<<endl;
+        cout<<getPowerNumber(1)<<endl;
+        cout<<getPowerNumber(2)<<endl;
+        cout<<getPowerNumber(3)<<endl;
+        cout<<getPowerNumber(4)<<endl;
+        cout<<getPowerNumber(5)<<endl;
+        cout<<getPowerNumber(6)<<endl;
+        cout<<getPowerNumber(7)<<endl;
+        cout<<getPowerNumber(8)<<endl;
+        cout<<getPowerNumber(9)<<endl;
+        cout<<getPowerNumber(10)<<endl;
+        cout<<getPowerNumber(11)<<endl;
+    }
+};
+
+class Solution519 {
+//    匹配
+//    s =  “abc”, p = “abc”
+//    s = “aaaab”, p = “a*b”
+//    s = “”, p = “a*b*c*”
+//    s = “abcdefg”, p = “.*”
+//    不匹配
+//    s = “abc”, p = “a*”
+//    s = “”, p = “ab*”
+private:
+    bool dfs(string s, string p) {
+        //空的regexp 只能匹配空字符串
+        if (p.empty()) {
+            return s.empty();
+        }
+        char c=p[0];
+        //第二个字符为*
+        if (p.size()>1 && p[1]=='*') {
+            int k=0;
+            //枚举所有匹配前两个字符的前缀，剩下部分是子问题
+            //这里用do-while而不是while 为了处理好match empty prefix
+            do {
+                if (dfs(s.substr(k), p.substr(2))) {
                     return true;
                 }
+            } while(k<s.size() && match(s[k++], c));
+            return false;
+        }
+        //第二个字符不为*
+        return !s.empty() && match(s[0], c) && dfs(s.substr(1), p.substr(1));
+    }
+    
+    bool match(char c, char p) {
+        return p=='.'?true:p==c;
+    }
+    
+    bool dfs1(string s, string p) {
+        if (p.empty()) {
+            return s.empty();
+        }
+        char c=p[0];
+        if (p.size()>1 && p[1]=='*') {
+            return dfs1(s, p.substr(2)) ||
+                       (!s.empty() && match(s[0], c) && dfs1(s.substr(1), p));
+        }
+        return !s.empty() && match(s[0], c) && dfs1(s.substr(1), p.substr(1));
+    }
+    
+    bool dfs2(string s, int i, string p, int j) {
+        if (j==p.size()) {
+            return i==s.size();
+        }
+        char c=p[j];
+        if (j+1 < p.size() && p[j+1]=='*') {
+            return dfs2(s, i, p, j+2) ||
+            (i<s.size() && match(s[i], c) && dfs2(s, i+1, p, j));
+        }
+        return i<s.size() && match(s[i], c) && dfs2(s, i+1, p, j+1);
+    }
+    
+    bool dfs3(string s, int i, string p, int j, vector<vector<bool>>& memo) {
+        if (j==p.size()) {
+            return i==s.size();
+        }
+        if (memo[i][j]!=false) {
+            return memo[i][j];
+        }
+        char c=p[j];
+        if (j+1<p.size() && p[j+1]=='*') {
+            memo[i][j]=dfs3(s, i, p, j+2, memo) ||
+            (i<s.size() && match(s[i], c) && dfs3(s, i+1, p, j, memo));
+            return memo[i][j];
+        }
+        memo[i][j]=i<s.size() && match(s[i], c) && dfs3(s, i+1, p, j+1, memo);
+        return memo[i][j];
+    }
+    
+    bool isMatch(string s, string p) {
+        vector<vector<bool>> dp(s.size()+1, vector<bool>(p.size()+1, false));
+        for (int i=s.size(); i>=0; i--) {
+            for (int j=p.size(); j>=0; j--) {
+                if (j==p.size()) {
+                    dp[i][j]=i==s.size();
+                }
                 else {
-                    visited[i]=false;
-                    result.pop_back();
+                    char c=p[j];
+                    if (j+1<p.size() && p[j+1]=='*') {
+                        dp[i][j]=dp[i][j+2] ||
+                        (i!=s.size() && match(s[i], c) && dp[i+1][j]);
+                    }
+                    else {
+                        dp[i][j]=i!=s.size() && match(s[i], c) && dp[i+1][j+1];
+                    }
+                }
+            }
+        }
+        return dp[0][0];
+    }
+    
+    bool isMatch2(string s, string p) {
+        vector<vector<bool>> dp(2, vector<bool>(p.size()+1));
+        for (int i=s.size(); i>=0; i--) {
+            for (int j=p.size(); j>=0; j--) {
+                if (j==p.size()) {
+                    dp[i%2][j]=i==s.size();
+                }
+                else {
+                    char c=p[j];
+                    if (j+1<p.size() && p[j+1]=='*') {
+                        dp[i%2][j]==dp[i%2][j+2] ||
+                        (i!=s.size() && match(s[i], c) && dp[(i+1)%2][j]);
+                    }
+                    else {
+                        dp[i%2][j]=i!=s.size() && match(s[i], c) && dp[(i+1)%2][j+1];
+                    }
+                }
+            }
+        }
+        return dp[0][0];
+    }
+public:
+    void test() {
+        string s="";
+        string p="ab";
+        cout<<isMatch(s, p)<<endl;
+        cout<<isMatch2(s, p)<<endl;
+    }
+};
+
+class Solution520 {
+//  Given a 2D array of either '\' or '/', find out how many pieces this rectangle is divided into graphically.
+//  For a 2X2 matrix with
+//    /\
+//    \/
+//  The matrix split into 5 pieces - the diamond in middle and the four corners. Return 5 as the answer.
+private:
+    int segmentCount(vector<vector<char>> m) {
+        int rows=m.size(), cols=m[0].size();
+        vector<vector<bool>> upperHalf(rows, vector<bool>(cols));
+        vector<vector<bool>> lowerHalf(rows, vector<bool>(cols));
+        int count=0;
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                if (!upperHalf[i][j]) {
+                    count++;
+                    dfs(m, upperHalf, lowerHalf, i, j, 0);
+                }
+                if (!lowerHalf[i][j]) {
+                    count++;
+                    dfs(m, upperHalf, lowerHalf, i, j, 1);
+                }
+            }
+        }
+        return count;
+    }
+    // position:upper:0, lower:1, left:2, right:3
+    // In this graph every node has at most 2 edges. Every position (x, y) has 2 nodes.
+    // If it's a '/' in (x, y) and current node is upper half of (x,y), the next two nodes to search is right half of (x - 1, y) and lower half of (x, y - 1).
+    void dfs(vector<vector<char>>& m,
+             vector<vector<bool>>& upperHalf, vector<vector<bool>>& lowerHalf,
+             int i, int j, int position) {
+        if (i<0 || i>=m.size() || j<0 || j>=m[0].size()) {
+            return;
+        }
+        if ((position==2 && m[i][j]=='\\') || (position==3 && m[i][j]=='/')) {
+            position=1;
+        }
+        if ((position==2 && m[i][j]=='/') || (position==3 && m[i][j]=='\\')) {
+            position=0;
+        }
+        if ((position==0 && upperHalf[i][j]) || (position==1 && lowerHalf[i][j])) {
+            return;
+        }
+        if (position==0) {
+            upperHalf[i][j]=true;
+        }
+        else {
+            lowerHalf[i][j]=true;
+        }
+        if (position==0 && m[i][j]=='\\') {
+            dfs(m, upperHalf, lowerHalf, i, j+1, 2);    //go right
+            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up
+        }
+        if (position==0 && m[i][j]=='/') {
+            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
+            dfs(m, upperHalf, lowerHalf, i-1, j, 1);    //go up;
+        }
+        if (position==1 && m[i][j]=='\\') {
+            dfs(m, upperHalf, lowerHalf, i, j-1, 3);    //go left
+            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
+        }
+        if (position==1 && m[i][j]=='/') {
+            dfs(m, upperHalf, lowerHalf, i, j+1, 2);    //go right
+            dfs(m, upperHalf, lowerHalf, i+1, j, 0);    //go down
+        }
+    }
+public:
+    void test() {
+        vector<vector<char>> input={{'/', '\\'}, {'\\', '/'}};
+        cout<<segmentCount(input)<<endl;
+    }
+};
+
+class Solution521 {
+// finding the longest (number of characters) absolute path to a file within our file system.
+// For example, in the second example above, the longest absolute path is "dir/subdir2/subsubdir2/file2.ext", and its length is 32 (not including the double quotes).
+private:
+public:
+    int lengthLongestPath(string input) {
+        int leng=input.size();
+        vector<int> levels(200, 0);
+        int lv=0;
+        bool isFile=false;
+        int count=0;
+        int result=0;
+        // dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext
+        // =\n end
+        // =\t level++
+        // =.
+        //     result=0;
+        for (int i=0; i<leng; i++) {
+            //find which level
+            while (input[i]=='\t') {
+                lv++;
+                i++;
+            }
+            while (input[i]!='\n' && i<leng) {
+                if (input[i]=='.') {
+                    isFile=true;
+                }
+                count++;
+                i++;
+            }
+            if (isFile) {
+                result=max(result, levels[lv-1]+count);
+            }
+            else {
+                levels[lv]=levels[lv-1]+count+1;
+            }
+            lv=0; isFile=false; count=0;
+        }
+        return result;
+    }
+};
+
+class Solution522 {
+//  word break
+private:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        if (wordDict.size() == 0) {
+            return false;
+        }
+        vector<bool> dp(s.size()+1, false);
+        dp[0] = true;
+        for (int i = 1; i <= s.size(); ++i) {
+            for (int j = i-1; j >= 0; --j) {
+                if (dp[j]) {
+                    string word=s.substr(j, i-j);
+                    if (wordDict.count(word)>0) {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+        for(int i = 0; i < dp.size(); ++i) {
+            cout<<dp[i]<<" ";
+        }
+        return dp.back();
+    }
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        if (wordDict.size() == 0) {
+            return {};
+        }
+        unordered_set<string> lookup;
+        for (auto i:wordDict) {
+            lookup.insert(i);
+        }
+        vector<string> result;
+        string combo="";
+        wordBreakHelper(s, 0, combo, lookup, result);
+        return result;
+    }
+
+    void wordBreakHelper(string s, int index, string& combo, unordered_set<string>& lookup, vector<string>& result) {
+        if (index == s.size()) {
+            combo.pop_back();   //delete last space
+            result.push_back(combo);
+            combo.clear();  //restart new backtracking
+            return;
+        }
+        for (int i = index+1; i <= s.size(); ++i) {
+            string word=s.substr(index, i-index);
+            if (lookup.count(word)>0) {
+                combo += word;
+                combo += " ";
+                wordBreakHelper(s, i, combo, lookup, result);
+            }
+        }
+    }
+public:
+    void test() {
+        string s="catsanddog";
+        vector<string> dict={"cat", "cats", "and", "sand", "dog"};
+        vector<string> result=wordBreak(s, dict);
+        for (auto ss : result) {
+            cout<<ss<<endl;
+        }
+    }
+};
+
+class Solution523 {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        if (board.size()==0) {
+            return;
+        }
+        solve(board);
+    }
+    
+    void test() {
+        vector<string> data;
+        data = {"..9748...","7........",".2.1.9...","..7...24.",".64.1.59.",".98...3..","...8.3.2.","........6","...2759.."};
+        vector<vector<char>> array;
+        for (int i=0; i<data.size(); i++) {
+            vector<char> v(data[i].c_str(), data[i].c_str()+data[i].length()+1);
+            array.push_back(v);
+        }
+        solveSudoku(array);
+        for (int i=0; i<array.size(); i++) {
+            for (int j=0; j<array[0].size(); j++) {
+                cout<<array[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        
+    }
+private:
+    bool solve(vector<vector<char>>& board) {
+        for (int i=0; i<9; i++) {
+            for (int j=0; j<9; j++) {
+                if (board[i][j]=='.') {
+                    for (char d='1'; d<='9'; d++) {
+                        if (valid(board, i, j, d)) {
+                            board[i][j]=d;
+                            if (solve(board)) {
+                                return true;
+                            }
+                            else {
+                                board[i][j]='.';
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    bool valid(vector<vector<char>>& board, int m, int n, char c) {
+        for (int row=0; row<9; row++) {
+            if (board[row][n]==c) {
+                return false;
+            }
+        }
+        for (int col=0; col<9; col++) {
+            if (board[m][col]==c) {
+                return false;
+            }
+        }
+        for (int row=0; row<3; row++) {
+            for (int col=0; col<3; col++) {
+                if (board[row+m/3*3][col+n/3*3]==c) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+
+class Solution524 {
+//    str = "aabbcc", k = 3
+//    Result: "abcabc"
+//    str = "aaadbbcc", k = 2
+//    Answer: "abacabcd"
+//    Another possible answer is: "abcabcda"
+private:
+    string rearrangeString(string str, int k) {
+        if (k==0) {
+            return str;
+        }
+        string result;
+        int leng=str.size();
+        unordered_map<char, int> dict;
+        priority_queue<pair<int, char>> pq;
+        for (auto a : str) {
+            dict[a]++;
+        }
+        for (auto it=dict.begin(); it!=dict.end(); it++) {
+            pq.push({it->second, it->first});
+        }
+        while (!pq.empty()) {
+            int cnt=min(k, leng);
+            vector<pair<int, char>> remains;
+            for (int i=0; i<cnt; i++) {
+                if (pq.empty()) {
+                    return "";
+                }
+                auto t=pq.top();
+                pq.pop();
+                result.push_back(t.second);
+                if(--t.first>0) {
+                    remains.push_back(t);
+                };
+                leng--;
+            }
+            for (auto j : remains) {
+                pq.push(j);
+            }
+        }
+        return result;
+    }
+public:
+    void test() {
+        string str="aaaadbbcc";
+        int k=2;
+        cout<<rearrangeString(str, 2)<<endl;
+    }
+};
+
+class Solution525 {
+//    gift wrapping algorithm
+//    Jarvis’s Algorithm or Wrapping
+public:
+    struct Point {
+        int x, y;
+    };
+    // To find orientation of ordered triplet (p, q, r).
+    // The function returns following values
+    // 0 --> p, q and r are colinear
+    // 1 --> Clockwise
+    // 2 --> Counterclockwise
+    int orientation(Point p, Point q, Point r) {
+        int val = (q.y-p.y)*(r.x-q.x) - (q.x-p.x)*(r.y-q.y);
+        if (val==0) {
+            return 0;
+        }
+        return val > 0 ? 1 : 2;
+    }
+    
+    void convexHull(vector<Point> points, int n) {
+        if (n<3) {
+            return;
+        }
+        vector<Point> hull;
+        int l=0;
+        for (int i=1; i<n; i++) {
+            if (points[i].x<points[l].x) {
+                l=i;
+            }
+        }
+        int p=l, q;
+        do {
+            hull.push_back(points[p]);
+            q=(p+1)%n;
+            for (int i=0; i<n; i++) {
+                // If i is more counterclockwise than current q, then update q
+                if (orientation(points[p], points[i], points[q])==2) {
+                    q=i;
+                }
+            }
+            p=q;
+        } while(p!=l);
+        
+        for (int i=0; i<hull.size(); i++) {
+            cout<<"(" << hull[i].x << ", "<< hull[i].y << ")\n";
+        }
+    }
+    
+    void test() {
+        vector<Point> points={{0, 3}, {2, 2}, {1, 1}, {2, 1},
+            {3, 0}, {0, 0}, {3, 3}};
+        int n = points.size();
+        convexHull(points, n);
+    }
+};
+
+class Solution999 {
+public:
+    class topoSort {
+    public:
+        vector<int> findOrder(int numCourses, vector<vector<int>> prerequisites) {
+            vector<int> result(numCourses, 0);
+            if (numCourses==0) {
+                return result;
+            }
+            vector<int> indegrees(numCourses, 0);
+            vector<vector<int>> graph;
+            buildGraph(numCourses, prerequisites, graph, indegrees);
+            queue<int> myque;
+            for (int i=0; i<numCourses; i++) {
+                if (indegrees[i]==0) {
+                    myque.push(i);
+                }
+            }
+            int index=0;
+            while (!myque.empty()) {
+                int temp=myque.front();   myque.pop();
+                result[index++]=temp;
+                vector<int> children=graph[temp];
+                for (auto child:children) {
+                    indegrees[child]--;
+                    if (indegrees[child]==0) {
+                        myque.push(child);
+                    }
+                }
+            }
+            if (index==numCourses) {
+                return result;
+            }
+            else {
+                return {};
+            }
+        }
+    private:
+        void buildGraph(int Courses, vector<vector<int>>& prerequisites, vector<vector<int>>& graph, vector<int>& indegrees) {
+            for (int i=0; i<Courses; i++) {
+                graph.push_back({});
+            }
+            for (auto pre : prerequisites) {
+                graph[pre[1]].push_back(pre[0]);
+                indegrees[pre[0]]++;
+            }
+        }
+    };
+    class vector2D {
+    public:
+        vector2D(vector<vector<int>>& vec2d) {
+            if (vec2d.size()==0) {
+                return;
+            }
+            it1=vec2d.begin();
+            ite=vec2d.end();
+            it2=(*it1).begin();
+            
+        }
+        int next() {
+            return *it2++;
+        }
+        
+        bool hasNext() {
+            while (it1!=ite && it2==(*it1).end()) {
+                it1++;
+                it2=(*it1).begin();
+                
+            }
+            return it1!=ite;
+        }
+        
+    private:
+        vector<vector<int>>::iterator it1, ite;
+        vector<int>::iterator it2;
+    };
+    //    Given a sorted integer array without duplicates, return the summary of its ranges
+    //    For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+    
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> ans;
+        for(int i=0;i<nums.size();)
+        {
+            int start = i;
+            while(i+1<nums.size() && nums[i+1]-nums[i]==1) {
+                i++;
+            }
+            if(nums[i]>nums[start]) {
+                //cout<<to_string(nums[start])+"->"+to_string(nums[i]);
+                ans.push_back(to_string(nums[start])+"->"+to_string(nums[i]));
+            }
+            else if(nums[i]==nums[start]) {
+                //cout<<to_string(nums[i]);
+                ans.push_back(to_string(nums[i]));
+            }
+            i++;
+        }
+        return ans;
+    }
+    //    intersection A: [ {name: "road1", cost: 3, destination: "intersection B"}, {name: "road2", cost: 2, destination: "intersection B"}, {name: "road3", cost: 1, destination: "intersection B"} ]
+    //    intersection B: [ {name: "road4", cost: 4, destination: "intersection C"} ]
+    //    intersection C: []. more info on 1point3acres.com
+    //
+    //    最短路径从A到C：road3 -> road4
+    vector<string> getPath(unordered_map<string, unordered_map<string, pair<string, int> > >& mp, const string& start, const string& end) {
+        unordered_map<string, int> dist;
+        unordered_set<string> q;
+        for (const auto& p: mp) {
+            dist[p.first] = INT_MAX;
+            q.insert(p.first);
+        }
+        dist[start] = 0;
+        unordered_map<string, string> previous;
+        if (mp.count(start) == 0 || start == end) {
+            return {};
+        }
+        while (not q.empty()) {
+            string cur;
+            int curDist = INT_MAX;
+            for (const string& s: q) {
+                if (dist[s] < curDist) {
+                    curDist = dist[s];
+                    cur = s;
+                }
+            }
+            for (auto p: mp[cur]) {
+                if (dist[p.first]> dist[cur] + p.second.second) {
+                    dist[p.first] = dist[cur] + p.second.second;
+                    previous[p.first] = cur;
+                }
+            }
+            q.erase(cur);
+        }
+        vector<string> res;
+        string tmp = end;
+        while (tmp != start) {
+            res.push_back(mp[previous[tmp]][tmp].first);
+            tmp = previous[tmp];
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+    //Insert Into Cycle Linked List
+    ListNode* insertNode(ListNode* head, int val) {
+        // 如果原本head为空，添加新的节点，next指向自己
+        if (head == NULL) {
+            ListNode *node = new ListNode(val);
+            node->next = node;
+            return node;
+        }
+        
+        ListNode *cur = head;
+        
+        do {
+            //如果val的值正好介于两个节点之间，结束循环，等号是有必要的
+            if (val >= cur->value && val <= cur->next->value)
+                break;
+            // 如果正好是排序链断开处
+            if (cur->value > cur->next->value && (val < cur->next->value || val > cur->value))
+                break;
+            // 否则继续往下找
+            cur = cur->next;
+        } while (cur != head);
+        // 循环直到又到head
+        
+        //插入新节点
+        ListNode *newNode = new ListNode(val);
+        newNode->next = cur->next;
+        cur->next = newNode;
+        return newNode;
+    }
+    //  meeting overlap
+    //  The number of minutes in a day is constant. Create an array of size 60*24 minutes in a day. Mark true on meeting schedules.
+    bool meetingOverlap(vector<vector<int>> meetings) {
+        vector<bool> schedule(24*60, false);
+        for (auto time: meetings) {
+            for (int i=time[0]; i<time[1]; i++) {
+                if (schedule[i]==true) {
+                    return true;
                 }
             }
         }
         return false;
     }
+    
+    void subset_sum(vector<int>& s, vector<int>& t, int sizes, int sizet, int sum, int ite, int target, int& nodes) {
+        nodes++;
+        if (target==sum) {
+            //handle t
+            if (ite+1<sizes && sum-s[ite]+s[ite+1]<=target) {
+                subset_sum(s, t, sizes, sizet-1, sum-s[ite], ite+1, target, nodes);
+            }
+            return;
+        }
+        else {
+            if (ite<sizes && sum+s[ite]<=target) {
+                for (int i=ite; i<sizes; i++) {
+                    t[sizet]=s[i];
+                    if (sum+s[i]<=target) {
+                        subset_sum(s, t, sizes, sizet+1, sum+s[i], i+1, target, nodes);
+                    }
+                }
+            }
+        }
+    }
+    
+    //  Subset sum. Follow-up: Optimize the solution.
+    void generateSubsets(vector<int>& s, int size, int target) {
+        vector<int> tuplet(size, 0);
+        int total=0;
+        sort(s.begin(), s.end(), [](int a, int b){return a>b;});
+        for (int i=0; i<size; i++) {
+            total+=s[i];
+        }
+        int nodes=0;
+        if (s[0] <= target && total >= target) {
+            subset_sum(s, tuplet, size, 0, 0, 0, target, nodes);
+        }
+    }    //    void sortColors(vector<int>& A, int n) {
+    //        int red = 0, blue = n-1;
+    //        int i = 0;
+    //        while (i <= blue) {
+    //            if(A[i] == 0) {//red
+    //                swap(A[red], A[i]);
+    //                red++;
+    //                i++;
+    //
+    //            }
+    //            else if(A[i]==2) {//blue
+    //                swap(A[blue], A[i]);
+    //                blue--;
+    //            }
+    //            else {
+    //                i++;
+    //            }
+    //        }
+    //    }
+    //
+    //    void sortColors(vector<vector<int>>& A, int m, int n) {
+    //        int red=0, blue=m*n-1, i=0;
+    //        while (i<=blue) {
+    //            int row=i/m, col=i%n;
+    //            if(A[row][col] == 0) {
+    //                //red
+    //                swap(A[red/m][red%n], A[row][col]);
+    //                i++;
+    //                red++;
+    //            }
+    //            else if(A[row][col] == 2) {
+    //                //blue
+    //                swap(A[blue/m][blue%n], A[row][col]);
+    //                blue--;
+    //            }
+    //            else {
+    //                i++;
+    //            }
+    //        }
+    //    }
+    //
+    //
+    //    int findOptimal(int n) {
+    //        if (n<=6) {
+    //            return n;
+    //        }
+    //        int result=0;
+    //        int b=0;
+    //        for (b = n-3-1; b >= 1; --b) {
+    //            int curr=(n-b-1)*findOptimal(b);
+    //            if (curr > result) {
+    //                result = curr;
+    //            }
+    //        }
+    //        return result;
+    //    }
+    //    // Only +, - ,(, ), empty
+    //    int Calculate1(string s) {
+    //        int sign=-1, result=0;
+    //        stack<int> stk;
+    //        for (int i = 0; i < s.size(); ++i) {
+    //            if (isdigit(s[i])) {
+    //                int sum=s[i]-'0';
+    //                while (i+1 < s.size() && isdigit(s[i+1])) {
+    //                    sum = sum * 10 + s[i+1] - '0';
+    //                    i++;
+    //                }
+    //                result = result + sum * sign;
+    //            }
+    //            else if (s[i] == '+') {
+    //                sign = 1;
+    //            }
+    //            else if (s[i] == '-') {
+    //                sign = -1;
+    //            }
+    //            else if (s[i] == '(') {
+    //                stk.push(result);
+    //                stk.push(sign);
+    //                result = 0;
+    //                sign = 1;
+    //            }
+    //            else if (s[i] == ')') {
+    //                result = result*stk.top();
+    //                stk.pop();
+    //                result += stk.top();
+    //                stk.pop();
+    //            }
+    //        }
+    //        return result;
+    //    }
+    //
+    //    // Only +, - , *, /, empty
+    //    int Calculate2(string s) {
+    //        if (s.size()<=0) {
+    //            return 0;
+    //        }
+    //        stack<int> stk;
+    //        int num=0;
+    //        char sign='+';
+    //        for (int i=0; i<s.size(); ++i) {
+    //            if (isdigit(s[i])) {
+    //                num = num*10 + s[i] - '0';
+    //                if (num > INT_MAX) {
+    //                    num = INT_MAX;
+    //                }
+    //            }
+    //            if ((!isdigit(s[i]) && s[i] != ' ' ) || i == s.size()-1) {
+    //                if (sign == '+') {
+    //                    stk.push(num);
+    //                }
+    //                else if (sign == '-') {
+    //                    stk.push(-num);
+    //                }
+    //                else if (sign == '*') {
+    //                    int top=stk.top();
+    //                    stk.pop();
+    //                    stk.push(top * num);
+    //                }
+    //                else if (sign == '/') {
+    //                    int top=stk.top();
+    //                    stk.pop();
+    //                    stk.push(top / num);
+    //                }
+    //                //reset
+    //                sign = s[i];
+    //                num = 0;
+    //            }
+    //        }
+    //        //sum up
+    //        int res=0;
+    //        while (!stk.empty()) {
+    //            res += stk.top();
+    //            stk.pop();
+    //        }
+    //        return res;
+    //    }
+    //
+    //    //    int Calculate3(string s) {
+    //    //        if (s.size() <= 0) {
+    //    //            return 0;
+    //    //        }
+    //    //        stack<int> stk;
+    //    //        int num = 0;
+    //    //        char sign = '+';
+    //    //        int res = 0;
+    //    //        for (int i = 0; i < s.size(); ++i) {
+    //    //            char cur = s[i];
+    //    //            if (isdigit(cur)) {
+    //    //                num = num * 10 + cur - '0';
+    //    //                if (num > INT_MAX) {
+    //    //                    num = INT_MAX;
+    //    //                }
+    //    //            }
+    //    //            if (cur == '+' || cur == '-' || cur == '*' || cur == '/' || i == s.size()-1) {
+    //    //                if (sign == '+' || sign == '-') {
+    //    //                    int tmp = sign == '+' ? num : -num;
+    //    //                    stk.push(tmp);
+    //    //                    res += tmp;
+    //    //                }
+    //    //                else {
+    //    //                    res = res - stk.top();
+    //    //                    stk.pop();
+    //    //                    int tmp = sign == '*' ? res * stk.top() : stk.top() / num;
+    //    //                    stk.pop();
+    //    //                    stk.push(tmp);
+    //    //                    res = res + tmp;
+    //    //                }
+    //    //                sign = cur;
+    //    //                num = 0;
+    //    //            }
+    //    //        }
+    //    //        return res;
+    //    //    }
+    //
+    //    //+, -, *, /, allowed negative after sign
+    //    int Calculate4(string s) {
+    //        if (s.size()<=0) {
+    //            return 0;
+    //        }
+    //        int num = 0;
+    //        char sign = '+';
+    //        int negative = 1;
+    //        stack<int> stk;
+    //        for (int i = 0; i < s.size(); ++i) {
+    //            if (isdigit(s[i])) {
+    //                num = num * 10 + s[i] - '0';
+    //                if (num > INT_MAX) {
+    //                    num =INT_MAX;
+    //                }
+    //            }
+    //            if (s[i] != ' ' && (i == s.size() -1  || !isdigit(s[i]))) {
+    //                //Handle 3+-10 => 3+(-10) case
+    //                if (s[i] == '-' && (i==0 || !isdigit(s[i-1]))) {
+    //                    negative = -1;
+    //                    continue;
+    //                }
+    //                if (sign == '+') {
+    //                    stk.push(negative * num);
+    //                }
+    //                else if (sign == '-') {
+    //                    stk.push(negative * -1 * num);
+    //                }
+    //                else if (sign == '*') {
+    //                    int tmp = stk.top();
+    //                    stk.pop();
+    //                    stk.push(tmp * num * negative);
+    //                }
+    //                else if (sign == '/') {
+    //                    int tmp = stk.top();
+    //                    stk.pop();
+    //                    stk.push(tmp / (negative * num));
+    //                }
+    //                //reset
+    //                num = 0;
+    //                negative = 1;
+    //                sign = s[i];
+    //            }
+    //        }
+    //        //sum up
+    //        int res = 0;
+    //        while (!stk.empty()) {
+    //            res += stk.top();
+    //            stk.pop();
+    //        }
+    //        return res;
+    //    }
+    //
+    //    //Case 4 +，-， *， /， (, ) Case
+    //    int Calculate5(string s) {
+    //        if (s.size() <= 0) {
+    //            return 0;
+    //        }
+    //        stack<int> stk;
+    //        int num = 0;
+    //        char sign = '+';
+    //        int negative = 1;
+    //        for (int i = 0; i < s.size(); ++i) {
+    //            if (isdigit(s[i])) {
+    //                num = num * 10 + s[i] - '0';
+    //                if (num > INT_MAX) {
+    //                    num = INT_MAX;
+    //                }
+    //            }
+    //            if (s[i] != ' ' && (i == s.size() - 1 || !isdigit(s[i]))) {
+    //                //Handle 3+-10 => 3+(-10) case
+    //                if (s[i] == '-' && (i == 0 || !isdigit(s[i-1]))) {
+    //                    negative = -1;
+    //                    continue;
+    //                }
+    //                if (s[i] == '(') {
+    //                    int count = 1;
+    //                    int start = i;
+    //                    int leng = 0;
+    //                    i++;
+    //                    while (i < s.size() && count > 0) {
+    //                        if (s[i] == '(') {
+    //                            count++;
+    //                        }
+    //                        else if (s[i] == ')') {
+    //                            count--;
+    //                        }
+    //                        i++;
+    //                        leng++;
+    //                    }
+    //                    //excute last ')'
+    //                    i = i - 1;
+    //                    leng--;
+    //                    string curr= s.substr(start+1, leng);
+    //                    num = Calculate5(curr);
+    //                    if (i == s.size() - 1) {
+    //                        i = i - 1;
+    //                    }
+    //                    continue;
+    //                }
+    //                if (sign == '+') {
+    //                    stk.push(negative * num);
+    //                }
+    //                else if (sign == '-') {
+    //                    stk.push(negative * -1 * num);
+    //                }
+    //                else if (sign == '*') {
+    //                    int tmp = stk.top();
+    //                    stk.pop();
+    //                    stk.push(tmp * negative * num);
+    //                }
+    //                else if (sign == '/') {
+    //                    int tmp = stk.top();
+    //                    stk.pop();
+    //                    stk.push(tmp / (negative * num));
+    //                }
+    //
+    //                //reset
+    //                num = 0;
+    //                negative = 1;
+    //                sign = s[i];
+    //            }
+    //        }
+    //        int res = 0;
+    //        while (!stk.empty()) {
+    //            res += stk.top();
+    //            stk.pop();
+    //        }
+    //        return res;
+    //    }
+    //
+    //    void helper(stack<int>& nums, stack<char>& oprs) {
+    //        int a = nums.top(); nums.pop();
+    //        int b = nums.top(); nums.pop();
+    //        char p = oprs.top(); oprs.pop();
+    //        if (p == '+') {
+    //            nums.push(b + a);
+    //        }
+    //        else if (p == '-') {
+    //            nums.push(b - a);
+    //        }
+    //        else if (p == '*') {
+    //            nums.push(b * a);
+    //        }
+    //        else if (p == '/') {
+    //            nums.push(b / a);
+    //        }
+    //        else if (p == '^') {
+    //            nums.push(pow(b, a));
+    //        }
+    //        return;
+    //    }
+    //
+    //    //Case 5  Only +, -, *, / and ^
+    //    int Calculate6(string s) {
+    //        if (s.size()<=0) {
+    //            return 0;
+    //        }
+    //        int num = 0;
+    //        stack<int> nums;
+    //        stack<char> oprs;
+    //        unordered_map<char, int> dict;
+    //        dict['+']=1;
+    //        dict['-']=1;
+    //        dict['*']=2;
+    //        dict['/']=2;
+    //        dict['^']=3;
+    //        for (int i = 0; i < s.size(); ++i) {
+    //            if (isdigit(s[i])) {
+    //                num = num * 10 + s[i] - '0';
+    //            }
+    //            else if(s[i] != ' ') {
+    //                nums.push(num);
+    //                num = 0;
+    //                //Empty case or Curr operator's level > top of opStack
+    //                if (oprs.size() == 0 || dict[s[i]] > dict[oprs.top()]) {
+    //                    oprs.push(s[i]);
+    //                }
+    //                else {
+    //                    while (!oprs.empty() && dict[s[i]] <= dict[oprs.top()]) {
+    //                        helper(nums, oprs);
+    //                    }
+    //                    oprs.push(s[i]);
+    //                }
+    //            }
+    //        }
+    //        nums.push(num);
+    //        while (!oprs.empty()) {
+    //            helper(nums, oprs);
+    //        }
+    //        return nums.top();
+    //    }
+    //    //Medean of 2 sorted array
+    //    double findMedian(vector<int>& a, vector<int>& b) {
+    //        int m = a.size(), n = b.size();
+    //        int total = m + n;
+    //        if (total % 2 != 0) {
+    //            return findKth(a, 0, b, 0, total/2 + 1);
+    //        }
+    //        else {
+    //            return (findKth(a, 0, b, 0, total/2) +
+    //                    findKth(a, 0, b, 0, total/2 + 1)) / 2.0;
+    //        }
+    //    }
+    //
+    //    double findKth(vector<int>& a, int m, vector<int>& b, int n, int k) {
+    //        if (m >= a.size()) {
+    //            return b[n+k-1];
+    //        }
+    //        if (n >= b.size()) {
+    //            return a[m+k-1];
+    //        }
+    //        if (k == 1) {
+    //            return min(a[m], b[n]);
+    //        }
+    //        int ap=m + k/2 - 1 >= a.size() ? INT_MAX : a[m+k/2-1];
+    //        int bp=n + k/2 - 1 >= b.size() ? INT_MAX : b[n+k/2-1];
+    //        if (ap<bp) {
+    //            return findKth(a, m+k/2, b, n, k-k/2);
+    //        }
+    //        else {
+    //            return findKth(a, m, b, n+k/2, k-k/2);
+    //        }
+    //    }
+    //    //second largest in BST
+    //    void inOrder(struct TreeNode* root, int& pre, int& prepre) {
+    //        if (root == NULL) {
+    //            return;
+    //        }
+    //        else {
+    //            inOrder(root->left, pre, prepre);
+    //            prepre = pre;
+    //            cout<<root->val<<" ";
+    //            pre = root->val;
+    //            inOrder(root->right, pre, prepre);
+    //        }
+    //    }
+    //
+    //    //Kth largest in BST with space
+    //    void inOrder(struct TreeNode* root, vector<int>& pres, int& i) {
+    //        if (root == NULL) {
+    //            return;
+    //        }
+    //        else {
+    //            inOrder(root->left, pres, i);
+    //            cout<<root->val<<" ";
+    //            pres[(i++)%3]=root->val;
+    //            inOrder(root->right, pres, i);
+    //        }
+    //    }
+    //
+    //    void secondLargestHelper(struct TreeNode* root, int& c) {
+    //        if (root == NULL || c >= 2) {
+    //            return;
+    //        }
+    //        secondLargestHelper(root->right, c);
+    //        c++;
+    //        if (c == 2) {
+    //            cout<<"2nd largest element is "<<root->val<<endl;
+    //            return;
+    //        }
+    //        secondLargestHelper(root->left, c);
+    //    }
+    //
+    //    void secondLargest(struct TreeNode* root) {
+    //        int c = 0;
+    //        secondLargestHelper(root, c);
+    //    }
+    //
+    //    //Say the node for whose inorder suc­ces­sor needs to be find is p.
+    //
+    //    //Case 1 : If the p has a right child then its inorder suc­ces­sor will the left most ele­ment in the right sub tree of p.
+    //
+    //    //Case 2: If the p doesnt have a right child then its inorder suc­ces­sor will the one of its ances­tors, using par­ent link keep trav­el­ing up till you get the node which is the left child of its par­ent. Then this par­ent node will be the inorder successor.
+    //
+    //    //Case 3: if p is the right most node in the tree then its inorder suc­ces­sor will be NULL.
+    //
+    //    TreeNode* leftMost(TreeNode* p) {
+    //        while (p->left) {
+    //            p = p->left;
+    //        }
+    //        return p;
+    //    }
+    //
+    //    TreeNode* inOrderSuccessor(TreeNode* p) {
+    //        if (p->right) {
+    //            return leftMost(p->right);
+    //        }
+    //        TreeNode* parent = p->parent;
+    //        while (parent && p == parent->right) {
+    //            p = parent;
+    //            parent = parent->parent;
+    //        }
+    //
+    //        return parent;
+    //    }
+    //
+    //    //Find Successor, no parent point, no value to compare, but give the root of tree
+    //    void inOrderTraverse(TreeNode* root, vector<TreeNode*>& inorders) {
+    //        if (root == NULL) {
+    //            return;
+    //        }
+    //        inOrderTraverse(root->left, inorders);
+    //        inorders.push_back(root);
+    //        inOrderTraverse(root->right, inorders);
+    //    }
+    //
+    //    TreeNode* inOrderSuccessor(TreeNode* root, TreeNode* p) {
+    //        if (p->right) {
+    //            return leftMost(p);
+    //        }
+    //        vector<TreeNode*> inorders;
+    //        inOrderTraverse(root, inorders);
+    //        for (int i = 0; i < inorders.size(); ++i) {
+    //            if (inorders[i] == p && i+1 < inorders.size()) {
+    //                return inorders[i+1];
+    //            }
+    //        }
+    //        return NULL;
+    //    }
+    //
+    //    void dfs(TreeNode* root, TreeNode* p, vector<TreeNode*>& array, vector<TreeNode*>& res) {
+    //        if (root == NULL) {
+    //            return;
+    //        }
+    //        array.push_back(root);
+    //        if (root == p) {
+    //            res.insert(res.end(), array.begin(), array.end());
+    //            return;
+    //        }
+    //        dfs(root->left, p, array, res);
+    //        dfs(root->right, p, array, res);
+    //        array.pop_back();
+    //    }
+    //
+    //    vector<TreeNode*> getAncestors(TreeNode* root, TreeNode* p) {
+    //        vector<TreeNode*> res;
+    //        vector<TreeNode*> array;
+    //        dfs(root, p, array, res);
+    //        return res;
+    //    }
+    //
+    //    //第二个使用了DFS Backtracking, 来寻找p到root的路径， 而且修改了找不到返回本身，
+    //    //如果需要返回Null的话， 删掉temp,。总体来说跟前面差不多，少许少了些无用功
+    //    TreeNode* inOrderSuccessorWithRoot(TreeNode* root, TreeNode* p) {
+    //        TreeNode* temp = p;
+    //        if (p != NULL && p->right != NULL) {
+    //            return leftMost(p->right);
+    //        }
+    //        vector<TreeNode*> ancestors = getAncestors(root, p);
+    //        int i = 1;
+    //        while (ancestors.size() - i > 0) {
+    //            TreeNode* parent = ancestors[ancestors.size()-1-i];
+    //            if (parent->left == p) {
+    //                return parent;
+    //            }
+    //            p = parent;
+    //            i++;
+    //        }
+    //        return temp;
+    //    }
+    //
+    //    TreeNode* rightMost(TreeNode* root) {
+    //        if (root == NULL) {
+    //            return NULL;
+    //        }
+    //        while (root->right != NULL) {
+    //            root = root->right;
+    //        }
+    //        return root;
+    //    }
+    //    //Find predecessor with parent, no root
+    //    TreeNode* inOrderPredecessor(TreeNode* p) {
+    //        if (p==NULL) {
+    //            return NULL;
+    //        }
+    //        if (p->left!=NULL) {
+    //            return rightMost(p->left);
+    //        }
+    //        TreeNode* parent = p->parent;
+    //        TreeNode* curr = p;
+    //        while (parent != NULL && curr == parent->left) {
+    //            curr = parent;
+    //            parent = parent->parent;
+    //        }
+    //        return parent;
+    //    }
+    //
+    //    //Inorder Successor(Predecessor) in BST
+    //    //With Value and Root
+    //    TreeNode* inOrderSuccessorWithRootAndValue(TreeNode* root, TreeNode* p) {
+    //        TreeNode* successor = NULL;
+    //        while (root!=NULL) {
+    //            if (p->val < root->val) {
+    //                successor = root;
+    //                root = root->left;
+    //            }
+    //            else {
+    //                root = root->right;
+    //            }
+    //        }
+    //        return successor;
+    //    }
+    //
+    //    TreeNode* predeccessor(TreeNode* root, TreeNode* p) {
+    //        if (root == NULL) {
+    //            return NULL;
+    //        }
+    //        if (root->val >= p->val) {
+    //            return predeccessor(root->left, p);
+    //        }
+    //        else {
+    //            TreeNode* right = predeccessor(root->right, p);
+    //            return right == NULL ? root : right;
+    //        }
+    //    }
+    //    //Array Update and Query
+    //
+    //    //Naive
+    //    class numArrayNaive {
+    //    private:
+    //        vector<int> nums;
+    //    public:
+    //        numArrayNaive(vector<int>& nums) {
+    //            this->nums = nums;
+    //        }
+    //        void update(int i, int val) {
+    //            this->nums[i] = val;
+    //        }
+    //        int sumRange(int i, int j) {
+    //            int sum = 0;
+    //            for (int low = i; low <= j; ++low) {
+    //                sum += nums[low];
+    //            }
+    //            return sum;
+    //        }
+    //    };
+    //
+    //
+    //    void testNaive(int i) {
+    //        vector<int> array;
+    //        for (int j=0; j<i; ++j) {
+    //            array.push_back(j);
+    //        }
+    //        numArrayNaive* nan = new numArrayNaive(array);
+    //        cout<<nan->sumRange(3, 7);
+    //    }
+    //
+    //    //Naive with Buffer
+    //    class numArrayBuffer {
+    //    private:
+    //        vector<int> nums;
+    //        vector<long> sums;
+    //        vector<pair<int, int>> buffer;
+    //    public:
+    //        numArrayBuffer(vector<int>& nums) {
+    //            this->nums = nums;
+    //            this->sums = vector<long>(nums.size() + 1);
+    //            for (int i=0; i<nums.size()-1; ++i) {
+    //                sums[i+1]=nums[i]+sums[i];
+    //            }
+    //        }
+    //
+    //        void update(int i, int val) {
+    //            buffer.push_back(make_pair(i, val-nums[i]));
+    //            nums[i] = val;
+    //            if (buffer.size() > 300) {
+    //                for (int j = 0; j<nums.size()-1; ++j) {
+    //                    sums[j+1] = nums[j] + sums[j];
+    //                }
+    //            }
+    //        }
+    //
+    //        int sumRange(int i, int j) {
+    //            long res = sums[j+1] - sums[i];
+    //            for (int m = 0; m < buffer.size(); ++m) {
+    //                if (buffer[m].first <= j && buffer[m].first >= i) {
+    //                    res += buffer[m].second;
+    //                }
+    //            }
+    //            if (res >= INT_MAX || res <= INT_MIN) {
+    //                throw out_of_range("error");
+    //            }
+    //            else {
+    //                return (int)res;
+    //            }
+    //        }
+    //    };
+    //
+    //    void testBuffer(int n) {
+    //        vector<int> array;
+    //        for (int j=0; j<n; ++j) {
+    //            array.push_back(j);
+    //        }
+    //        numArrayBuffer* nan = new numArrayBuffer(array);
+    //        cout<<nan->sumRange(3, 7);
+    //    }
+    //
+    //
+    //    //Segment Tree
+    //    struct segmentTree {
+    //        int start, end;
+    //        segmentTree *left, *right;
+    //        int sum;
+    //        segmentTree(int s, int e): start(s), end(e) {
+    //            left=NULL;
+    //            right=NULL;
+    //            sum=0;
+    //        }
+    //    };
+    //
+    //
+    //    class numArrayTree {
+    //    private:
+    //        segmentTree* root;
+    //
+    //        int sumRange(segmentTree* root, int i, int j) {
+    //            if(root==NULL) {
+    //                return 0;
+    //            }
+    //            if (root->start == i && root->end == j) {
+    //                return root->sum;
+    //            }
+    //            else {
+    //                int mid = root->start + (root->end-root->start)/2;
+    //                if (j <= mid) {
+    //                    return sumRange(root->left, i, j);
+    //                }
+    //                else if (i >= mid + 1) {
+    //                    return sumRange(root->right, i, j);
+    //                }
+    //                else {
+    //                    return sumRange(root->right, mid+1, j) +
+    //                    sumRange(root->left, i, mid);
+    //                }
+    //            }
+    //        }
+    //        void updateTree(segmentTree* root, int i, int val) {
+    //            if (root->start == root->end) {
+    //                root->sum = val;
+    //            }
+    //            else {
+    //                int mid = root->start + (root->end - root->start)/2;
+    //                if (i <= mid) {
+    //                    updateTree(root->left, i, val);
+    //                }
+    //                else {
+    //                    updateTree(root->right, i, val);
+    //                }
+    //                root->sum = root->left->sum + root->right->sum;
+    //            }
+    //        }
+    //
+    //        segmentTree* buildTree(vector<int>& nums, int start, int end) {
+    //            if (start>end) {
+    //                return NULL;
+    //            }
+    //            else {
+    //                segmentTree* p = new segmentTree(start, end);
+    //                if (start == end) {
+    //                    p->sum = nums[start];
+    //                }
+    //                else {
+    //                    int mid = start + (end - start)/2;
+    //                    p->left = buildTree(nums, start, mid);
+    //                    p->right = buildTree(nums, mid+1, end);
+    //                    if (p->left!=NULL && p->right!=NULL) {
+    //                        p->sum = p->left->sum + p->right->sum;
+    //                    }
+    //                    else if (p->left!=NULL) {
+    //                        p->sum = p->left->sum;
+    //                    }
+    //                    else if (p->right!=NULL) {
+    //                        p->sum = p->right->sum;
+    //                    }
+    //                    else {
+    //                        p->sum = 0;
+    //                    }
+    //                }
+    //                return p;
+    //            }
+    //        }
+    //    public:
+    //        numArrayTree(vector<int>& array) {
+    //            this->root = buildTree(array, 0, array.size()-1);
+    //        }
+    //        int sumRange(int start, int end) {
+    //            return sumRange(root, start, end);
+    //        }
+    //
+    //        void updateTree(int i, int val) {
+    //            updateTree(root, i, val);
+    //        }
+    //    };
+    //
+    //    void testSegmentTree(int i) {
+    //        vector<int> array;
+    //        for (int j=0; j<i; ++j) {
+    //            array.push_back(j);
+    //        }
+    //        numArrayTree* nat = new numArrayTree(array);
+    //        nat->updateTree(3, 10);
+    //        cout<<nat->sumRange(3, 7)<<endl;
+    //    }
+    //
+    //    class numArrayBIT {
+    //    private:
+    //        vector<int> nums;
+    //        vector<int> bits;
+    //        int n;
+    //
+    //        void init(int i, int val) {
+    //            i++;
+    //            while (i<=n)  {
+    //                bits[i] += val;
+    //                i += (i & -i);
+    //            }
+    //        }
+    //
+    //        int getSum(int i) {
+    //            int sum=0;
+    //            i++;
+    //            while (i>0) {
+    //                sum += bits[i];
+    //                i = i - (i&-i);
+    //            }
+    //            return sum;
+    //        }
+    //    public:
+    //        numArrayBIT(vector<int> nums) {
+    //            this->nums = nums;
+    //            n = nums.size();
+    //            bits = vector<int>(n+1, 0);
+    //            for (int i=0; i<n; ++i) {
+    //                init(i, nums[i]);
+    //            }
+    //        }
+    //
+    //        void update(int i, int val) {
+    //            int diff = val - nums[i];
+    //            nums[i] = val;
+    //            init(i, diff);
+    //        }
+    //
+    //        int sumRange(int i, int j) {
+    //            return getSum(j) - getSum(i-1);
+    //        }
+    //    };
+    //
+    //    void testBits(int i) {
+    //        vector<int> array;
+    //        for (int j=0; j<i; ++j) {
+    //            array.push_back(j);
+    //        }
+    //        numArrayBIT* nab = new numArrayBIT(array);
+    //        nab->update(3, 10);
+    //        cout<<nab->sumRange(3, 7)<<endl;;
+    //    }
+    //Calculator series II
+    //Most General Case: Can handle +, -, *, /, ^, (, ) and Negative sign
+    int Calculate(string s) {
+        if (s.size()<=0) {
+            return 0;
+        }
+        int num = 0;
+        int negative = 1;
+        stack<int> nums;
+        stack<char> oprs;
+        unordered_map<char, int> dict;
+        dict['+'] = 1; dict['-'] = 1;
+        dict['*'] = 2; dict['/'] = 2;
+        dict['^'] = 3;
+        
+        for (int i=0; i<s.size(); ++i) {
+            char cur = s[i];
+            if (isdigit(cur)) {
+                num = num * 10 + cur - '0';
+            }
+            else if (cur != ' ') {
+                if (cur == '(') {
+                    int count = 1;
+                    int j = i + 1;
+                    int leng = 0;
+                    while (j<s.size()) {
+                        char now = s[j];
+                        if (now == '(') {
+                            count++;
+                        }
+                        else if (now == ')') {
+                            count--;
+                        }
+                        if (count==0) {
+                            break;
+                        }
+                        j++;
+                        leng++;
+                    }
+                    int temp = Calculate(s.substr(i+1, leng)); //recursive process
+                    num = temp;
+                    i = j;
+                    continue;
+                }
+                
+                if (cur == '-') {
+                    if (i == 0 || !isdigit(s[i-1]) && s[i-1] != ')') {
+                        negative = -1;
+                        continue;
+                    }
+                }
+                nums.push(negative*num);
+                num = 0;
+                negative = 1;
+                
+                if (oprs.size() == 0 || dict[cur] > dict[oprs.top()]) {
+                    oprs.push(cur);
+                }
+                else {
+                    while (!oprs.empty() && dict[cur] <= dict[oprs.top()]) {
+                        helper(nums, oprs);
+                    }
+                    oprs.push(cur);
+                }
+            }
+        }
+        nums.push(num);
+        while (!oprs.empty()) {
+            helper(nums, oprs);
+        }
+        cout<<nums.top()<<endl;
+        return nums.top();
+    }
+    
+    void helper(stack<int>& nums, stack<char>& oprs) {
+        int b = nums.top(); nums.pop();
+        int a = nums.top(); nums.pop();
+        char p = oprs.top(); oprs.pop();
+        
+        if (p == '+') {
+            nums.push(a+b);
+        }
+        else if (p == '-') {
+            nums.push(a-b);
+        }
+        else if (p == '*') {
+            nums.push(a*b);
+        }
+        else if (p == '/') {
+            nums.push(a/b);
+        }
+        else if (p == '^') {
+            nums.push(pow(a, b));
+        }
+        return;
+    }
+    
+    //    GraphNode* dfsClone(GraphNode* node) {
+    //        if (node == NULL) {
+    //            return NULL;
+    //        }
+    //        GraphNode* root = new GraphNode(node->val);
+    //        unordered_map<GraphNode*, GraphNode*> dict;
+    //        dict[node] = root;
+    //        dfsHelper(node, root, dict);
+    //        return root;
+    //    }
+    //
+    //    GraphNode* bfsClone(GraphNode* node) {
+    //        if (node == NULL) {
+    //            return NULL;
+    //        }
+    //        GraphNode* root = new GraphNode(node->val);
+    //        unordered_map<GraphNode*, GraphNode*> dict;
+    //        dict[node] = root;
+    //        deque<GraphNode*> dq;
+    //        dq.push_back(node);
+    //        while (!dq.empty()) {
+    //            GraphNode* curr = dq.front();
+    //            dq.pop_front();
+    //            for (int i=0; i<curr->neighbors.size(); ++i) {
+    //                if (dict.count(curr->neighbors[i])==0) {
+    //                    GraphNode* now = new GraphNode(curr->neighbors[i]->val);
+    //                    dict[curr->neighbors[i]]=now;
+    //                    dq.push_back(curr->neighbors[i]);
+    //                }
+    //                else {
+    //                    dict[curr]->neighbors.push_back(dict[curr->neighbors[i]]);
+    //                }
+    //            }
+    //        }
+    //        return root;
+    //    }
+    //    void dfsHelper(GraphNode* node, GraphNode* root, unordered_map<GraphNode*, GraphNode*>& dict) {
+    //        for (int i=0; i<(node->neighbors).size(); ++i) {
+    //            if (dict[node->neighbors[i]]==NULL) {
+    //                GraphNode* child = new GraphNode((node->neighbors)[i]->val);
+    //                (root->neighbors).push_back(child);
+    //                dict[node->neighbors[i]]=child;
+    //                dfsHelper(node->neighbors[i], child, dict);
+    //            }
+    //            else {
+    //                root->neighbors.push_back(dict[node->neighbors[i]]);
+    //            }
+    //        }
+    //    }
+    
+    //    //Dijkstra: Shortest path from a source
+    //    //If Given is a distance, source and total vertices's
+    //    //First Missing Positive
+    //    void dijkstra(vector<vector<int>>& graph, int source, int vertices) {
+    //        vector<int> distance(vertices, INT_MAX);
+    //        vector<bool> shortpath(vertices, false);
+    //        distance[source] = 0;
+    //        //Find shortest path for all vertices
+    //        for (int count=0; count<vertices-1; ++count) {
+    //            int u = minDistance(distance, shortpath, vertices);
+    //            shortpath[u] = true;
+    //            for (int v=0; v<vertices; ++v) {
+    //                if (!shortpath[v] && graph[u][v]>0 && \
+    //                    distance[u] != INT_MAX && distance[u]+graph[u][v] < distance[v]) {
+    //                    distance[v] = distance[u] + graph[u][v];
+    //                }
+    //            }
+    //        }
+    //        output(distance, vertices);
+    //    }
+    //
+    //    int minDistance(vector<int>& distance, vector<bool>& shortpath, int vertices) {
+    //        int min = INT_MAX;
+    //        int idx= 0;
+    //        for (int v=0; v<vertices; ++v) {
+    //            if (shortpath[v] == false && distance[v]<=min) {
+    //                min = distance[v];
+    //                idx = v;
+    //            }
+    //        }
+    //        return idx;
+    //    }
+    //
+    //    void output(vector<int>& distance, int vertices) {
+    //        cout<<"Vertex        Distance from source"<<endl;
+    //        for (int i=0; i<vertices; ++i) {
+    //            cout<<i<<"\t   "<<distance[i]<<endl;
+    //        }
+    //    }
+    //
+    //    int firstMissingPositive(vector<int>& nums) {
+    //        for (int i=0; i<nums.size();) {
+    //            //1. nums[i] = i + 1 Normal case
+    //            //2. nums[i] < 1; Negative number
+    //            //3. nums[i] > nums.size()  Greatest value
+    //            //4. nums[i == nums[nums[i] - 1] => n = nums[n+1]
+    //            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=nums.size() && nums[i] != nums[nums[i]-1]) {
+    //                swap(nums[nums[i]-1], nums[i]);
+    //            }
+    //            i++;
+    //
+    //        }
+    //        for (int i=0; i<nums.size(); ++i) {
+    //            if (nums[i]!=i+1) {
+    //                return i+1;
+    //            }
+    //        }
+    //        return nums.size()+1;
+    //    }
+    //
+    //
+    //    int firstMissingPositive(vector<int>& nums, int n) {
+    //        int result=n;
+    //        for (int i=n-1; i>=0; --i) {
+    //            while (nums[i] != i+1 && nums[i]>=1 && nums[i]<=n && nums[i] != nums[nums[i]-1]) {
+    //                swap(nums[nums[i]-1], nums[i]);
+    //            }
+    //            if (nums[i]!=i+1) {
+    //                result=i;
+    //            }
+    //        }
+    //        return result+1;
+    //    }
+    
+    //    void heapify(vector<int>& array, int n, int i) {
+    //        int max=i;
+    //        int left=2*i+1;
+    //        int right=2*i+2;
+    //        if (left<n && array[left]>array[max]) {
+    //            max=left;
+    //        }
+    //        if (right<n && array[right]>array[max]) {
+    //            max=right;
+    //        }
+    //        if (max!=i) {
+    //            swap(array[max], array[i]);
+    //            heapify(array, n, max);
+    //        }
+    //    }
+    //
+    //    void heapsort(vector<int>& array, int n) {
+    //        for (int i=n/2-1; i>=0; i--) {
+    //            heapify(array, n, i);
+    //        }
+    //        for (int i=n-1; i>=0; i--) {
+    //            swap(array[i], array[0]);
+    //            heapify(array, n, 0);
+    //        }
+    //    }
+    //    //Kth Largest Element
+    //    //naive
+    //    int findKthLargest(vector<int>& nums, int k) {
+    //        int leng = nums.size();
+    //        sort(nums.begin(), nums.end());
+    //        return nums[leng-k];
+    //    }
+    //
+    //    //use maxHeap
+    //    int findKthLargestInHeap(vector<int>& nums, int k) {
+    //        priority_queue<int, vector<int>, greater<int>> min_heap;
+    //        for (int i=0; i<nums.size(); ++i) {
+    //            if (min_heap.size()<k) {
+    //                min_heap.push(nums[i]);
+    //            }
+    //            else {
+    //                if (nums[i]>=min_heap.top()) {
+    //                    min_heap.pop();
+    //                    min_heap.push(nums[i]);
+    //                }
+    //            }
+    //        }
+    //        return min_heap.top();
+    //    }
+    //    //quick select
+    //    int findKthLargestQuick(vector<int>& nums, int k) {
+    //        if (nums.size()==1) {
+    //            return nums[0];
+    //        }
+    //        int left=0, right=nums.size()-1;
+    //        while (left<=right) {
+    //            int mid = partition(nums, left, right);
+    //            if (mid - left + 1 < k) {
+    //                k = k - (mid - left +1);
+    //                left = mid+1;
+    //            }
+    //            else if (mid - left + 1 > k) {
+    //                right = mid - 1;
+    //            }
+    //            else {
+    //                return nums[mid];
+    //            }
+    //        }
+    //        return 0;
+    //    }
+    //    int partition(vector<int>& nums, int left, int right) {
+    //        int mid = left + (right - left) / 2;
+    //        int now = nums[mid];
+    //        swap(nums[mid], nums[right]);
+    //        int leftb = left;
+    //        int rightb = right - 1;
+    //        while (leftb <= rightb) {
+    //            if (nums[leftb]>now) {
+    //                leftb++;
+    //            }
+    //            else if (nums[rightb]<now) {
+    //                rightb--;
+    //            }
+    //            else {
+    //                swap(nums[leftb], nums[rightb]);
+    //                leftb++;
+    //                rightb--;
+    //            }
+    //        }
+    //        swap(nums[leftb], nums[right]);
+    //        return leftb;
+    //    }
+    
+    //    //Longest Increasing Subsequence
+    //    int lengthOfLIS(vector<int>& nums) {
+    //        return findLength(nums, INT_MIN, 0);
+    //    }
+    //
+    //    int dplengthOfLIS(vector<int>& nums) {
+    //        int leng = nums.size();
+    //        if (leng<=1) {
+    //            return leng;
+    //        }
+    //        vector<int> dp(leng, 0);
+    //        int curr=0;
+    //        for (int i=0; i<leng; ++i) {
+    //            dp[i]=1;
+    //            for (int j=0; j<i; ++j) {
+    //                if (nums[i]>nums[j]) {
+    //                    dp[i]=dp[j]+1;
+    //                }
+    //            }
+    //            curr=max(curr, dp[i]);
+    //        }
+    //        return curr;
+    //    }
+    //
+    //    int dplogLengthOfLIS(vector<int>& nums) {
+    //        int leng = nums.size();
+    //        if (leng<=0) {
+    //            return 0;
+    //        }
+    //        vector<int> table(leng+1, 0);
+    //        int result=1;
+    //        for (int i=1; i<leng; ++i) {
+    //            int index=findLargestSmaller(table, 1, result, nums[i]);
+    //            if (index==result) {
+    //                table[++result]=nums[i];
+    //            }
+    //            else {
+    //                table[index+1]=nums[i];
+    //            }
+    //        }
+    //        return result;
+    //    }
+    //    int findLength(vector<int>& nums, int prev, int curr) {
+    //        if (curr == nums.size()) {
+    //            return 0;
+    //        }
+    //        int taken=0;
+    //        if (nums[curr] > prev) {
+    //            taken = 1 + findLength(nums, nums[curr], curr+1);
+    //        }
+    //        int notTaken = findLength(nums, prev, curr+1);
+    //        return max(taken, notTaken);
+    //    }
+    //
+    //    int findLargestSmaller(vector<int>& table, int left, int right, int target) {
+    //        while (left<=right) {
+    //            int mid=left+(right-left)/2;
+    //            if (table[mid]>=target) {
+    //                right=mid-1;
+    //            }
+    //            else {
+    //                left=mid+1;
+    //            }
+    //        }
+    //        return right;
+    //    }
+    //    struct Tuple {
+    //    public:
+    //        string name;
+    //        int value;
+    //        int maximum_stack_size;
+    //        Tuple(string name, int value, int maximum_stack_size) {
+    //            this->name = name;
+    //            this->value = value;
+    //            this->maximum_stack_size = maximum_stack_size;
+    //        }
+    //    };
+    //    int maxValue(int n, vector<string>& stuff, vector<Tuple*>& items) {
+    //        unordered_map<string, int> cnt_dict;
+    //        for (auto s:stuff) {
+    //            cnt_dict[s]++;
+    //        }
+    //        priority_queue<int, vector<int>, less<int>> max_heap;
+    //        unordered_map<string, Tuple*> item_map;
+    //        for (auto item:items) {
+    //            item_map[item->name]=item;
+    //        }
+    //        for (auto it=cnt_dict.begin(); it!=cnt_dict.end(); ++it) {
+    //            string key = it->first;
+    //            int amt = it->second;
+    //            int maxstack = item_map[key]->maximum_stack_size;
+    //            int value = item_map[key]->value;
+    //            if (amt>maxstack) {
+    //                max_heap.push(value*maxstack);
+    //                max_heap.push(value*(amt-maxstack));
+    //            }
+    //            else {
+    //                max_heap.push(value*amt);
+    //            }
+    //        }
+    //        int t=0, result=0;
+    //        while (t<n) {
+    //            result+=max_heap.top();
+    //            max_heap.pop();
+    //            t++;
+    //        }
+    //        return result;
+    //    }
+    //    int maxPathSum(TreeNode* root) {
+    //        if (root==NULL) {
+    //            return INT_MIN;
+    //        }
+    //        int maxsum=INT_MIN;
+    //        helper(root, maxsum);
+    //        return maxsum;
+    //    }
+    //
+    //    TreeNode* buildTree(string a) {
+    //        if(a.size()==0) {
+    //            return NULL;
+    //        }
+    //        int leng = a.size();
+    //        stack<TreeNode*> stk;
+    //
+    //        TreeNode* root=new TreeNode(a[0]);
+    //        TreeNode* output=root;
+    //        //   Ex 1: "a?b?c:d:e"
+    //        //                |
+    //        //   a
+    //        // b   c
+    //        bool flag=true;
+    //        for(int i=1;i<leng;++i) {
+    //            if(a[i]>='a' && a[i]<='z') {
+    //                if(flag) {
+    //                    stk.top()->left = new TreeNode(a[i]);
+    //                    root=stk.top()->left;
+    //                }
+    //                else {
+    //                    if(stk.empty()) {
+    //                        stk.push(root);
+    //                    }
+    //                    stk.top()->right=new TreeNode(a[i]);
+    //                    root=stk.top()->right;
+    //                }
+    //            }
+    //            else if(a[i]=='?') {
+    //                stk.push(root);
+    //                flag=true;
+    //            }
+    //            else if(a[i]==':') {
+    //                flag=false;
+    //            }
+    //        }
+    //        return output;
+    //    }
+    //    int helper(TreeNode* root, int& maxsum) {
+    //        if (root==NULL) {
+    //            return 0;
+    //        }
+    //        int leftsum=0, rightsum=0;
+    //        if (root->left!=NULL) {
+    //            leftsum = helper(root->left, maxsum);
+    //        }
+    //        if (root->right!=NULL) {
+    //            rightsum = helper(root->right, maxsum);
+    //        }
+    //        if (root->left && root->right) {
+    //            maxsum = max(maxsum, root->val + leftsum + rightsum);
+    //            return max(leftsum, rightsum) + root->val;
+    //        }
+    //        else if(root->left){
+    //            return leftsum+root->val;
+    //        }
+    //        else {
+    //            return rightsum+root->val;
+    //        }
+    //    }
+    
+    //    class Server {
+    //    private:
+    //        unordered_set<Client*> _clients;
+    //
+    //    public:
+    //        void registerClient(Client* client) {
+    //            _clients.insert(client);
+    //        }
+    //
+    //        void unregisterClient(Client* client) {
+    //            if (_clients.count(client)) _clients.erase(client);
+    //        }
+    //
+    //        void update(string ticker) {
+    //            for (auto c:_clients) c->update(ticker);
+    //        }
+    //    };
+    //
+    //    struct Comp {
+    //        bool operator()(const pair<string,int>& a, const pair<string,int>& b) {
+    //            return a.second > b.second;
+    //        }
+    //    };
+    //
+    //    class Client {
+    //    private:
+    //        string _id;
+    //        unordered_map<string, int> _freq;
+    //        set<pair<string,int>, Comp> _top10freq;
+    //        Server* _server;
+    //
+    //    public:
+    //        Client(string id, Server* server)
+    //        :_id(id), _server(server) {
+    //            if (_server) _server->registerClient(this);
+    //        }
+    //
+    //        void registerTicker(string ticker) {
+    //            if (!_freq.count(ticker)) _freq[ticker] = 0;
+    //        }
+    //
+    //        void update(string ticker) {
+    //            if (!_freq.count(ticker)) return;
+    //            _freq[ticker]++;
+    //            for (auto& x:_top10freq) {
+    //                if (x.first == ticker) {
+    //                    _top10freq.erase(x); break;
+    //                }
+    //            }
+    //            if (_top10freq.size() < 10) _top10freq.emplace(ticker, _freq[ticker]);
+    //            else if (_top10freq.rbegin()->second < _freq[ticker]) {
+    //                _top10freq.erase(*_top10freq.rbegin());
+    //                _top10freq.emplace(ticker, _freq[ticker]);
+    //            }
+    //        }
+    //
+    //        vector<string> getTop10freq() {
+    //            vector<string> top10;
+    //            for (auto& x:_top10freq) top10.push_back(x.first);
+    //            return top10;
+    //        }
+    //    };
+    //    int lengthOfLongestSubstringKDistinct(String s, int k) {
+    //        if(k==0 || s==null || s.length()==0)
+    //            return 0;
+    //        
+    //        if(s.length()<k)
+    //            return s.length();
+    //        
+    //        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+    //        
+    //        int maxLen=k;
+    //        int left=0;
+    //        for(int i=0; i<s.length(); i++){
+    //            char c = s.charAt(i);
+    //            if(map.containsKey(c)){
+    //                map.put(c, map.get(c)+1);
+    //            }else{
+    //                map.put(c, 1);
+    //            }
+    //            
+    //            if(map.size()>k){
+    //                maxLen=Math.max(maxLen, i-left);
+    //                
+    //                while(map.size()>k){
+    //                    
+    //                    char fc = s.charAt(left);
+    //                    if(map.get(fc)==1){
+    //                        map.remove(fc);
+    //                    }else{
+    //                        map.put(fc, map.get(fc)-1);
+    //                    }
+    //                    
+    //                    left++;
+    //                }
+    //            }
+    //            
+    //        }
+    //        
+    //        maxLen = Math.max(maxLen, s.length()-left);
+    //        
+    //        return maxLen;
+    //    }
+    //    class Singleton
+    //    {
+    //    private:
+    //        /* Here will be the instance stored. */
+    //        static Singleton* instance;
+    //        
+    //        /* Private constructor to prevent instancing. */
+    //        Singleton();
+    //        
+    //    public:
+    //        /* Static access method. */
+    //        static Singleton* getInstance() {
+    //            
+    //            if (instance == 0)
+    //            {
+    //                instance = new Singleton();
+    //            }
+    //            
+    //            return instance;
+    //        }
+    //        
+    //    };
+    //
+    //    class prodcons {
+    //        
+    //        vector<int> buffer;
+    //
+    //        uint64_t produced_count = 0;
+    //        uint64_t consumed_count = 0;
+    //        mutex counts_mutex;
+    //        condition_variable counts_cv;
+    //
+    //        void producer()
+    //        {
+    //            while (true) {
+    //                unique_lock<mutex> counts_lock(counts_mutex);
+    //                while (produced_count - consumed_count == buffer.size()) {
+    //                    counts_cv.wait(counts_lock);
+    //                }
+    //
+    //                int product = rand();
+    //                buffer[produced_count++ % buffer.size()] = product;
+    //                cout << "produced: " << product << "\n";
+    //
+    //                counts_cv.notify_all();
+    //            }
+    //        }
+    //
+    //        void consumer()
+    //        {
+    //            while (true) {
+    //                unique_lock<mutex> counts_lock(counts_mutex);
+    //                while (produced_count - consumed_count == 0) {
+    //                    counts_cv.wait(counts_lock);
+    //                }
+    //
+    //                int product = buffer[consumed_count++ % buffer.size()];
+    //                cout << "consumed: " <<  product << "\n";
+    //
+    //                counts_cv.notify_all();
+    //            }
+    //        }
+    //
+    //        int test()
+    //        {
+    //            buffer.resize(16, 0);
+    //             to handle the uint64_t counts overflow, the following must be true:
+    //             (0xffffffffffffffff + 1) % buffer.size() == 0
+    //    
+    //            vector<thread> threads;
+    //            for (int i = 0; i < 3; ++i) {
+    //                threads.push_back(producer());
+    //            }
+    //            sleep(3);
+    //            for (int i = 0; i < 3; ++i) {
+    //                threads.push_back(consumer());
+    //            }
+    //            for (int i = 0; i < threads.size(); ++i) {
+    //                threads[i].join();
+    //            }
+    //            return 0;
+    //        }
+    //    };
+    //    int solution() {
+    //        vector<int> first_3_digit(27, 0);
+    //        vector<int> last_3_digit(27, 0);
+    //        unordered_map<int, int> single_zero_set;
+    //        for (int i=100; i<1000; i++) {
+    //            int first_sum, zero_count, non_zero_num;
+    //            sum_count_zero(i, first_sum, zero_count, non_zero_num);
+    //            int last_3_combo=1;
+    //            if (zero_count==1) {
+    //                if (single_zero_set[non_zero_num]>0) {
+    //                    last_3_combo=0;
+    //                }
+    //                else {
+    //                    single_zero_set[non_zero_num]=1;
+    //                }
+    //                last_3_combo=3;
+    //            }
+    //            else if (zero_count==2) {
+    //                last_3_combo=3;
+    //            }
+    //            first_3_digit+=1;
+    //            last_3_digit+=last_3_combo;
+    //        }
+    //        int result=0;
+    //        for (int i=0; i<27; i++) {
+    //            result+=first_3_digit[i]*last_3_digit[i];
+    //        }
+    //        return result;
+    //    }
+    //    
+    //    class Employee {
+    //    public:
+    //        int id_;
+    //        vector<Employee*> reporters_;
+    //    };
+    //    void GetReporters(Employee *e, int id, vector<Employee*> &reporters, bool found = false, bool processed = false)
+    //    {
+    //        if (!processed &&
+    //            e)
+    //        {
+    //            if (found) {
+    //                reporters.push_back(e);
+    //            }
+    //            if (e->id_ == id) {
+    //                found = true;
+    //            }
+    //            for (auto reporter : e->reporters_) {
+    //                GetReporters(reporter, id, reporters, found, processed);
+    //            }
+    //            if (e->id_ == id) {
+    //                processed = true;
+    //            }        
+    //        }
+    //    }
+};
+
+class Solution526 {
+public:
+    class TreeNode {
+    public:
+        char val;
+        vector<TreeNode*> children;
+        TreeNode(char val) {
+            this->val=val;
+            this->children={};
+        }
+    };
+    
+    TreeNode* buildTree(TreeNode* root) {
+        if (root==NULL) {
+            return NULL;
+        }
+        else if (root->val=='*') {
+            vector<TreeNode*> lefts;
+            vector<TreeNode*> rights;
+            if (root->children[0]->val=='+') {
+                lefts=getChildren(root->children[0]);
+            }
+            if (root->children[1]->val=='+') {
+                rights=getChildren(root->children[1]);
+            }
+            if (lefts.size()>0 && rights.size()>0) {
+                TreeNode* result=new TreeNode('+');
+                for (int i=0; i<lefts.size(); i++) {
+                    for (int j=0; j<rights.size(); j++) {
+                        TreeNode* child = new TreeNode('*');
+                        TreeNode* child1 = new TreeNode(lefts[i]->val);
+                        TreeNode* child2 = new TreeNode(rights[j]->val);
+                        child->children.push_back(child1);
+                        child->children.push_back(child2);
+                        result->children.push_back(child);
+                    }
+                }
+                return result;
+            }
+            else if (lefts.size()>0) {
+                TreeNode* result=new TreeNode('+');
+                for (int i=0; i<lefts.size(); i++) {
+                    TreeNode* child = new TreeNode('*');
+                    TreeNode* child1 = new TreeNode(lefts[i]->val);
+                    TreeNode* child2 = new TreeNode(root->children[1]->val);
+                    child->children.push_back(child1);
+                    child->children.push_back(child2);
+                    result->children.push_back(child);
+                }
+                return result;
+            }
+            else if (rights.size()>0) {
+                TreeNode* result=new TreeNode('+');
+                for (int i=0; i<rights.size(); i++) {
+                    TreeNode* child = new TreeNode('*');
+                    TreeNode* child1 = new TreeNode(root->children[1]->val);
+                    TreeNode* child2 = new TreeNode(rights[i]->val);
+                    child->children.push_back(child1);
+                    child->children.push_back(child2);
+                    result->children.push_back(child);
+                }
+                return result;
+            }
+            else {
+                return root;
+            }
+        }
+        else {
+            return root;
+        }
+    }
+    
+    vector<TreeNode*> getChildren(TreeNode* root) {
+        vector<TreeNode*> result;
+        if (root->val=='+' || root->val=='*') {
+            for (int i=0; i<root->children.size(); i++) {
+                result.push_back(root->children[i]);
+            }
+        }
+        return result;
+    }
+    void test() {
+//                    +
+//                *       d
+//              *    e
+//           +      c
+//         a   b
+        string str="((a+b)*(c+d))*e+d";
+        TreeNode* t1=new TreeNode('*');
+        TreeNode* t2=new TreeNode('+');
+        TreeNode* t3=new TreeNode('+');
+        TreeNode* t4=new TreeNode('a');
+        TreeNode* t5=new TreeNode('b');
+        TreeNode* t6=new TreeNode('c');
+        TreeNode* t7=new TreeNode('d');
+        t1->children.push_back(t2);
+        t1->children.push_back(t3);
+        t2->children.push_back(t4);
+        t2->children.push_back(t5);
+        t3->children.push_back(t6);
+        t3->children.push_back(t7);
+        TreeNode* root=buildTree(t1);
+        cout<<root->val<<endl;
+    }
 };
 
 // To execute C++, please define "int main()"
 int main() {
+    Solution526* s526 = new Solution526();
+    s526->test();
+//    Solution525* s525 = new Solution525();
+//    s525->test();
+//    Solution524* s524 = new Solution524();
+//    s524->test();
+//    Solution523* s523 = new Solution523();
+//    s523->test();
+//    Solution522* s522 = new Solution522();
+//    s522->test();
+//    Solution520* s520 = new Solution520();
+//    s520->test();
+//    Solution519* s519 = new Solution519();
+//    s519->test();
+//    Solution518* s518 = new Solution518();
+//    s518->test();
+//    Solution517* s517 = new Solution517();
+//    s517->test();
+//    Solution515* s515 = new Solution515();
+//    s515->test();
+//    Solution514* s514 = new Solution514();
+//    s514->test();
+//    Solution512* s512 = new Solution512();
+//    s512->test();
+//    Solution511* s511 = new Solution511();
+//    s511->test();
+//    Solution510* s510 = new Solution510();
+//    s510->test();
+//    Solution509* s509 = new Solution509();
+//    s509->test();
+//    Solution482* s482 = new Solution482();
+//    s482->test();
+//    Solution481* s481 = new Solution481();
+//    s481->test();
+//    Solution480* s480 = new Solution480();
+//    s480->test();
 	//    Solution400* s400 = new Solution400();
 	//    s400->rainbowSortIII({1}, 1);
 	//    s400->rainbowSortIII({1, 3, 2, 1, 2} , 3);
@@ -17565,24 +18875,34 @@ int main() {
 //    s322->test();
 //    Solution320* s320 = new Solution320();
 //    s320->test();
+//    Solution319* s319 = new Solution319();
+//    s319->test();
 //    Solution318* s318 = new Solution318();
 //    s318->test();
 //    Solution316* s316 = new Solution316();
 //    s316->test();
+//    Solution315* s315 = new Solution315();
+//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
+//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
+//    r315 = s315->dedup({4,4,4,1,2,3,3,3});
 //    Solution314* s314 = new Solution314();
 //    s314->test();
 //    Solution313* s313 = new Solution313();
 //    s313->test();
 //    Solution312* s312 = new Solution312();
 //    s312->test();
-    Solution311* s311 = new Solution311();
-    s311->test();
-//    Solution319* s319 = new Solution319();
-//    s319->test();
-	//    Solution315* s315 = new Solution315();
-	//    vector<int> r315 = s315->dedup({1, 2, 2, 3, 3, 3});
-	//    r315 = s315->dedup({2, 1, 2, 2, 2, 3});
-	//    r315 = s315->dedup({4,4,4,1,2,3,3,3});
+//    Solution311* s311 = new Solution311();
+//    s311->test();
+//    Solution310* s310 = new Solution310();
+//    s310->test();
+//    Solution309* s309 = new Solution309();
+//    s309->test();
+//    Solution308* s308 = new Solution308();
+//    s308->test();
+//    Solution272* s272 = new Solution272();
+//    s272->test();
+//    Solution249* s249 = new Solution249();
+//    s249->test();
 	//    Solution235* s235 = new Solution235();
 	//    cout<<s235->countAndSay(3)<<endl;
 	//    cout<<s235->countAndSay(4)<<endl;
