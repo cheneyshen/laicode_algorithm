@@ -1,4 +1,4 @@
-package laicode;
+package laicode_java;
 
 import java.util.*;
 //K Closest In Sorted Array

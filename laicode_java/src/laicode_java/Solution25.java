@@ -1,20 +1,17 @@
 package laicode_java;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 //Binary Tree Pre-order Iterative Traversal
 public class Solution25 {
-	//¸´ÖÆjavaÎÄ¼þ
+	//ï¿½ï¿½ï¿½ï¿½javaï¿½Ä¼ï¿½
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done
-	//·ÖÀëÄ³Ò»ÐÐÈ»ºóÌæ»»
+	//ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½È»ï¿½ï¿½ï¿½æ»»
 	//for i in {3..100}; do head -3 "Solution$i.java" | tail -1 $1 | awk '{split($0, a, ' '); print a[3]' ; done
 	//sed -i ' ' 's/hi/hello/' file1
-	//¸ü¸Äºó¸´ÖÆµ½ÐÂÎÄ¼þ
+	//ï¿½ï¿½ï¿½Äºï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 	//awk 'NR==2{gsub("hi", "Hello", $1)}; {print $0}' file1 > newfile
-	//´ú±äÁ¿¾Í±ØÐëÒªÓÃ¡°¡±Ë«ÒýºÅ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½Òªï¿½Ã¡ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½
 	//for i in {3..100}; do sed -i " " "3s/Solution/Solution$i/" Solution$i.java ; done
 	public List<Integer> preOrder(TreeNode root) {
 		List<Integer> preorder=new ArrayList<Integer>();
@@ -31,10 +28,11 @@ public class Solution25 {
 			if(curr.left!=null) {
 				stack.offerFirst(curr.left);
 			}
-			preorder.add(curr.value);
+			preorder.add(curr.key);
 		}
 		return preorder;
 	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -55,16 +53,5 @@ public class Solution25 {
 		List<Integer> result=s25.preOrder(t1);
 		System.out.println(result);
 		return;
-	}
-}
-
-class TreeNode {
-	public int value;
-	public TreeNode left;
-	public TreeNode right;
-	public TreeNode(int value) {
-		this.value=value;
-		this.left=null;
-		this.right=null;
 	}
 }

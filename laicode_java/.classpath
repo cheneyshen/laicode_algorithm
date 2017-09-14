@@ -2,5 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/httpclient-win-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/httpclient-cache-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/fluent-hc-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/httpmime-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/httpclient-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/dropins/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

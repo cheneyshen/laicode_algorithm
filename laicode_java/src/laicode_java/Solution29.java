@@ -2,14 +2,14 @@ package laicode_java;
 
 //Check if binary tree is Symmetric
 public class Solution29 {
-	//¸´ÖÆjavaÎÄ¼þ
+	//ï¿½ï¿½ï¿½ï¿½javaï¿½Ä¼ï¿½
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done
-	//·ÖÀëÄ³Ò»ÐÐÈ»ºóÌæ»»
+	//ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½È»ï¿½ï¿½ï¿½æ»»
 	//for i in {3..100}; do head -3 "Solution$i.java" | tail -1 $1 | awk '{split($0, a, ' '); print a[3]' ; done
 	//sed -i ' ' 's/hi/hello/' file1
-	//¸ü¸Äºó¸´ÖÆµ½ÐÂÎÄ¼þ
+	//ï¿½ï¿½ï¿½Äºï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 	//awk 'NR==2{gsub("hi", "Hello", $1)}; {print $0}' file1 > newfile
-	//´ú±äÁ¿¾Í±ØÐëÒªÓÃ¡°¡±Ë«ÒýºÅ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½Òªï¿½Ã¡ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½
 	//for i in {3..100}; do sed -i " " "3s/Solution/Solution$i/" Solution$i.java ; done
 	public boolean isSymmetric(TreeNode root) {
 		if(root==null) {
@@ -25,7 +25,7 @@ public class Solution29 {
 		else if(one==null || two==null) {
 			return false;
 		}
-		else if(one.value!=two.value) {
+		else if(one.key!=two.key) {
 			return false;
 		}
 		return isSymmetric(one.left, two.right) && 
