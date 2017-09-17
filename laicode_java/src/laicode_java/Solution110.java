@@ -14,7 +14,26 @@ import java.util.*;
 //            sample() - return at any time the k samples as a list, return the list of all values read when the number of values read so fas <= k.
 //            You may need to add more fields for the class.
 public class Solution110 {
-
+	private int count;
+	private Integer sample;
+	
+	public Solution110() {
+		this.count=0;
+		this.sample=null;
+	}
+	
+	public void read(int value) {
+		count++;
+		int prob = (int)(Math.random()*count);
+		if(prob==0) {
+			sample = value;
+		}
+	}
+	
+	public Integer sample() {
+		return sample;
+	}
+	
 	public static void main(String[] args) {
 
 

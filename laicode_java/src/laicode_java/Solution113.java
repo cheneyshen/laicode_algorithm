@@ -17,7 +17,44 @@ import java.util.*;
 //            read(10), median is 2.5
 //            ......
 public class Solution113 {
-
+	private PriorityQueue<Integer> smaller;
+	private PriorityQueue<Integer> bigger;
+	
+	public Solution113() {
+		bigger = new PriorityQueue<Integer>();
+		smaller = new PriorityQueue<Integer>(11, Collections.reverseOrder());
+	}
+	
+	public void read(int value) {
+		if(smaller.isEmpty() || value<= smaller.peek()) {
+			smaller.offer(value);
+		} else {
+			bigger.offer(value);
+		}
+		if(smaller.size() - bigger.size() >= 2) {
+			int temp = smaller.poll();
+			bigger.offer(temp);
+		} else if (bigger.size() > smaller.size()) {
+			int temp = bigger.poll();
+			smaller.offer(temp);
+		}
+	}
+	
+	public Double median() {
+		int size=size();
+		if(size==0) {
+			return null;
+		} else if(size%2 == 0) {
+			return (double)(smaller.peek() + bigger.peek())/2.0;
+		} else {
+			return (double)(smaller.peek());
+		}
+	}
+	
+	private int size() {
+		return smaller.size() + bigger.size();
+	}
+	
 	public static void main(String[] args) {
 
 

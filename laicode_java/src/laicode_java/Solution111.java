@@ -6,6 +6,21 @@ import java.util.*;
 
 public class Solution111 {
 
+	private int rand5() {
+		return (int)(Math.random()%5);
+	}
+	public int random7() {
+		while(true) {
+			int num=0;
+			for(int i=0; i<2; i++) {
+				num = num*5 + rand5();
+			}
+			if(num<21) {
+				return num%7;
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 
 
