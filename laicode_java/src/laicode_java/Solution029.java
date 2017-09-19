@@ -12,7 +12,7 @@ import java.util.*;
 //    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
 //    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to -3 -> 2 -> 4 -> 5 -> 6
 public class Solution029 {
-	class ListNode {
+	static class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {

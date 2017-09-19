@@ -26,9 +26,44 @@ import java.util.*;
 //
 //    The maximum path sum in the above binary tree is 6 + 11 + (-1) + 2 = 18
 public class Solution139 {
-
+	static class TreeNode {
+		public int key;
+		public TreeNode left;
+		public TreeNode right;
+		public TreeNode(int key) {
+			this.key = key;
+		}
+	}
+	
+	public int maxPathSum(TreeNode root) {
+		int[] result = new int[]{Integer.MIN_VALUE};
+		helper(root, result);
+		return result[0];
+	}
+	
+	private int helper(TreeNode root, int[] result) {
+		if(root==null) {
+			return 0;
+		}
+		int lefts = helper(root.left, result);
+		int rights = helper(root.right, result);
+		lefts = Math.max(lefts, 0);
+		rights = Math.max(rights, 0);
+		result[0] = Math.max(result[0], lefts + rights + root.key);
+		return Math.max(lefts, rights) + root.key;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution139 ss = new Solution139();
+		TreeNode t1 = new TreeNode(-1);
+		TreeNode t2 = new TreeNode(2);
+		TreeNode t3 = new TreeNode(11);
+		TreeNode t4 = new TreeNode(6);
+		TreeNode t5 = new TreeNode(-14);
+		t1.left = t2;
+		t1.right = t3;
+		t3.left = t4;
+		t3.right = t5;
+		System.out.println(ss.maxPathSum(t1));
 	}
 }

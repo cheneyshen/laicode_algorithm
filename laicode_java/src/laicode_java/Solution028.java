@@ -11,7 +11,7 @@ import java.util.*;
 //    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
 //    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to 2 -> 3 -> 4 -> 5 -> 6
 public class Solution028 {
-	class ListNode {
+	static class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {
@@ -19,6 +19,7 @@ public class Solution028 {
 			next=null;
 		}
 	}
+	
 	public ListNode selectionSort(ListNode a) {
 		for(ListNode node1=a; node1!=null; node1=node1.next) {
 			ListNode min=node1;

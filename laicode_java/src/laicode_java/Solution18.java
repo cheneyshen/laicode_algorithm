@@ -1,5 +1,7 @@
 package laicode_java;
 
+import laicode_java.Utilities.ListNode;
+
 //Reverse Linked List
 public class Solution18 {
 	//复制java文件
@@ -12,6 +14,7 @@ public class Solution18 {
 	//代变量就必须要用“”双引号
 	//for i in {3..100}; do sed -i " " "3s/Solution/Solution$i/" Solution$i.java ; done
 
+	
 	public ListNode reverseLinkedList(ListNode head) {
 		ListNode prev=null;
 		while(head!=null) {
@@ -33,8 +36,6 @@ public class Solution18 {
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
-		Solution18 s18 = new Solution18();
 		ListNode l1=new ListNode(1);
 		ListNode l2=new ListNode(2);
 		ListNode l3=new ListNode(3);
@@ -46,17 +47,9 @@ public class Solution18 {
 		l3.next=l4;
 		l4.next=l5;
 		l5.next=l6;
+		Solution18 s18 = new Solution18();
 		l1 = s18.reverseLinkedList(l1);
 		System.out.println(l1.value);
 		return;
 	}
 }
-
-class ListNode {
-	 public int value;
-	 public ListNode next;
-	 public ListNode(int value) {
-		 this.value = value;
-	     next = null;
-	 }
-};

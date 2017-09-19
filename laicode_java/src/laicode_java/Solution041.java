@@ -2,7 +2,7 @@ package laicode_java;
 
 import java.util.*;
 //ReOrder Linked List
-//Reorder the given singly-linked list N1 -> N2 -> N3 -> N4 -> … -> Nn -> null to be N1- > Nn -> N2 -> Nn-1 -> N3 -> Nn-2 -> … -> null
+//Reorder the given singly-linked list N1 -> N2 -> N3 -> N4 -> 鈥� -> Nn -> null to be N1- > Nn -> N2 -> Nn-1 -> N3 -> Nn-2 -> 鈥� -> null
 //
 //Examples
 //
@@ -12,6 +12,14 @@ import java.util.*;
 //L = 1 -> 2 -> 3 -> null, is reordred to 1 -> 3 -> 2 -> null
 
 public class Solution041 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode reorderHelper(ListNode left, ListNode right) {
 		if(left==null && right==null) {
 			return null;

@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution029.ListNode;
+
 public class Solution036 {
 
 //  Middle Node Of Linked List
@@ -14,6 +16,14 @@ public class Solution036 {
 //  L = 1 -> 2 -> null, return 1
 //  L = 1 -> 2 -> 3 -> null, return 2
 //  L = 1 -> 2 -> 3 -> 4 -> null, return 2
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode middleNode(ListNode head) {
 		if(head==null || head.next==null) {
 			return head;

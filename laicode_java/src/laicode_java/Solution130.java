@@ -7,7 +7,40 @@ import java.util.*;
 //
 //    Make a deep copy of the original skip list.
 public class Solution130 {
-
+	class SkipListNode {
+		public int key;
+		public SkipListNode next;
+		public SkipListNode forward;
+		public SkipListNode(int key) {
+			this.key = key;
+		}
+	}
+	
+	public SkipListNode copy(SkipListNode head) {
+		if(head==null) {
+			return null;
+		}
+		SkipListNode dummy = new SkipListNode(0);
+		SkipListNode curr = dummy;
+		
+		HashMap<SkipListNode, SkipListNode> dict = new HashMap<SkipListNode, SkipListNode>();
+		while(head!=null) {
+			if(!dict.containsKey(head)) {
+				dict.put(head, new SkipListNode(head.key));
+			}
+			curr.next=dict.get(head);
+			if(head.forward!=null) {
+				if(!dict.containsKey(head.forward)) {
+					dict.put(head.forward, new SkipListNode(head.forward.key));
+				}
+				curr.forward=dict.get(head.forward);
+			}
+			head=head.next;
+			curr=curr.next;
+		}
+		return curr.next;
+	}
+	
 	public static void main(String[] args) {
 
 

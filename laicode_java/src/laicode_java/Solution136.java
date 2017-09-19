@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution135.TreeNode;
+
 //    Largest Number Smaller In Binary Search Tree
 //    In a binary search tree, find the node containing the largest number smaller than the given target number.
 //
@@ -29,7 +31,29 @@ import java.util.*;
 //
 //    largest number smaller than 6 is 5
 public class Solution136 {
-
+	static class TreeNode {
+		public int key;
+		public TreeNode left;
+		public TreeNode right;
+		public TreeNode(int key) {
+			this.key = key;
+		}
+	}
+	
+	public int largestSmaller(TreeNode root, int target) {
+		int result=Integer.MIN_VALUE;
+		while(root!=null) {
+			if(root.key>=target) {
+				root = root.left;
+			}
+			else {
+				result=root.key;
+				root = root.right;
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
 
 

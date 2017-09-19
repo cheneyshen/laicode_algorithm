@@ -4,7 +4,17 @@ import java.util.*;
 //Cycle Node In Linked List
 //Check if a given linked list has a cycle. Return the node where the cycle starts. Return null if there is no cycle.
 
+import laicode_java.Solution029.ListNode;
+
 public class Solution038 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode cycleNode(ListNode head) {
 		ListNode fast=head;
 		ListNode slow=head;

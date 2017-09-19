@@ -12,16 +12,16 @@ import java.util.*;
 //    1 -> 2 -> 3 -> null, is sorted to 1 -> 2 -> 3 -> null
 //    4 -> 2 -> 6 -> -3 -> 5 -> null, is sorted to -3 -> 2 -> 4 -> 5 -> 6
 
-class ListNode {
-	public int value;
-	public ListNode next;
-	public ListNode(int value) {
-		this.value=value;
-		next=null;
-	}
-}
-
 public class Solution030 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
+
 	public ListNode quickSort(ListNode a) {
 		if(a==null || a.next==null) {
 			return a;
@@ -60,6 +60,7 @@ public class Solution030 {
 	
 	public static void main(String[] args) {
 
+		Solution030 ss = new Solution030();
 		ListNode l1=new ListNode(2);
 		ListNode l2=new ListNode(1);
 		ListNode l3=new ListNode(4);
@@ -71,7 +72,6 @@ public class Solution030 {
 		l3.next=l4;
 		l4.next=l5;
 		l5.next=l6;
-		Solution030 ss = new Solution030();
 		l1 = ss.quickSort(l1);
 		while(l1!=null) {
 			System.out.println(l1.value);

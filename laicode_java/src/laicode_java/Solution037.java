@@ -2,9 +2,19 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution029.ListNode;
+
 public class Solution037 {
 //  Check If Linked List Has A Cycle
 //  Check if a given linked list has a cycle. Return true if it does, otherwise return false.
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	boolean hasCycle(ListNode head) {
 		ListNode fast=head;
 		ListNode slow=head;

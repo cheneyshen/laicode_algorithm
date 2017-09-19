@@ -11,7 +11,17 @@ import java.util.*;
 //L = 1 -> 3 -> 5 -> null, insert 3, return 1 -> 3 -> 3 -> 5 -> null
 //L = 2 -> 3 -> null, insert 1, return 1 -> 2 -> 3 -> null
 
+import laicode_java.Solution029.ListNode;
+
 public class Solution039 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode insert(ListNode head, int value) {
 		ListNode node=new ListNode(value);
 		if(head==null || head.value>=value) {

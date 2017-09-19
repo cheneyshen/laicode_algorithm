@@ -11,7 +11,18 @@ import java.util.*;
 //    L = 1 -> 2 -> null, after reverse is 2 -> 1 -> null
 //    L = 1 -> 2 -> 3 -> null, after reverse is 2 -> 1 -> 3 -> null
 
+import laicode_java.Solution029.ListNode;
+
 public class Solution035 {
+
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode reverseInPairs(ListNode head) {
 		if(head==null || head.next==null) {
 			return head;

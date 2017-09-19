@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution029.ListNode;
+
 //Merge Two Sorted Linked Lists
 //Merge two sorted lists into one large sorted list.
 //
@@ -11,6 +13,14 @@ import java.util.*;
 //L1 = null, L2 = 1 -> 2 -> null, merge L1 and L2 to 1 -> 2 -> null
 //L1 = null, L2 = null, merge L1 and L2 to null
 public class Solution040 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 	ListNode merge(ListNode one, ListNode two) {
 		if(one==null && two==null) {
 			return one;
