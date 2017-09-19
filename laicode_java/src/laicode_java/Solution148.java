@@ -25,6 +25,7 @@ It can be either decoded as 2, 1, 2("BAB") or 2, 12("BL") or 21, 2("UB"), return
       2,0        20
         	26
       2,6        26
+     01 02 03 ... 09 10 11 12 ... 19 20 21 ... 26 27 28...99
             
 */
 
@@ -33,25 +34,23 @@ public class Solution148 {
 		if(s==null || s.length()==0 || s.charAt(0)=='0') {
 			return 0;
 		}
-		int leng=s.length();
-		if(leng==1) {
-			return 1;
-		} else if(leng==2) {
-			if(s.charAt(1)=='0') {
-				return 1;
-			}
-			else {
-				return 2;
-			}
-		} else {
-			if(s.charAt(1)=='0') {
-				return numDecodeWay(s.substring(2)) + 1;
-			}
-			else {
-				return 1 + numDecodeWay(s.substring(1));
-			}
-		}
+		return numDecodeWay(s, 0);
 	}
+	
+	private int numDecodeWay(String s, int i) {
+		if(i==s.length()) {
+			return 1;
+		}
+		if(s.charAt(i)=='0') {
+			return 0;
+		}
+		int result=numDecodeWay(s, i+1);
+		if(i<s.length()-1 && (s.charAt(i)=='1' || (s.charAt(i)=='2' && s.charAt(i+1)<'7'))) {
+			result+=numDecodeWay(s, i+2);
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
 		Solution148 ss = new Solution148();
 		System.out.println(ss.numDecodeWay("2120"));

@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution028.ListNode;
+
 //Linked List Plus II
 //Given two linked list representing two numbers, return the sum of these two numbers as another linked list.
 //
@@ -26,6 +28,14 @@ import java.util.*;
  * }
  */
 public class Solution361 {
+	static class ListNode {
+		public int value;
+		public ListNode next;
+		public ListNode(int value) {
+			this.value=value;
+			next=null;
+		}
+	}
 
 	  public ListNode plus(ListNode l1, ListNode l2) {
 	    // Write your solution here.
