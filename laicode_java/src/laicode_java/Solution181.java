@@ -15,9 +15,30 @@ import java.util.*;
 //
 //A = {1, 2, 2, 4}, target = 6, return [[1, 3], [2, 3]]
 public class Solution181 {
-
+	public List<List<Integer>> allPairs(int[] array, int target) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+		for(int i=0; i<array.length; i++) {
+			List<Integer> indices = map.get(target - array[i]);
+			if(indices!=null) {
+				for(int j : indices) {
+					result.add(Arrays.asList(j, i));
+				}
+			}
+			if(!map.containsKey(array[i])) {
+				map.put(array[i], new ArrayList<Integer>());
+			}
+			map.get(array[i]).add(i);
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution181 ss = new Solution181();
+		int[] array = new int[]{1,2,2,4};
+		List<List<Integer>> result = ss.allPairs(array, 6);
+		for(int i=0; i<result.size(); i++) {
+			System.out.println(result.get(i));
+		}
 	}
 }

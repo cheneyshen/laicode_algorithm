@@ -11,9 +11,30 @@ import java.util.*;
 //A = {3, 1, 5}, B = {2, 8}, target = 7, return true(pick 5 from A and pick 2 from B)
 //A = {1, 3, 5}, B = {2, 8}, target = 6, return false
 public class Solution185 {
-
+	public boolean existSum(int[] a, int[] b, int target) {
+		if(a==null || b==null || a.length<1 || b.length<1) {
+			return false;
+		}
+		Arrays.sort(b);
+		for(int i=0; i<a.length; i++) {
+			int other = target-a[i];
+			int start=0, end=b.length-1;
+			while(start<=end) {
+				int mid=start+(end-start)/2;
+				if(b[mid]==other) {
+					return true;
+				} else if(b[mid]>other) {
+					end=mid-1;
+				} else {
+					start=mid+1;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public static void main(String[] args) {
-
+		
 
 	}
 }

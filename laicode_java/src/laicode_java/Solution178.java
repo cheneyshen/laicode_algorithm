@@ -21,7 +21,27 @@ import java.util.*;
 ///   \
 //1      5
 public class Solution178 {
-
+	static class TreeNode {
+		public int key;
+		public TreeNode left;
+		public TreeNode right;
+		public TreeNode(int key) {
+			this.key=key;
+		}
+	}
+	
+	public TreeNode reverse(TreeNode root) {
+		if(root==null || root.left==null) {
+			return root;
+		}
+		TreeNode subtree = reverse(root.left);
+		root.left.left = root;
+		root.left.right = root.right;
+		root.left = null;
+		root.right = null;
+		return subtree;
+	}
+	
 	public static void main(String[] args) {
 
 
