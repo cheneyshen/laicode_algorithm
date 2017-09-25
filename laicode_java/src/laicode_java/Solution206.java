@@ -13,9 +13,27 @@ import java.util.*;
 //
 //A = {1, 2, 1, 2, 1}, return 1
 public class Solution206 {
-
+	public int majority(int[] array) {
+		int result=array[0];
+		int count=1;
+		for(int i=1; i<array.length; i++) {
+			if(count==0) {
+				result=array[i];
+				count++;
+			}
+			else if(array[i]!=result) {
+				count--;
+			}
+			else {
+				count++;
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution206 ss = new Solution206();
+		int[] array = new int[]{1,2,3,3,2,1,1,1,1};
+		System.out.println(ss.majority(array));
 	}
 }
