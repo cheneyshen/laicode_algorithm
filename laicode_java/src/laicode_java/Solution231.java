@@ -18,9 +18,49 @@ import java.util.*;
 //[2, 6]
 //[1, 1, 6]
 public class Solution231 {
-
+	public List<List<Integer>> combinationSum2(int[] num, int target) {
+		if(num==null) {
+			return null;
+		}
+		Arrays.sort(num);
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		List<Integer> combi = new ArrayList<>();
+		HashMap<String, Integer> dict = new HashMap<>();
+		dfsHelper(num, 0, target, combi, result, dict);
+		return result;
+	}
+	
+	private void dfsHelper(int[] num, int start, int remain, List<Integer> combi, List<List<Integer>> result, HashMap<String, Integer> dict) {
+		if(remain==0) {
+			String combo = "";
+			for(int i=0; i<combi.size(); i++) {
+				combo+=combi.get(i)+'0';
+			}
+			if(dict.containsKey(combo)==false) {
+				dict.put(combo, 1);
+				result.add(new ArrayList<Integer>(combi));
+			}
+			return;
+		}
+		if(start==num.length) {
+			return;
+		}
+		if(remain>=num[start]) {
+			int leng=combi.size();
+			combi.add(num[start]);
+			dfsHelper(num, start+1, remain-num[start], combi, result, dict);
+			combi.remove(leng);
+			dfsHelper(num, start+1, remain, combi, result, dict);
+		}
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution231 ss = new Solution231();
+		int[] num = new int[]{10,1,2,7,6,1,5};
+		int target = 8;
+		List<List<Integer>> result = ss.combinationSum2(num, target);
+		for(int i=0; i<result.size(); i++) {
+			System.out.println(result.get(i));
+		}
 	}
 }

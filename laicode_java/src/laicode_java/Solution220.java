@@ -16,9 +16,56 @@ import java.util.*;
 //6 5 8 9 5 4 2 3
 //5 8 7 1 4 3 5 8
 public class Solution220 {
-
+	public int largestSummary(int[][] matrix) {
+		if(matrix==null || matrix.length!=8) {
+			return 0;
+		}
+		int result=0;
+		for(int i=0; i<8; i++) {
+			for(int j=0; j<8; j++) {
+				int[] current=new int[1];
+				boolean[][] visited=new boolean[matrix.length][matrix[0].length];
+				dfsHelper(matrix, i, j, visited, current);
+				result = Math.max(result, current[0]);
+			}
+		}
+		return result;
+	}
+	
+	private void dfsHelper(int[][] matrix, int i, int j, boolean[][] visited, int[] current) {
+		if(visited[i][j]==true) {
+			return;
+		}
+		visited[i][j]=true;
+		if(i-2>=0 && visited[i-2][j]==false) {
+			current[0]+=matrix[i-2][j];
+			dfsHelper(matrix, i-2, j, visited, current);
+		}
+		if(j-2>=0 && visited[i][j-2]==false) {
+			current[0]+=matrix[i][j-2];
+			dfsHelper(matrix, i, j-2, visited, current);
+		}
+		if(i+2<matrix.length && visited[i+2][j]==false) {
+			current[0]+=matrix[i+2][j];
+			dfsHelper(matrix, i+2, j, visited, current);
+		}
+		if(j+2<matrix[0].length && visited[i][j+2]==false) {
+			current[0]+=matrix[i][j+2];
+			dfsHelper(matrix, i, j+2, visited, current);
+		}
+ 	}
+	
 	public static void main(String[] args) {
-
-
+		Solution220 ss = new Solution220();
+		int[][] matrix = {{4, 3, 2, 1, 9, 6, 5, 2},
+				{5, 8, 7, 6, 7, 4, 3, 1},
+				{8, 7, 6, 5, 4, 3, 2, 1},
+				{5, 6, 7, 8, 9, 4, 3, 8},
+				{8, 7, 6, 5, 3, 4, 8, 9},
+				{2, 3, 4, 5, 6, 5, 2, 8},
+				{6, 5, 8, 9, 5, 4, 2, 3},
+				{5, 8, 7, 1, 4, 3, 5, 8}};
+		int result = ss.largestSummary(matrix);
+		System.out.println(result);
 	}
 }

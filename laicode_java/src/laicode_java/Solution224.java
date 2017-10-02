@@ -16,9 +16,20 @@ import java.util.*;
 //Input:     -14
 //Output:  -41
 public class Solution224 {
-
+	public int reverseInt(int i) {
+		long result=0;
+		while(i!=0) {
+			result=result*10+i%10;
+			i=i/10;
+		}
+		if(result>Integer.MAX_VALUE || result<Integer.MIN_VALUE) {
+			return 0;
+		}
+		return (int) (result);
+	}
 	public static void main(String[] args) {
-
-
+		Solution224 ss = new Solution224();
+		System.out.println(ss.reverseInt(-32));
+		System.out.println(ss.reverseInt(1000000003));
 	}
 }
