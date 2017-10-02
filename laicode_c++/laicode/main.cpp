@@ -26,6 +26,8 @@
 #include <condition_variable>
 #include <mutex>
 #include <unistd.h>
+#include <iomanip>
+
 // C++ program to  largest rectangle with all 1s in a binary matrix
 using namespace std; 
 //
@@ -18784,10 +18786,67 @@ public:
     }
 };
 
+class Solution555 {
+public:
+    
+    int countBits(int a)
+    {
+        int result = 0;
+        while (a!=0)
+        {
+            if (a & 1)
+                result += 1;
+            a = a>>1;
+        }
+        return result;
+    }
+    
+    vector<int> cardinalitySort(vector<int> nums)
+    {
+        if(nums.size()<1) {
+            return nums;
+        }
+        int leng=nums.size();
+        //int has 32 bits, bucket sorting
+        
+        vector<vector<int>> count(32);
+        int setbitcount = 0;
+        for (int i=0; i<nums.size(); i++)
+        {
+            setbitcount = countBits(nums[i]);
+            count[setbitcount].push_back(nums[i]);
+        }
+        vector<int> result;
+        int j = 0;
+        
+        // Traverse through all bit counts
+        for (int i=0; i<32; i++)
+        {
+            if(count[i].size()!=0) {
+                
+                for (int k=0; k<count[i].size(); k++)
+                    result.push_back(count[i][k]);
+            }
+        }
+        return result;
+    }
+    
+    void test() {
+        vector<int> nums = {1,2,3,4,5};
+        vector<int> result = cardinalitySort(nums);
+        for (int i=0; i<result.size(); i++) {
+            cout<<result[i]<<" ";
+        }
+    }
+
+};
+
 // To execute C++, please define "int main()"
 int main() {
-    Solution526* s526 = new Solution526();
-    s526->test();
+//    Solution555* s555 = new Solution555();
+//    s555->test();
+//    Solution526* s526 = new Solution526();
+//    s526->test();
 //    Solution525* s525 = new Solution525();
 //    s525->test();
 //    Solution524* s524 = new Solution524();
