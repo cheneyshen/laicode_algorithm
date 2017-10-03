@@ -16,9 +16,41 @@ import java.util.*;
 //
 //n starts from 1, the first number is "1", the second number is "11"
 public class Solution235 {
-
+	public String countAndSay(int i) {
+		if(i<=0) {
+			return "";
+		}
+		String[] result=new String[1];
+		helper("1", i-1, result);
+		return result[0];
+	}
+	
+	private void helper(String str, int index, String[] result) {
+		if(index==0) {
+			result[0]=str;
+			return;
+		}
+		String array="";
+		for(int i=0; i<str.length();) {
+			int counts=1;
+			int j=i;
+			while(j+1<str.length() && str.charAt(j)==str.charAt(j+1)) {
+				j++;
+				counts++;
+			}
+			array+=(char)(counts+'0');
+			array+=str.charAt(j);
+			i=j+1;
+		}
+		helper(array, index-1, result);
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution235 ss = new Solution235();
+		System.out.println(ss.countAndSay(1));
+		System.out.println(ss.countAndSay(2));
+		System.out.println(ss.countAndSay(3));
+		System.out.println(ss.countAndSay(4));
+		System.out.println(ss.countAndSay(10));
 	}
 }
