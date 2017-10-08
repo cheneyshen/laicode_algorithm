@@ -9311,20 +9311,14 @@ class Solution200 {
     //    Given a non-negative integer 2D array representing the heights of bars in a matrix. Suppose each bar has length and width of 1. Find the largest amount of water that can be trapped in the matrix. The water can flow into a neighboring bar if the neighboring bar's height is smaller than the water's height. Each bar has 4 neighboring bars to the left, right, up and down side.
     //
     //        Assumptions
-    //
     //        The given matrix is not null and has size of M * N, where M > 0 and N > 0, all the values are non-negative integers in the matrix.
     //        Examples
-    //
-    //    { { 2, 3, 4, 2 },
-    //
+    //    	{ { 2, 3, 4, 2 },
     //        { 3, 1, 2, 3 },
-    //
     //        { 4, 3, 5, 4 } }
-    //
     //    the amount of water can be trapped is 3,
     //
     //    at position (1, 1) there is 2 units of water trapped,
-    //
     //    at position (1, 2) there is 1 unit of water trapped.
 private:
     class Element {
@@ -11229,22 +11223,58 @@ public:
 //        1 -1 2 -2 3 -3 5 -4 4 -5 6
 //   posi                             |
 //   negi                        |
-        if (array.empty()) {
-            return array;
-        }
-        int j=0;
-        for (int i=0; i<array.size(); i++) {
-            if (array[i]<0) {
-                swap(array[j++], array[i]);
-            }
-        }
-        int posi=j, negi=0;
-        while (posi<array.size() && negi<posi && array[negi]<0) {
-            swap(array[posi], array[negi]);
-            posi++;
-            negi+=2;
-        }
-        return array;
+		if(array==null || array.size()<=2) {
+			return array;
+		}
+		int leng=array.size();
+		int positive=0;
+		int slow=0;
+		//sort, left pos, right neg
+		//{1, 2, 3, 4, 5, -1, -1, -1}
+		for(int fast=0; fast<leng; fast++) {
+			if(array[fast]>0) {
+				positive++;
+				swap(array[slow++], array[fast]);
+			}
+		}
+		int negIndex=0;
+		int posIndex=1;
+		if(positive>leng/2) {
+			posIndex=0;
+			negIndex=1;
+			int left=0;
+			int right=leng-1;
+			//if pos more than neg, put pos to tailer
+			//{-1, -1, -1, 1, 2, 3, 4, 5}
+			while(right>=positive) {
+				swap(array[left++], array[right--]);
+			}
+		}
+		//now swap pos and neg
+		//{-1, -1, -1, 1, 2, 3, 4, 5}
+		/*  p
+		 *             n 
+		 *  1  -1  -1 -1  2  3  4  5   
+		 *          p
+		 *                   n 
+		 *  1  -1   3 -1  2 -1  4  5   
+		 *                           p
+		 *                         n
+		 *        
+		 */
+		while(true) {
+			while(posIndex<leng && A[posIndex]>0) {
+				posIndex+=2;
+			}
+			while(negIndex<leng && A[negIndex]<0) {
+				negIndex+=2;
+			}
+			if(posIndex>=leng || negIndex>=leng) {
+				break;
+			}
+			swap(array[posIndex], array[negIndex]);
+		}
+		return array;
     }
 private:
     
