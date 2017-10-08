@@ -11,9 +11,37 @@ import java.util.*;
 //
 //The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
 public class Solution244 {
-
+	public int Sum3Closest(int[] array, int target) {
+		if(array==null || array.length<3) {
+			return Integer.MIN_VALUE;
+		}
+		Arrays.sort(array);
+		int result=Integer.MAX_VALUE;
+		for(int i=0; i<array.length-2; i++) {
+			int left=i+1, right=array.length-1;
+			while(left<right) {
+				int sum = array[i]+array[left]+array[right];
+				if(Math.abs(sum-target) < Math.abs(result-target)) {
+					result=sum;
+				}
+				if(sum==target) {
+					return target;
+				}
+				else if(sum>target) {
+					right--;
+				}
+				else {
+					left++;
+				}
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution244 ss = new Solution244();
+		int[] array = new int[]{-1,2,1,-4};
+		int target = 1;
+		System.out.println(ss.Sum3Closest(array, target));
 	}
 }

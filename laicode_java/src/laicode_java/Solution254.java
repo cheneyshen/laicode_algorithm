@@ -22,6 +22,31 @@ import java.util.*;
 //]
 public class Solution254 {
 
+	static class TreeNode {
+	 	int val;
+	 	TreeNode left;
+	 	TreeNode right;
+	 	TreeNode(int x) { val = x; }
+	}
+	 
+	public List<List<Integer>> levelOrderBottom(TreeNode root) {
+		List<List<Integer>> result = new ArrayList<>();
+		dfsHelper(root, 0, result);
+		return result;
+	}
+	
+	private void dfsHelper(TreeNode root, int level, List<List<Integer>> result) {
+		if(root==null) {
+			return; // The level does not exist in output
+		}
+		if(level == result.size()) {
+			result.add(new ArrayList<Integer>());// Create a new level
+		}
+		result.get(level).add(root.val); // Add the current value to its level
+		dfsHelper(root.left, level+1, result); // Go to the next level
+		dfsHelper(root.right, level+1, result);
+	}
+	
 	public static void main(String[] args) {
 
 

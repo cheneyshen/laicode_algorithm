@@ -11,13 +11,50 @@ import java.util.*;
 //Examples
 //Input:     "abbc"
 //Output:  "bb"
+/* a
+ *  b bb abb
+ *   b
+ * 
+ */
 //
 //Input:     "abcbcbd"
 //Output:  "bcbcb"
+/*	abcbcbd
+ * 	a
+ * 	 b abc
+ *    c bcb abcbc
+ *     b cbc bcbcb abcbcbd
+ *      c bcb cbcbd
+ *       b cbd
+ *        d  
+ */
 public class Solution252 {
-
+	public String longestPalindrome(String s) {
+		if(s==null || s.length()<2) {
+			return s;
+		}
+		int leng=s.length();
+		String result="";
+		int dist=0;
+		boolean[][] isPalindrome = new boolean[leng+1][leng+1]; 
+		for(int end=1; end<=leng; end++) {
+			for(int start=end; start>0; start--) {
+				if(s.charAt(start-1)==s.charAt(end-1)) {
+					isPalindrome[start][end] = end-start<2 || isPalindrome[start+1][end-1];
+				}
+				if(isPalindrome[start][end] && end-start>=dist) {
+					result=s.substring(start-1, end);
+					dist = end-start;
+				}
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution252 ss = new Solution252();
+		System.out.println(ss.longestPalindrome(""));
+		System.out.println(ss.longestPalindrome("abcbcbd"));
+		System.out.println(ss.longestPalindrome("abbc"));
 	}
 }

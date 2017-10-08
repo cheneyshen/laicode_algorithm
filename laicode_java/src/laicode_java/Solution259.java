@@ -15,7 +15,20 @@ import java.util.*;
 //{1} --> {1}
 //{1, 0, 3, 0, 1} --> {1, 3, 1, 0, 0}
 public class Solution259 {
-
+	public void moveZeros(int[] nums) {
+		int low=0, high=nums.length;
+		//move all the nonzero elements advance
+		for(int i=0; i<high; i++) {
+			if(nums[i]!=0) {
+				nums[low++]=nums[i];
+			}
+		}
+		for(; low<high; low++) {
+			nums[low]=0;
+		}
+		return;
+	}
+	
 	public static void main(String[] args) {
 
 
