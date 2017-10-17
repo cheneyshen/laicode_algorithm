@@ -11,14 +11,54 @@ import java.util.*;
 //
 //The given matrix is not null, and has size of N * M, where N >= 0 and M >= 0.
 //Examples:
-//
-//matrix = { {1, 2, 3}, {4, 5, 7}, {8, 9, 10} }
+/*matrix = {{1, 2, 3},
+ *  		{4, 5, 7}, 
+ *  		{8, 9, 10} }
+ */
 //target = 7, return {1, 2}
 //target = 6, return {-1, -1} to represent the target number does not exist in the matrix.
 public class Solution267 {
-
+	public List<Integer> search(int[][] matrix, int target) {
+		if(matrix==null || matrix.length<1) {
+			return null;
+		}
+		int rows = matrix.length, cols = matrix[0].length;
+		List<Integer> result=new ArrayList<>();
+		int i=0, j=cols-1;
+		while(i<rows && j>=0) {
+			int curr=matrix[i][j];
+			if(curr==target) {
+				result.add(i);
+				result.add(j);
+				return result;
+			} else if(curr<target) {
+				i++;
+			} else {
+				j--;
+			}
+		}
+		result.add(-1); result.add(-1);
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
+		Solution267 ss = new Solution267();
+		int[][] matrix = new int[][]{
+				{1, 2, 3},
+				{4, 5, 7},
+				{8, 9, 10}
+		};
+		System.out.println(ss.search(matrix, 1));
+		System.out.println(ss.search(matrix, 2));
+		System.out.println(ss.search(matrix, 3));
+		System.out.println(ss.search(matrix, 4));
+		System.out.println(ss.search(matrix, 5));
+		System.out.println(ss.search(matrix, 6));
+		System.out.println(ss.search(matrix, 7));
+		System.out.println(ss.search(matrix, 8));
+		System.out.println(ss.search(matrix, 9));
+		System.out.println(ss.search(matrix, 10));
+		System.out.println(ss.search(matrix, 11));
 
 	}
 }

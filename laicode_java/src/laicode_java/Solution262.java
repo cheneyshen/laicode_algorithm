@@ -15,9 +15,33 @@ import java.util.*;
 //{1, 2, 3, 4, 5} --> {1, 3, 2, 5, 4}
 //       m
 public class Solution262 {
-
+	public void sortInPair(int[] array) {
+		if(array==null || array.length<2) {
+			return;
+		}
+		int leng=array.length;
+		for(int i=0; i<leng; i+=2) {
+            // If current even element is smaller than previous
+			if(i>0 && array[i-1]<array[i]) {
+				swap(array, i, i-1);
+			}
+            // If current even element is smaller than next
+			if(i<leng-1 && array[i]>array[i+1]) {
+				swap(array, i, i+1);
+			}
+		}
+	}
+	
+	private void swap(int[] array, int i, int j) {
+		int temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+	
 	public static void main(String[] args) {
-
-
+		Solution262 ss = new Solution262();
+		int[] array = new int[]{1, 4, 2, 3, 5, 6};
+		ss.sortInPair(array);
+		System.out.println(Arrays.toString(array));
 	}
 }
