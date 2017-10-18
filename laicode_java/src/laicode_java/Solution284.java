@@ -13,9 +13,30 @@ import java.util.*;
 //	input = “{ 2{4{6}} }”.output = 2×1 + 4×2 + 6×3 = 28.
 //	input = "{34{5}6}".output = 3 + 4 + 5x2 + 6 = 23.
 public class Solution284 {
-
+	public int nestedValue(String str) {
+		if(str==null || str.length()<1) {
+			return 0;
+		}
+		Stack<Character> stk = new Stack<>();
+		int result=0;
+		for(int i=0; i<str.length(); i++) {
+			if (str.charAt(i)=='{') {
+				stk.push(str.charAt(i));
+			} else if (str.charAt(i)>='0' && str.charAt(i)<='9') {
+				result += (str.charAt(i)-'0')*stk.size();
+			} else if (str.charAt(i)=='}') {
+				stk.pop();
+			}
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
-
+		Solution284 ss = new Solution284();
+		String str = "{ 2{4{6}} }";
+		System.out.println(ss.nestedValue(str));
+		str = "{34{5}6}";
+		System.out.println(ss.nestedValue(str));
 
 	}
 }
