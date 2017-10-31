@@ -18956,9 +18956,144 @@ public:
 
 };
 
+class Solution556 {
+public:
+	//Audible
+    int subarraySum(vector<int> arr) {
+        if(arr.empty() || arr.size()<1) {
+            return 0;
+        }
+        long result = 0;
+        // must use long, otherwise some cases are failures, wired
+        long leng = arr.size();
+        for(long i=0; i<leng; i++) {
+            // 1, 2, 3, 1 2, 2 3, 1 2 3
+            // 1 1 1, i=0, 3*1*a[0]
+            // 2 2 2 2, i=1, 2*2*a[1]
+            // 3 3 3, i=2, 1*3*a[2]
+            //(i+1) * (leng - i)*a[i]
+            result+=(leng-i)*(i+1)*arr[i];
+        }
+        return result;
+    }
+    
+    /*
+     * helper function to convert prefix to postfix
+     * input: prefix, eg: "*34"
+     * output: postfix, eg: "34*"
+     */
+    string pre2post(string str) {
+        if(str.empty() || str.size()<2) {
+            return str;
+        }
+        //stack is used to store digits
+        stack<string> stk;
+        //from tail to head, push into stack
+        for(int i=str.size()-1; i>=0; i--) {
+            char curr = str[i];
+            if(isdigit(curr)) {
+                stk.push(to_string(curr-'0'));
+            } else {
+                string a = stk.top(); stk.pop();
+                string b = stk.top(); stk.pop();
+                //build target string
+                stk.push(a+b+curr);
+            }
+        }
+        return stk.top();
+    }
+    /*
+     *  for each prefix, call helper function to convert
+     *  input: array of prefixes
+     *  output: array of postfixes
+     */
+    vector <string> prefixToPostfix(vector <string> prefixes) {
+        vector<string> result;
+        for (int i = 0; i < prefixes.size(); ++i)
+        {
+            result.push_back(pre2post(prefixes[i]));
+        }
+        return result;
+    }
+    
+    /*
+     * main function
+     * input: total budget, shops' quantities, corresponding costs
+     * output: the maximum quantities we can buy with budget
+     */
+    int budgetShopping(int n, vector <int> bundleQuantities, vector <int> bundleCosts) {
+        
+        if(bundleQuantities.empty() || bundleQuantities.size()<1) {
+            return 0;
+        }
+        //array to save how much we buy with budget [1, n]
+        vector<int> dp(n+1, 0);
+        //need to sort by cost asc, the less cost we choose firstly
+        vector<pair<int, int>> shops;
+        for(int i=0; i<min(bundleQuantities.size(), bundleCosts.size()); i++) {
+            shops.push_back(make_pair(bundleCosts[i], bundleQuantities[i]));
+        }
+        sort(shops.begin(), shops.end());
+        //    for (int i=0; i<shops.size(); i++) {
+        //        cout<<shops[i].first<<" "<<shops[i].second<<endl;
+        //    }
+        for(int i=shops[0].first; i<n+1; i++) {
+            for(int j=0; j<shops.size(); j++) {
+                //if current bugest is less than cost, skip
+                if(i<shops[j].first) {
+                    break;
+                }
+                //if we can buy more, then update the ith number
+                if(dp[i-shops[j].first] + shops[j].second > dp[i]) {
+                    dp[i] = dp[i-shops[j].first] + shops[j].second;
+                }
+            }
+        }
+        // return the nth, the maximum books we buy with n
+        return dp[n];
+    }
+    
+    void test1() {
+        vector<int> arr;
+        arr = {};
+        cout<<subarraySum(arr)<<endl;
+        arr = {1};
+        cout<<subarraySum(arr)<<endl;
+        arr = {1,1,1};
+        cout<<subarraySum(arr)<<endl;
+        arr = {1,2,3};
+        cout<<subarraySum(arr)<<endl;
+    }
+    
+    void test2() {
+        vector<string> array;
+        array.push_back("*34");
+        array.push_back("+1*23");
+        array.push_back("+12");
+        array.push_back("+1**23/14");
+        array = prefixToPostfix(array);
+        for (auto i:array) {
+            cout<<i<<endl;
+        }
+    }
+    
+    void test3() {
+        vector<int> quantities = {20, 19};
+        vector<int> costs = {24, 20};
+        cout<<budgetShopping(50, quantities, costs)<<endl;
+        quantities = {10};
+        costs = {2, 20};
+        cout<<budgetShopping(4, quantities, costs)<<endl;
+    }
+    
+};
 
 // To execute C++, please define "int main()"
 int main() {
+    Solution556* s556 = new Solution556();
+    s556->test1();
+    s556->test2();
+    s556->test3();
 //    Solution555* s555 = new Solution555();
 //    s555->test();
 //    Solution526* s526 = new Solution526();
@@ -19074,8 +19209,8 @@ int main() {
 //    s309->test();
 //    Solution308* s308 = new Solution308();
 //        s308->test();
-    Solution277* s277 = new Solution277();
-    s277->test();
+//    Solution277* s277 = new Solution277();
+//    s277->test();
 //    Solution272* s272 = new Solution272();
 //    s272->test();
 //    Solution249* s249 = new Solution249();
