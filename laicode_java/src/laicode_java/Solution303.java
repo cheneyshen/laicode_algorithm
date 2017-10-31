@@ -18,7 +18,19 @@ import java.util.*;
 //15.right = 29
 //35.right = 40
 public class Solution303 {
-
+	void linkRightToSuccessor(TreeNode root, TreeNode prev) {
+		if(root==null) {
+			return;
+		}
+		linkRightToSuccessor(root.right, prev);
+		if(prev!=null && root.right==null) {
+			root.right = prev;
+		}
+		prev = root;
+		
+		linkRightToSuccessor(root.left, prev);
+	}
+	
 	public static void main(String[] args) {
 
 
