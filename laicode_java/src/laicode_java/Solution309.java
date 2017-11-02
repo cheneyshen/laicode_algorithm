@@ -13,8 +13,45 @@ import java.util.*;
 //{1, 3, 2, 1, 4, 6, 1}, the longest bitonic sub sequence is {1, 3, 4, 6, 1}, length is 5.
 public class Solution309 {
 
-	public static void main(String[] args) {
+	static int lbs(int arr[], int n) {
+		int i, j;
+		int[] lis = new int[n];
+		for (i=0; i<n; i++) {
+		    lis[i]=1;
+        }
+        for(i=1; i<n; i++) {
+		    for(j=0; j<i; j++) {
+		        if(arr[i]>arr[j] && lis[i]<lis[j]+1) {
+		            lis[i]=lis[j]+1;
+                }
+            }
+        }
+        int[] lds = new int[n];
+		for(i=0; i<n; i++) {
+		    lds[i] = 1;
+        }
+        for(i=n-2; i>=0; i--) {
+		    for (j=n-1; j>1; j--) {
+		        if(arr[i]>arr[j] && lds[i]<lds[j]+1) {
+		            lds[i]=lds[j]+1;
+                }
+            }
+        }
+        int max = lis[0]+lds[0]-1;
+		for(i=1; i<n; i++) {
+		    if(lis[i]+lds[i]-1>max) {
+		        max = lis[i]+lds[i]-1;
+            }
+        }
+        return max;
+	}
 
+	public static void main(String[] args) {
+        int arr[] = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5,
+                13, 3, 11, 7, 15};
+        int n = arr.length;
+        Solution309 ss = new Solution309();
+        System.out.println("Length of LBS is "+ ss.lbs( arr, n ));
 
 	}
 }
