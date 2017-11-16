@@ -15,7 +15,15 @@ import java.util.*;
 //Can you do it like a boss? Do it without using any builtin function like __builtin_popcount in c++ or in any other language.
 
 public class Solution471 {
-
+	public int[] countBits(int num) {
+		//f[i] = f[i / 2] + i % 2
+		
+		int[] f = new int[num+1];
+		for (int i=1; i<=num; i++) {
+			f[i] = f[i>>1] + (i&1);
+		}
+		return f;
+	}
 	public static void main(String[] args) {
 
 
