@@ -24,7 +24,26 @@ import java.util.*;
 //
 
 public class Solution464 {
-
+//	Let miss be the smallest sum in [0,n] that we might be missing.
+//	Meaning we already know we can build all sums in [0,miss). 
+//	Then if we have a number num <= miss in the given array, we can 
+//	add it to those smaller sums to build all sums in [0,miss+num). 
+//	If we don't, then we must add such a number to the array, and 
+//	it's best to add miss itself, to maximize the reach.
+	public int minPatches(int[] nums, int n) {
+		long max = 0;
+		int cnt=0;
+		for (int i=0; max<n; ) {
+			if(i>=nums.length || max < nums[i]-1) {
+				max += max+1;
+				cnt++;
+			} else {
+				max += nums[i];
+				i++;
+			}
+		}
+		return cnt;
+	}
 	public static void main(String[] args) {
 
 

@@ -11,7 +11,21 @@ import java.util.*;
 //
 
 public class Solution446 {
-
+	public boolean isPalindrome(String s) {
+		for(int i=0,j=s.length()-1; i<j; i++,j--) {
+			while(Character.isDigit(s.charAt(i))==false && Character.isLetter(s.charAt(i))==false && i<j) {
+				i++;
+			}
+			while(Character.isDigit(s.charAt(i))==false && Character.isLetter(s.charAt(i))==false && i<j) {
+				j--;
+			}
+			if(Character.toUpperCase(s.charAt(i)) != Character.toUpperCase(s.charAt(j))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public static void main(String[] args) {
 
 

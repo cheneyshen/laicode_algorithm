@@ -17,7 +17,16 @@ import java.util.*;
 // / \   / \
 //9   6 3   1
 public class Solution449 {
-
+	public TreeNode invertTree(TreeNode root) {
+		if(root==null) {
+			return null;
+		}
+		final TreeNode left = root.left, right = root.right;
+		root.left = invertTree(right);
+		root.right = invertTree(left);
+		return root;
+	}
+	
 	public static void main(String[] args) {
 
 
