@@ -11,7 +11,17 @@ import java.util.*;
 //Note: 
 //You may assume k is always valid, 1 ≤ k ≤ array's length.
 public class Solution436 {
-
+	public int findKthLargest(int[] nums, int k) {
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		for(int val:nums) {
+			pq.offer(val);
+			if(pq.size()>k) {
+				pq.poll();
+			}
+		}
+		return pq.peek();
+	}
+	
 	public static void main(String[] args) {
 
 

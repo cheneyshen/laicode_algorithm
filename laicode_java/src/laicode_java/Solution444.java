@@ -10,7 +10,26 @@ import java.util.*;
 //
 
 public class Solution444 {
-
+	public int countNodes(TreeNode root) {
+		if(root==null) {
+			return 0;
+		}
+		int l = leftHeight(root.left);
+		int r = leftHeight(root.right);
+		if(l==r) {
+			return countNodes(root.right) + (1<<l);
+		}
+		return countNodes(root.right) + (1<<r);
+	}
+	
+	private int leftHeight(TreeNode node) {
+		int h=0;
+		while(node!=null) {
+			h++;
+			node = node.left;
+		}
+		return h;
+	}
 	public static void main(String[] args) {
 
 

@@ -11,7 +11,30 @@ import java.util.*;
 //
 
 public class Solution434 {
-
+	public int rob(int[] nums) {
+		int n = nums.length;
+		if(n==0)
+			return 0;
+		else if (n==1)
+			return nums[0];
+		else if (n==2)
+			return Math.max(nums[0], nums[1]);
+		else
+			return Math.max(rob(nums, n, 0, n-2), rob(nums, n, 1, n-1));
+	}
+	
+	private int rob(int[] nums, int n, int start, int end) {
+		int[] f = new int[n];
+        //f[start] = nums[start];
+        //f[start+1] = max(nums[start], nums[start+1]);
+		for(int i=start; i<=end; i++) {
+			int a = (i-2>=0 ? f[i-2]:0) + nums[i];
+			int b = (i-1>=0 ? f[i-1]:0);
+			f[i] = Math.max(a, b);
+		}
+		return f[end];
+	}
+	
 	public static void main(String[] args) {
 
 
