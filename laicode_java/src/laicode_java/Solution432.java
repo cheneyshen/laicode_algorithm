@@ -16,7 +16,13 @@ import java.util.*;
 //
 //So you should return 1, because there is only one bulb is on.
 public class Solution432 {
-
+	public int bulbSwitch(int n) {
+		int counts=0;
+		for(int i=1; i*i<=n; i++) {
+			counts++;
+		}
+		return counts;
+	}
 	public static void main(String[] args) {
 
 
