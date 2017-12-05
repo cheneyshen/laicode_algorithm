@@ -21,7 +21,40 @@ import java.util.*;
 //
 
 public class Solution430 {
-
+	public int[] findOrder(int numCourses, int[][] prerequisities) {
+		if(numCourses==0) {
+			return null;
+		}
+		//Convert graph presentation from edges to indegree of adjacent list
+		int indegree[] = new int[numCourses], order[] = new int[numCourses], index=0;
+		for(int i=0; i<prerequisities.length; i++) {
+			indegree[prerequisities[i][0]]++;
+		}
+		
+		Queue<Integer> queue = new LinkedList<Integer>();
+		for (int i=0; i<numCourses; i++) {
+			if(indegree[i]==0) {
+				//add the course to the order because it has no prerequisities
+				order[index++]=i;
+				queue.offer(i);
+			}
+		}
+		// How many courses don't need prerequisites
+		while(!queue.isEmpty()) {
+			int prerequisite = queue.poll(); // Already finished this prerequisities course
+			for(int i=0; i<prerequisities.length; i++) {
+				if(prerequisities[i][1]==prerequisite) {
+					indegree[prerequisities[i][0]]--;
+					if(indegree[prerequisities[i][0]]==0) {
+						// if degree is zero, then add the course to the order
+						order[index++] = prerequisities[i][0];
+						queue.offer(prerequisities[i][0]);
+					}
+				}
+			}
+		}
+		return (index==numCourses) ? order : new int[0];
+	}
 	public static void main(String[] args) {
 
 
