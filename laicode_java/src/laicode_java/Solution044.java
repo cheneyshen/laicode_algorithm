@@ -12,13 +12,13 @@ public class Solution044 {
 		stack.offerFirst(root);
 		while(stack.isEmpty()==false) {
 			TreeNode curr=stack.pollFirst();
+			preorder.add(curr.key);
 			if(curr.right!=null) {
 				stack.offerFirst(curr.right);
 			}
 			if(curr.left!=null) {
 				stack.offerFirst(curr.left);
 			}
-			preorder.add(curr.key);
 		}
 		return preorder;
 	}

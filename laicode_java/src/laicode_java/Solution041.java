@@ -65,8 +65,8 @@ public class Solution041 {
 			return head;
 		}
 		ListNode prev=null;
-		ListNode next=null;
 		ListNode curr=head;
+		ListNode next=null;
 		while(curr!=null) {
 			next=curr.next;
 			curr.next=prev;
@@ -87,9 +87,7 @@ public class Solution041 {
 			fast=fast.next;
 			prev=slow;
 			slow=slow.next;
-			if(fast!=null) {
-				fast=fast.next;
-			}
+			fast=fast.next;
 		}
 		ListNode second=slow.next;
 		slow.next=null;

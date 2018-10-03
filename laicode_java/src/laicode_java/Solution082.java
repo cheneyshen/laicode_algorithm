@@ -23,9 +23,8 @@ public class Solution082 {
 			return s;
 		}
 		Stack<Character> stk = new Stack<Character>();
-		int slow=0, fast=0;
+		int fast=0;
 		for(; fast<s.length(); ) {
-			slow=fast;
 			if(!stk.isEmpty() && s.charAt(fast)==stk.peek()) {
 				while(s.charAt(fast)==stk.peek()) {
 					fast++;

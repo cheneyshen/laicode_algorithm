@@ -43,11 +43,13 @@ public class Solution084 {
 		}
 		return String.valueOf(array);
 	}
+	
 	private void swap(char[] s, int i, int j) {
 		char tmp = s[i];
 		s[i]=s[j];
 		s[j]=tmp;
 	}
+	
 	public static void main(String[] args) {
 		Solution084 ss = new Solution084();
 		System.out.println(ss.reverseWords("   I love Google "));

@@ -46,7 +46,9 @@ public class Solution090 {
 		}
 	}
 	public static void main(String[] args) {
-
-
+		int[] array = new int[] {1,3,2,0,2};
+		Solution090 solution = new Solution090();
+		System.out.println(solution.minJump(array));
+		
 	}
 }

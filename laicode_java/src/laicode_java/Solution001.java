@@ -12,14 +12,16 @@ import java.util.*;
 //Input: A = {5, 2, 6, 3, 4, 7, 5}
 //Output: 4
 //Because [2, 3, 4, 5] is the longest ascending subsequence.
+// result = 3
+// table = 0 2 3 4 5 0 0 
 public class Solution001 {
 	public int longest(int[] array) {
 		if(array.length==0) {
 			return 0;
 		}
 		int[] table=new int[array.length];
-		int result=1;
-		table[1]=array[0];
+		int result=1; // longest ascending subsequence 初始化为1
+		table[1]=array[0];  //为什么是1？因为从table 1 到 result之间搜索
 		for(int i=1; i<array.length; i++) {
 			int index=find(table, 1, result, array[i]);
 			if(index==result) {

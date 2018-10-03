@@ -27,8 +27,8 @@ public class Solution034 {
 			return head;
 		}
 		ListNode prev=null;
-		ListNode next=null;
 		ListNode curr=head;
+		ListNode next=null;
 		while(curr!=null) {
 			next=curr.next;
 			curr.next=prev;

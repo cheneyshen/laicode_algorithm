@@ -9,7 +9,7 @@ import java.util.*;
 //The two given strings are not null
 //Examples
 //
-//S = ¡°abcde¡±, T = ¡°cdf¡±, the longest common substring of S and T is ¡°cd¡±
+//S = "abcde", T = "cdf", the longest common substring of S and T is "cd"
 
 public class Solution176 {
 	public String longestCommon(String s, String t) {

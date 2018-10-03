@@ -33,9 +33,7 @@ public class Solution036 {
 		while(fast.next!=null && fast.next.next!=null) {
 			fast=fast.next;
 			slow=slow.next;
-			if(fast!=null) {
-				fast=fast.next;
-			}
+			fast=fast.next;
 		}
 		return slow;
 	}

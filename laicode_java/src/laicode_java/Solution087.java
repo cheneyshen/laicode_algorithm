@@ -19,8 +19,8 @@ public class Solution087 {
 		}
 		int result=0;
 		for(int i=1; i<n; i++) {
-			int best=Math.max(n-i, maxProduct(n-i));
-			result=Math.max(best*i, result);
+			int rightPartValue=Math.max(n-i, maxProduct(n-i));
+			result=Math.max(rightPartValue*i, result);
 		}
 		return result;
 	}

@@ -27,10 +27,10 @@ public class Solution035 {
 		if(head==null || head.next==null) {
 			return head;
 		}
-		ListNode next=head.next;
-		head.next=reverseInPairs(next.next);
-		next.next=head;
-		return next;
+		ListNode nextNode = head.next;
+		head.next=reverseInPairs(nextNode.next);
+		nextNode.next=head;
+		return nextNode;
 	}
 	
 	public static void main(String[] args) {

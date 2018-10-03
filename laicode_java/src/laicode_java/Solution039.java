@@ -29,12 +29,12 @@ public class Solution039 {
 			head=node;
 			return head;
 		}
-		ListNode prev=head;
-		while(prev.next!=null && prev.next.value<value) {
-			prev=prev.next;
+		ListNode curr=head;
+		while(curr.next!=null && curr.next.value<value) {
+			curr=curr.next;
 		}
-		node.next=prev.next;
-		prev.next=node;
+		node.next=curr.next;
+		curr.next=node;
 		return head;
 	}
 	

@@ -17,17 +17,17 @@ import java.util.*;
 
 //{ 1, 0, 1, 1 } }
 /*
- * left show where is left most 1 最左边的1在哪
+ * left show where is left most 1 
  * 0 0 0 0 
  * 0 0 0 0
  * 0 1 1 1
  * 0 0 2 2
- * right show where is right most 1 最右边的1在哪
+ * right show where is right most 1 
  * 4 4 4 4
  * 4 4 4 4
  * 0 4 4 4
  * 1 0 4 4
- * height has how many 1s 当前位置的高度
+ * height has how many 1s 
  * 0 0 0 0
  * 1 1 1 1
  * 0 2 2 2

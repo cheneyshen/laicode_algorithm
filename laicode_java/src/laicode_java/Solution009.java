@@ -33,6 +33,7 @@ public class Solution009 {
 	
 	private void merge(int[] array, int[] helper, int left, int mid, int right) {
 		for (int i=left; i<=right; i++) {
+			// shallow copy
 			helper[i]=array[i];
 		}
 		int leftIndex=left;
