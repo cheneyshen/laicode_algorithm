@@ -29,7 +29,7 @@ public class Solution291 {
 	}
 	
 	TreeNode convertExpression(String expression, int i) {
-		if(i>expression.length()) {
+		if(i>=expression.length()) {
 			return null;
 		}
 		TreeNode root = new TreeNode(expression.charAt(i));
@@ -43,7 +43,8 @@ public class Solution291 {
 	}
 	
 	public static void main(String[] args) {
-
-
+		Solution291 solution = new Solution291();
+		TreeNode result = solution.convertExpression("a?b?c:d:e", 0);
+		System.out.println(result.data);
 	}
 }

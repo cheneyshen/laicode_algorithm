@@ -14,7 +14,7 @@ import java.util.*;
  { 2, 1, 3, 3, 4 }, the largest rectangle area is 3 * 3 = 9(starting from index 2 and ending at index 4)
  2  3  4
  2*1  2*(1-0+1)  3*1 3*(3-2+1) 4*()
- 
+ stack : 1. 升序 2. 小于 计算
  */
 public class Solution198 {
 	//O(N^2)
@@ -53,6 +53,17 @@ public class Solution198 {
 				result = Math.max(result, array[index]*(stk.isEmpty() ? i : i-1-stk.peek()));
 				i--;	//
 			}
+		}
+		Stack<Integer> stack = new Stack<Integer>();
+		for(int i=0; i<=leng;i++) {
+			int h = i==leng?0:array[i];
+			while(!stack.isEmpty() && h<array[stack.peek()]) {
+				int height = array[stack.pop()];
+				int start = stack.isEmpty()? -1 : stack.peek();
+				int area = height *(i-1-start);
+				result = Math.max(result, area);
+			}
+			stack.push(i);
 		}
 		return result;
 	}

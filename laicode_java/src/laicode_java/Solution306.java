@@ -66,7 +66,7 @@ public class Solution306 {
 	void reverse() {
 		ListNode prev = null;
 		ListNode curr = second;
-		ListNode next;
+		ListNode next = null;
 		while(curr!=null) {
 			next = curr.next;
 			curr.next = prev;
@@ -74,6 +74,20 @@ public class Solution306 {
 			curr = next;
 		}
 		second = prev;
+	}
+	
+	ListNode reverse(ListNode head) {
+		if(head==null) {
+			return null;
+		}
+		ListNode prev=null, curr = head, next = null;
+		while(curr!=null) {
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+		}
+		return prev;
 	}
 	
 	boolean compareHelper(ListNode head1, ListNode head2) {
@@ -94,7 +108,18 @@ public class Solution306 {
 	}
 	
 	public static void main(String[] args) {
-
-
+		// 1 -> 2 -> 3 -> 2 -> 1
+		ListNode n1 = new ListNode('1');
+		ListNode n2 = new ListNode('2');
+		ListNode n3 = new ListNode('3');
+		ListNode n4 = new ListNode('4');
+		ListNode n5 = new ListNode('5');
+		n1.next = n2;
+		n2.next = n3;
+		n3.next = n4;
+		n4.next = n5;
+		Solution306 solution = new Solution306();
+		ListNode result = solution.reverse(n1);
+		System.out.println(result.data);
 	}
 }

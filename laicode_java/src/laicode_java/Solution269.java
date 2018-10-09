@@ -41,7 +41,7 @@ public class Solution269 {
 		return result;
 	}
 	public static void main(String[] args) {
-		int[][] buildings = {{2,4,2},{1,3,1},{2,6,3}};
+		int[][] buildings = {{1,3,1},{2,4,2}};
 		Solution269 ss = new Solution269();
 		int result = ss.totalArea(buildings);
 		System.out.println(result);

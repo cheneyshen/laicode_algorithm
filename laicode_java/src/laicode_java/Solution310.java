@@ -10,6 +10,13 @@ import java.util.*;
 //Examples:
 //Input: { 1, -3, 1, -4, 3, 4 }
 //Two subarrays: {-3, 1, -4 }, { 3, 4 }
+/*
+ * 1 -2  1  -4  3 7
+ * 1 -3 -2  -6 -3 4
+ * 
+ * 2  1  4   3  7 4
+ *-5 -6 -3  -4  3 4
+ */
 //Maximum difference = 13
 public class Solution310 {
 	int maxDiffSubArrays(int[] nums) {
@@ -26,9 +33,9 @@ public class Solution310 {
 		int max = Integer.MIN_VALUE;
 		int sum = 0;
 		int minsum = 0;
-		//forward get max subarray
+		//forward: get max subarray
 		for(int i=0; i<size; i++) {
-			sum +=nums[i];
+			sum += nums[i];
 			max = Math.max(max, sum-minsum);
 			minsum = Math.max(sum, minsum);
 			left_max[i] = max;

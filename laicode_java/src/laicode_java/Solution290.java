@@ -38,6 +38,16 @@ public class Solution290 {
 		}
 		return i<s.length() && match(s.charAt(i), c) && dfs2(s, i+1, p, j+1);
 	}
+	public boolean ddfs(String s, int i, String p, int j) {
+		if(j==p.length()) {
+			return i == s.length();
+		}
+		char c = p.charAt(j);
+		if (j+1 < p.length() && p.charAt(j+1)=='*') {
+			return ddfs(s, i, p, j+2) || (i<s.length() && match(s.charAt(i), c) && ddfs(s, i+1, p, j));
+		}
+		return i<s.length() && match(s.charAt(i), c) && ddfs(s, i+1, p, j+1);
+	}
 	
 	private boolean match(char c, char p) {
 		return p=='.'? true : p==c;

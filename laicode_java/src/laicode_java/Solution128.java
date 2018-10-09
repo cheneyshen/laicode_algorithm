@@ -48,7 +48,7 @@ public class Solution128 {
 	}
 	
 	private boolean findNode(TreeNode root, TreeNode two) {
-		if(root==null || root==null) {
+		if(root==null || two==null) {
 			return false;
 		}
 		else if(two==root) {

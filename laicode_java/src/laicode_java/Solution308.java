@@ -17,7 +17,7 @@ public class Solution308 {
         if (l==h-1) {
 		    return str.charAt(l)==str.charAt(h)?0:1;
         }
-        return (str.charAt(l)==str.charAt(l))?
+        return (str.charAt(l)==str.charAt(h))?
                 findMinInsertions(str, l+1, h-1) : (
                         Integer.min(findMinInsertions(str, l, h-1),
                                 findMinInsertions(str, l+1, h))+1
@@ -27,7 +27,7 @@ public class Solution308 {
 	public static void main(String[] args) {
 
         Solution308 ss = new Solution308();
-        String str = "javaj";
+        String str = "javaja";
         System.out.println("Least Insertions is "+ ss.findMinInsertions(str, 0, str.length()-1));
 
 	}

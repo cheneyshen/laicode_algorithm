@@ -33,11 +33,10 @@ public class Solution305 {
 	 * returns the pointer to the new head node
 	 */
 	ListNode kAltReverse(ListNode node, int k) {
-		ListNode curr = node;
-		ListNode next=null, prev=null;
+		ListNode prev=null, curr=node, next=null;
 		int count=0;
 		//1. reverse first k nodes of the linked list
-		while(curr!=null && count<k) {
+		while(curr != null && count < k) {
 			next = curr.next;
 			curr.next = prev;
 			prev = curr;
@@ -67,6 +66,36 @@ public class Solution305 {
 		
 		//5. prev is new head of the input list
 		return prev;
+	}
+	
+	ListNode kReverse(ListNode node, int k) {
+		ListNode prev=null, curr=node, next=null;
+		int count=0;
+		
+		while(curr != null && count < k) {
+			next = curr.next;
+			curr.next = prev;
+			curr = next;
+			prev = curr;
+			count++;
+		}
+
+		if(node != null) {
+			node.next = curr;
+		}
+		
+		count=0;
+		while (count < k-1 && curr != null) {
+			curr = curr.next;
+			count++;
+		}
+		
+		if(curr != null) {
+			curr.next = kReverse(curr.next, k);
+		}
+		
+		return prev;
+		
 	}
 	
 	public static void main(String[] args) {

@@ -17,14 +17,13 @@ public class Solution201 {
 		}
 		int leng=array.length;
 		int left=0, right=leng-1;
-		while(left<right) {
+		while (left < right) {
 			int minHeight = Math.min(array[left], array[right]);
 			result = Math.max(result, minHeight*(right-left));
 			if(left<right) {
 				if(array[left]<array[right]) {
 					left++;
-				}
-				else {
+				} else {
 					right--;
 				}
 			}

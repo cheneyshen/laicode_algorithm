@@ -24,6 +24,7 @@ public class Solution304 {
 				return false;
 			}
 		}
+		
 		//check if both two parts are post traversals of BSTs
 		return isPostTraversalOfBST(arr, 0, i) &&
 				isPostTraversalOfBST(arr, i, end-1);
