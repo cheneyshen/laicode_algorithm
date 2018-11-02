@@ -45,6 +45,17 @@ public class Solution235 {
 		helper(array, index-1, result);
 	}
 	
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		while((root.key - p.key) * (root.key - q.key) < 0) {
+			if(p.key < root.key) {
+				root = root.left;
+			} else {
+				root = root.right;
+			}
+		}
+		return root;
+	}
+	
 	public static void main(String[] args) {
 		Solution235 ss = new Solution235();
 		System.out.println(ss.countAndSay(1));

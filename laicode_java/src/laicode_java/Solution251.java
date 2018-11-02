@@ -77,6 +77,50 @@ public class Solution251 {
 		}
 		return " ";
 	}
+	
+	class Vector2D implements Iterator<Integer> {
+		List<List<Integer>> vec;
+		int rowIndex, colIndex;
+		
+		public Vector2D(List<List<Integer>> vec2d) {
+			vec = vec2d;
+			rowIndex = 0;
+			colIndex = 0;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			if(rowIndex < vec.size() - 1) {
+				while(rowIndex < vec.size() && vec.get(rowIndex).size() == 0) {
+					rowIndex++;
+				}
+				return rowIndex != vec.size();
+			} else if (rowIndex == vec.size() - 1) {
+				if(colIndex + 1 <= vec.get(rowIndex).size()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public Integer next() {
+			// TODO Auto-generated method stub
+			if(hasNext()==true) {
+				Integer ans = vec.get(rowIndex).get(colIndex);
+				if(colIndex < vec.get(rowIndex).size()-1) {
+					colIndex++;
+				} else {
+					colIndex = 0;
+					rowIndex++;
+				}
+				return ans;
+			}
+			return null;
+		}
+	}
+	
 	public static void main(String[] args) {
 		Solution251 ss = new Solution251();
 		ss.zigzagConvert("PAYPALISHIRING", 3);

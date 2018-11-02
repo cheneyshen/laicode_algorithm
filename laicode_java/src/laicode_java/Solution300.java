@@ -62,6 +62,28 @@ public class Solution300 {
             node = node.right;
         }
     }
+	
+	public int lengthOfLIS(int[] nums) {
+		if(nums==null || nums.length<1) {
+			return 0;
+		}
+		int[] tail = new int[nums.length];
+		int length = 1;
+		tail[0] = nums[0];
+		for(int i=1; i<nums.length; i++) {
+			if(nums[i] > tail[length-1]) {
+				tail[length++] = nums[i];
+			} else {
+				int curr = Arrays.binarySearch(tail, 0, length, nums[i]);
+				if(curr<0) {
+					curr = -(curr+1);
+				}
+				tail[curr] = nums[i];
+			}
+		}
+		return length;
+	}
+	
 	public static void main(String[] args) {
 		Solution300 ss = new Solution300();
 		TreeNode t1 =new TreeNode(10);

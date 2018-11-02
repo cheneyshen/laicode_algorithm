@@ -31,6 +31,29 @@ public class Solution284 {
 		return result;
 	}
 	
+	class PeekingIterator implements Iterator<Integer> {
+		List<Integer> list;
+		public PeekingIterator(Iterator<Integer> iterator) {
+			list = new LinkedList();
+			while(iterator.hasNext()) {
+				list.add(iterator.next());
+			}
+		}
+		
+		public Integer peek() {
+			return list.get(0);
+		}
+		
+		@Override
+		public Integer next() {
+			return list.remove(0);
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return !(list.size()==0);
+		}
+	}
 	public static void main(String[] args) {
 		Solution284 ss = new Solution284();
 		String str = "{ 2{4{6}} }";

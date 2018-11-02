@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution126.TreeNode;
+
 //A + B + C = D
 //Determine if there exist 4 elements in an given positive integer array, such that A + B + C = D.
 //  Assumptions:
@@ -35,6 +37,41 @@ public class Solution314 {
 			}
 		}
 		return false;
+	}
+	
+	public List<List<Integer>> verticalOrder(TreeNode root) {
+		if(root==null) {
+			return null;
+		}
+		Map<Integer, ArrayList<Integer>> map = new HashMap<>();
+		Queue<TreeNode> q = new LinkedList<>();
+		Queue<Integer> cols = new LinkedList<>();
+		q.add(root);
+		cols.add(0);
+		int min = 0, max = 0;
+		while(!q.isEmpty()) {
+			TreeNode node = q.poll();
+			int col = cols.poll();
+			if(!map.containsKey(col)) {
+				map.put(col, new ArrayList<Integer>());
+			}
+			map.get(col).add(node.key);
+			if(node.left!=null) {
+				q.add(node.left);
+				cols.add(col-1);
+				min = Math.min(col-1, min);
+			}
+			if(node.right!=null) {
+				q.add(node.right);
+				cols.add(col+1);
+				max = Math.max(col+1, max);
+			}
+		}
+		List<List<Integer>> result = new ArrayList<>();
+		for(int i=min; i<=max; i++) {
+			result.add(map.get(i));
+		}
+		return result;
 	}
 	
 	public static void main(String[] args) {

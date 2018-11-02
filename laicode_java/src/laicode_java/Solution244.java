@@ -38,6 +38,29 @@ public class Solution244 {
 		return result;
 	}
 	
+	Map<String, ArrayList<Integer>> map = new HashMap<>();
+	
+	public int wordDistance(String[] words, String word1, String word2) {
+		for(int i=0; i<words.length; i++) {
+			ArrayList<Integer> idx = map.getOrDefault(words[i], new ArrayList<>());
+			idx.add(i);
+			map.put(words[i], idx);
+		}
+		return shortest(word1, word2);
+	}
+	
+	public int shortest(String word1, String word2) {
+		int min = Integer.MAX_VALUE;
+		ArrayList<Integer> list1 = map.get(word1);
+		ArrayList<Integer> list2 = map.get(word2);
+		for(int i=0; i<list1.size(); i++) {
+			for(int j=0; j<list2.size(); j++) {
+				min = Math.min(Math.abs(list1.get(i) - list2.get(j)), min);
+			}
+		}
+		return min;
+	}
+	
 	public static void main(String[] args) {
 		Solution244 ss = new Solution244();
 		int[] array = new int[]{-1,2,1,-4};

@@ -28,6 +28,27 @@ public class Solution315 {
 		}
 		return Arrays.copyOf(array, end+1);
 	}
+
+    public List<Integer> countSmaller(int[] nums) {
+        
+        List<Integer> news = new LinkedList<>();
+        List<Integer> result = Arrays.asList(new Integer[nums.length]);
+        for(int i=nums.length-1; i>=0; i--) {
+            int left=0, right=news.size();
+            while(left<right) {
+                int mid=left+(right-left)/2;
+                if(news.get(mid)>=nums[i])
+                    right=mid;
+                else
+                    left=mid+1;
+            }
+            result.set(i, right);
+            news.add(right, nums[i]);
+            
+        }
+        List<Integer> list = result;
+        return list;
+    }
 	public static void main(String[] args) {
 
 

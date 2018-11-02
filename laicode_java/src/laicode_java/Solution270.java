@@ -23,6 +23,17 @@ public class Solution270 {
 		return new int[]{result,result};
 	}
 	
+	public int closestValue(TreeNode root, double target) {
+		int ret = root.key;
+		while(root!=null) {
+			if(Math.abs(target-root.key)<Math.abs(target-ret)) {
+				ret = root.key;
+			}
+			root = root.key > target ? root.left : root.right;
+		}
+		return ret;
+	}
+	
 	public static void main(String[] args) {
 
 

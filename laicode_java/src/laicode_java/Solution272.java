@@ -59,6 +59,30 @@ public class Solution272 {
 		return dfsHelper(digits, i+1, dict, newResult);
 	}
 	
+	public List<Integer> closetKValues(TreeNode root, double target, int k) {
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		helper(list, root, target, k);
+		return list;
+	}
+	
+	private boolean helper(LinkedList<Integer> list, TreeNode root, double target, int k) {
+		if(root==null) {
+			return false;
+		}
+		if(helper(list, root.left, target, k)) {
+			return true;
+		}
+		if(list.size()==k) {
+			if(Math.abs(list.getFirst() - target) < Math.abs(root.key - target)) {
+				return true;
+			} else {
+				list.removeFirst();
+			}
+		}
+		list.addLast(root.key);
+		return helper(list, root.right, target, k);
+	}
+	
 	public static void main(String[] args) {
 		Solution272 ss = new Solution272();
 		List<String> result = new ArrayList<>();

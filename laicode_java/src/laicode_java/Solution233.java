@@ -43,6 +43,26 @@ public class Solution233 {
 		return true;
 	}
 	
+	public int countDigit(int n) {
+		int result = 0, left = 1, right = 1;
+		while(n>0) {
+			int front = (n+8)/10;
+			if(front > 0) {
+				if(n%10==1) {
+					result += front*left+right;
+				} else {
+					result += front*left;
+				}
+			} else if(n%10==1) {
+				result += 1*right;
+			}
+			right += n%10*left;
+			left *= 10;
+			n/=10;
+		}
+		return result;
+	}
+	
 	public static void main(String[] args) {
 		Solution233 ss = new Solution233();
 		List<List<Integer>> result = ss.nqueens(8);

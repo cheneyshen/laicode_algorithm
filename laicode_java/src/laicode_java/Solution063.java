@@ -31,11 +31,13 @@ public class Solution063 {
     void helper(char[] set, StringBuilder sb, int index, List<String> result) {
     	if(index==set.length) {
     		result.add(sb.toString());
+    		return;
     	}
     	helper(set, sb.append(set[index]), index+1, result);
     	while(index<set.length-1 && set[index]==set[index+1]) {
     		index++;
     	}
+    	sb.deleteCharAt(sb.length()-1);
     	helper(set, sb, index+1, result);
     }
     
@@ -63,7 +65,12 @@ public class Solution063 {
     }
     
 	public static void main(String[] args) {
-
+		Solution063 solution = new Solution063();
+		String input = "abb";
+		List<String> result = solution.subSets(input);
+		System.out.println(result);
+		result = solution.subsetII(input);
+		System.out.println(result);
 
 	}
 }

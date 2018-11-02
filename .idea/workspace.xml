@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0c9e8e1d-11f6-4bcb-8008-c2f993a6bc25" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution1.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution10.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution100.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution100.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution11.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution11.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution12.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution12.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution13.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution13.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution14.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution14.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution15.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution15.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution16.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution16.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution17.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution17.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution18.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution18.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution19.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution19.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution2.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution20.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution20.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution21.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution21.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution22.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution22.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution23.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution23.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution24.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution24.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution25.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution25.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution26.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution26.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution27.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution27.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution28.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution28.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution29.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution29.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution3.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution30.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution30.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution31.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution31.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution32.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution32.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution33.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution33.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution34.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution34.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution35.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution35.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution36.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution36.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution37.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution37.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution38.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution38.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution39.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution39.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution4.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution40.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution40.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution41.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution41.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution42.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution42.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution43.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution43.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution44.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution44.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution45.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution45.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution46.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution46.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution47.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution47.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution48.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution48.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution49.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution49.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution5.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution50.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution50.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution51.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution51.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution52.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution52.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution53.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution53.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution54.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution54.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution55.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution55.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution56.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution56.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution57.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution57.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution58.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution58.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution59.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution59.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution6.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution60.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution60.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution61.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution61.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution62.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution62.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution63.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution63.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution64.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution64.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution65.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution65.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution66.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution66.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution67.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution67.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution68.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution68.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution69.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution69.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution7.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution70.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution70.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution71.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution71.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution72.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution72.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution73.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution73.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution74.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution74.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution75.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution75.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution76.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution76.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution77.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution77.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution78.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution78.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution79.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution79.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution8.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution80.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution80.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution81.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution81.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution82.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution82.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution83.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution83.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution84.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution84.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution85.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution85.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution86.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution86.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution87.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution87.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution88.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution88.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution89.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution89.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution9.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution90.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution90.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution91.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution91.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution92.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution92.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution93.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution93.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution94.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution94.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution95.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution95.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution96.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution96.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution97.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution97.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution98.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution98.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution99.class" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/bin/laicode_java/Solution99.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution1.java" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution10.java" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution10.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution102.java" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution102.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution43.java" beforeDir="false" afterPath="$PROJECT_DIR$/laicode_java/src/laicode_java/Solution43.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1438424821">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="java" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JAVA" value="3" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution43.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="409">
+              <caret line="69" column="44" lean-forward="true" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution502.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution215.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="laicode_algorithm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laicode_java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laicode_algorithm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laicode_java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laicode_algorithm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laicode_java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="laicode_java" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537157623358" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Solution502">
+    <configuration name="Solution43" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="laicode_java.Solution43" />
+      <module name="laicode_java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="laicode_java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Solution502" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="laicode_java.Solution502" />
+      <module name="laicode_java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="laicode_java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Solution43" />
+      <item itemvalue="Application.Solution502" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Solution502" />
+        <item itemvalue="Application.Solution43" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0c9e8e1d-11f6-4bcb-8008-c2f993a6bc25" name="Default Changelist" comment="" />
+      <created>1537157137220</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1537157137220</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="22" width="1440" height="878" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="UI Designer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" weight="0.32951653" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.32951653" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Maven Projects" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution43.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="69" column="44" lean-forward="true" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution502.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/laicode_java/src/laicode_java/Solution215.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="21" lean-forward="true" selection-start-column="21" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

@@ -40,7 +40,58 @@ public class Solution227 {
 		nums[i] = nums[j];
 		nums[j] = temp;
 	}
-	
+
+    public int calculate(String s) {
+    	Stack<Integer> num = new Stack<>();
+    	Stack<Character> opr = new Stack<>();
+    	int result = 0;
+    	if(s.length()==0) {
+    		return result;
+    	}
+    	for(int i=0; i<s.length(); i++) {
+    		char curr = s.charAt(i);
+    		if(curr>='0' && curr<='9') {
+    			int n = curr-'0';
+    			while(i+1<s.length() && s.charAt(i+1)>='0') {
+    				n = n*10 + s.charAt(i+1)-'0';
+    				i++;
+    			}
+    			num.push(n);
+    			if(!opr.empty()) {
+    				if(opr.peek()=='*') {
+    					int a = num.pop();
+    					a = num.pop() * a;
+    					opr.pop();
+    					num.push(a);
+    				} else if(opr.peek() == '/') {
+    					int b = num.pop();
+    					b = num.pop() / b;
+    					opr.pop();
+    					num.push(b);
+    				} else if(opr.peek() == '-') {
+    					int c = num.pop();
+    					opr.pop();
+    					opr.push('+');
+    					num.push(c);
+    				}
+     			}
+    		} else if(curr == '+' || curr == '-' || curr == '*' || curr == '/' ) {
+    			opr.push(curr);
+    		} else {
+    			continue;
+    		}
+    	}
+    	while(!opr.empty()) {
+    		if(opr.peek()=='+') {
+    			int a = num.pop();
+    			a = a + num.pop();
+    			opr.pop();
+    			num.push(a);
+    		}
+    	}
+    	return num.peek();
+    }
+    
 	public static void main(String[] args) {
 		Solution227 ss = new Solution227();
 		int[] nums = null;

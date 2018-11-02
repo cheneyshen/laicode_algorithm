@@ -53,6 +53,44 @@ public class Solution297 {
 		}
 	}
 	
+	public class Codec{
+		public String serialize(TreeNode root) {
+			return shelper(root, "");
+		}
+		
+		public String shelper(TreeNode root, String str) {
+			if(root==null) {
+				return str+"null,";
+			}
+			str += String.valueOf(root.val) + ",";
+			str += shelper(root.left, str);
+			str += shelper(root.right, str);
+			return str;
+		}
+		
+		public TreeNode deserialize(String data) {
+			String[] array = data.split(",");
+			List<String> list = new LinkedList<String>(Arrays.asList(array));
+			int[] index = new int[] {0};
+			return dhelper(list, index);
+		}
+		
+		public TreeNode dhelper(List<String> list, int[] index) {
+			if(index[0]==list.size()) {
+				return null;
+			}
+			String curr = list.get(index[0]++);
+			if(curr.equals("null")) {
+				return null;
+			}
+			TreeNode root = new TreeNode(Integer.parseInt(curr));
+			root.left = dhelper(list, index);
+			root.right = dhelper(list, index);
+			return root;
+		}
+	}
+	
+	
 	public static void main(String[] args) {
 
 

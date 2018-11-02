@@ -25,33 +25,40 @@ public class Solution091 {
 		}
 		cancome[index]=0;
 		minJumpHelper(array, leng, index, cancome);
-		if(cancome[leng-1]==Integer.MAX_VALUE) {
-			return -1;
+		for(int i=0; i<leng; i++) {
+			if(array[i] == 0) {
+
+				if(cancome[i]==Integer.MAX_VALUE) {
+					return -1;
+				}
+				else {
+					return cancome[i];
+				}
+			}
+			
 		}
-		else {
-			return cancome[leng-1];
-		}
-		
+		return -1;
 	}
 	
 	private void minJumpHelper(int[] array, int leng, int index, int[] cancome) {
 		if(index<0 || index>=leng || array[index]==0) {
 			return ;
 		}
-		for(int i=1; i<=array[index]; i++) {
-			if(i+index<leng && cancome[index+i]>cancome[index]+1) {
-				cancome[index+i]=cancome[index]+1;
-				minJumpHelper(array, leng, index+i, cancome);
-			}
-			if(index-i>=0 && cancome[index-i]>cancome[index]+1) {
-				cancome[index-i]=cancome[index]+1;
-				minJumpHelper(array, leng, index-i, cancome);
-			}
+		if(array[index]+index<leng && cancome[array[index]+index]!=cancome[index]) {
+			cancome[array[index]+index]=cancome[index];
+			minJumpHelper(array, leng, array[index]+index, cancome);
+		}
+		if(index-array[index]>=0 && cancome[index-array[index]]!=cancome[index]) {
+			cancome[index-array[index]]=cancome[index];
+			minJumpHelper(array, leng, index-array[index], cancome);
 		}
 	}
 	
 	public static void main(String[] args) {
-
-
+		Solution091 s = new Solution091();
+		int[]  array = new int[] {3,4,2,3,0,3,1,2,1};
+		System.out.println(s.minJump(array, 2));
+		System.out.println(s.minJump(array, 0));
+		System.out.println(s.minJump(array, 1));
 	}
 }

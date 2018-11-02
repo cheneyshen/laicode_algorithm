@@ -51,6 +51,35 @@ public class Solution232 {
 		}
 	}
 	
+	Stack<Integer> input, output;
+	public Solution232() {
+		input = new Stack<>();
+		output = new Stack<>();
+	}
+	
+	public void push(int x) {
+		input.push(x);
+	}
+	
+	public int pop() {
+		int result = peek();
+		output.pop();
+		return result;
+	}
+	
+	public int peek() {
+		if(output.isEmpty()) {
+			while(!input.isEmpty()) {
+				output.push(input.pop());
+			}
+		}
+		return output.peek();
+	}
+	
+	public boolean empty() {
+		return input.isEmpty() && output.isEmpty();
+	}
+	
 	public static void main(String[] args) {
 		Solution232 ss = new Solution232();
 		int[] num = new int[]{2, 3, 6, 7};

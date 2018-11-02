@@ -54,51 +54,82 @@ public class Solution241 {
 		
 	}
 	
-public ListNode reverse2KGroupwithK(ListNode head, int k, int i) {
-	if(k<=1) {
-		return head;
-	}
-	if(head==null) {
-		return head;
-	}
-	ListNode index=head;
-	int leng=k;
-	while(leng>0 && index!=null) {
-		index=index.next;
-		leng--;
-	}
-	if(leng>0) {
-		//no enough list nodes, directly return head
-		return head;
-	}
-	//find if there are enough nodes
-	//index would be the (k+1)th node
-	//new header next should be the new converted list
-	ListNode prev=reverse2KGroupwithK(index, k, i+1);
-	ListNode curr=head;
-	leng=k;
-    if(i%2==0) {
-    	//normal reversed operation
-		while(curr!=null && leng>0) {
-			ListNode nexter = curr.next;
+	public ListNode reverse2KGroupwithK(ListNode head, int k, int i) {
+		if(k<=1) {
+			return head;
+		}
+		if(head==null) {
+			return head;
+		}
+		ListNode index=head;
+		int leng=k;
+		while(leng>0 && index!=null) {
+			index=index.next;
+			leng--;
+		}
+		if(leng>0) {
+			//no enough list nodes, directly return head
+			return head;
+		}
+		//find if there are enough nodes
+		//index would be the (k+1)th node
+		//new header next should be the new converted list
+		ListNode prev=reverse2KGroupwithK(index, k, i+1);
+		ListNode curr=head;
+		leng=k;
+	    if(i%2==0) {
+	    	//normal reversed operation
+			while(curr!=null && leng>0) {
+				ListNode nexter = curr.next;
+				curr.next = prev;
+				prev = curr;
+				curr = nexter;
+				leng--;
+			}
+			return prev;	
+	    } else {
+	    	//find the last node in every K nodes
+			while(curr!=null && leng>1) {
+				curr = curr.next;
+				leng--;
+			}
+			//connect the last node to the updated list head
 			curr.next = prev;
-			prev = curr;
-			curr = nexter;
-			leng--;
-		}
-		return prev;	
-    } else {
-    	//find the last node in every K nodes
-		while(curr!=null && leng>1) {
-			curr = curr.next;
-			leng--;
-		}
-		//connect the last node to the updated list head
-		curr.next = prev;
-		return head;	
-    }
-}
+			return head;	
+	    }
+	}
 	
+	public List<Integer> diffWaysToCompute(String input) {
+		if(input==null || input.length()<1) {
+			return null;
+		}
+		int n = input.length();
+		List<Integer> result = new ArrayList<>();
+		for(int i=0; i<n; i++) {
+			char curr = input.charAt(i);
+			if(isOperator(curr)) {
+				List<Integer> left = diffWaysToCompute(input.substring(0, i));
+				List<Integer> right = diffWaysToCompute(input.substring(i+1));
+				for(int a:left) {
+					for(int b:right) {
+						if(curr == '+')	result.add(a+b);
+						if(curr == '-')	result.add(a-b);
+						if(curr == '*')	result.add(a*b);
+					}
+				}
+			}
+		}
+		if(result.size()>0) {
+			return result;
+		} else {
+			result.add(Integer.valueOf(input));
+			return result;
+		}
+	}
+	
+	private boolean isOperator(char c) {
+		return !(c>='0' && c<='9');
+	}
 	public static void main(String[] args) {
 		Solution241 ss = new Solution241();
 		ListNode l1 = new ListNode(1);

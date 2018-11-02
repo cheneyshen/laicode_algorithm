@@ -34,6 +34,46 @@ public class Solution245 {
 		}
 		return result;
 	}
+	
+	public int shortestWordDistance(String[] words, String word1, String word2) {
+		if(word1.equals(word2)) {
+			int p1 = -1, p2 = -1;
+			int res = Integer.MAX_VALUE;
+			for(int i=0; i<words.length; i++) {
+				if(words[i].equals(word1)) {
+					if(p1==-1) {
+						p1=i;
+					} else if(p2==-1) {
+						p2=i;
+						res = Math.min(res, p2-p1);
+					} else {
+						p1 = p2;
+						p2 = i;
+						res = Math.min(res, p2-p1);
+					}
+				}
+			}
+			return res;
+		} else {
+			int p1 = -1, p2 = -1;
+			int res = Integer.MAX_VALUE;
+			for(int i=0; i<words.length; i++) {
+				if(words[i].equals(word1)) {
+					p1=i;
+					if(p2!=-1) {
+						res = Math.min(res, p1-p2);
+					}
+				} else if(words[i].equals(word2)) {
+					p2=i;
+					if(p1!=-1) {
+						res = Math.min(res, p2-p1);
+					}
+				}
+			}
+			return res;
+		}
+	}
+	
 	public static void main(String[] args) {
 		Solution245 ss = new Solution245();
 		String[] strs = new String[]{"aacb", "aab", "aa"};

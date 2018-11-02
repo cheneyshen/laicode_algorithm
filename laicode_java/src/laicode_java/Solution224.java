@@ -27,8 +27,41 @@ public class Solution224 {
 		}
 		return (int) (result);
 	}
+	
+
+    public int calculate(String s) {
+        Stack<Integer> igers = new Stack<>();
+        int sign=1;
+        int num=0;
+        int ans=0;
+        igers.push(1);
+        for(char c:s.toCharArray()) {
+            if(c>='0'&&c<='9') {
+                num=num*10+c-'0';
+            } else if(c=='+'||c=='-') {
+                ans=ans+sign*num;//already have two numbers, compute
+                num=0;//back to 0
+                sign=(c=='+'?1:-1);//ready to meet next number
+            } else if(c=='(') {
+                igers.push(ans);
+                igers.push(sign);
+                sign=1;//back to '+'
+                ans=0;
+            } else if(c==')') {
+                ans=ans+sign*num; // sign mean + or -
+                num=0;
+                ans=ans*igers.pop();//reverse, firstly times sign, -1 or 1
+                ans=ans+igers.pop();//secondly + or - ans
+            }
+        }
+        if(num!=0)
+            ans=ans+num*sign;
+        return ans;
+    }
+    
 	public static void main(String[] args) {
 		Solution224 ss = new Solution224();
+		System.out.println(ss.calculate("(1+(4+5+2)-3)+(6+8)"));
 		System.out.println(ss.reverseInt(-32));
 		System.out.println(ss.reverseInt(1000000003));
 	}

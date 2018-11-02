@@ -60,6 +60,19 @@ public class Solution279 {
 		}
 	}
 	
+	public int numSquares(int n) {
+		int[] dp = new int[n+1];
+		for(int i=0; i<=n; i++) {
+			dp[i] = i;
+			for(int j=0; i-j*j>=0; j++) {
+				if(dp[i-j*j] + 1 < dp[i]) {
+					dp[i] = dp[i-j*j]+1;
+				}
+			}
+		}
+		return dp[n];
+	}
+	
 	public static void main(String[] args) {
 		Solution279 ss = new Solution279();
 		Stack<Integer> st = new Stack<>();

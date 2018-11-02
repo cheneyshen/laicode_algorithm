@@ -58,7 +58,10 @@ public class Solution073 {
 	}
 	
 	public static void main(String[] args) {
-
-
+		Solution073 solution  = new Solution073();
+		int[] coins = new int[] {2, 1};
+		List<List<Integer>> result = solution.combinations(4, coins);
+		System.out.println(result);
+		
 	}
 }

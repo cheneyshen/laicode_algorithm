@@ -20,9 +20,9 @@ public class Solution062 {
 			result.add(sb.toString());
 			return;
 		}
-		helper(set, sb, index+1, result);
 		helper(set, sb.append(set[index]), index+1, result);
 		sb.deleteCharAt(sb.length()-1);
+		helper(set, sb, index+1, result);
 	}
 	
 	List<String> subsets(String set) {
@@ -39,6 +39,10 @@ public class Solution062 {
 	
 	public static void main(String[] args) {
 
+		Solution062 solution = new Solution062();
+		String input = "abc";
+		List<String> result = solution.subsets(input);
+		System.out.println(result);
 
 	}
 }

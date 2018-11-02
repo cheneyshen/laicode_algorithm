@@ -2,6 +2,8 @@ package laicode_java;
 
 import java.util.*;
 
+import laicode_java.Solution028.ListNode;
+
 //N-Queen II
 //Follow up for N-Queens problem. Now, instead outputting board configurations, return the total number of distinct solutions.
 public class Solution234 {
@@ -41,6 +43,35 @@ public class Solution234 {
 			}
 		}
 		return true;
+	}
+	
+	public boolean isPalindrome(ListNode head) {
+		int i=0, len=0;
+		ListNode prev=null, curr=head, next=null, shead=null;
+		boolean res = true;
+		while(curr!=null) {
+			len++;
+			curr=curr.next;
+		}
+		if(len<=1)	return true;
+		else if(len==2)	return (head.value == head.next.value);
+		
+		curr = head;
+		prev = null;
+		for(i=0; i<len/2; i++) {
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+		}
+		head = prev;
+		shead = len%2 == 1? next.next : next;
+		while(shead!=null && (shead.value == head.value)) {
+			shead = shead.next;
+			head = head.next;
+		}
+		res = (null == shead);
+		return res;
 	}
 	
 	public static void main(String[] args) {

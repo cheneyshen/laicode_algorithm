@@ -67,6 +67,25 @@ public class Solution298 {
 		findMinMax(node.right, min, max, hd+1);
 	}
 	
+	private int maxLength = 0;
+	public int longestConsecutive(TreeNode root) {
+		dfs(root, null, 0);
+		return maxLength;
+	}
+	
+	private void dfs(TreeNode root, TreeNode prev, int length) {
+		if(root==null) {
+			return;
+		}
+		if(prev!=null && prev.val == root.val - 1) {
+			length = length+1;
+		} else {
+			length = 1;
+		}
+		maxLength = Math.max(maxLength, length);
+		dfs(root.left, root, length);
+		dfs(root.right, root, length);
+	}
 	
 	public static void main(String[] args) {
 

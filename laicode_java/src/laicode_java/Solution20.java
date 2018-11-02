@@ -35,10 +35,25 @@ public class Solution20 {
 		}
 		return false;
 	}
+	
+	public int hammingWeight(int n) {
+        int count = 0;
+        while(n>0) {
+            if((n & 1) != 0) {
+                count++;
+            }
+            System.out.println(n);
+            n=n>>1;
+        }
+        
+        return count;
+    }
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		Solution20 s20 = new Solution20();
+		s20.hammingWeight(Integer.bitCount(20));
 		ListNode l1=new ListNode(1);
 		ListNode l2=new ListNode(2);
 		ListNode l3=new ListNode(3);

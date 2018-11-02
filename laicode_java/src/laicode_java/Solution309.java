@@ -45,7 +45,28 @@ public class Solution309 {
         }
         return max;
 	}
-
+	
+	/*
+	 * 	buy[i]  = max(rest[i-1]-price, buy[i-1]) 
+	 *	sell[i] = max(buy[i-1]+price, sell[i-1])
+	 *	rest[i] = max(sell[i-1], buy[i-1], rest[i-1])
+	 *
+	 *  because rest[i] <= sell[i]  buy[i] <= rest[i]
+	 *  so rest[i] = sell[i-1]
+	 *	buy[i] = max(sell[i-2]-price, buy[i-1])
+	 *	sell[i] = max(buy[i-1]+price, sell[i-1])
+	 */
+	public int maxProfit(int[] prices) {
+	    int sell = 0, prev_sell = 0, buy = Integer.MIN_VALUE, prev_buy;
+	    for (int price : prices) {
+	        prev_buy = buy;
+	        buy = Math.max(prev_sell - price, prev_buy);
+	        prev_sell = sell;
+	        sell = Math.max(prev_buy + price, prev_sell);
+	    }
+	    return sell;
+	}
+	
 	public static void main(String[] args) {
         int arr[] = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5,
                 13, 3, 11, 7, 15};

@@ -58,6 +58,19 @@ public class Solution226 {
 		String output=new String(result, j, result.length-j);
  		return output;
     }
+	
+
+    public TreeNode invertTree(TreeNode root) {
+        if (root!=null) {
+            invertTree(root.left);
+            invertTree(root.right);
+            TreeNode tmp = root.left;
+            root.left = root.right;
+            root.right = tmp;
+        }
+        return root;
+    }
+    
 	public static void main(String[] args) {
 		Solution226 ss = new Solution226();
 		String result="";

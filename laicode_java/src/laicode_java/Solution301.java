@@ -35,6 +35,46 @@ public class Solution301 {
 		result.add(new Integer(pre[pi]));
 	}
 	
+	List<String> removeInvalidParentheses(String s) {
+		List<String> result = new ArrayList<>();
+		Map<String, Integer> visited = new HashMap<>();
+		Queue<String> q = new LinkedList<>();
+		q.add(s);
+		visited.put(s, visited.getOrDefault(s, 0)+1);
+		boolean found = false;
+		while(!q.isEmpty()) {
+			s = q.poll();
+			if(isValid(s)) {
+				result.add(s);
+				found = true;
+			}
+			if(found) {
+				continue;
+			}
+			for(int i=0; i<s.length(); i++) {
+				if(s.charAt(i) != '(' && s.charAt(i) != ')') {
+					continue;
+				}
+				String t = s.substring(0, i) + s.substring(i+1);
+				if(visited.get(t)==0) {
+					q.add(t);
+					visited.put(t, visited.getOrDefault(t, 0)+1);
+				}
+			}
+		}
+		return result;
+	}
+	
+	boolean isValid(String t) {
+		int cnt = 0;
+		for(int i=0; i<t.length(); i++) {
+			if(t.charAt(i)=='(')	cnt++;
+			if(t.charAt(i)==')' && cnt--==0) {
+				return false;
+			}
+		}
+		return true;
+	}
 	public static void main(String[] args) {
 		Solution301 ss = new Solution301();
 		int[] in = {4, 2, 5, 1, 3, 6};
