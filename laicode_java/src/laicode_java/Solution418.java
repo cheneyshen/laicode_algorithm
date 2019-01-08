@@ -28,8 +28,32 @@ import java.util.*;
 //You may assume that row1 ≤ row2 and col1 ≤ col2.
 public class Solution418 {
 
+    public static int wordsTyping(String[] sentence, int rows, int cols) {
+        int i=0;
+        int n=sentence.length;
+        int[] len=new int[sentence.length];
+        for(String s:sentence) {
+            if(s.length()>cols) {
+                return 0;
+            }
+            len[i++] = s.length();
+        }
+        int res=0;
+        for(i=0; i<rows; i++) {
+            int curr=res%n;
+            int leng = len[curr];
+            while(leng + 1 + len[(res+1)%n] <= cols) {
+                leng += 1 + len[(res+1)%n];
+                res++;
+            }
+            res++;
+        }
+        return res/sentence.length;
+    }
+    
 	public static void main(String[] args) {
-
+		String[] ss = new String[] {"a"};
+		System.out.println(wordsTyping(ss, 20000, 20000));
 
 	}
 }

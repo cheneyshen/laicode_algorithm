@@ -44,8 +44,50 @@ public class Solution480 {
 		find(low, high, "9"+path+"6", leng);
 	}
 	
+	static class MedianQueue {
+	    private Queue<Long> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+	    private Queue<Long> minHeap = new PriorityQueue<>();
+
+	    public void add(long n) {
+	        if (maxHeap.size()>minHeap.size()) {
+	            if (n >= maxHeap.peek()) {
+	                minHeap.add(n);
+	            } else {
+	                minHeap.add(maxHeap.poll());
+	                maxHeap.add(n);
+	            }
+	        } else if (maxHeap.size() == minHeap.size()) {
+	            if (maxHeap.size() == 0 || n <= minHeap.peek()) {
+	                maxHeap.add(n);
+	            } else {
+	                maxHeap.add(minHeap.poll());
+	                minHeap.add(n);
+	            }
+	        }
+	    }
+
+	    public double median() {
+	    	if(maxHeap.size()==0 && minHeap.size()==0) {
+	    		return 0.0;
+	    	}
+	        return maxHeap.size()==minHeap.size()?(maxHeap.peek()+minHeap.peek())/2.0 : maxHeap.peek();
+	    }
+
+	    public boolean remove(long n) {
+	        return maxHeap.remove(n) || minHeap.remove(n);
+	    }
+	}
+
+
 	public static void main(String[] args) {
-
-
+		MedianQueue mq = new MedianQueue();
+		mq.add(2);
+		mq.add(3);
+//		mq.add(4);
+//		mq.add(5);
+//		mq.add(6);
+//		mq.add(7);
+//		mq.add(8);
+		System.out.println(mq.median());
 	}
 }

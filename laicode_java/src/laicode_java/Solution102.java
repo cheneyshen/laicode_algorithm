@@ -53,8 +53,7 @@ public class Solution102 {
 				if(matrix[i][j]==1) {
 					left[j]=Math.max(curleft, left[j]);
 					height[j]++;
-				}
-				else {
+				} else {
 					left[j]=0; curleft=j+1;
 					height[j]=0;
 				}
@@ -62,8 +61,7 @@ public class Solution102 {
 			for(int j=n-1; j>=0; j--) {
 				if(matrix[i][j]==1) {
 					right[j]=Math.max(curright, right[j]);
-				}
-				else {
+				} else {
 					right[j]=n; curright=j;
 				}
 			}
@@ -77,9 +75,9 @@ public class Solution102 {
 	public static void main(String[] args) {
 		Solution102 ss = new Solution102();
 		int[][] matrix = { { 0, 0, 0, 0 },           
-						{ 1, 1, 1, 1 },
-						{ 0, 1, 1, 1 },
-						{ 1, 0, 1, 1 }};
+						   { 1, 1, 1, 1 },
+						   { 0, 1, 1, 1 },
+						   { 1, 0, 1, 1 }};
 		System.out.println(ss.largest(matrix));
 	}
 }

@@ -3,14 +3,14 @@ import java.util.*;
 
 //Find all anagrams of short string in a long string
 public class Solution58 {
-	//¸´ÖÆjavaÎÄ¼þ
+	//ï¿½ï¿½ï¿½ï¿½javaï¿½Ä¼ï¿½
 	//for i in {3..100}; do cp Solution2.java "Solution$i.java"; done
-	//·ÖÀëÄ³Ò»ÐÐÈ»ºóÌæ»»
+	//ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½È»ï¿½ï¿½ï¿½æ»»
 	//for i in {3..100}; do head -3 "Solution$i.java" | tail -1 $1 | awk '{split($0, a, ' '); print a[3]' ; done
 	//sed -i ' ' 's/hi/hello/' file1
-	//¸ü¸Äºó¸´ÖÆµ½ÐÂÎÄ¼þ
+	//ï¿½ï¿½ï¿½Äºï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 	//awk 'NR==2{gsub("hi", "Hello", $1)}; {print $0}' file1 > newfile
-	//´ú±äÁ¿¾Í±ØÐëÒªÓÃ¡°¡±Ë«ÒýºÅ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½Òªï¿½Ã¡ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½
 	//for i in {3..100}; do sed -i " " "3s/Solution/Solution$i/" Solution$i.java ; done
 	public List<Integer> allAnagrams(String s, String l) {
 		List<Integer> result=new ArrayList<Integer>();
@@ -22,21 +22,20 @@ public class Solution58 {
 		}
 		Map<Character, Integer> map=countMap(s);
 		int match=0;
+		Map<Character, Integer> map2 = new HashMap<>();
 		for(int i=0;i<l.length();i++) {
 			char tmp=l.charAt(i);
-			Integer count=map.get(tmp);
-			if(count!=null) {
-				map.put(tmp, count-1);
-				if(count==1) {
+			if(map.containsKey(tmp)) {
+				map2.put(tmp, map2.getOrDefault(tmp, 0)+1);
+				if(map2.get(tmp)==map.get(tmp)) {
 					match++;
 				}
 			}
 			if(i>=s.length()) {
 				tmp=l.charAt(i-s.length());
-				count=map.get(tmp);
-				if(count!=null) {
-					map.put(tmp, count+1);
-					if(count==0) {
+				if(map.containsKey(tmp)) {
+					map2.put(tmp, map2.get(tmp)-1);
+					if(map2.get(tmp)<map.get(tmp)) {
 						match--;
 					}
 				}
@@ -54,20 +53,30 @@ public class Solution58 {
 			Integer count=map.get(ch);
 			if(count==null) {
 				map.put(ch, 1);
-			}
-			else {
+			} else {
 				map.put(ch, count+1);
 			}
 		}
 		return map;
 	}
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		Solution58 s58 = new Solution58();
-		List<Integer> result=s58.allAnagrams("ab", "abcbac");
+		List<Integer> result=s58.allAnagrams("ab", "ababacbac");
 		System.out.println(result);
+		final Integer i4=4;
+		Integer i5=5;
+		int a = 0x000F;
+		int b = 0x2222;
+		System.out.println(a&b);
+		class Inner {
+			final Integer i6=6;
+			Integer i7=7;
+			Inner() {
+				System.out.println(i6+i7);
+			}
+		}
 		return;
 	}
 }

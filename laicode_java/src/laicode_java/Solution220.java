@@ -55,6 +55,33 @@ public class Solution220 {
 		}
  	}
 	
+	private long getID(long x, long w) {
+		return x<0 ? (x+1)/w-1 : x/w;
+	}
+	
+	public boolean containsNearByAlmostDuplicate(int[] nums, int k, int t) {
+		if(t<0)	return false;
+		Map<Long, Long> d = new HashMap<>();
+		long w = (long)t+1;
+		for(int i=0; i<nums.length; i++) {
+			long m = getID(nums[i], w);
+			if(d.containsKey(m)) {
+				return true;
+			}
+			if(d.containsKey(m-1) && Math.abs(nums[i]-d.get(m-1))<w) {
+				return true;
+			}
+			if(d.containsKey(m+1) && Math.abs(nums[i]-d.get(m+1))<w) {
+				return true;
+			}
+			d.put(m, (long)nums[i]);
+			if(i>=k) {
+				d.remove(getID(nums[i-k], w));
+			}
+		}
+		return false;
+	}
+	
 	public static void main(String[] args) {
 		Solution220 ss = new Solution220();
 		int[][] matrix = {{4, 3, 2, 1, 9, 6, 5, 2},
@@ -66,6 +93,9 @@ public class Solution220 {
 				{6, 5, 8, 9, 5, 4, 2, 3},
 				{5, 8, 7, 1, 4, 3, 5, 8}};
 		int result = ss.largestSummary(matrix);
+		
 		System.out.println(result);
+		System.out.println(-0/5-1);
+		System.out.println(3/5);
 	}
 }

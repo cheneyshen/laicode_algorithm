@@ -51,6 +51,7 @@ public class Solution120 {
 		return result;
 	}
 	
+	
 	public static void main(String[] args) {
 		Solution120 ss = new Solution120();
 		int[] array =  {2, 1, 5, 4, 3};

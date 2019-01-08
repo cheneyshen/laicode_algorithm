@@ -356,6 +356,55 @@ public class Solution503 {
 		});
 		return res;
 	}
+	
+	public static List<List<Integer>> permutation(List<List<Integer>> array) {
+		List<List<Integer>> result = new ArrayList<>();
+		List<Integer> res = new ArrayList<>();
+		helper(array, 0, res, result);
+		return result;
+	}
+	
+	public static void helper(List<List<Integer>> array, int x, List<Integer> res, List<List<Integer>> result) {
+		if(x==array.size()) {
+			List<Integer> mirr = new ArrayList<>(res);
+			result.add(mirr);
+			return;
+		}
+		for(int i=0; i<array.get(x).size(); i++) {
+			res.add(array.get(x).get(i));
+			helper(array, x+1, res, result);
+			res.remove(res.size()-1);
+		}
+	}
+	public static List<List<Integer>> permutation1(List<List<Integer>> array) {
+		List<List<Integer>> res = new ArrayList<>();
+		Queue<List<Integer>> que = new LinkedList<>();
+		if(array==null || array.size()<1) 	return res;
+		int i=0;
+		for(int j=0; j<array.get(i).size(); j++) {
+			List<Integer> cur = new ArrayList<>();
+			cur.add(array.get(i).get(j));
+			que.add(cur);
+		}
+		while(!que.isEmpty()) {
+			i++;
+			int size=que.size();
+			for(int m=0; m<size; m++) {
+				List<Integer> cur = que.poll();
+				if(i==array.size()) {
+					res.add(cur);
+				} else {
+					for(int n=0; n<array.get(i).size(); n++) {
+						List<Integer> tmp = new ArrayList<>(cur);
+						tmp.add(array.get(i).get(n));
+						que.add(tmp);
+					}
+				}
+			}
+		}
+		return res;
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int arr[] = { 2, 3, 5, 2, 6 };
@@ -364,6 +413,13 @@ public class Solution503 {
 		String[] array = new String[]{"alex", "bob", "alex"};
 		array = solution.uniqueUserNames(array);
 		System.out.println(Arrays.toString(array));
+		List<Integer> cur1 = new ArrayList<>();cur1.add(2);cur1.add(3);cur1.add(4);
+		List<Integer> cur2 = new ArrayList<>();cur2.add(7);cur2.add(8);cur2.add(9);
+		List<Integer> cur3 = new ArrayList<>();cur3.add(5);cur3.add(6);
+		List<List<Integer>> arry = new ArrayList<>();;
+		arry.add(cur1);arry.add(cur2);arry.add(cur3);
+		permutation(arry);
+		permutation1(arry);
 	}
 
 }
