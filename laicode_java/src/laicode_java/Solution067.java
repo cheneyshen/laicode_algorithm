@@ -18,50 +18,40 @@ import java.util.*;
 //    Composition = ["a", "a", "b", "b", "b", "b", "c", "c", "c", "d"], top 4 frequent words are [“b”, “c”, "a", "d"]
 //    Composition = ["a", "a", "b", "b", "b", "b", "c", "c", "c", "d"], top 5 frequent words are [“b”, “c”, "a", "d"]
 public class Solution067 {
-	String[] topKFrequent(String[] combo, int k) {
-		if(combo.length==0) {
-			return new String[0];
+	public String[] topKFrequent(String[] combo, int k) {
+		Map<String, Integer> freq = new HashMap<>();
+		for(String cur : combo) {
+			freq.put(cur, freq.getOrDefault(cur, 0)+1);
 		}
-		Map<String, Integer> freqMap=getFreqMap(combo);
-		PriorityQueue<Map.Entry<String, Integer>> minHeap=new PriorityQueue<>(k, 
-				new Comparator<Map.Entry<String, Integer>>() {
+		PriorityQueue<Node> minHeap=new PriorityQueue<>(k, 
+				new Comparator<Node>() {
 			@Override
-			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-				return e1.getValue().compareTo(e2.getValue());
+			public int compare(Node a, Node b) {
+				if(a.cnt == b.cnt) {
+					return a.str.compareTo(b.str);
+				} else {
+					return b.cnt - a.cnt;
+				}
 			}
 		});
-		for(Map.Entry<String, Integer> entry:freqMap.entrySet()) {
-			if(minHeap.size()<k) {
-				minHeap.offer(entry);
-			}
-			else if(entry.getValue()>minHeap.peek().getValue()) {
-				minHeap.poll();
-				minHeap.offer(entry);
-			}
+		for(Map.Entry<String, Integer> entry : freq.entrySet()) {
+			minHeap.offer(new Node(entry.getKey(), entry.getValue()));
 		}
-		return freqArray(minHeap);
+		k = Math.min(k, freq.size());
+		String[] res = new String[k];
+		for(int i=0; i<k; i++) {
+			res[i] = minHeap.poll().str;
+		}
+		return res;
 	}
 	
-	Map<String, Integer> getFreqMap(String[] combo) {
-		Map<String, Integer> freqMap=new HashMap<>();
-		for(String s:combo) {
-			Integer freq=freqMap.get(s);
-			if(freq==null) {
-				freqMap.put(s, 1);
-			}
-			else {
-				freqMap.put(s, freq+1);
-			}
+	class Node {
+		String str;
+		int cnt;
+		public Node(String str, int cnt) {
+			this.str = str;
+			this.cnt = cnt;
 		}
-		return freqMap;
-	}
-	
-	String[] freqArray(PriorityQueue<Map.Entry<String, Integer>> minHeap) {
-		String[] result=new String[minHeap.size()];
-		for(int i=minHeap.size()-1; i>=0; i--) {
-			result[i]=minHeap.poll().getKey();
-		}
-		return result;
 	}
 	
 	public static void main(String[] args) {

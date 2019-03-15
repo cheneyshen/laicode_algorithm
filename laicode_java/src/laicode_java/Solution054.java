@@ -27,9 +27,6 @@ public class Solution054 {
 	}
     
 	boolean isBST(TreeNode root) {
-		if (root == null) {
-			return true;
-		}
 		return isBSTHelper(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
 	

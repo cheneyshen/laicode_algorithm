@@ -15,18 +15,19 @@ import java.util.*;
 //Set = null, all the subsets are []
 public class Solution062 {
 
-	void helper(char[] set, StringBuilder sb, int index, List<String> result) {
+	private void helper(char[] set, StringBuilder sb, int index, List<String> result) {
 		if(index==set.length) {
 			result.add(sb.toString());
 			return;
 		}
-		helper(set, sb.append(set[index]), index+1, result);
+		sb.append(set[index]);
+		helper(set, sb, index+1, result);
 		sb.deleteCharAt(sb.length()-1);
 		helper(set, sb, index+1, result);
 	}
 	
-	List<String> subsets(String set) {
-		List<String> result=new ArrayList<String>();
+	public List<String> subsets(String set) {
+		List<String> result=new ArrayList<>();
 		if(set==null) {
 			return result;
 		}

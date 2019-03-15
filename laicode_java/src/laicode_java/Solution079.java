@@ -16,19 +16,14 @@ import java.util.*;
 //      If the given string is null, we do not need to do anything.
 public class Solution079 {
 	public String deDup(String s) {
-		int leng=s.length();
-		if(leng<=1) {
+		if(s==null || s.length()<2) {
 			return s;
 		}
-		int fast=0, slow=0;
-		char[] array=s.toCharArray();
-		for(; fast<leng; ) {
-			if(array[fast]==array[slow]) {
-				fast++;
-			} else {
-				slow++;
-				array[slow] = array[fast];
-				fast++;
+		char[] array = s.toCharArray();
+		int slow = 0;
+		for(int fast=0; fast<array.length; fast++) {
+			if(fast==0 || array[fast] != array[slow-1]) {
+				array[slow++] = array[fast];
 			}
 		}
 		return new String(array, 0, slow);

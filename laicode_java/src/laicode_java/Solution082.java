@@ -12,40 +12,32 @@ import java.util.*;
 //"abbbaaccz" → "aaaccz" → "ccz" → "z"
 //"aabccdc" → "bccdc" → "bdc"
 public class Solution082 {
-
     // abbbaaccz
-    // z
-    // s
-    //         f
+    //  s
+    //       f
 	
 	public String deDup(String s) {
-		if(s==null || s.length()==0) {
+		if(s==null || s.length()<2) {
 			return s;
 		}
-		Stack<Character> stk = new Stack<Character>();
-		int fast=0;
-		for(; fast<s.length(); ) {
-			if(!stk.isEmpty() && s.charAt(fast)==stk.peek()) {
-				while(s.charAt(fast)==stk.peek()) {
-					fast++;
-				}
-				stk.pop();
+	    /*
+	    abbbaaccz
+	           s
+	   e
+	    */
+		int end = -1;
+		char[] array = s.toCharArray();
+		for(int start = 0; start<array.length; start++) {
+			if(end==-1 || array[end] != array[start]) {
+				array[++end] = array[start];
 			} else {
-				stk.push(s.charAt(fast));
-				fast++;
+				end--;
+				while(start+1<array.length && array[start+1]==array[start]) {
+					start++;
+				}
 			}
 		}
-		char[] result = new char[stk.size()];
-		for(int i=0; i<stk.size(); i++) {
-			result[i]=stk.get(i);
-		}
-
-		for(int i=0, j=result.length-1; i<j; i++, j--) {
-			char temp=result[i];
-			result[i]=result[j];
-			result[j]=temp;
-		}
-		return Arrays.toString(result);
+		return new String(array, 0, end+1);
 	}
 	
 	public static void main(String[] args) {

@@ -35,11 +35,9 @@ public class Solution020 {
 			int mid=left+(right-left)/2;
 			if(dict.get(mid)==null || dict.get(mid)>target) {
 				right=mid-1;
-			}
-			else if(dict.get(mid)<target) {
+			} else if(dict.get(mid)<target) {
 				left=mid+1;
-			}
-			else {
+			} else {
 				return mid;
 			}
 		}

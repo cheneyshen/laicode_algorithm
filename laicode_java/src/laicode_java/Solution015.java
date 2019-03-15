@@ -17,20 +17,16 @@ public class Solution015 {
 			return -1;
 		}
 		int left=0, right=array.length-1;
-		while(left<right-1) {
+		while(left<right) {
 			int mid=left+(right-left)/2;
 			if(array[mid]>=target) {
 				right=mid;
-			}
-			else {
-				left=mid;
+			} else {
+				left=mid + 1;
 			}
 		}
-		if(array[left]==target) {
+		if (array[left]==target) {
 			return left;
-		}
-		else if(array[right]==target) {
-			return right;
 		}
 		return -1;
 	}

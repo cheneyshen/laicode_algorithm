@@ -23,9 +23,9 @@ import java.util.*;
 //What if there are no keys in the given range? Return an empty list in this case.
 public class Solution055 {
 	List<Integer> getRange(TreeNode root, int min, int max) {
-		List<Integer> list=new ArrayList<Integer>();
-		getRange(root, min, max, list);
-		return list;
+		List<Integer> res=new ArrayList<Integer>();
+		getRange(root, min, max, res);
+		return res;
 	}
 	
 	void getRange(TreeNode root, int min, int max, List<Integer> list) {

@@ -13,49 +13,45 @@ import java.util.*;
 //isEmpty() should return true if there is no element buffered in the queue, false otherwise.
 
 public class Solution031 {
-	private Stack<Integer> stack1;
-	private Stack<Integer> stack2;
+	private LinkedList<Integer> in = new LinkedList<>();
+	private LinkedList<Integer> out = new LinkedList<>();
 	
 	public boolean isEmpty() {
-		return stack1.empty() && stack2.empty();
+		return in.isEmpty() && out.isEmpty();
 	}
 	
 	public void offer(int e) {
-		stack1.push(e);
+		in.offerFirst(e);
 	}
 	
 	public int poll() {
-		if(!stack2.empty()) {
-			return stack2.pop();
-		}
-		else if(!stack1.empty()) {
-			while(!stack1.empty()) {
-				stack2.push(stack1.pop());
+		if(out.isEmpty()==false) {
+			return out.pop();
+		} else if(!in.isEmpty()) {
+			while(!in.isEmpty()) {
+				out.push(in.pop());
 			}
-			return stack2.pop();
-		}
-		else {
+			return out.pop();
+		} else {
 			return -1;
 		}
 	}
 	
 	public int peek() {
-		if(!stack2.empty()) {
-			return stack2.peek();
-		}
-		else if(!stack1.empty()) {
-			while(!stack1.empty()) {
-				stack2.push(stack1.pop());
+		if(!out.isEmpty()) {
+			return out.peek();
+		} else if(!in.isEmpty()) {
+			while(!in.isEmpty()) {
+				out.push(in.pop());
 			}
-			return stack2.peek();
-		}
-		else {
+			return out.peek();
+		} else {
 			return -1;
 		}
 	}
 	
 	public int size() {
-		return stack1.size()+stack2.size();
+		return in.size()+out.size();
 	}
 	
 	public static void main(String[] args) {

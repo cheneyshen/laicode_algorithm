@@ -15,18 +15,22 @@ import java.util.*;
 //{1} --> {1}
 //{1, 0, 3, 0, 1} --> {1, 3, 1, 0, 0} or {1, 1, 3, 0, 0} or {3, 1, 1, 0, 0}
 public class Solution258 {
-	public void moveZeros(int[] nums) {
-		int low=0, high=nums.length;
+	public int[] moveZeros(int[] array) {
+		if(array==null || array.length<1) {
+			return array;
+		}
+		int slow=0, fast=0;
 		//move all the nonzero elements advance
-		for(int i=0; i<high; i++) {
-			if(nums[i]!=0) {
-				nums[low++]=nums[i];
+		while(fast<array.length) {
+			if(array[fast]!=0) {
+				array[slow++] = array[fast];
 			}
+			fast++;
 		}
-		for(; low<high; low++) {
-			nums[low]=0;
+		while(slow<array.length) {
+			array[slow++] = 0;
 		}
-		return;
+		return array;
 	}
 	
 	public static void main(String[] args) {

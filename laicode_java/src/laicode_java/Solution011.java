@@ -22,11 +22,9 @@ public class Solution011 {
 		while(zero<=one) {
 			if(array[zero]==-1) {
 				swap(array, neg++, zero++);
-			}
-			else if(array[zero]==0) {
+			} else if(array[zero]==0) {
 				zero++;
-			}
-			else {
+			} else {
 				swap(array, zero, one--);
 			}
 		}

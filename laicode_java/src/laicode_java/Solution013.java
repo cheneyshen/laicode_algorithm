@@ -19,14 +19,8 @@ public class Solution013 {
 		if (b<0) {
 			return 0;
 		}
-		else if(b%2==0) {
-			long result=power(a, b/2);
-			return result* result;
-		}
-		else {
-			long result=power(a, b/2);
-			return result* result*a;
-		}
+		long half = power(a, b/2);
+		return b%2==0 ? half*half : half*half*a;
 	}
 	public static void main(String[] args) {
 		Solution013 ss = new Solution013();

@@ -13,43 +13,44 @@ import java.util.*;
 //{4, 2, -3, 6, 1} is sorted to {-3, 1, 2, 4, 6}
 public class Solution009 {
 	public int[] mergeSort(int[] array) {
-		if(array==null) {
+		if(array==null || array.length<1) {
 			return array;
 		}
-		int[] helper=new int[array.length];
-		mergeSort(array, helper, 0, array.length-1);
-		return array;
+
+		return helper(array, 0, array.length-1);
 	}
 	
-	private void mergeSort(int[] array, int[] helper, int left, int right) {
-		if(left>=right) {
-			return;
+	private int[] helper(int[] array, int left, int right) {
+		int[] res = new int[right-left+1];
+		if(left==right) {
+			res[0] = array[left];
+			return res;
 		}
 		int mid=left+(right-left)/2;
-		mergeSort(array, helper, left, mid);
-		mergeSort(array, helper, mid+1, right);
-		merge(array, helper, left, mid, right);
+		int[] lefter = helper(array, left, mid);
+		int[] righter = helper(array, mid+1, right);
+		return mergeHelper(lefter, righter);
 	}
 	
-	private void merge(int[] array, int[] helper, int left, int mid, int right) {
-		for (int i=left; i<=right; i++) {
-			// shallow copy
-			helper[i]=array[i];
-		}
-		int leftIndex=left;
-		int rightIndex=mid+1;
-		while(leftIndex<=mid && rightIndex<=right) {
-			if(helper[leftIndex]<=helper[rightIndex]) {
-				array[left++]=helper[leftIndex++];
-			}
-			else {
-				array[left++]=helper[rightIndex++];
+	private int[] mergeHelper(int[] left, int[] right) {
+		int[] res = new int[left.length+right.length];
+		int i=0, j=0, k=0;
+		while(i<left.length && j<right.length) {
+			if(left[i]<=right[j]) {
+				res[k++] = left[i++];
+			} else {
+				res[k++] = right[j++];
 			}
 		}
-		while(leftIndex<=mid) {
-			array[left++]=helper[leftIndex++];
+		while(i<left.length) {
+			res[k++] = left[i++];
 		}
+		while(j<right.length) {
+			res[k++] = right[j++];
+		}
+		return res;
 	}
+	
 	public static void main(String[] args) {
 		int[] array=new int[]{2,4,1,5,3};
 		Solution009 ss = new Solution009();

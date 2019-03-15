@@ -14,7 +14,7 @@ import java.util.*;
 import laicode_java.Solution029.ListNode;
 
 public class Solution039 {
-	static class ListNode {
+	class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {
@@ -23,19 +23,20 @@ public class Solution039 {
 		}
 	}
 	ListNode insert(ListNode head, int value) {
-		ListNode node=new ListNode(value);
-		if(head==null || head.value>=value) {
-			node.next=head;
-			head=node;
-			return head;
+		if(head==null) {
+			return new ListNode(value);
 		}
-		ListNode curr=head;
-		while(curr.next!=null && curr.next.value<value) {
-			curr=curr.next;
+		ListNode dummy = new ListNode(-1);
+		dummy.next = head;
+		ListNode cur = head, pre = dummy;
+		while(cur!=null && cur.value<=value) {
+			pre = cur;
+			cur = cur.next;
 		}
-		node.next=curr.next;
-		curr.next=node;
-		return head;
+		ListNode newnode = new ListNode(value);
+		newnode.next = pre.next;
+		pre.next = newnode;
+		return dummy.next;
 	}
 	
 	public static void main(String[] args) {

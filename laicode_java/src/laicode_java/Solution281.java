@@ -10,77 +10,26 @@ import java.util.*;
 //“  a” --> “a”
 //“   I     love MTV ” --> “I love MTV"
 public class Solution281 {
-	public String removeSpace(String input) {
-		String result="";
-		int fast=0;
-		for(; fast<input.length(); ) {
-			while(input.charAt(fast)==' ') {
-				fast++;
-			}
-			while(fast<input.length() && input.charAt(fast)!=' ') {
-				result+=input.charAt(fast++);
-			}
-			while(fast<input.length() && input.charAt(fast)==' ') {
-				fast++;
-			}
-			result+=' ';
+	public String removeSpaces(String input) {
+		if(input.isEmpty()) {
+			return input;
 		}
-		return result;
-	}
-	
-	public class ZigzagIterator {
-		LinkedList<Iterator> list;
-		public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-			list = new LinkedList<Iterator>();
-			if(!v1.isEmpty())	list.add(v1.iterator());
-			if(!v2.isEmpty())	list.add(v2.iterator());
-		}
-		
-		public int next() {
-			Iterator curr = list.remove();
-			int result = (Integer)curr.next();
-			if(curr.hasNext()) {
-				list.add(curr);
+		char[] array = input.toCharArray();
+		int end=0;
+		for(int fast=0; fast<input.length(); fast++) {
+			if(array[fast]==' ' && (fast==0 || array[fast-1]==' ')) {
+				continue;
 			}
-			return result;
+			array[end++] = array[fast];
 		}
-		
-		public boolean hasNext() {
-			return !list.isEmpty();
+		if(end>0 && array[end-1]==' ') {
+			return new String(array, 0, end-1);
 		}
-	}
-	
-	List<String> addOperator(String num, int target) {
-		List<String> result = new ArrayList<>();
-		helper(result, num, target, "", 0, 0);
-		return result;
-	}
-	
-	void helper(List<String> result, String num, int target, String tmp, int curr, int prev) {
-		if(curr==target && num.length()==0) {
-			result.add(tmp);
-			return;
-		}
-		for(int i=1; i<=num.length(); i++) {
-			String cur = num.substring(0, i);
-			if(cur.length()>1 && cur.charAt(0)=='0') {
-				return;
-			}
-			int currNum = Integer.valueOf(cur);
-			String next = num.substring(i);
-			if(tmp.length()!=0) {
-				helper(result, next, target, tmp + "*" +cur, curr-prev+prev*currNum, prev*currNum);
-				helper(result, next, target, tmp + "+" +cur, curr+currNum, currNum);
-				helper(result, next, target, tmp + "-" +cur, curr-currNum, -currNum);
-				
-			} else {
-				helper(result, next, target, cur, currNum, currNum);
-			}
-		}
+		return new String(array, 0, end);
 	}
 	
 	public static void main(String[] args) {
 		Solution281 ss = new Solution281();
-		System.out.println(ss.removeSpace("   I     love MTV "));
+		System.out.println(ss.removeSpaces("   I     love MTV "));
 	}
 }

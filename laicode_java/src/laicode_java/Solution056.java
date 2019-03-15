@@ -22,16 +22,16 @@ import java.util.*;
 //  3  --   4
 //  
 //  is not bipartite.
-class GraphNode {
-	public int key;
-	public List<GraphNode> neighbors;
-	public GraphNode(int key) {
-		this.key = key;
-		this.neighbors = new ArrayList<GraphNode>();
-	}
-}
 
 public class Solution056 {
+	class GraphNode {
+		public int key;
+		public List<GraphNode> neighbors;
+		public GraphNode(int key) {
+			this.key = key;
+			this.neighbors = new ArrayList<GraphNode>();
+		}
+	}
 	boolean isBipartite(List<GraphNode> graph) {
 		if(graph.isEmpty()) {
 			return false;
@@ -51,17 +51,19 @@ public class Solution056 {
 		}
 		Queue<GraphNode> queue=new LinkedList<GraphNode>();
 		queue.offer(node);
-		visited.put(node, 0);
+		visited.put(node, 1);
 		while(!queue.isEmpty()) {
-			GraphNode curr=queue.poll();
-			int curGroup=visited.get(curr);
-			int neiGroup=curGroup==0?1:0;
-			for(GraphNode nei:curr.neighbors) {
-				if(!visited.containsKey(nei)) {
-					visited.put(nei, neiGroup);
-				}
-				else if(visited.get(nei)!=neiGroup) {
-					return false;
+			int size=queue.size();
+			for(int i=0; i<size; i++) {
+				GraphNode curr=queue.poll();
+				for(GraphNode nei:curr.neighbors) {
+					if(!visited.containsKey(nei)) {
+						visited.put(nei, 1-visited.get(curr));
+						queue.add(nei);
+					}
+					else if(visited.get(nei)==visited.get(curr)) {
+						return false;
+					}
 				}
 			}
 		}

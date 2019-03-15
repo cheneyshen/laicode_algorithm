@@ -14,24 +14,29 @@ import java.util.*;
 //N = 3, all valid permutations are ["((()))", "(()())", "(())()", "()(())", "()()()"]
 //N = 0, all valid permutations are [""]
 public class Solution066 {
-	List<String> validParen(int k) {
-		List<String> result=new ArrayList<String>();
-		char[] cur=new char[k*2];
-		helper(cur, k, k, 0, result);
+	public List<String> validParentheses(int k) {
+		List<String> result=new ArrayList<>();
+		if(k<0) {
+			return result;
+		}
+		StringBuilder sb = new StringBuilder();
+		helper(sb, k, k, result);
 		return result;
 	}
-	void helper(char[] cur, int left, int right, int index, List<String> result) {
+	private void helper(StringBuilder sb, int left, int right, List<String> result) {
 		if(left==0 && right==0) {
-			result.add(new String(cur));
+			result.add(sb.toString());
 			return;
 		}
 		if(left>0) {
-			cur[index]='(';
-			helper(cur, left-1, right, index+1, result);
+			sb.append("(");
+			helper(sb, left-1, right, result);
+			sb.setLength(sb.length()-1);
 		}
 		if(right>left) {
-			cur[index]=')';
-			helper(cur, left, right-1, index+1, result);
+			sb.append(")");
+			helper(sb, left, right-1, result);
+			sb.setLength(sb.length()-1);
 		}
 	}
 	

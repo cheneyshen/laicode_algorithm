@@ -9,7 +9,7 @@ import java.util.*;
 //L = 2 -> 4 -> 3 -> 5 -> 1 -> null, T = 3, is partitioned to 2 -> 1 -> 4 -> 3 -> 5 -> null
 
 public class Solution042 {
-	static class ListNode {
+	class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {
@@ -17,9 +17,10 @@ public class Solution042 {
 			next=null;
 		}
 	}
-	ListNode partition(ListNode head, int target) {
-		if(head==null) {
-			return null;
+	
+	public ListNode partition(ListNode head, int target) {
+		if(head == null || head.next == null) {
+			return head;
 		}
 		ListNode fakeSmall=new ListNode(-1);
 		ListNode fakeLarge=new ListNode(-1);
@@ -29,13 +30,12 @@ public class Solution042 {
 			if(head.value<target) {
 				currSmall.next=head;
 				currSmall=currSmall.next;
-				head=head.next;
 			}
 			else {
 				currLarge.next=head;
 				currLarge=currLarge.next;
-				head=head.next;
 			}
+			head=head.next;
 		}
 		currSmall.next=fakeLarge.next;
 		currLarge.next=null;

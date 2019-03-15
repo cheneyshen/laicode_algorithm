@@ -18,82 +18,29 @@ import java.util.*;
 //target = 7, return {1, 2}
 //target = 6, return {-1, -1} to represent the target number does not exist in the matrix.
 public class Solution267 {
-	public List<Integer> search(int[][] matrix, int target) {
-		if(matrix==null || matrix.length<1) {
-			return null;
+	public int[] search(int[][] matrix, int target) {
+		if(matrix==null || matrix.length<1 || matrix[0].length<1) {
+			return new int[2];
 		}
-		int rows = matrix.length, cols = matrix[0].length;
-		List<Integer> result=new ArrayList<>();
-		int i=0, j=cols-1;
-		while(i<rows && j>=0) {
-			int curr=matrix[i][j];
-			if(curr==target) {
-				result.add(i);
-				result.add(j);
-				return result;
-			} else if(curr<target) {
-				i++;
+		int m = matrix.length, n = matrix[0].length;
+		int left = 0, right = m*n-1;
+		int[] res = new int[2];
+		res[0] = -1; res[1] = -1;
+		while(left<=right) {
+			int mid = left+(right-left)/2;
+			int row = mid/n, col = mid%n;
+			if(matrix[row][col]==target) {
+				res[0]=row;res[1]=col;
+				return res;
+			} else if(matrix[row][col]>target) {
+				right = mid-1;
 			} else {
-				j--;
+				left = mid+1;
 			}
 		}
-		result.add(-1); result.add(-1);
-		return result;
+		return res;
 	}
 	
-	Set<String> set = new HashSet<>();
-	public List<String> generatePalindromes(String s) {
-		int[] map = new int[128];
-		char[] st = new char[s.length()];
-		if(!canPermute(s, map)) {
-			return new ArrayList<>();
-		}
-		char ch = 0;
-		int k = 0;
-		for(int i=0; i<map.length; i++) {
-			if(map[i]%2==1) {
-				ch = (char)i;
-			} for(int j=0; j<map[i]/2; j++) {
-				st[k] = (char)i;
-				k++;
-			}
-		}
-		permute(st, 0, ch);
-		return new ArrayList<String>(set);
-	}
-	
-	public boolean canPermute(String s, int[] map) {
-		int count = 0;
-		for(int i=0; i<s.length(); i++) {
-			map[s.charAt(i)]++;
-			if(map[s.charAt(i)]%2==0) {
-				count--;
-			} else {
-				count++;
-			}
-		}
-		return count<=1;
-	}
-	
-	void permute(char[] s, int l, char ch) {
-		if(l==s.length) {
-			set.add(new String(s) + (ch==0?"":ch)+ new StringBuffer(new String(s)).reverse());
-		} else {
-			for(int i=l; i<s.length; i++) {
-				if(s[l]!=s[i] || l==i) {
-					swap(s, l, i);
-					permute(s, l+1, ch);
-					swap(s, l, i);
-				}
-			}
-		}
-	}
-	
-	public void swap(char[] s, int i, int j) {
-		char tmp = s[i];
-		s[i] = s[j];
-		s[j] = tmp;
-	}
 	public static void main(String[] args) {
 		Solution267 ss = new Solution267();
 		int[][] matrix = new int[][]{

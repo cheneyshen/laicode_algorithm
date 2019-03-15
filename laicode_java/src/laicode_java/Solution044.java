@@ -3,24 +3,24 @@ package laicode_java;
 import java.util.*;
 
 public class Solution044 {
-	List<Integer> preOrder(TreeNode root) {
-		List<Integer> preorder=new ArrayList<Integer>();
+	public List<Integer> preOrder(TreeNode root) {
+		List<Integer> res=new ArrayList<Integer>();
 		if(root==null) {
-			return preorder;
+			return res;
 		}
-		Deque<TreeNode> stack=new LinkedList<TreeNode>();
-		stack.offerFirst(root);
-		while(stack.isEmpty()==false) {
-			TreeNode curr=stack.pollFirst();
-			preorder.add(curr.key);
+		Deque<TreeNode> que=new LinkedList<TreeNode>();
+		que.offerFirst(root);
+		while(que.isEmpty()==false) {
+			TreeNode curr=que.pollFirst();
+			res.add(curr.key);
 			if(curr.right!=null) {
-				stack.offerFirst(curr.right);
+				que.offerFirst(curr.right);
 			}
 			if(curr.left!=null) {
-				stack.offerFirst(curr.left);
+				que.offerFirst(curr.left);
 			}
 		}
-		return preorder;
+		return res;
 	}
 	
 	public static void main(String[] args) {

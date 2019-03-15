@@ -14,25 +14,17 @@ import java.util.*;
 //    A = {1, 1, 2, 2, 3}, B = {1, 1, 2, 5, 6}, common numbers are [1, 1, 2]
 
 public class Solution072 {
-	public List<Integer> common(int[] a, int[] b) {
-		List<Integer> result=new ArrayList<Integer>();
-		if(a.length==0 || b.length==0) {
-			return result;
-		}
-		HashMap<Integer, Integer> dict=new HashMap<Integer, Integer>();
-		for(int i:a) {
-			Integer aa=dict.get(i);
-			if(aa==null) {
-				dict.put(i, 1);
+	public List<Integer> common(List<Integer> A, List<Integer> B) {
+		List<Integer> result=new ArrayList<>();
+		int i=0, j=0;
+		while(i<A.size() && j<B.size()) {
+			if(A.get(i)== B.get(j)) {
+				result.add(A.get(i));
+				i++;j++;
+			} else if(A.get(i)<B.get(j)) {
+				i++;
 			} else {
-				dict.put(i,	aa+1);
-			}
-		}
-		for(int j:b) {
-			Integer bb=dict.get(j);
-			if(bb!=null && bb>0) {
-				result.add(j);
-				dict.put(j, bb-1);
+				j++;
 			}
 		}
 		return result;

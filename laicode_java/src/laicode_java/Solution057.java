@@ -23,11 +23,11 @@ import java.util.*;
 //What if the binary tree is null? Return an empty list of list in this case.
 public class Solution057 {
 	List<List<Integer>> layerByLayer(TreeNode root) {
-		List<List<Integer>> list=new ArrayList<List<Integer>>();
+		List<List<Integer>> list=new ArrayList<>();
 		if(root==null) {
 			return list;
 		}
-		Queue<TreeNode> queue=new LinkedList<TreeNode>();
+		Queue<TreeNode> queue=new LinkedList<>();
 		queue.offer(root);
 		while(!queue.isEmpty()) {
 			int leng=queue.size();

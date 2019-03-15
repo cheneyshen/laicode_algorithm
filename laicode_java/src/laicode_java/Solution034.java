@@ -14,7 +14,7 @@ import laicode_java.Solution029.ListNode;
 //L = 1 -> 2 -> 3 -> null, return 3 -> 2 -> 1 -> null
 public class Solution034 {
 
-	static class ListNode {
+	class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {

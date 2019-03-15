@@ -16,7 +16,7 @@ import java.util.*;
 //    A = {3, 4, 1, 2, 5}, K = 3, the 3 smallest numbers are {1, 2, 3}
 public class Solution025 {
 	public int[] KSmallest(int[] input, int k) {
-		if(input.length==0 || k==0) {
+		if(input==null || input.length==0 || k==0) {
 			return new int[0];
 		}
 		PriorityQueue<Integer> maxHeap=new PriorityQueue<Integer>(k, new Comparator<Integer>() {

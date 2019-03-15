@@ -13,40 +13,28 @@ import java.util.*;
 //
 //input = "abcd", t = "ab", delete all instances of 'a' and 'b', the result is "cd".
 public class Solution395 {
-	public boolean canChange(String a, String b) {
-		if(a==null && b==null) {
-			return true;
+	public String remove(String input, String t) {
+		if(input==null || input.length()<1) {
+			return input;
 		}
-		if(a==null || b==null || a.length()!=b.length()) {
-			return false;
+		char[] array = input.toCharArray();
+		Set<Character> set = new HashSet<>();
+		for(char c:t.toCharArray()) {
+			set.add(c);
 		}
-		char[] aa = a.toCharArray();
-		char[] bb = b.toCharArray();
-		Map<Character, Character> dict = new HashMap<>();
-		for(int i=0; i<aa.length; i++) {
-			if(aa[i] == bb[i]) {
-				continue;
-			}
-			if(!dict.containsKey(aa[i])) {
-				dict.put(aa[i], bb[i]);
-			}
-			char curr = aa[i];
-			for(int j=0; j<aa.length; j++) {
-				if(aa[j]==curr) {
-					aa[j] = dict.get(curr);
-				}
-			}
-			if(String.copyValueOf(aa).equals(String.valueOf(bb))) {
-				return true;
+		int slow=0;
+		for(int fast=0; fast<array.length; fast++) {
+			if(!set.contains(array[fast])) {
+				array[slow++] = array[fast];
 			}
 		}
-		return false;
+		return new String(array, 0, slow);
 	}
 	
 	public static void main(String[] args) {
 		Solution395 s = new Solution395();
-		System.out.println(s.canChange("aba", "cac"));
-		System.out.println(s.canChange("abc", "aaa"));
-		System.out.println(s.canChange("abc", "cba"));
+		System.out.println(s.remove("aba", "cac"));
+		System.out.println(s.remove("abc", "aaa"));
+		System.out.println(s.remove("abc", "cba"));
 	}
 }

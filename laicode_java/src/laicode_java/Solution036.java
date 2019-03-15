@@ -16,7 +16,7 @@ public class Solution036 {
 //  L = 1 -> 2 -> null, return 1
 //  L = 1 -> 2 -> 3 -> null, return 2
 //  L = 1 -> 2 -> 3 -> 4 -> null, return 2
-	static class ListNode {
+	class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {
@@ -31,9 +31,8 @@ public class Solution036 {
 		ListNode fast=head;
 		ListNode slow=head;
 		while(fast.next!=null && fast.next.next!=null) {
-			fast=fast.next;
 			slow=slow.next;
-			fast=fast.next;
+			fast=fast.next.next;
 		}
 		return slow;
 	}

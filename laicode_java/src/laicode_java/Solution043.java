@@ -33,24 +33,30 @@ class TreeNode {
 }
 
 public class Solution043 {
-	List<Integer> inOrder(TreeNode root) {
-		List<Integer> inorder=new ArrayList<Integer>();
-		Deque<TreeNode> stack=new LinkedList<TreeNode>();
-		TreeNode curr=root;
-		while(curr!=null || !stack.isEmpty()) {
-			if(curr!=null) {
-				stack.offerFirst(curr);
-				curr=curr.left;
-			}
-			else {
-				curr=stack.pollFirst();
-				inorder.add(curr.key);
-				curr=curr.right;
+	public List<Integer> inOrder(TreeNode root) {
+		List<Integer> res=new ArrayList<Integer>();
+		if(root==null) {
+			return res;
+		}
+		Deque<TreeNode> que=new LinkedList<TreeNode>();
+		pushLeft(root, que);
+		while(!que.isEmpty()) {
+			TreeNode cur = que.pollLast();
+			res.add(cur.key);
+			if(cur.right!=null) {
+				pushLeft(cur.right, que);
 			}
 		}
-		return inorder;
-		
+		return res;
 	}
+	
+	void pushLeft(TreeNode root, Deque<TreeNode> que) {
+		while(root!=null) {
+			que.addLast(root);
+			root = root.left;
+		}
+	}
+	
 	public static void main(String[] args) {
 
 

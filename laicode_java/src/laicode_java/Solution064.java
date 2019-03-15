@@ -12,34 +12,32 @@ import java.util.*;
 //Set = null, all permutations are []
 public class Solution064 {
 
-	List<String> solve(String input) {
-		List<String> result=new ArrayList<String>();
-		if (input == "") {
-			result.add("");
-			return result;
+	public List<String> permutations(String input) {
+		List<String> res = new ArrayList<>();
+		if(input==null) {
+			return res;
 		}
-    	char[] arraySet=input.toCharArray();
-    	Arrays.sort(arraySet);
-		helper(arraySet, 0, result);
-		return result;
+    	char[] array = input.toCharArray();
+		helper(array, 0, res);
+		return res;
 	}
 	
-	void helper(char[] arraySet, int index, List<String> result) {
-		if(index==arraySet.length) {
-			result.add(new String(arraySet));
+	private void helper(char[] array, int index, List<String> result) {
+		if(index==array.length) {
+			result.add(new String(array));
 			return;
 		}
-		for(int i=index; i<arraySet.length; i++) {
-			swap(arraySet, index, i);
-			helper(arraySet, index+1, result);
-			swap(arraySet, index, i);
+		for(int i=index; i<array.length; i++) {
+			swap(array, index, i);
+			helper(array, index+1, result);
+			swap(array, index, i);
 		}
 	}
 	
-	void swap(char[] input, int index, int i) {
-		char temp=input[index];
-		input[index]=input[i];
-		input[i]=temp;
+	private void swap(char[] input, int i, int j) {
+		char temp = input[i];
+		input[i] = input[j];
+		input[j] = temp;
 	}
 	
 	public static void main(String[] args) {

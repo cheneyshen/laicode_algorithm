@@ -12,7 +12,7 @@ import java.util.*;
 //L = 1 -> 2 -> 3 -> null, is reordred to 1 -> 3 -> 2 -> null
 
 public class Solution041 {
-	static class ListNode {
+	class ListNode {
 		public int value;
 		public ListNode next;
 		public ListNode(int value) {
@@ -20,44 +20,28 @@ public class Solution041 {
 			next=null;
 		}
 	}
-	ListNode reorderHelper(ListNode left, ListNode right) {
-		if(left==null && right==null) {
-			return null;
-		}
-		else if(left==null) {
-			return right;
-		}
-		else if(right==null) {
-			return left;
-		}
-		ListNode faker=new ListNode(-1);
-		ListNode curr=faker;
-		int index=0;
-		while(left!=null && right!=null) {
-			if(index%2==0) {
-				curr.next=left;
-				left=left.next;
-				index++;
-				curr=curr.next;
+	ListNode reorderHelper(ListNode first, ListNode second) {
+		ListNode dummy = new ListNode(-1);
+		ListNode cur = dummy;
+		int count = 0;
+		while(first!=null && second != null) {
+			if(count%2==0) {
+				cur.next = first;
+				first = first.next;
+			} else {
+				cur.next = second;
+				second = second.next;
 			}
-			else {
-				curr.next=right;
-				right=right.next;
-				index++;
-				curr=curr.next;
-			}
+			cur = cur.next;
+			count++;
 		}
-		while(left!=null) {
-			curr.next=left;
-			left=left.next;
-			curr=curr.next;
+		if(first!=null) {
+			cur.next = first;
 		}
-		while(right!=null) {
-			curr.next=right;
-			right=right.next;
-			curr=curr.next;
+		if(second!=null) {
+			cur.next = second;
 		}
-		return faker.next;
+		return dummy.next;
 	}
 	
 	ListNode reverse(ListNode head) {
@@ -76,21 +60,25 @@ public class Solution041 {
 		return prev;
 	}
 	
-	ListNode reorder(ListNode head) {
-		if(head==null || head.next==null || head.next.next==null) {
+	private ListNode getMiddle(ListNode head) {
+		if(head==null || head.next==null) {
 			return head;
 		}
-		ListNode fast=head;
-		ListNode slow=head;
-		ListNode prev=null;
+		ListNode slow = head, fast = head;
 		while(fast.next!=null && fast.next.next!=null) {
-			fast=fast.next;
-			prev=slow;
-			slow=slow.next;
-			fast=fast.next;
+			slow = slow.next;
+			fast = fast.next.next;
 		}
-		ListNode second=slow.next;
-		slow.next=null;
+		return slow;
+	}
+	
+	public ListNode reorder(ListNode head) {
+		if(head==null || head.next==null) {
+			return head;
+		}
+		ListNode mid = getMiddle(head);
+		ListNode second = mid.next;
+		mid.next = null;
 		second=reverse(second);
 		ListNode result=reorderHelper(head, second);
 		return result;

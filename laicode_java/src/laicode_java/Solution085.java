@@ -19,27 +19,28 @@ import java.util.*;
 //      “bcd” is not a substring of “bcabc”, return -1
 //      "" is substring of "abc", return 0
 public class Solution085 {
-	int strstr(String large, String small) {
+	public int strstr(String large, String small) {
 		if(small.length()==0) {
 			return 0;
 		}
-		if(large.length()==0) {
+		if(large.length() < small.length()) {
 			return -1;
 		}
-		int i=0, j=0;
-		while(i<=large.length()-small.length()) {
-			while(j<small.length() && small.charAt(j)==large.charAt(i+j)) {
-				j++;
-			}
-			if(j==small.length()) {
+		for(int i=0; i<=large.length()-small.length(); i++) {
+			if(equals(large, i, small)) {
 				return i;
-			}
-			else {
-				i+=1;
-				j=0;
 			}
 		}
 		return -1;
+	}
+	
+	public boolean equals(String large, int index, String small) {
+		for(int i=0; i<small.length(); i++) {
+			if(large.charAt(i+index)!=small.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	public static void main(String[] args) {
 

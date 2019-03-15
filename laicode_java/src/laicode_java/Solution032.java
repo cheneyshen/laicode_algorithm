@@ -9,47 +9,44 @@ import java.util.*;
 //push(int element) - push the element to top
 //top() - return the top element without remove it, if the stack is empty, return -1
 //min() - return the current min value in the stack.
-class StackMinNode {
-	public int value;
-	public int min;
-	public StackMinNode next;
-	public StackMinNode(int v) {
-		value=v;
-		next=null;
-	}
-}
 
 public class Solution032 {
-	private StackMinNode head;
-	
+	private Deque<Integer> stack;
+	private Deque<Integer> minstack;
 	public Solution032() {
-		head=null;
+		stack = new LinkedList<Integer>();
+		minstack = new LinkedList<Integer>();
+	}
+	public int pop() {
+		if(stack.isEmpty()) {
+			return -1;
+		}
+		int cur = stack.peekFirst();
+		if(minstack.peekFirst()==cur) {
+			minstack.pollFirst();
+		}
+		return stack.pollFirst();
 	}
 	
 	public void push(int x) {
-		StackMinNode temp = new StackMinNode(x);
-		temp.next=head;
-		if(head==null) {
-			temp.min=x;
+		stack.offerFirst(x);
+		if(minstack.isEmpty() || minstack.peekFirst()>=x) {
+			minstack.offerFirst(x);
 		}
-		else {
-			temp.min=Math.min(temp.min, x);
-		}
-		head=temp;
 	}
 	
 	public int top() {
-		if(head==null) {
+		if(stack.isEmpty()) {
 			return -1;
 		}
-		return head.value;
+		return stack.peek();
 	}
 	
 	public int min() {
-		if(head==null) {
+		if(minstack.isEmpty()) {
 			return -1;
 		}
-		return head.min;
+		return minstack.peekFirst();
 	}
 	
 	public static void main(String[] args) {
