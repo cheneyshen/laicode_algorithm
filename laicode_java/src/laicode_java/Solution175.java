@@ -19,21 +19,30 @@ public class Solution175 {
 		if(input==null || input.length()<=1) {
 			return input;
 		}
-		String result="";
-		for(int i=0; i<input.length(); i++) {
-			if(input.charAt(i)>='a' && input.charAt(i)<='z') {
-				result+=input.charAt(i);
+		int fast = 0;
+		char[] array = input.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		while(fast < array.length) {
+			if(Character.isLetter(array[fast])) {
+				sb.append(array[fast]);
+				fast++;
 			} else {
-				if(input.charAt(i)=='0') {
-					result = result.substring(0, result.length()-1);
+				int res = 0;
+				while(fast<array.length && Character.isDigit(array[fast])) {
+					res = res*10 + array[fast]-'0';
+					fast++;
+				}
+				if(res==0) {
+					sb.setLength(sb.length()-1);
 				} else {
-					for(int add=input.charAt(i); add>'1'; add--) {
-						result+= result.charAt(result.length()-1);
+					while(res>1) {
+						sb.append(sb.charAt(sb.length()-1));
+						res--;
 					}
 				}
 			}
 		}
-		return result;
+		return sb.toString();
 	}
 	public static void main(String[] args) {
 		Solution175 ss = new Solution175();

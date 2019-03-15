@@ -25,18 +25,18 @@ import java.util.*;
  */
 //{ 1, 2, 3, 4, 5, 6, 7 } 鈫� { 1, 4, 2, 5, 3, 6, 7 }
 public class Solution197 {
-	public List<Integer> reorder(int[] array) {
-		List<Integer> intList = new ArrayList<Integer>();
+	public int[] reorder(int[] array) {
+		if(array==null || array.length<2) {
+			return array;
+		}
 		if(array.length%2==0) {
 			helper(array, 0, array.length-1);
 		}
 		else {
 			helper(array, 0, array.length-2);
 		}
-		for(int i=0; i<array.length; i++) {
-			intList.add(array[i]);
-		}
-		return intList;
+		
+		return array;
 	}
 	
 	private void helper(int[] array, int left, int right) {
@@ -51,13 +51,12 @@ public class Solution197 {
 		int leng = right-left+1;
 		int mid = left+leng/2;
 		int leftmid = left+leng/4;
-		int rightmid = mid+leng/4;
+		int rightmid = left+leng*3/4;
 		reverse(array, leftmid, mid-1);
 		reverse(array, mid, rightmid-1);
 		reverse(array, leftmid, rightmid-1);
 		helper(array, left, left+2*(leftmid-left)-1);
 		helper(array, left+2*(leftmid-left), right);
-		return;
 	}
 	
 	private void reverse(int[] array, int left, int right) {
@@ -72,13 +71,13 @@ public class Solution197 {
 	public static void main(String[] args) {
 		Solution197 ss = new Solution197();
 		int[] array = new int[] {1,2,3,4,5,6};
-		List<Integer> result = ss.reorder(array);
-		System.out.println(result);
+		array = ss.reorder(array);
+		System.out.println(Arrays.toString(array));
 		array = new int[] {1,2,3,4,5,6,7};
-		result = ss.reorder(array);
-		System.out.println(result);
+		array = ss.reorder(array);
+		System.out.println(Arrays.toString(array));
 		array = new int[] {1,2,3,4,5,6,7,8,9,10};
-		result = ss.reorder(array);
-		System.out.println(result);
+		array = ss.reorder(array);
+		System.out.println(Arrays.toString(array));
 	}
 }

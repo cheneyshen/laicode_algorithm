@@ -17,14 +17,14 @@ public class Solution172 {
 		if(input==null || input.length()==0 || input=="") {
 			return input;
 		}
-		List<List<Integer>> pos = new ArrayList<List<Integer>>();
+		List<List<Integer>> pos = new ArrayList<>();
 		finderHelper(input, 0, s, pos);
-		replaceHelper(input, t, pos);
-		return input;
+		return replaceHelper(input, t, pos);
 	}
 	
 	private void finderHelper(String input, int index, String s, List<List<Integer>> pos) {
-		for(int i=index, j=0; i<input.length();) {
+		for(int i=index; i<input.length();i++) {
+			int j=0;
 			while(j<s.length() && input.charAt(i+j)==s.charAt(j)) {
 				j++;
 			}
@@ -33,31 +33,30 @@ public class Solution172 {
             //   i
             //docom
 			if(j==s.length()) {
-				List<Integer> curr = new ArrayList<Integer>();
-				curr.add(i); curr.add(j);
-				pos.add(curr);
-				i+=j; j=0;
-			} else {
-				i++; j=0;
+				pos.add(Arrays.asList(i, j));
+				i+=j-1;
 			}
 		}
-		return;
 	}
 	
-	private void replaceHelper(String input, String t, List<List<Integer>> pos) {
+	private String replaceHelper(String input, String t, List<List<Integer>> pos) {
 		//from end to start
 		StringBuilder sb = new StringBuilder();
-		for(int i=0, j=0; i<pos.size() && j<input.length(); ) {
+		int j = 0;
+		for(int i=0; i<pos.size() && j<input.length(); ) {
 			if(j!=pos.get(i).get(0)) {
 				sb.append(input.charAt(j));
 				j++;
-			} else if(j==pos.get(i).get(0)) {
+			} else {
 				sb.append(t);
 				j = j + pos.get(i).get(1);
 				i++;
 			}
 		}
-//		System.out.println(sb.toString());
+		if(j<input.length()) {
+			sb.append(input.substring(j));
+		}
+		return sb.toString();
 	}
 	public static void main(String[] args) {
 		Solution172 ss = new Solution172();

@@ -12,22 +12,26 @@ import java.util.*;
 //    Set = "", all permutations are [""]
 //    Set = null, all permutations are []
 public class Solution065 {
-	List<String> permutations(String set) {
-		List<String> result=new ArrayList<String>();
+	public List<String> permutations(String set) {
+		List<String> res=new ArrayList<>();
 		if(set==null) {
-			return result;
+			return res;
 		}
-		char[] array=set.toCharArray();
-		helper(array, 0, result);
-		return result;
+		if(set.length()<1) {
+			res.add("");
+			return res;
+		}
+		char[] array = set.toCharArray();
+		helper(array, 0, res);
+		return res;
 	}
 	
-	void helper(char[] array, int index, List<String> result) {
-		if(index==array.length) {
+	private void helper(char[] array, int index, List<String> result) {
+		if(index == array.length) {
 			result.add(new String(array));
 			return;
 		}
-		Set<Character> used=new HashSet<Character>();
+		Set<Character> used=new HashSet<>();
 		for(int i=index; i<array.length; i++) {
 			if(used.add(array[i])) {
 				swap(array, i, index);
@@ -37,7 +41,7 @@ public class Solution065 {
 		}
 	}
 	
-	void swap(char[] array, int left, int right) {
+	private void swap(char[] array, int left, int right) {
 		char temp=array[left];
 		array[left]=array[right];
 		array[right]=temp;

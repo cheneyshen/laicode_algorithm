@@ -13,58 +13,19 @@ public class Solution253 {
 			return leng;
 		}
 		int result=0;
-		HashMap<Character, Integer> dict = new HashMap<>();
-		for(int slow=0, fast=0; fast<leng; fast++) {
-			char curr = input.charAt(fast);
-			if(dict.containsKey(curr)==false) {
-				dict.put(curr, 1);
+		char[] array = input.toCharArray();
+		int slow = 0, fast = 0;
+		Set<Character> set = new HashSet<>();
+		while(fast<array.length) {
+			if(set.contains(array[fast])) {
+				set.remove(array[slow++]);
 			} else {
-				dict.put(curr, dict.get(curr));
-			}
-			if(dict.get(curr)>1) {
-				while(dict.get(curr)>1) {
-					dict.put(input.charAt(slow), dict.get(input.charAt(slow)));
-					slow++;
-				}
-			} else {
-				result = Math.max(result, fast-slow+1);
+				set.add(array[fast++]);
+				result = Math.max(result, fast-slow);
 			}
 		}
 		return result;
 	}
-	
-	public int minMeetingRooms(Interval[] intervals) {
-        if(intervals.length==0) {
-        	return 0;
-        }
-        Integer[] start = new Integer[intervals.length];
-        Integer[] end = new Integer[intervals.length];
-        for(int i=0; i<intervals.length; i++) {
-        	start[i] = intervals[i].start;
-        	end[i] = intervals[i].end;
-        }
-        Arrays.sort(end, new Comparator<Integer>() {
-        	public int compare(Integer a, Integer b) {
-        		return a-b;
-        	}
-        });
-        Arrays.sort(start, new Comparator<Integer>() {
-        	public int compare(Integer a, Integer b) {
-        		return a-b;
-        	}
-        });
-        int starts = 0, ends = 0;
-        int used = 0;
-        while(starts<intervals.length) {
-        	if(start[starts] >= end[ends]) {
-        		used -=1;
-        		ends +=1;
-        	}
-        	used += 1;
-        	starts += 1;
-        }
-        return used;
-    }
 	
 	public static void main(String[] args) {
 
