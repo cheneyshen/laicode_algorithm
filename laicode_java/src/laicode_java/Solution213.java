@@ -28,48 +28,38 @@ public class Solution213 {
 		}
 	}
 	
-	public TreeNode recontruct(List<Integer> preorder, List<Integer> inorder) {
-		if(preorder==null || inorder==null) {
+	public TreeNode recontruct(int[] inorder, int[] preorder) {
+		if(inorder==null || inorder.length<1 || preorder==null || preorder.length<1) {
 			return null;
 		}
-		if(preorder.size() != inorder.size()) {
-			return null;
-		}
-		if(preorder.size()==1 || inorder.size()==1) {
-			return new TreeNode(preorder.get(0));
-		}
-		int pi=0, pj=preorder.size()-1;
-		int ii=0, ij=inorder.size()-1;
-		TreeNode root = new TreeNode(preorder.get(pi));
-		List<Integer> leftp = new ArrayList<>();
-		List<Integer> rightp = new ArrayList<>();
-		List<Integer> lefti = new ArrayList<>();
-		List<Integer> righti = new ArrayList<>();
-		for(int i=0; i<=ij; i++) {
-			if(preorder.get(i) < preorder.get(pi)) {
-				leftp.add(preorder.get(i));
-			}
-			else if(preorder.get(i) > preorder.get(pi)) {
-				rightp.add(preorder.get(i));
-			}
-			if(inorder.get(i) < preorder.get(pi)) {
-				lefti.add(inorder.get(i));
-			}
-			else if(inorder.get(i) > preorder.get(pi)) {
-				righti.add(inorder.get(i));
-			}
-		}
-		root.left = recontruct(leftp, lefti);
-		root.right = recontruct(rightp, righti);
-		return root;
+		int len = inorder.length;
+		Map<Integer, Integer> inmap = getMap(inorder);
+		
+		return helper(inmap, 0, len-1, preorder, 0, len-1);
 	}
 	
+	private Map<Integer, Integer> getMap(int[] inorder) {
+		Map<Integer, Integer> res = new HashMap<>();
+		for(int i=0; i<inorder.length; i++) {
+			res.put(inorder[i], i);
+		}
+		return res;
+	}
+	
+	private TreeNode helper(Map<Integer, Integer> inmap, int inleft, int inright, int[] preOrder, int preleft, int preright) {
+		if(inleft>inright) {
+			return null;
+		}
+		TreeNode root = new TreeNode(preOrder[preleft]);
+		int inmid = inmap.get(preOrder[preleft]);
+		root.left = helper(inmap, inleft, inmid-1, preOrder, preleft+1, preleft+inmid-inleft);
+		root.right = helper(inmap, inmid+1, inright, preOrder, preright+inmid-inright+1, preright);
+		return root;
+	}
 	public static void main(String[] args) {
 		Solution213 ss = new Solution213();
-		List<Integer> a = new ArrayList<Integer>();
-		a.add(5);a.add(3);a.add(2);a.add(4);a.add(6);
-		List<Integer> b = new ArrayList<Integer>();
-		b.add(2);b.add(3);b.add(4);b.add(5);b.add(6);
+		int[] a = new int[] {5,3,2,4,6};
+		int[] b = new int[] {2,3,4,5,6};
 		TreeNode result = ss.recontruct(a, b);
 		System.out.println(result.left.left.key);
 	}

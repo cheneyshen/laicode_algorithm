@@ -26,19 +26,15 @@ public class Solution101 {
 			return 0;
 		}
 		int result=0;
-		int[][] func = new int[rows][cols];
-		for(int i=0; i<rows; i++) {
-			Arrays.fill(func[i], 0);
-		}
+		int[][] vals = new int[rows][cols];
 		for(int i=0; i<rows; i++) {
 			for(int j=0; j<cols; j++) {
 				if(i==0 || j==0) {
-					func[i][j]=matrix[i][j];
+					vals[i][j] = matrix[i][j]==0?0:1;
+				} else if(matrix[i][j]==1) {
+					vals[i][j] =  Math.min(vals[i-1][j-1], Math.min(vals[i-1][j], vals[i][j-1])) + 1;
 				}
-				else if(matrix[i][j]==1) {
-					func[i][j] =  Math.min(func[i-1][j-1], Math.min(func[i-1][j], func[i][j-1])) + 1;
-				}
-				result=Math.max(result, func[i][j]);
+				result=Math.max(result, vals[i][j]);
 			}
 		}
 		return result;

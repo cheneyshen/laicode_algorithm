@@ -12,90 +12,60 @@ import java.util.*;
 //l = 1, m = 1, n = 0, all the valid permutations are ["()[]", "([])", "[()]", "[]()"]
 
 public class Solution179 {
-	public List<String> solve(int l, int m, int n) {
-		int leng=2*(l+m+n);
-		List<Integer> counts = new ArrayList<Integer>();
-		counts.add(l);
-		counts.add(l);
-		counts.add(m);
-		counts.add(m);
-		counts.add(n);
-		counts.add(n);
-		String combo="";
-		Stack<Character> stk = new Stack<Character>();
-		List<String> result = new ArrayList<String>();
-		helper(leng, counts, combo, stk, result);
-		return result;
+	public List<String> validParentheses(int l, int m, int n) {
+		
+		List<String> res = new ArrayList<>();
+		Stack<Character> stk = new Stack<>();
+		helper(l, l, m, m, n, n, "", res, stk);
+		return res;
 	}
 	
-	private void helper(int leng, List<Integer> remains, String prefix, Stack<Character> stk, List<String> result) {
-		for(int i=0; i<remains.size(); i++) {
-			if(remains.get(i)<0) {
-				return;
+	private void helper(int left1, int right1, int left2, int right2, int left3, int right3, String cur, List<String> res, Stack<Character> stk) {
+		if(left1==0 && right1==0 && left2==0 && right2==0 && left3==0 && right3==0) {
+			res.add(cur);
+			return;
+		}
+		if(left1>0) {
+			stk.push('(');
+			helper(left1-1, right1, left2, right2, left3, right3, cur+'(', res, stk);
+			stk.pop();
+		}
+		if(left2>0) {
+			stk.push('<');
+			helper(left1, right1, left2, right2, left3, right3, cur+'<', res, stk);
+			stk.pop();
+		}
+		if(left3>0) {
+			stk.push('{');
+			helper(left1, right1, left2, right2, left3-1, right3, cur+'{', res, stk);
+			stk.pop();
+		}
+		if(right1>left1) {
+			if(!stk.isEmpty() && stk.peek()=='(') {
+				stk.pop();
+				helper(left1, right1-1, left2, right2, left3, right3, cur+')', res, stk);
+				stk.push('(');
 			}
 		}
-		if(prefix.length()==leng) {
-			result.add(prefix);
+		if(right2>left2) {
+			if(!stk.isEmpty() && stk.peek()=='<') {
+				stk.pop();
+				helper(left1, right1, left2, right2-1, left3, right3, cur+'>', res, stk);
+				stk.push('<');
+			}
 		}
-		if(remains.get(0)>0) {
-			prefix+='(';
-			stk.push('(');
-			remains.set(0, remains.get(0)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(0, remains.get(0)+1);
-			stk.pop();
-			prefix = prefix.substring(0, prefix.length()-1);
-		}
-		if(remains.get(2)>0) {
-			prefix+='[';
-			stk.push('[');
-			remains.set(2, remains.get(2)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(2, remains.get(2)+1);
-			stk.pop();
-			prefix = prefix.substring(0, prefix.length()-1);
-		}
-		if(remains.get(4)>0) {
-			prefix+='{';
-			stk.push('{');
-			remains.set(4, remains.get(4)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(4, remains.get(4)+1);
-			stk.pop();
-			prefix = prefix.substring(0, prefix.length()-1);
-		}
-		if(remains.get(1)>remains.get(0) && stk.peek()=='(') {
-			prefix+=')';
-			stk.pop();
-			remains.set(1, remains.get(1)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(1, remains.get(1)+1);
-			stk.push('(');
-			prefix = prefix.substring(0, prefix.length()-1);
-		}
-		if(remains.get(3)>remains.get(2) && stk.peek()=='[') {
-			prefix+=']';
-			stk.pop();
-			remains.set(3, remains.get(3)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(3, remains.get(3)+1);
-			stk.push('[');
-			prefix = prefix.substring(0, prefix.length()-1);
-		}
-		if(remains.get(5)>remains.get(4) && stk.peek()=='{') {
-			prefix+='}';
-			stk.pop();
-			remains.set(5, remains.get(5)-1);
-			helper(leng, remains, prefix, stk, result);
-			remains.set(5, remains.get(5)+1);
-			stk.push('{');
-			prefix= prefix.substring(0, prefix.length()-1);
+		if(right3>left3) {
+			if(!stk.isEmpty() && stk.peek()=='{') {
+				stk.pop();
+				helper(left1, right1, left2, right2, left3, right3-1, cur+'}', res, stk);
+				stk.push('{');
+			}
 		}
 	}
 	
 	public static void main(String[] args) {
 		Solution179 ss = new Solution179();
-		List<String> result = ss.solve(1, 1, 0);
+		List<String> result = ss.validParentheses(1, 1, 0);
 		System.out.println(result);
 	}
 }

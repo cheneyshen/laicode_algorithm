@@ -22,9 +22,9 @@ public class Solution075 {
         //        return count;
         int count = 0;
         int result = a^b;
-        while (result!=0) {
-            count++;
-            result = result&(result - 1);
+        while (result != 0) {
+            count += result&1;
+            result>>>=1;
         }
         return count;
     }

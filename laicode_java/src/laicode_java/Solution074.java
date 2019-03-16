@@ -17,14 +17,9 @@ public class Solution074 {
             return false;
         }
         long lower = (long)number - 1;
-        long result = number&lower;
-        if (result == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (number & lower) == 0;
     }
+	
 	public static void main(String[] args) {
 
 

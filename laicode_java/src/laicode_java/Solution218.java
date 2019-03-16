@@ -25,37 +25,10 @@ import java.util.*;
  *  1  
  */
 public class Solution218 {
-	class Dir {
-		public int dx, dy;
-		public Dir(int dx, int dy) {
-			this.dx = dx;
-			this.dy = dy;
-		}
-		public int moveX(int x, int times) {
-			return x + times*dx;
-		}
-		public int moveY(int y, int times) {
-			return y + times*dy;
-		}
-	}
+	int[][] dirs = new int[][] {{0,1},{1,0},{0,-1},{-1,0}};
 	
-	public Solution218() {
-		Dir north = new Dir(0, 1);
-		Dir south = new Dir(0, -1);
-		Dir east = new Dir(1, 0);
-		Dir west = new Dir(-1, 0);
-		this.dirs = new ArrayList<>();
-		this.dirs.add(north);
-		this.dirs.add(south);
-		this.dirs.add(east);
-		this.dirs.add(west);
-	}
-	
-	private List<Dir>  dirs;
 	public int[][] maze(int n) {
-		if(n%2==0) {
-			return null;
-		}
+		
 		int[][] result=new int[n][n];
 		for(int i=0; i<n; i++) {
 			for(int j=0; j<n; j++) {
@@ -72,17 +45,26 @@ public class Solution218 {
 	}
 	
 	private void generate(int[][] matrix, int x, int y) {
-		Collections.shuffle(dirs);
-		for(int i=0; i<dirs.size(); i++) {
-			int nextX = dirs.get(i).moveX(x, 2);
-			int nextY = dirs.get(i).moveY(y, 2);
-			if(isValidWall(matrix, nextX, nextY)) {
-				int newX = dirs.get(i).moveX(x, 1);
-				int newY = dirs.get(i).moveY(y, 1);
-				matrix[newX][newY]=0;
-				matrix[nextX][nextY]=0;
-				generate(matrix, nextX, nextY);
+		int[][] newdirs = dirs;
+		shuffle(newdirs);
+		for(int[] dir : newdirs) {
+			int newx = dir[0]*2+x;
+			int newy = dir[1]*2+y;
+			if(isValidWall(matrix, newx, newy)) {
+				matrix[dir[0]+x][dir[1]+y] = 0;
+				matrix[newx][newy] = 0;
+				generate(matrix, newx, newy);
 			}
+		}
+	}
+	
+	private void shuffle(int[][] array) {
+		int leng = array.length;
+		for(int i=0; i<leng; i++) {
+			int cur = (int)(Math.random()*(leng-i));
+			int[] tmp = array[i];
+			array[i] = array[i+cur];
+			array[cur+i] = tmp;
 		}
 	}
 	

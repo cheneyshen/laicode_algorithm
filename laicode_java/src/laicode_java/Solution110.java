@@ -15,23 +15,31 @@ import java.util.*;
 //            You may need to add more fields for the class.
 public class Solution110 {
 	private int count;
-	private Integer sample;
-	
-	public Solution110() {
-		this.count=0;
-		this.sample=null;
+	private int k;
+	private List<Integer> set;
+	public Solution110(int k) {
+		if(k<=0) {
+			throw new IllegalArgumentException("k<=0");
+		}
+		this.k = k;
+		this.count = 0;
+		this.set = new ArrayList<>();
 	}
 	
 	public void read(int value) {
 		count++;
-		int prob = (int)(Math.random()*count);
-		if(prob==0) {
-			sample = value;
+		if(count<=k) {
+			set.add(value);
+		} else {
+			int prob = (int)(Math.random()*count);
+			if(prob < k) {
+				set.set(prob, value);
+			}
 		}
 	}
 	
-	public Integer sample() {
-		return sample;
+	public List<Integer> sample() {
+		return this.set;
 	}
 	
 	public static void main(String[] args) {

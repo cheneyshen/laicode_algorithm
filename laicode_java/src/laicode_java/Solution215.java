@@ -29,38 +29,29 @@ public class Solution215 {
 	}
 	
 	public TreeNode recontruct(List<Integer> levelorder, List<Integer> inorder) {
-		if(levelorder==null || inorder==null) {
+		Map<Integer, Integer> inmap = new HashMap<>();
+		for(int i=0; i<inorder.size(); i++) {
+			inmap.put(inorder.get(i), i);
+		}
+		return helper(levelorder, inmap);
+	}
+	
+	private TreeNode helper(List<Integer> level, Map<Integer, Integer> inmap) {
+		if(level.isEmpty()) {
 			return null;
 		}
-		if(levelorder.size() != inorder.size()) {
-			return null;
-		}
-		if(levelorder.size()==1 || inorder.size()==1) {
-			return new TreeNode(levelorder.get(0));
-		}
-		int li=0, lj=levelorder.size()-1;
-		int ii=0, ij=inorder.size()-1;
-		TreeNode root = new TreeNode(levelorder.get(li));
-		List<Integer> leftl = new ArrayList<>();
-		List<Integer> rightl = new ArrayList<>();
-		List<Integer> lefti = new ArrayList<>();
-		List<Integer> righti = new ArrayList<>();
-		for(int i=0; i<=ij; i++) {
-			if(levelorder.get(i) < levelorder.get(li)) {
-				leftl.add(levelorder.get(i));
-			}
-			else if(levelorder.get(i) > levelorder.get(li)) {
-				rightl.add(levelorder.get(i));
-			}
-			if(inorder.get(i) < levelorder.get(li)) {
-				lefti.add(inorder.get(i));
-			}
-			else if(inorder.get(i) > levelorder.get(li)) {
-				righti.add(inorder.get(i));
+		TreeNode root = new TreeNode(level.remove(0));
+		List<Integer> left = new ArrayList<>();
+		List<Integer> right = new ArrayList<>();
+		for(int num:level) {
+			if(inmap.get(num) < inmap.get(root.key)) {
+				left.add(num);
+			} else {
+				right.add(num);
 			}
 		}
-		root.left = recontruct(leftl, lefti);
-		root.right = recontruct(rightl, righti);
+		root.left = helper(left, inmap);
+		root.right = helper(right, inmap);
 		return root;
 	}
 	

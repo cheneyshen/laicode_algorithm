@@ -41,30 +41,35 @@ public class Solution141 {
 	}
 	
 	public boolean exit(TreeNode root, int target) {
-		Set<Integer> map = new HashSet<Integer>();
-		map.add(0);
-		return helper(root, 0, target, map);
-	}
-	
-	private boolean helper(TreeNode root, int pre, int target, Set<Integer> map) {
 		if(root==null) {
 			return false;
 		}
-		pre += root.key;
-		if(map.contains(pre-target)) {
-			return true;
+		List<Integer> path = new ArrayList<>();
+		boolean[] res = new boolean[1];
+		helper(root, path, target, res);
+		return res[0];
+	}
+	
+	private void helper(TreeNode root, List<Integer> path, int target, boolean[] res) {
+		if(res[0] == true || root==null) {
+			return;
 		}
-		boolean needRemove = map.add(pre);
-		if(root.left!=null && helper(root.left, pre, target, map)) {
-			return true;
+		path.add(root.key);
+		int tmp = 0;
+		for(int i=path.size()-1; i>=0; i--) {
+			tmp += path.get(i);
+			if(tmp==target) {
+				res[0] = true;
+				return;
+			}
 		}
-		if(root.right!=null & helper(root.right, pre, target, map)) {
-			return true;
+		if(!res[0]) {
+			helper(root.left, path, target, res);
 		}
-		if(needRemove) {
-			map.remove(pre);
+		if(!res[0]) {
+			helper(root.right, path, target, res);
 		}
-		return false;
+		path.remove(path.size()-1);
 	}
 	
 	public static void main(String[] args) {

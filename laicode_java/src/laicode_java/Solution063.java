@@ -16,29 +16,27 @@ public class Solution063 {
 	//	Set = "", all the subsets are[""]
 	//	Set = null, all the subsets are[]
 
-    List<String> subSets(String set) {
+    public List<String> subSets(String set) {
     	List<String> result=new ArrayList<String>();
     	if(set==null) {
     		return result;
     	}
-    	char[] arraySet=set.toCharArray();
-    	Arrays.sort(arraySet);
-    	StringBuilder sb=new StringBuilder();
-    	helper(arraySet, sb, 0, result);
+    	char[] array = set.toCharArray();
+    	Arrays.sort(array);
+    	helper(array, "", 0, result);
     	return result;
     }
     
-    void helper(char[] set, StringBuilder sb, int index, List<String> result) {
-    	if(index==set.length) {
-    		result.add(sb.toString());
+    private void helper(char[] array, String cur, int index, List<String> result) {
+    	if(index==array.length) {
+    		result.add(cur);
     		return;
     	}
-    	helper(set, sb.append(set[index]), index+1, result);
-    	while(index<set.length-1 && set[index]==set[index+1]) {
+    	helper(array, cur+array[index], index+1, result);
+    	while(index+1<array.length && array[index]==array[index+1]) {
     		index++;
     	}
-    	sb.deleteCharAt(sb.length()-1);
-    	helper(set, sb, index+1, result);
+    	helper(array, cur, index+1, result);
     }
     
     List<String> subsetII(String set) {

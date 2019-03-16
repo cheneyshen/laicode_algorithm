@@ -38,21 +38,21 @@ public class Solution129 {
 		}
 	}
 	
-	public TreeNode solve(TreeNode root, List<TreeNode> nodes) {
-		Set<TreeNode> set = new HashSet<>(nodes);
-		return helper(root, set);
-	}
-	
-	private TreeNode helper(TreeNode root, Set<TreeNode> set) {
-		if(root==null || set.contains(root)) {
+	public TreeNode lowestCommonAncestor(TreeNode root, List<TreeNode> nodes) {
+		if(root==null) {
 			return root;
 		}
-		TreeNode l=helper(root.left, set);
-		TreeNode r=helper(root.right, set);
-		if(l!=null && r!=null) {
+		for(TreeNode cur:nodes) {
+			if(root.key==cur.key) {
+				return root;
+			}
+		}
+		TreeNode left = lowestCommonAncestor(root.left, nodes);
+		TreeNode right = lowestCommonAncestor(root.right, nodes);
+		if(left!=null && right!=null) {
 			return root;
 		}
-		return l==null ? r : l;
+		return left==null ? right : left;
 	}
 	
 	public static void main(String[] args) {

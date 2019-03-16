@@ -15,22 +15,23 @@ import java.util.*;
 //    {1, 2, 3, 3, 4, 4, 5}, longest ascending subarray is {1, 2, 3}, length is 3.
 public class Solution086 {
 	public int longest(int[] input) {
-		if(input.length==0) {
+		if(input == null || input.length==0) {
 			return 0;
 		}
-		else if(input.length==1) {
-			return 1;
-		}
-		int[] result=new int[input.length];
-		int output=1;
+		int res = 1;
+		int[] set = new int[input.length];
+		set[0] = 1;
 		for(int i=1; i<input.length; i++) {
-			if(input[i]>input[i-1]) {
-				result[i]=result[i-1]+1;
-				output=Math.max(output, result[i]);
+			if(input[i] > input[i-1]) {
+				set[i] = set[i-1]+1;
+			} else {
+				set[i] = 1;
 			}
+			res = Math.max(res, set[i]);
 		}
-		return output;
+		return res;
 	}
+	
 	public static void main(String[] args) {
 
 

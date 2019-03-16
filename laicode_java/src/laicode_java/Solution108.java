@@ -6,13 +6,12 @@ import java.util.*;
 // std::srand(time(NULL)); is already called for you.
 public class Solution108 {
 	public void shuffle(int[] array) {
-		if(array==null || array.length==0) {
+		if(array==null || array.length<2) {
 			return;
 		}
-		int leng=array.length;
-		for(int i=0; i<leng; i++) {
-			int index=(int)(Math.random()*(leng-i));
-			swap(array, i, i+index);
+		for(int i=array.length; i>0; i--) {
+			int cur = (int)(Math.random()*i);
+			swap(array, i-1, cur);
 		}
 	}
 	
@@ -21,6 +20,7 @@ public class Solution108 {
 		array[left]=array[right];
 		array[right]=temp;
 	}
+	
 	public static void main(String[] args) {
 		Solution108 ss = new Solution108();
 		int[] array = {1,2,3,4,5,6,7,8};

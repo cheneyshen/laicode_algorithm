@@ -23,46 +23,30 @@ public class Solution106 {
 			return 0;
 		}
 		int rows=matrix.length, cols=matrix[0].length;
-		int[][] sumMatrix=new int[rows][cols];
-		int result=Integer.MIN_VALUE;
+		int res=Integer.MIN_VALUE;
 		for(int i=0; i<rows; i++) {
-			for(int j=0; j<cols; j++) {
-				if(j==0) {
-					sumMatrix[i][j]=matrix[i][j];
-				}
-				else {
-					sumMatrix[i][j]=sumMatrix[i][j-1]+matrix[i][j];
-				}
+			int[] cur = new int[cols];
+			for(int j=i; j<rows; j++) {
+				add(cur, matrix[j]);
+				res = Math.max(res, max(cur));
 			}
 		}
-		for(int i=0; i<cols; i++) {
-			for(int j=i; j<cols; j++) {
-				int[] current = new int[rows];
-				for(int k=0; k<rows; k++) {
-					current[k] = sumMatrix[k][j]-sumMatrix[k][i];
-				}
-				result=Math.max(result, helper(current));
-			}
-		}
-		return result;
+		return res;
 	}
 	
-	private int helper(int[] array) {
-		if(array==null || array.length==0) {
-			return 0;
+	private void add(int[] cur, int[] cols) {
+		for(int i=0; i<cur.length; i++) {
+			cur[i]+=cols[i];
 		}
-		int[] sum = new int[array.length];
-		int result=0;
-		for(int i=0; i<array.length; i++) {
-			if(i==0) {
-				sum[i]=array[i];
-			}
-			else if(sum[i-1]>0){
-				sum[i]=array[i]+sum[i-1];
-			}
-			result=Math.max(result, sum[i]);
+	}
+	
+	private int max(int[] cur) {
+		int res = cur[0], tmp = cur[0];
+		for(int i=1; i<cur.length; i++) {
+			tmp = Math.max(tmp+cur[i], cur[i]);
+			res = Math.max(tmp, res);
 		}
-		return result;
+		return res;
 	}
 	
 	public static void main(String[] args) {

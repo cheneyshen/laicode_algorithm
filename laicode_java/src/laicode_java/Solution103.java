@@ -17,16 +17,16 @@ public class Solution103 {
 		if(input==null || input.length==0) {
 			return 0;
 		}
-		int[] longest = new int[input.length];
-		Arrays.fill(longest, 0);
-		int result=0;
-		for(int i=0; i<input.length; i++) {
-			if(i==0) {
-				longest[i]=input[i];
-			}
-			else if(input[i]==1) {
-				longest[i]=longest[i-1]+1;
-				result=Math.max(result, longest[i]);
+		int result=0, slow=0, fast=0;
+		while(fast<input.length) {
+			if(input[fast]==1) {
+				slow=fast;
+				while(fast<input.length && input[fast]==1) {
+					fast++;
+				}
+				result = Math.max(result, fast-slow);
+			} else {
+				fast++;
 			}
 		}
 		return result;

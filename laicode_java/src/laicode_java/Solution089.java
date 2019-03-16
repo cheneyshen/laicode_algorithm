@@ -15,12 +15,12 @@ import java.util.*;
 //{ 2, 1, 1, 0, 2 }, you are not able to reach the end of array, return -1 in this case.
 public class Solution089 {
 	public int minJump(int[] input) {
-		if(input.length==1) {
-			return 0;
+		if(input==null || input.length<1) {
+			return -1;
 		}
 		int[] mi = new int[input.length];
 		Arrays.fill(mi, Integer.MAX_VALUE);
-		mi[input.length-1]=0;
+		mi[input.length-1] = 0;
 		for(int i=input.length-2; i>=0; i--) {
 			for(int j=input[i]; j>0; j--) {
 				if(mi[i+j]!=Integer.MAX_VALUE) {
@@ -32,7 +32,8 @@ public class Solution089 {
 	}
 	
 	public static void main(String[] args) {
-
-
+		int[] array = new int[] {3,3,1,0,4};
+		Solution089 s = new Solution089();
+		System.out.println(s.minJump(array));
 	}
 }

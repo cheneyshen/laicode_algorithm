@@ -13,18 +13,19 @@ import java.util.*;
 public class Solution109 {
 	private int count=0;
 	private int result;	
-	public int sample() {
-		return result;
+	public Integer sample() {
+		return this.result;
 	}
 	
 	public void read(int i) {
 		count++;
-		int randomor = (int)Math.random()%(count);
+		int randomor = (int)(Math.random()*count);
         //randomor has the probability 1/count to be the 0th current sample
 		if(randomor==0) {
 			result=i;
 		}
 	}
+	
 	public static void main(String[] args) {
 
 
