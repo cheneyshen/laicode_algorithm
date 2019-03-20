@@ -4,28 +4,27 @@ import java.util.*;
 
 //Implement LRU Cache
 //Implement a least recently used cache. It should provide set(), get() operations. If not exists, return null (Java), false (C++).
-public class Solution205 {
+public class Solution205<K,V> {
 	/* 1 -> 2 -> 3
 	 * 
 	 */
 	private int size;
-	private HashMap<Integer, ListNode> cache;
+	private Map<K, ListNode> cache;
 	private ListNode head;
 	private ListNode tail;
 	
 	public Solution205(int size) {
 		this.size = size;
-		this.cache = new HashMap<Integer, ListNode>(size);
+		this.cache = new HashMap<K, ListNode>();
 		this.head = null;
 		this.tail = null;
 	}
 	
-	static class ListNode {
-		public int key;
-		public int value;
-		public ListNode left;
-		public ListNode right;
-		public ListNode(int key, int value) {
+	static class ListNode<K,V> {
+		public K key;
+		public V value;
+		public ListNode left, right;
+		public ListNode(K key, V value) {
 			this.key = key;
 			this.value = value;
 			this.left = null;
@@ -33,7 +32,7 @@ public class Solution205 {
 		}
 	}
 	
-	public void set(int key, int value) {
+	public void set(K key, V value) {
 		if(cache.containsKey(key)) {
 			ListNode curr = cache.get(key);
 			remove(curr);
@@ -50,15 +49,15 @@ public class Solution205 {
 		}
 	}
 	
-	public int get(int key) {
+	public V get(K key) {
 		ListNode node = cache.get(key);
 		if(node==null) {
-			return -1;
+			return null;
 		}
 		else {
 			remove(node);
 			append(node);
-			return node.value;
+			return (V)node.value;
 		}
 	}
 	
@@ -79,7 +78,7 @@ public class Solution205 {
 	}
 	
 	private void append(ListNode node) {
-		cache.put(node.key, node);
+		cache.put((K) node.key, node);
 		if(head==null) {
 			head=node;
 			tail=node;

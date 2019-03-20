@@ -17819,248 +17819,248 @@ public:
     //            return right == NULL ? root : right;
     //        }
     //    }
-    //    //Array Update and Query
-    //
-    //    //Naive
-    //    class numArrayNaive {
-    //    private:
-    //        vector<int> nums;
-    //    public:
-    //        numArrayNaive(vector<int>& nums) {
-    //            this->nums = nums;
-    //        }
-    //        void update(int i, int val) {
-    //            this->nums[i] = val;
-    //        }
-    //        int sumRange(int i, int j) {
-    //            int sum = 0;
-    //            for (int low = i; low <= j; ++low) {
-    //                sum += nums[low];
-    //            }
-    //            return sum;
-    //        }
-    //    };
-    //
-    //
-    //    void testNaive(int i) {
-    //        vector<int> array;
-    //        for (int j=0; j<i; ++j) {
-    //            array.push_back(j);
-    //        }
-    //        numArrayNaive* nan = new numArrayNaive(array);
-    //        cout<<nan->sumRange(3, 7);
-    //    }
-    //
-    //    //Naive with Buffer
-    //    class numArrayBuffer {
-    //    private:
-    //        vector<int> nums;
-    //        vector<long> sums;
-    //        vector<pair<int, int>> buffer;
-    //    public:
-    //        numArrayBuffer(vector<int>& nums) {
-    //            this->nums = nums;
-    //            this->sums = vector<long>(nums.size() + 1);
-    //            for (int i=0; i<nums.size()-1; ++i) {
-    //                sums[i+1]=nums[i]+sums[i];
-    //            }
-    //        }
-    //
-    //        void update(int i, int val) {
-    //            buffer.push_back(make_pair(i, val-nums[i]));
-    //            nums[i] = val;
-    //            if (buffer.size() > 300) {
-    //                for (int j = 0; j<nums.size()-1; ++j) {
-    //                    sums[j+1] = nums[j] + sums[j];
-    //                }
-    //            }
-    //        }
-    //
-    //        int sumRange(int i, int j) {
-    //            long res = sums[j+1] - sums[i];
-    //            for (int m = 0; m < buffer.size(); ++m) {
-    //                if (buffer[m].first <= j && buffer[m].first >= i) {
-    //                    res += buffer[m].second;
-    //                }
-    //            }
-    //            if (res >= INT_MAX || res <= INT_MIN) {
-    //                throw out_of_range("error");
-    //            }
-    //            else {
-    //                return (int)res;
-    //            }
-    //        }
-    //    };
-    //
-    //    void testBuffer(int n) {
-    //        vector<int> array;
-    //        for (int j=0; j<n; ++j) {
-    //            array.push_back(j);
-    //        }
-    //        numArrayBuffer* nan = new numArrayBuffer(array);
-    //        cout<<nan->sumRange(3, 7);
-    //    }
-    //
-    //
-    //    //Segment Tree
-    //    struct segmentTree {
-    //        int start, end;
-    //        segmentTree *left, *right;
-    //        int sum;
-    //        segmentTree(int s, int e): start(s), end(e) {
-    //            left=NULL;
-    //            right=NULL;
-    //            sum=0;
-    //        }
-    //    };
-    //
-    //
-    //    class numArrayTree {
-    //    private:
-    //        segmentTree* root;
-    //
-    //        int sumRange(segmentTree* root, int i, int j) {
-    //            if(root==NULL) {
-    //                return 0;
-    //            }
-    //            if (root->start == i && root->end == j) {
-    //                return root->sum;
-    //            }
-    //            else {
-    //                int mid = root->start + (root->end-root->start)/2;
-    //                if (j <= mid) {
-    //                    return sumRange(root->left, i, j);
-    //                }
-    //                else if (i >= mid + 1) {
-    //                    return sumRange(root->right, i, j);
-    //                }
-    //                else {
-    //                    return sumRange(root->right, mid+1, j) +
-    //                    sumRange(root->left, i, mid);
-    //                }
-    //            }
-    //        }
-    //        void updateTree(segmentTree* root, int i, int val) {
-    //            if (root->start == root->end) {
-    //                root->sum = val;
-    //            }
-    //            else {
-    //                int mid = root->start + (root->end - root->start)/2;
-    //                if (i <= mid) {
-    //                    updateTree(root->left, i, val);
-    //                }
-    //                else {
-    //                    updateTree(root->right, i, val);
-    //                }
-    //                root->sum = root->left->sum + root->right->sum;
-    //            }
-    //        }
-    //
-    //        segmentTree* buildTree(vector<int>& nums, int start, int end) {
-    //            if (start>end) {
-    //                return NULL;
-    //            }
-    //            else {
-    //                segmentTree* p = new segmentTree(start, end);
-    //                if (start == end) {
-    //                    p->sum = nums[start];
-    //                }
-    //                else {
-    //                    int mid = start + (end - start)/2;
-    //                    p->left = buildTree(nums, start, mid);
-    //                    p->right = buildTree(nums, mid+1, end);
-    //                    if (p->left!=NULL && p->right!=NULL) {
-    //                        p->sum = p->left->sum + p->right->sum;
-    //                    }
-    //                    else if (p->left!=NULL) {
-    //                        p->sum = p->left->sum;
-    //                    }
-    //                    else if (p->right!=NULL) {
-    //                        p->sum = p->right->sum;
-    //                    }
-    //                    else {
-    //                        p->sum = 0;
-    //                    }
-    //                }
-    //                return p;
-    //            }
-    //        }
-    //    public:
-    //        numArrayTree(vector<int>& array) {
-    //            this->root = buildTree(array, 0, array.size()-1);
-    //        }
-    //        int sumRange(int start, int end) {
-    //            return sumRange(root, start, end);
-    //        }
-    //
-    //        void updateTree(int i, int val) {
-    //            updateTree(root, i, val);
-    //        }
-    //    };
-    //
-    //    void testSegmentTree(int i) {
-    //        vector<int> array;
-    //        for (int j=0; j<i; ++j) {
-    //            array.push_back(j);
-    //        }
-    //        numArrayTree* nat = new numArrayTree(array);
-    //        nat->updateTree(3, 10);
-    //        cout<<nat->sumRange(3, 7)<<endl;
-    //    }
-    //
-    //    class numArrayBIT {
-    //    private:
-    //        vector<int> nums;
-    //        vector<int> bits;
-    //        int n;
-    //
-    //        void init(int i, int val) {
-    //            i++;
-    //            while (i<=n)  {
-    //                bits[i] += val;
-    //                i += (i & -i);
-    //            }
-    //        }
-    //
-    //        int getSum(int i) {
-    //            int sum=0;
-    //            i++;
-    //            while (i>0) {
-    //                sum += bits[i];
-    //                i = i - (i&-i);
-    //            }
-    //            return sum;
-    //        }
-    //    public:
-    //        numArrayBIT(vector<int> nums) {
-    //            this->nums = nums;
-    //            n = nums.size();
-    //            bits = vector<int>(n+1, 0);
-    //            for (int i=0; i<n; ++i) {
-    //                init(i, nums[i]);
-    //            }
-    //        }
-    //
-    //        void update(int i, int val) {
-    //            int diff = val - nums[i];
-    //            nums[i] = val;
-    //            init(i, diff);
-    //        }
-    //
-    //        int sumRange(int i, int j) {
-    //            return getSum(j) - getSum(i-1);
-    //        }
-    //    };
-    //
-    //    void testBits(int i) {
-    //        vector<int> array;
-    //        for (int j=0; j<i; ++j) {
-    //            array.push_back(j);
-    //        }
-    //        numArrayBIT* nab = new numArrayBIT(array);
-    //        nab->update(3, 10);
-    //        cout<<nab->sumRange(3, 7)<<endl;;
-    //    }
+       //Array Update and Query
+    
+       //Naive
+       class numArrayNaive {
+       private:
+           vector<int> nums;
+       public:
+           numArrayNaive(vector<int>& nums) {
+               this->nums = nums;
+           }
+           void update(int i, int val) {
+               this->nums[i] = val;
+           }
+           int sumRange(int i, int j) {
+               int sum = 0;
+               for (int low = i; low <= j; ++low) {
+                   sum += nums[low];
+               }
+               return sum;
+           }
+       };
+    
+    
+       void testNaive(int i) {
+           vector<int> array;
+           for (int j=0; j<i; ++j) {
+               array.push_back(j);
+           }
+           numArrayNaive* nan = new numArrayNaive(array);
+           cout<<nan->sumRange(3, 7);
+       }
+    
+       //Naive with Buffer
+       class numArrayBuffer {
+       private:
+           vector<int> nums;
+           vector<long> sums;
+           vector<pair<int, int>> buffer;
+       public:
+           numArrayBuffer(vector<int>& nums) {
+               this->nums = nums;
+               this->sums = vector<long>(nums.size() + 1);
+               for (int i=0; i<nums.size()-1; ++i) {
+                   sums[i+1]=nums[i]+sums[i];
+               }
+           }
+    
+           void update(int i, int val) {
+               buffer.push_back(make_pair(i, val-nums[i]));
+               nums[i] = val;
+               if (buffer.size() > 300) {
+                   for (int j = 0; j<nums.size()-1; ++j) {
+                       sums[j+1] = nums[j] + sums[j];
+                   }
+               }
+           }
+    
+           int sumRange(int i, int j) {
+               long res = sums[j+1] - sums[i];
+               for (int m = 0; m < buffer.size(); ++m) {
+                   if (buffer[m].first <= j && buffer[m].first >= i) {
+                       res += buffer[m].second;
+                   }
+               }
+               if (res >= INT_MAX || res <= INT_MIN) {
+                   throw out_of_range("error");
+               }
+               else {
+                   return (int)res;
+               }
+           }
+       };
+    
+       void testBuffer(int n) {
+           vector<int> array;
+           for (int j=0; j<n; ++j) {
+               array.push_back(j);
+           }
+           numArrayBuffer* nan = new numArrayBuffer(array);
+           cout<<nan->sumRange(3, 7);
+       }
+    
+    
+       //Segment Tree
+       struct segmentTree {
+           int start, end;
+           segmentTree *left, *right;
+           int sum;
+           segmentTree(int s, int e): start(s), end(e) {
+               left=NULL;
+               right=NULL;
+               sum=0;
+           }
+       };
+    
+    
+       class numArrayTree {
+       private:
+           segmentTree* root;
+    
+           int sumRange(segmentTree* root, int i, int j) {
+               if(root==NULL) {
+                   return 0;
+               }
+               if (root->start == i && root->end == j) {
+                   return root->sum;
+               }
+               else {
+                   int mid = root->start + (root->end-root->start)/2;
+                   if (j <= mid) {
+                       return sumRange(root->left, i, j);
+                   }
+                   else if (i >= mid + 1) {
+                       return sumRange(root->right, i, j);
+                   }
+                   else {
+                       return sumRange(root->right, mid+1, j) +
+                       sumRange(root->left, i, mid);
+                   }
+               }
+           }
+           void updateTree(segmentTree* root, int i, int val) {
+               if (root->start == root->end) {
+                   root->sum = val;
+               }
+               else {
+                   int mid = root->start + (root->end - root->start)/2;
+                   if (i <= mid) {
+                       updateTree(root->left, i, val);
+                   }
+                   else {
+                       updateTree(root->right, i, val);
+                   }
+                   root->sum = root->left->sum + root->right->sum;
+               }
+           }
+    
+           segmentTree* buildTree(vector<int>& nums, int start, int end) {
+               if (start>end) {
+                   return NULL;
+               }
+               else {
+                   segmentTree* p = new segmentTree(start, end);
+                   if (start == end) {
+                       p->sum = nums[start];
+                   }
+                   else {
+                       int mid = start + (end - start)/2;
+                       p->left = buildTree(nums, start, mid);
+                       p->right = buildTree(nums, mid+1, end);
+                       if (p->left!=NULL && p->right!=NULL) {
+                           p->sum = p->left->sum + p->right->sum;
+                       }
+                       else if (p->left!=NULL) {
+                           p->sum = p->left->sum;
+                       }
+                       else if (p->right!=NULL) {
+                           p->sum = p->right->sum;
+                       }
+                       else {
+                           p->sum = 0;
+                       }
+                   }
+                   return p;
+               }
+           }
+       public:
+           numArrayTree(vector<int>& array) {
+               this->root = buildTree(array, 0, array.size()-1);
+           }
+           int sumRange(int start, int end) {
+               return sumRange(root, start, end);
+           }
+    
+           void updateTree(int i, int val) {
+               updateTree(root, i, val);
+           }
+       };
+    
+       void testSegmentTree(int i) {
+           vector<int> array;
+           for (int j=0; j<i; ++j) {
+               array.push_back(j);
+           }
+           numArrayTree* nat = new numArrayTree(array);
+           nat->updateTree(3, 10);
+           cout<<nat->sumRange(3, 7)<<endl;
+       }
+    
+       class numArrayBIT {
+       private:
+           vector<int> nums;
+           vector<int> bits;
+           int n;
+    
+           void init(int i, int val) {
+               i++;
+               while (i<=n)  {
+                   bits[i] += val;
+                   i += (i & -i);
+               }
+           }
+    
+           int getSum(int i) {
+               int sum=0;
+               i++;
+               while (i>0) {
+                   sum += bits[i];
+                   i = i - (i&-i);
+               }
+               return sum;
+           }
+       public:
+           numArrayBIT(vector<int> nums) {
+               this->nums = nums;
+               n = nums.size();
+               bits = vector<int>(n+1, 0);
+               for (int i=0; i<n; ++i) {
+                   init(i, nums[i]);
+               }
+           }
+    
+           void update(int i, int val) {
+               int diff = val - nums[i];
+               nums[i] = val;
+               init(i, diff);
+           }
+    
+           int sumRange(int i, int j) {
+               return getSum(j) - getSum(i-1);
+           }
+       };
+    
+       void testBits(int i) {
+           vector<int> array;
+           for (int j=0; j<i; ++j) {
+               array.push_back(j);
+           }
+           numArrayBIT* nab = new numArrayBIT(array);
+           nab->update(3, 10);
+           cout<<nab->sumRange(3, 7)<<endl;;
+       }
     //Calculator series II
     //Most General Case: Can handle +, -, *, /, ^, (, ) and Negative sign
     int Calculate(string s) {

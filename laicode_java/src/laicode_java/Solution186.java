@@ -14,6 +14,9 @@ import java.util.*;
 public class Solution186 {
 	public List<List<Integer>> solve(int[] array, int target) {
 		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		if(array==null || array.length<3) {
+			return result;
+		}
 		helper(array, target, result);
 		return result;
 	}

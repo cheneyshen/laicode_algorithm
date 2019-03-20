@@ -14,7 +14,7 @@ import java.util.*;
  { 2, 1, 3, 3, 4 }, the largest rectangle area is 3 * 3 = 9(starting from index 2 and ending at index 4)
  2  3  4
  2*1  2*(1-0+1)  3*1 3*(3-2+1) 4*()
- stack : 1. 升序 2. 小于 计算
+ 
  */
 public class Solution198 {
 	//O(N^2)
@@ -37,35 +37,46 @@ public class Solution198 {
 	}
 	
 	//O(N)
+	/*
+	 * 1 2 3 4 5
+	 * 5 * (5-3-1)
+	 * 4 * (5-2-1)
+	 * 3 * (5-1-1)
+	 * 2 * (5-0-1)
+	 * 1 * (5-0)
+	 * 5 4 3 2 1
+	 * 5 
+	 * 5 * (1-0)
+	 * 4
+	 * 4 * (2-0)
+	 * 3
+	 * 3 * (3-0)
+	 * 2 
+	 * 2 * (4-0)
+	 * 1
+	 * 1 * (5-0)
+	 * 碰到这种序列题可以从递增或者递减序列推导
+	 */
 	public int largest(int[] array, int n) {
-		if(array==null || array.length<1) {
-			return 0;
-		}
-		int leng=array.length;
-		Stack<Integer> stk = new Stack<Integer>();
-		int result=0;
-		for(int i=0; i<=leng; i++) {
-			int height = (i==leng ? 0:array[i]);
-			if(stk.isEmpty() || height>=array[stk.peek()]) {
-				stk.push(i);
-			} else {
-				int index = stk.pop();
-				result = Math.max(result, array[index]*(stk.isEmpty() ? i : i-1-stk.peek()));
-				i--;	//
+		int res = 0;
+		//用来保存递增序列
+		Deque<Integer> stk = new LinkedList<>();
+		//如果是递增序列，i==array.length触发弹栈动作
+		for(int i=0; i<=array.length; i++) {
+			//cur用来比较，因为array[i]始终为非负数，所以可设置为0
+			int cur = (i==array.length?0:array[i]);
+			//弹栈动作直到遇到小于当前数的数
+			while(!stk.isEmpty() && cur<=array[stk.peekFirst()]) {
+				//长方形高度为栈顶元素，并且弹栈
+				int height = array[stk.pollFirst()];
+				//长方形左边为0或者栈顶+1
+				int left = stk.isEmpty()?0:stk.peekFirst()+1;
+				res = Math.max(res, height*(i-left));
 			}
+			//把当前元素压栈
+			stk.push(i);
 		}
-		Stack<Integer> stack = new Stack<Integer>();
-		for(int i=0; i<=leng;i++) {
-			int h = i==leng?0:array[i];
-			while(!stack.isEmpty() && h<array[stack.peek()]) {
-				int height = array[stack.pop()];
-				int start = stack.isEmpty()? -1 : stack.peek();
-				int area = height *(i-1-start);
-				result = Math.max(result, area);
-			}
-			stack.push(i);
-		}
-		return result;
+		return res;
 	}
 	
 	public static void main(String[] args) {

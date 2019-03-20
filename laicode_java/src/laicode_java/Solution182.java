@@ -18,21 +18,24 @@ public class Solution182 {
 			return null;
 		}
 		List<List<Integer>> result = new ArrayList<List<Integer>>();
-		helper(array, target, result);
-		return result;
-	}
-	
-	private void helper(int[] array, int target, List<List<Integer>> result) {
-		HashMap<Integer, Integer> dict = new HashMap<Integer, Integer>();
-		HashMap<Integer, Boolean> checker = new HashMap<Integer, Boolean>();
-		for(int i=0; i<array.length; i++) {
-			if(dict.containsKey(target-array[i]) && dict.get(target-array[i]) > 0 && !checker.containsKey(array[i])) {
-				result.add(Arrays.asList(target-array[i], array[i]));
-				checker.put(array[i], true);
-				checker.put(target-array[i], true);
+		Arrays.sort(array);
+		int left = 0, right = array.length-1;
+		while(left<right) {
+			int cur = array[left]+array[right];
+			if(cur==target) {
+				result.add(Arrays.asList(array[left], array[right]));
+				int newleft = left;
+				while(newleft < right && array[newleft] == array[left]) {
+					newleft++;
+				}
+				left = newleft;
+			} else if(array[left]+array[right]<target) {
+				left++;
+			} else {
+				right--;
 			}
-			dict.put(array[i], i+1);
 		}
+		return result;
 	}
 	
 	public static void main(String[] args) {

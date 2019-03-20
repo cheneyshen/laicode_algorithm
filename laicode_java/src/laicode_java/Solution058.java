@@ -19,7 +19,16 @@ import java.util.*;
 //
 //    the result is [5, 3, 8, 11, 4, 1]
 public class Solution058 {
-	List<Integer> zigZag(TreeNode root) {
+	public class TreeNode {
+		public int key;
+		public TreeNode left;
+		public TreeNode right;
+		public TreeNode(int key) {
+			this.key = key;
+		}
+	}
+	
+	public List<Integer> zigZag(TreeNode root) {
 		if(root==null) {
 			return new LinkedList<Integer>();
 		}
@@ -55,6 +64,7 @@ public class Solution058 {
 		}
 		return list;
 	}
+	
 	public static void main(String[] args) {
 
 

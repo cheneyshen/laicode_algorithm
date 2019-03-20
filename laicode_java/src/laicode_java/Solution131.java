@@ -7,11 +7,11 @@ import java.util.*;
 //
 public class Solution131 {
 	class RandomListNode {
-		public int key;
+		public int value;
 		public RandomListNode next;
 		public RandomListNode random;
 		public RandomListNode(int key) {
-			this.key = key;
+			this.value = value;
 		}
 	}
 	
@@ -19,25 +19,29 @@ public class Solution131 {
 		if(head==null) {
 			return null;
 		}
-		RandomListNode dummy = new RandomListNode(0);
-		RandomListNode curr=dummy;
-		Map<RandomListNode, RandomListNode> dict = new HashMap<>();
-		while(head!=null) {
-			if(!dict.containsKey(head)) {
-				dict.put(head, new RandomListNode(head.key));
+		Map<RandomListNode, RandomListNode> map = new HashMap<>();
+		RandomListNode cur = head;
+		while(cur!=null) {
+			if(!map.containsKey(cur)) {
+				map.put(cur, new RandomListNode(cur.value));
 			}
-			curr.next=dict.get(head);
-			if(head.random!=null) {
-				if(!dict.containsKey(head.random)) {
-					dict.put(head.random, new RandomListNode(head.random.key));
+			if(cur.next!=null) {
+				if(!map.containsKey(cur.next)) {
+					map.put(cur.next, new RandomListNode(cur.next.value));
 				}
-				curr.random=dict.get(head.random);
+				map.get(cur).next = map.get(cur.next);
 			}
-			head=head.next;
-			curr=curr.next;
+			if(cur.random!=null) {
+				if(!map.containsKey(cur.random)) {
+					map.put(cur.random, new RandomListNode(cur.random.value));
+				}
+				map.get(cur).random = map.get(cur.random);
+			}
+			cur = cur.next;
 		}
-		return dummy.next;
+		return map.get(head);
 	}
+	
 	public static void main(String[] args) {
 
 

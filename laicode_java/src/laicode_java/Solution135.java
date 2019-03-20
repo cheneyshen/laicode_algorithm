@@ -37,22 +37,23 @@ public class Solution135 {
 	}
 	
 	public int closest(TreeNode root, int target) {
-		int result = root.key;
+		int res = Integer.MAX_VALUE;
 		while(root!=null) {
 			if(root.key == target) {
-				return target;
-			}
-			else if (root.key < target) {
+				return root.key;
+			} else if(root.key < target) {
+				if(Math.abs(root.key-target)<Math.abs(res-target)) {
+					res = root.key;
+				}
 				root = root.right;
-			}
-			else {
+			} else {
+				if(Math.abs(root.key-target)<Math.abs(res-target)) {
+					res = root.key;
+				}
 				root = root.left;
 			}
-			if (root!=null && (Math.abs(root.key - target) < Math.abs(result - target))) {
-				result = root.key;
-			}
 		}
-		return result;
+		return res;
 	}
 	
 	public static void main(String[] args) {

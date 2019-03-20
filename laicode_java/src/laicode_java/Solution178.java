@@ -31,12 +31,16 @@ public class Solution178 {
 	}
 	
 	public TreeNode reverse(TreeNode root) {
-		if(root==null || root.left==null) {
+		if (root==null || (root.left==null && root.right==null)) {
 			return root;
 		}
+		// subtree will be 3
 		TreeNode subtree = reverse(root.left);
+		// 2.left = 1
 		root.left.left = root;
+		// 2.right = 5
 		root.left.right = root.right;
+		// 1.left = null, 1.right = null
 		root.left = null;
 		root.right = null;
 		return subtree;

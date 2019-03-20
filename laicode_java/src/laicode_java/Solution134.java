@@ -13,37 +13,53 @@ public class Solution134 {
 		public ListNode next;
 		public ListNode(int value) {
 			this.value=value;
-			next=null;
+			this.next=null;
 		}
 	}
+	
 	public ListNode merge(List<ListNode> listOfLists) {
-		PriorityQueue<ListNode> minHeap = new PriorityQueue<ListNode>(11, new MyComparator());
-		ListNode dummy = new ListNode(0);
+		if(listOfLists==null || listOfLists.size()==0) {
+			return null;
+		}
+		if(listOfLists.size()==1) {
+			return listOfLists.get(0);
+		}
+		ListNode res = null;
+		for(int i=0; i<listOfLists.size(); i++) {
+			res = mergeHelper(res, listOfLists.get(i));
+		}
+		return res;
+	}
+	
+	private ListNode mergeHelper(ListNode a, ListNode b) {
+		if(a==null) {
+			return b;
+		}
+		if(b==null) {
+			return a;
+		}
+		ListNode dummy = new ListNode(-1);
 		ListNode cur = dummy;
-		for(ListNode node : listOfLists) {
-			if(node!=null) {
-				minHeap.offer(node);
+		while(a!=null && b!=null) {
+			if(a.value<=b.value) {
+				cur.next = a;
+				cur = cur.next;
+				a = a.next;
+			} else {
+				cur.next = b;
+				cur = cur.next;
+				b = b.next;
 			}
 		}
-		while(!minHeap.isEmpty()) {
-			cur.next = minHeap.poll();
-			if(cur.next.next != null) {
-				minHeap.offer(cur.next.next);
-			}
-			cur = cur.next;
+		if(a!=null) {
+			cur.next = a;
+		}
+		if(b!=null) {
+			cur.next = b;
 		}
 		return dummy.next;
 	}
 	
-	static class MyComparator implements Comparator<ListNode> {
-		@Override
-		public int compare(ListNode o1, ListNode o2) {
-			if(o1.value == o2.value) {
-				return 0;
-			}
-			return o1.value < o2.value ? -1 : 1;
-		}
-	}
 	public static void main(String[] args) {
 
 

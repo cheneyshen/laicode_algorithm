@@ -22,16 +22,12 @@ public class Solution117 {
 		}
 		int slow=0;
 		for(int fast1=0, fast2=0; fast2<array.length;) {
-			if(array[fast2]==array[fast1]) {
-				while(fast2<array.length && array[fast2]==array[fast1]) {
-					fast2++;
-				}
+			fast1=fast2;
+			while(fast2<array.length && array[fast1]==array[fast2]) {
+				fast2++;
 			}
-			if(fast2>fast1+1) {
-				fast1=fast2;
-			}
-			else {
-				array[slow++] = array[fast1++];
+			if(fast2-fast1==1) {
+				array[slow++] = array[fast1];
 			}
 		}
 		return Arrays.copyOf(array, slow);

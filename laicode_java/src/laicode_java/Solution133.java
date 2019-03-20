@@ -9,9 +9,9 @@ import java.util.*;
 //
 //    The input arrayOfArrays is not null, none of the arrays is null either.
 public class Solution133 {
-	static class Entry {
+	static class Node {
 		int x, y, value;
-		Entry(int x, int y, int value) {
+		public Node(int x, int y, int value) {
 			this.x = x;
 			this.y = y;
 			this.value = value;
@@ -19,32 +19,33 @@ public class Solution133 {
 	}
 	
 	public int[] merge(int[][] arrayOfArrays) {
-		PriorityQueue<Entry> minHeap = new PriorityQueue<Entry>(11, new MyComparator());
-		int length = 0;
+		if(arrayOfArrays==null || arrayOfArrays.length<1) {
+			return new int[0];
+		}
+		PriorityQueue<Node> minHeap = new PriorityQueue<Node>(new MyComparator());
 		for(int i=0; i<arrayOfArrays.length; i++) {
-			int[] array = arrayOfArrays[i];
-			length+=array.length;
-			if(array.length>0) {
-				minHeap.offer(new Entry(i, 0, array[0]));
+			if(arrayOfArrays[i].length>0) {
+				minHeap.offer(new Node(arrayOfArrays[i][0], i, 0));
 			}
 		}
-		int[] result = new int[length];
-		int cur=0;
+		List<Integer> res = new ArrayList<>();
 		while(!minHeap.isEmpty()) {
-			Entry tmp = minHeap.poll();
-			result[cur++] = tmp.value;
-			if(tmp.y+1 < arrayOfArrays[tmp.x].length) {
-				tmp.y++;
-				tmp.value = arrayOfArrays[tmp.x][tmp.y];
-				minHeap.offer(tmp);
+			Node cur = minHeap.poll();
+			res.add(cur.value);
+			if(cur.y+1<arrayOfArrays[cur.x].length) {
+				minHeap.offer(new Node(arrayOfArrays[cur.x][cur.y+1], cur.x, cur.y+1));
 			}
 		}
-		return result;
+		int[] output = new int[res.size()];
+		for(int i=0; i<res.size(); i++) {
+			output[i] = res.get(i);
+		}
+		return output;
 	}
 	
-	private static class MyComparator implements Comparator<Entry> {
+	private static class MyComparator implements Comparator<Node> {
 		@Override
-		public int compare(Entry e1, Entry e2) {
+		public int compare(Node e1, Node e2) {
 			if (e1.value==e2.value) {
 				return 0;
 			}

@@ -9,18 +9,27 @@ import java.util.*;
 //The two given strings are not null
 //Examples
 //
-//S = ¡°abcde¡±, T = ¡°cbabdfe¡±, the longest common subsequence of s and t is {¡®a¡¯, ¡®b¡¯, ¡®d¡¯, ¡®e¡¯}, the length is 4.
+//S = â€œabcdeâ€, T = â€œcbabdfeâ€, the longest common subsequence of s and t is {â€˜aâ€™, â€˜bâ€™, â€˜dâ€™, â€˜eâ€™}, the length is 4.
 public class Solution177 {
 	public int longest(String s, String t) {
+	   /*
+            a a a a a
+	     a  1 1 1 1 1
+	     b  1 1 1 1 1
+	     b  1 1 1 1 1
+	     a  1 2 2 2 2
+	     b  1 2 2 2 2
+	     a  1 2 3 3 3
+	    */
 		if(s==null || t==null || s.length()==0 || t.length()==0) {
 			return 0;
 		}
+		//æˆ‘ä»¬éœ€è¦åˆå§‹åŒ–é•¿åº¦+1çš„äºŒç»´æ•°ç»„ï¼Œå½“i==0&&j==0çš„æ—¶å€™é»˜è®¤ä¸º0
+		//å› ä¸ºæˆ‘ä»¬çš„induction ruleä¾èµ–äºmatrix[i-1][j-1]
 		int[][] matrix = new int[s.length()+1][t.length()+1];
 		for(int i=0; i<=s.length(); i++) {
 			for(int j=0; j<=t.length(); j++) {
-				if(i==0 || j==0) {
-					matrix[i][j]=0;
-				} else if(s.charAt(i-1) == t.charAt(j-1)) {
+				if(s.charAt(i-1) == t.charAt(j-1)) {
 					matrix[i][j]=matrix[i-1][j-1]+1;
 				} else {
 					matrix[i][j] = Math.max(matrix[i-1][j], matrix[i][j-1]);

@@ -14,28 +14,24 @@ import java.util.*;
 //the 5th smallest is 3 ^ 3 * 5 * 7 = 945
 public class Solution193 {
 	public long Kth(int k) {
-		PriorityQueue<Long> queue = new PriorityQueue<Long>();
-		queue.add((long) (3*5*7));
-		HashSet<Long> visited = new HashSet<Long>();
-		visited.add((long)3*5*7);
-		int index=k;
-		while(index>1) {
-			long curr = queue.poll();
-			if(visited.contains(curr*3)==false) {
-				queue.add(curr*3);
-				visited.add((long)curr*3);
+		Queue<Long> minheap = new PriorityQueue<Long>();
+		Set<Long> seen = new HashSet<>();
+		minheap.offer(3*5*7L);
+		seen.add(3*5*7L);
+		while(k>1) {
+			long cur = minheap.poll();
+			if(seen.add(cur*3)) {
+				minheap.offer(cur*3);
 			}
-			if(visited.contains(curr*5)==false) {
-				queue.add(curr*5);
-				visited.add((long)curr*5);
+			if(seen.add(cur*5)) {
+				minheap.offer(cur*5);
 			}
-			if(visited.contains(curr*7)==false) {
-				queue.add(curr*7);
-				visited.add((long)curr*7);
+			if(seen.add(cur*7)) {
+				minheap.offer(cur*7);
 			}
-			index--;
+			k--;
 		}
-		return queue.peek();
+		return minheap.peek();
 	}
 	
 	public static void main(String[] args) {

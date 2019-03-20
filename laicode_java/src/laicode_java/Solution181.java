@@ -25,9 +25,7 @@ public class Solution181 {
 					result.add(Arrays.asList(j, i));
 				}
 			}
-			if(!map.containsKey(array[i])) {
-				map.put(array[i], new ArrayList<Integer>());
-			}
+			map.putIfAbsent(array[i], new ArrayList<Integer>());
 			map.get(array[i]).add(i);
 		}
 		return result;

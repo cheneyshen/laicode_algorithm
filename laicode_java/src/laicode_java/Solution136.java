@@ -42,12 +42,12 @@ public class Solution136 {
 	
 	public int largestSmaller(TreeNode root, int target) {
 		int result=Integer.MIN_VALUE;
-		while(root!=null) {
-			if(root.key>=target) {
+		TreeNode cur = root;
+		while(cur != null) {
+			if(cur.key >= target) {
 				root = root.left;
-			}
-			else {
-				result=root.key;
+			} else {
+				result = Math.max(result, cur.key);
 				root = root.right;
 			}
 		}

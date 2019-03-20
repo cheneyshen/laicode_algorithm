@@ -10,55 +10,37 @@ import java.util.*;
 //A = { 4, 1, 3, 2 }, we should get B = { 3, 0, 1, 0 }.
 //Requirement:
 //time complexity = O(nlogn).
-/*	1 2 3 4
- * 
+/*	
+ * 该题对应leetcode 315
  */
 public class Solution276 {
-	public List<Integer> countSmaller(int[] nums) {
-		Integer[] result = new Integer[nums.length];
-		List<Integer> sorted = new ArrayList<>();
-		for(int i=nums.length-1; i>=0; i--) {
-			int index = findIndex(sorted, nums[i]);
-			result[i] = index;
-			sorted.add(index, nums[i]);
+	//TreeMap 实现方法O(Nlog(N))
+	public int[] countArray(int[] array) {
+		if(array==null || array.length==0) {
+			return array;
 		}
-		return Arrays.asList(result);
-	}
-	
-	private int findIndex(List<Integer> sorted, int target) {
-		if(sorted.size()==0) {
-			return 0;
+		if(array.length == 1) {
+			return new int[] {0};
 		}
-		int start=0;
-		int end=sorted.size()-1;
-		if(sorted.get(start)>=target) {
-			return 0;
-		}
-		if(sorted.get(end)<target) {
-			return end+1;
-		}
-		while(start+1<end) {
-			int mid = start+(end-start)/2;
-			if(sorted.get(mid)==target) {
-				end=mid;
-			} else if(sorted.get(mid)>target) {
-				end=mid;
-			} else {
-				start=mid;
+		int[] result = new int[array.length];
+		NavigableMap<Integer, Integer> map = new TreeMap<>();
+		//从后往前计算，对每个数字统计频率
+		for(int i=array.length-1; i>=0; i--) {
+			map.put(array[i], map.getOrDefault(array[i], 0)+1);
+			//NavigableMap的headMap统计有多少个比array[i]小的key
+			Map<Integer, Integer> headMap = map.headMap(array[i], false);
+			int value = 0;
+			for(Map.Entry<Integer, Integer> e : headMap.entrySet()) {
+				value += e.getValue();
 			}
+			result[i] = value;
 		}
-		if(sorted.get(start)>=target) {
-			return start;
-		} else {
-			return end;
-		}
+		return result;
 	}
 	
 	public static void main(String[] args) {
 		Solution276 ss = new Solution276();
-		List<Integer> result = new ArrayList<>();
 		int[] nums = new int[]{5,2,3,3,3,6,1};
-		result = ss.countSmaller(nums);
-		System.out.println(result);
+		System.out.println(ss.countArray(nums).toString());
 	}
 }

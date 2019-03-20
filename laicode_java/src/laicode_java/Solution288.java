@@ -13,58 +13,76 @@ read:
 		firstNonRepeating :
 	a   a   a   b   b   b   null*/
 public class Solution288 {
-	
-	final static int MAX_CHAR = 256;
-	
-	public char[] findFirstNonRepeating(char[] array)
-	{
-		// inDLL[x] contains pointer to a DLL node if x is present 
-        // in DLL. If x is not present, then inDLL[x] is NULL
-        List<Character> inDLL =new ArrayList<Character>();
-         
-        // repeated[x] is true if x is repeated two or more times.
-        // If x is not seen so far or x is seen only once. then 
-        // repeated[x] is false
-        boolean[] repeated =new boolean[MAX_CHAR];
-        char[] result = new char[array.length];
-        // Let us consider following stream and see the process
-     
-        for (int i=0;i < array.length;i++)
-        {
-            char x = array[i];
-             
-            // We process this character only if it has not occurred
-            // or occurred only once. repeated[x] is true if x is 
-            // repeated twice or more.s
-            if(!repeated[x])
-            {
-                // If the character is not in DLL, then add this at 
-                // the end of DLL.
-                if(!(inDLL.contains(x)))
-                {
-                    inDLL.add(x);
-                }
-                else    // Otherwise remove this character from DLL
-                {
-                    inDLL.remove((Character)x);
-                    repeated[x] = true; // Also mark it as repeated
-                }
-            }
-            
-            if(inDLL.size() != 0)
-            {
-                result[i] = inDLL.get(0);
-            } else {
-            	result[i] = ' ';
-            }
-        }
-        return result;
+	//根据LRU实现做的双向链表
+	class ListNode {
+		char key;
+		ListNode left, right;
+		public ListNode(char key) {
+			this.key = key;
+			this.left = null;
+			this.right = null;
+		}
+	}
+	//每个字符记录出现的Node位置
+	Map<Character, ListNode> map;
+	ListNode head, tail;
+	public Solution288() {
+		this.map = new HashMap<>();
+		this.head = null;
+		this.tail = null;
+	}
+	//跟LRU一致的remove方法
+	private void remove(ListNode cur) {
+		if(cur.right != null) {
+			cur.right.left = cur.left;
+		}
+		if(cur.left != null) {
+			cur.left.right = cur.right;
+		}
+		if(cur==head) {
+			head = head.right;
+		}
+		if(cur==tail) {
+			tail = tail.left;
+		}
+		cur.left = null;
+		cur.right = null;
+	}
+	//跟LRU一致的insert方法
+	private void insert(ListNode cur) {
+		if(head==null) {
+			head=cur;
+			tail=cur;
+		} else {
+			//插入右边
+			tail.right = cur;
+			cur.left = tail;
+			tail = cur;
+		}
+	}
+	/*
+	 * read方法，不存在则插入最右侧
+	 * 否则从map删除
+	 */
+	public void read(char ch) {
+		if(!map.containsKey(ch)) {
+			ListNode cur = new ListNode(ch);
+			insert(cur);
+			map.put(ch, cur);
+		} else {
+			ListNode cur = map.get(ch);
+			remove(cur);
+		}
+	}
+	//firstNonRepeating方法返回head
+	public Character firstNonRepeating() {
+		if(head!=null) {
+			return head.key;
+		}
+		return null;
 	}
 	
 	public static void main(String[] args) {
-		Solution288 ss = new Solution288();
-		char[] array = {'a',   'b',   'c',   'a',  'c',   'c',    'b'};
-		array  = ss.findFirstNonRepeating(array);
-		System.out.println(array);
+
 	}
 }

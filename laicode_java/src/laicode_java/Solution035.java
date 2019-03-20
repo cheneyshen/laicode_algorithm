@@ -44,17 +44,26 @@ public class Solution035 {
 		if(head==null || head.next==null) {
 			return head;
 		}
-		ListNode dummy = new ListNode(0);
-		dummy.next = head;
-		ListNode cur = dummy;
-		while(cur.next!=null && cur.next.next!=null) {
-			ListNode next = cur.next.next;
-			cur.next.next = next.next;
-			next.next = cur.next;
-			cur.next = next;
-			cur = cur.next.next;
+		int count = 0;
+		ListNode cur = head;
+		while(cur!=null) {
+			cur = cur.next;
+			count++;
+			if(count==2) {
+				break;
+			}
 		}
-		return dummy.next;
+		if(count==2) {
+			cur = reverseInPairsI(cur);
+			while(count>0) {
+				ListNode next = head.next;
+				head.next = cur;
+				cur = head;
+				head = next;
+				count--;
+			}
+		}
+		return cur;
 	}
 	
 	public static void main(String[] args) {
@@ -69,6 +78,11 @@ public class Solution035 {
 		l3.next = l4;
 		l4.next = l5;
 		l5.next = l6;
+		l6.next = new ListNode(7);
 		l1 = reverseInPairsI(l1);
+		while(l1!=null) {
+			System.out.println(l1.value);
+			l1=l1.next;
+		}
 	}
 }

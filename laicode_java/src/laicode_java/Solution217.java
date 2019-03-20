@@ -10,66 +10,51 @@ import java.util.*;
 //Examples
 //<0, 0>, <1, 1>, <2, 3>, <3, 3>, the maximum set of points are {<0, 0>, <1, 1>, <2, 3>}, the size is 3.
 public class Solution217 {
-	class SortbyX implements Comparator<List<Integer>> {
-		public int compare(List<Integer> a, List<Integer> b) {
-			return a.get(0)-b.get(0);
+	static class Point {
+		public int x;
+		public int y;
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
 		}
 	}
-	
-	class SortbyY implements Comparator<List<Integer>> {
-		public int compare(List<Integer> a, List<Integer> b) {
-			return a.get(1)-b.get(1);
-		}
-	}
-	
-	public int most(List<List<Integer>> points) {
-		if(points==null || points.size()<1) {
+	public int largest(Point[] points) {
+		if(points==null || points.length<1) {
 			return 0;
 		}
-		if(points.size()==1) {
-			return 1;
-		}
-		int result=1;
-		Collections.sort(points, new SortbyX());
-		for(int i=0; i<points.size(); i++) {
-			HashMap<Double, Integer> slope = new HashMap<>();
-			int sameX=1;
-			for(int j=i+1; j<points.size(); j++) {
-				if(points.get(j).get(0)==points.get(i).get(0)) {
-					sameX++;
-					result = Math.max(result, sameX);
-				}
-				else if(points.get(j).get(1)>points.get(i).get(1)) {
-					double degree = (points.get(j).get(1)-points.get(i).get(1)) / (points.get(j).get(0)-points.get(i).get(0));
-					if(slope.containsKey(degree)) {
-						slope.put(degree, slope.get(degree)+1);
-					} else {
-						slope.put(degree, 1);
-					}
-					result = Math.max(result, slope.get(degree));
+		Arrays.sort(points, new Comparator<Point>() {
+
+			@Override
+			public int compare(Point o1, Point o2) {
+				// TODO Auto-generated method stub
+				if(o1.x == o2.x) {
+					return o1.y-o2.y;
+				} else {
+					return o1.x-o2.x;
 				}
 			}
+			
+		});
+		//每个点都给记录一个最大的Positive Slope
+		int[] longest = new int[points.length];
+		int res = 0;
+		//为什么从0开始？我们规定1个点也是合理的解,最后结果如果是1则返回0，做特殊处理
+		for(int i=0; i<points.length; i++) {
+			int max = 0;
+			//对每个点从左边开始算斜率，induction rule是依赖左边的点的
+			for(int j=0; j<i; j++) {
+				if(points[i].x>points[j].x && points[i].y>points[j].y) {
+					max = Math.max(max, longest[i]);
+				}
+			}
+			//所以找出最左边的最大的值，再+1得到新的值
+			longest[i] = max+1;
+			res = Math.max(res, longest[i]);
 		}
-		return result;
+		//结果只有一个点就返回0
+		return res==1 ? 0 : res;
 	}
+	
 	public static void main(String[] args) {
-		Solution217 ss = new Solution217();
-		List<Integer> a = new ArrayList<>();
-		a.add(0);a.add(0);
-		List<Integer> b = new ArrayList<>();
-		b.add(1);b.add(1);
-//		List<Integer> c = new ArrayList<>();
-//		c.add(2);c.add(2);
-		List<Integer> d = new ArrayList<>();
-		d.add(2);d.add(3);
-		List<Integer> e = new ArrayList<>();
-		e.add(3);e.add(3);
-		List<List<Integer>> array=new ArrayList<>();
-		array.add(a);
-		array.add(b);
-//		array.add(c);
-		array.add(d);
-		array.add(e);
-		System.out.println(ss.most(array));
 	}
 }

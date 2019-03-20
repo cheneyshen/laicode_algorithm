@@ -18,10 +18,10 @@ public class Solution132 {
 	}
 	
 	public List<GraphNode> copy(List<GraphNode> graph) {
-		if(graph==null) {
+		if(graph==null || graph.isEmpty()) {
 			return null;
 		}
-		HashMap<GraphNode, GraphNode> dict = new HashMap<>();
+		Map<GraphNode, GraphNode> dict = new HashMap<>();
 		for(GraphNode node : graph) {
 			if(!dict.containsKey(node)) {
 				dict.put(node, new GraphNode(node.key));
@@ -31,7 +31,7 @@ public class Solution132 {
 		return new ArrayList<GraphNode>(dict.values());
 	}
 	
-	private void DFS(GraphNode seed, HashMap<GraphNode, GraphNode> map) {
+	private void DFS(GraphNode seed, Map<GraphNode, GraphNode> map) {
 		GraphNode copy = map.get(seed);
 		for(GraphNode nei : seed.neighbors) {
 			if(!map.containsKey(nei)) {

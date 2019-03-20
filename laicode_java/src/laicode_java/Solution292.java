@@ -11,33 +11,26 @@ The original string only contains alphabetic characters.
 	pattern “s11d” matches input “sophisticated” since “11” matches eleven chars “ophisticate”.*/
 public class Solution292 {
 	boolean match(String input, String pattern) {
-		return helper(input, 0, pattern, 0);
-	}
-	
-	boolean helper(String input, int id, String pattern, int ip) {
-		if(id==input.length() && ip==pattern.length()) {
-			return true;
-		} else if (input.length()==id || pattern.length()==ip) {
+		if(input==null || pattern==null) {
 			return false;
-		} else if (Character.isDigit(pattern.charAt(ip))) {
-			int i=ip;
-			int num=0;
-			while(i<pattern.length() && Character.isDigit(pattern.charAt(i))) {
-				num = num*10 + pattern.charAt(i)-'0';
-				i++;
-			}
-			if(id+num>input.length()) {
-				return false;
+		}
+		int fast = 0, slow = 0;
+		while(fast<pattern.length()) {
+			if(Character.isLetter(pattern.charAt(fast))) {
+				if(input.charAt(slow)!=pattern.charAt(fast)) {
+					return false;
+				}
+				fast++; slow++;
 			} else {
-				return helper(input, id+num, pattern, i);
-			}
-		} else {
-			if (input.charAt(id)!=pattern.charAt(ip)) {
-				return false;
-			} else {
-				return helper(input, id, pattern, ip+1);
+				int cur = 0;
+				while(fast<pattern.length() && Character.isDigit(pattern.charAt(fast))) {
+					cur = cur*10 + pattern.charAt(fast)-'0';
+					fast++;
+				}
+				slow+=cur;
 			}
 		}
+		return slow==input.length() && fast==pattern.length();
 	}
 	public static void main(String[] args) {
 

@@ -15,42 +15,19 @@ import java.util.*;
 //    -1 5 4 5 4 2 1 5 4 3
 public class Solution120 {
 	public int[] largestAndSecond(int[] array) {
-		int [] result=new int[2];
-		result[0]=0;
-		result[1]=0;
-		if(array==null || array.length==0) {
-			return result;
+		if(array.length==2) {
+			return new int[] {Math.max(array[0], array[1]), Math.min(array[0], array[1])};
 		}
-		int leng=array.length;
-		if(leng==1) {
-			result[0]=array[0];
-			result[1]=array[1];
-			return result;
-		}
-		int [] vector = new int[leng*2];
-		for(int i=leng*2-1; i>=leng; i--) {
-			vector[i]=array[i-leng];
-		}
-		for(int i=leng-1; i>0; i--) {
-			vector[i] = Math.max(vector[i*2], vector[i*2+1]);
-		}
-		result[0]=vector[1];
-		for(int i=1; i<leng; ) {
-			if(vector[i]==vector[2*i]) {
-				if(result[1]<vector[2*i+1]) {
-					result[1]=vector[2*i+1];
-				}
-				i=2*i;
-			} else {
-				if(result[1]<vector[2*i]) {
-					result[1]=vector[2*i];
-				}
-				i=2*i+1;
+		int l1=Integer.MIN_VALUE, l2=Integer.MAX_VALUE;
+		for(int i:array) {
+			if(i>l1) {
+				l2=l1;l1=i;
+			} else if(i>l2) {
+				l2=i;
 			}
 		}
-		return result;
+		return new int[] {l1, l2};
 	}
-	
 	
 	public static void main(String[] args) {
 		Solution120 ss = new Solution120();

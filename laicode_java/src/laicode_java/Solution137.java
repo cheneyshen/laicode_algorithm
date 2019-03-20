@@ -28,25 +28,22 @@ public class Solution137 {
 	public int minCost(int[] cuts, int length) {
 		int leng = cuts.length;
 		int[] fullcuts = new int[leng+2];
-		Arrays.fill(fullcuts, 0);
 		// 0 2 4 7 10
-		for(int i=1; i<leng; i++) {
+		for(int i=0; i<leng; i++) {
 			fullcuts[i+1] = cuts[i];
 		}
-		fullcuts[leng+1]=length;
+		fullcuts[leng+1] = length;
 		int[][] matrix = new int[leng+2][leng+2];
-		for(int dist=1; dist<leng+2; dist++) {
-			for(int i=0; i<leng+2-dist; i++) {
-				int j=dist+i;
-				if(dist==1) {
-					matrix[i][j]=0;
-				}
-				else {
-					matrix[i][j]=Integer.MAX_VALUE;
-					for(int k=i+1; k<j; k++) {
-						matrix[i][j]=Math.min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+		for(int i=1; i<fullcuts.length; i++) {
+			for(int j=i-1; j>=0; j--) {
+				if(i-j==1) {
+					matrix[j][i] = 0;
+				} else {
+					int cur = Integer.MAX_VALUE;
+					for(int k=j+1; k<i; k++) {
+						cur = Math.min(cur, matrix[j][k]+matrix[k][i]);
 					}
-					matrix[i][j]+=fullcuts[j]-fullcuts[i];
+					matrix[j][i] = cur+ fullcuts[i]-fullcuts[j];
 				}
 			}
 		}

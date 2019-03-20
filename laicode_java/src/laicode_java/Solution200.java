@@ -20,6 +20,7 @@ import laicode_java.Solution194.Triple;
 //
 //    at position (1, 2) there is 1 unit of water trapped.
 public class Solution200 {
+	//implements Comparable方便PriorityQueue
 	static class Element implements Comparable<Element> {
 		public int i, j, height;
 		public Element(int i, int j, int height) {
@@ -27,75 +28,48 @@ public class Solution200 {
 			this.j=j;
 			this.height=height;
 		}
-		public Element() {
-			this.i=0;
-			this.j=0;
-			this.height=0;
-		}
 		@Override
 		public int compareTo(Element arg0) {
 			return (int) (this.height-arg0.height);
 		}
 	}
-	
+	int[][] dirs = new int[][] {{1,0},{0,1},{-1,0},{0,-1}};
 	public int maxTrapped(int[][] matrix) {
-		int m=matrix.length, n=matrix[0].length;
-		if(m<3 || n<3) {
+		if(matrix==null || matrix.length<1 || matrix[0].length<1) {
 			return 0;
 		}
-		boolean[][] visited = new boolean[m][n];
-		PriorityQueue<Element> queue = new PriorityQueue<Element>();
-		int result=0;
-		Element ele = new Element();
+		int m = matrix.length, n = matrix[0].length;
+		//用优先队列存最低水位
+		Queue<Element> que = new PriorityQueue<>();
+		boolean[][] seen = new boolean[m][n];
 		for(int i=0; i<m; i++) {
-			ele = new Element(i, 0, matrix[i][0]);
-			queue.add(ele);
-			visited[i][0]=true;
-			ele = new Element(i, n-1, matrix[i][n-1]);
-			queue.add(ele);
-			visited[i][n-1]=true;
-		}
-		for(int j=0; j<n; j++) {
-			ele = new Element(0, j, matrix[0][j]);
-			queue.add(ele);
-			visited[0][j]=true;
-			ele = new Element(m-1, j, matrix[m-1][j]);
-			queue.add(ele);
-			visited[m-1][j]=true;
-		}
-		while(!queue.isEmpty()) {
-			ele = queue.poll();
-			List<Element> neis = getNeis(ele, matrix, m, n, visited);
-			for(int k=0; k<neis.size(); k++) {
-				if(visited[neis.get(k).i][neis.get(k).j]==true) {
-					continue;
+			for(int j=0; j<n; j++) {
+				//周围四周所有点全部入队列, 同时访问标记
+				if(i==0 || i==m-1 || j==0 || j==n-1) {
+					que.offer(new Element(i, j, matrix[i][j]));
+					seen[i][j] = true;
 				}
-				visited[neis.get(k).i][neis.get(k).j]=true;
-				result+=Math.max(ele.height-neis.get(k).height, 0);
-				neis.get(k).height = Math.max(ele.height, neis.get(k).height);
-				queue.add(neis.get(k));
 			}
 		}
-		return result;
-	}
-	
-	private List<Element> getNeis(Element ele, int[][] matrix, int m, int n, boolean[][] visited) {
-		int i = ele.i;
-		int j = ele.j;
-		List<Element> result = new ArrayList<Element>();
-		if(i+1<m) {
-			result.add(new Element(i+1, j, matrix[i+1][j]));
+		int res = 0;
+		while(!que.isEmpty()) {
+			Element cur = que.poll();
+			for(int[] dir:dirs) {
+				//算周围邻居，如果没被访问则更新水位
+				int newx = dir[0]+cur.i;
+				int newy = dir[1]+cur.j;
+				if(seen[newx][newy] == false) {
+					if(matrix[newx][newy]<cur.height) {
+						res += Math.abs(matrix[newx][newy]-cur.height);
+						matrix[newx][newy] = cur.height;
+					}
+				}
+				seen[newx][newy] = true;
+				//邻居入优先队列
+				que.offer(new Element(newx, newy, matrix[newx][newy]));
+			}
 		}
-		if(j+1<n) {
-			result.add(new Element(i, j+1, matrix[i][j+1]));
-		}
-		if(i-1>=0) {
-			result.add(new Element(i-1, j, matrix[i-1][j]));
-		}
-		if(j-1>=0) {
-			result.add(new Element(i, j-1, matrix[i][j-1]));
-		}
-		return result;
+		return res;
 	}
 	
 	public static void main(String[] args) {

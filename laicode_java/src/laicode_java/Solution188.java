@@ -12,7 +12,11 @@ import java.util.*;
 //A = {1, 2, 2, 3, 4}, target = 12, return false
 public class Solution188 {
 	public boolean exist(int[] array, int target) {
-		HashMap<Integer, List<Integer>> dict = new HashMap<Integer, List<Integer>>();
+		if(array==null || array.length<4) {
+			return false;
+		}
+		Arrays.sort(array);
+		Map<Integer, List<Integer>> dict = new HashMap<Integer, List<Integer>>();
 		for(int j=1; j<array.length; j++) {
 			for(int i=0; i<j; i++) {
 				int other=target-array[i]-array[j];

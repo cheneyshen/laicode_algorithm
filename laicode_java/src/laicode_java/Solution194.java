@@ -20,53 +20,47 @@ import java.util.*;
 //
 //The 2nd closest is <3, 2, 3>, distance is sqrt(9 + 4 + 9)
 public class Solution194 {
-	class Triple implements Comparable<Triple>{
-		public int i1, i2, i3;
-		Triple(int i1, int i2, int i3) {
-			this.i1=i1;
-			this.i2=i2;
-			this.i3=i3;
+	class Triple implements Comparable<Triple> {
+		private int i1, i2, i3;
+		public Triple(int x, int y, int z) {
+			this.i1 = x;
+			this.i2 = y;
+			this.i3 = z;
 		}
 		@Override
-		public int compareTo(Triple arg0) {
+		public int compareTo(Triple o) {
+			// TODO Auto-generated method stub
 			long ea = this.i1*this.i1+this.i2*this.i2+this.i3*this.i3;
-			long eb = arg0.i1*arg0.i1+arg0.i2*arg0.i2+arg0.i3*arg0.i3;
-			return (int) (ea-eb);
+			long eb = o.i1*o.i1 + o.i2*o.i2 + o.i3*o.i3;
+			return (int)(ea-eb);
 		}
 	}
 	
 	public List<Integer> closet(int[] a, int[] b, int[] c, int k) {
-		if(a==null || b==null || c==null) {
-			return null;
-		}
-		int aleng=a.length;
-		int bleng=b.length;
-		int cleng=c.length;
-		if(aleng<1 || bleng<1 || cleng<1) {
+		if(a==null || b==null || c==null || a.length<1 || b.length<1 || c.length<1) {
 			return null;
 		}
 		Arrays.sort(a);
 		Arrays.sort(b);
 		Arrays.sort(c);
-		PriorityQueue<Triple> queue = new PriorityQueue<Triple>(11);
-		for(int x=0; x<aleng && x<k; x++) {
-			for(int y=0; y<bleng && y<k; y++) {
-				for(int z=0; z<cleng && z<k; z++) {
-					Triple curr = new Triple(a[x], b[y], c[z]);
-					queue.add(curr);
+		Queue<Triple> que = new PriorityQueue<Triple>();
+		for(int i=0; i<a.length && i<k; i++) {
+			for(int j=0; j<b.length && j<k; j++) {
+				for(int m=0; m<c.length && m<k; m++) {
+					que.add(new Triple(a[i], b[j], c[m]));
 				}
 			}
 		}
-		Triple curr = null;
-		while(!queue.isEmpty() && k>0) {
-			curr = queue.poll();
+		Triple cur = null;
+		List<Integer> res = new ArrayList<>();
+		while(!que.isEmpty() && k>0) {
+			cur = que.poll();
 			k--;
 		}
-		List<Integer> result=new ArrayList<Integer>();
-		result.add(curr.i1);
-		result.add(curr.i2);
-		result.add(curr.i3);
-		return result;
+		if(k==0) {
+			res.addAll(Arrays.asList(cur.i1, cur.i2, cur.i3));
+		}
+		return res;
 	}
 	
 	public static void main(String[] args) {

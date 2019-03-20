@@ -14,16 +14,22 @@ import java.util.*;
 //A = {1, 2, 1, 2, 1}, return 1
 public class Solution206 {
 	public int majority(int[] array) {
+		//结果初始化为第一个
 		int result=array[0];
+		//等于major的个数
 		int count=1;
+		//从第二个元素开始机选
 		for(int i=1; i<array.length; i++) {
+			//major个数为0,更新major
 			if(count==0) {
 				result=array[i];
 				count++;
 			}
+			//不等于major,major抵消掉一个
 			else if(array[i]!=result) {
 				count--;
 			}
+			//major个数增加
 			else {
 				count++;
 			}
