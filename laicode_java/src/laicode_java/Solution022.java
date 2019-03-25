@@ -20,6 +20,24 @@ import java.util.*;
 
 public class Solution022 {
 	public int solve(int[] input, int target) {
+		/*
+		 * if mid == target
+		 * 	return
+		 * else if mid == left
+		 * 	left++
+		 * else if mid > left
+		 *   2 5 6 7 0 1 2
+		 *   if mid > target && target >= left
+		 *   	right = mid - 1
+		 *   else
+		 *   	left = mid + 1
+		 * else 
+		 * 	2 5 6 0 1 1 2
+		 *   if left <= target && target < mid
+		 *   	right = mid - 1
+		 *   else 
+		 *   	left = mid + 1
+		 */
 		if(input==null || input.length==0) {
 			return -1;
 		}
@@ -28,23 +46,18 @@ public class Solution022 {
 			int mid=left+(right-left)/2;
 			if(input[mid]==target) {
 				return mid;
-			}
-			else if(input[mid]==input[left]) {
+			} else if(input[mid]==input[left]) {
 				left++;
-			}
-			else if(input[mid]>input[left]) {
+			} else if(input[mid]>input[left]) {
 				if(input[mid]>=target && target>=input[left]) {
 					right=mid-1;
-				}
-				else {
+				} else {
 					left=mid+1;
 				}
-			}
-			else {
+			} else {
 				if(input[mid]<=target && input[right]>=target) {
 					left=mid+1;
-				}
-				else {
+				} else {
 					right=mid-1;
 				}
 			}

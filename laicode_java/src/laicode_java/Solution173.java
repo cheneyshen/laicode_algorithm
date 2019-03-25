@@ -17,27 +17,30 @@ import java.util.*;
 //“abbcccdeee” → “ab2c3de3”
 public class Solution173 {
 	public String compress(String input) {
-		if(input==null || input.length()<=1) {
+		if(input==null || input.length()<2) {
 			return input;
 		}
-		String output="";
-		output+=input.charAt(0);
+		StringBuilder sb = new StringBuilder();
+		//先带第一个字母
+		sb.append(input.charAt(0));
 		int count=1;
 		for(int i=1; i<input.length();) {
+			//计算次数
 			while(i<input.length() && input.charAt(i)==input.charAt(i-1)) {
 				count++;
 				i++;
 			}
+			//>1的时候才加数字
 			if(count>1) {
-				output+=String.valueOf(count);
+				sb.append(String.valueOf(count));
 			}
 			if(i<input.length()) {
-				output+=input.charAt(i);
+				sb.append(input.charAt(i));
 			}
 			count=1;
 			i++;
 		}
-		return output;
+		return sb.toString();
 	}
 	
 	public static void main(String[] args) {

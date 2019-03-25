@@ -21,47 +21,40 @@ public class Solution280 {
 	    int n=array.length;
 	    for (int i = 0; i < n; i++) 
 	    {
-	        // alternatively
+	    	//我们先用s2去得到s1当中最大的元素，s1当然最后会被弹空
+	    	//交换地，我们再用s1去得到s2当中最大的元素，当然s2最后也被弹空
 	        if (i % 2 == 0)
 	        {
 	            while (!s1.isEmpty())
 	            {
 	                int t = s1.pop();
-	                if (s2.isEmpty())  {
-	                    s2.push(t);     
+	                // s2为空或者比栈顶大的话，直接入栈
+	                if (s2.isEmpty() || s2.peek()<=t)  {
+	                    s2.push(t);
 	                } else {
-	                    if (s2.peek() > t)
-	                    {
-	                        // swapping
-	                        int temp = s2.pop();
-	                        s2.push(t);
-	                        s2.push(temp);
-	                    } else {
-	                        s2.push(t);
-	                    }
+                        // 为了保持最大的在栈顶，交换栈顶元素
+                        int temp = s2.pop();
+                        s2.push(t);
+                        s2.push(temp);
 	                }
 	            }
-	            // tricky step
+	            // 此时最大的就在栈顶，弹出扔到数组尾部
 	            array[n-1-i] = s2.pop();
 	        } else {
 	            while(!s2.isEmpty())
 	            {
 	                int t = s2.pop();
-	                if (s1.isEmpty()) {
+	                // s1为空或者比栈顶大的话，直接入栈
+	                if (s1.isEmpty() || s1.peek()<=t) {
 	                    s1.push(t);
 	                } else {
-	                    if (s1.peek() > t)
-	                    {
-	                        // swapping
-	                        int temp = s1.pop();  
-	                        s1.push(t);
-	                        s1.push(temp);
-	                    } else {
-	                        s1.push(t);
-	                    }
+                        // 为了保持最大的在栈顶，交换栈顶元素
+                        int temp = s1.pop();  
+                        s1.push(t);
+                        s1.push(temp);
 	                }
 	            }
-	            // tricky step
+	            // 此时最大的就在栈顶，弹出扔到数组尾部
 	            array[n-1-i] = s1.pop();
 	        }
 	    }

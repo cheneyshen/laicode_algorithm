@@ -12,7 +12,10 @@ import java.util.*;
 //{1, 2, 2, 3, 3, 3} --> {1, 2, 2, 3, 3}
 //{2, 1, 2, 2, 2, 3} --> {2, 1, 2, 2, 3}
 public class Solution315 {
-	int[] dedup(int[] array) {
+	public int[] dedup(int[] array) {
+		if(array == null || array.length<3) {
+			return array;
+		}
 		int end = -1;
 		for(int i=0; i<array.length; i++) {
 			if(end==-1 || array[end]!=array[i]) {
@@ -29,26 +32,6 @@ public class Solution315 {
 		return Arrays.copyOf(array, end+1);
 	}
 
-    public List<Integer> countSmaller(int[] nums) {
-        
-        List<Integer> news = new LinkedList<>();
-        List<Integer> result = Arrays.asList(new Integer[nums.length]);
-        for(int i=nums.length-1; i>=0; i--) {
-            int left=0, right=news.size();
-            while(left<right) {
-                int mid=left+(right-left)/2;
-                if(news.get(mid)>=nums[i])
-                    right=mid;
-                else
-                    left=mid+1;
-            }
-            result.set(i, right);
-            news.add(right, nums[i]);
-            
-        }
-        List<Integer> list = result;
-        return list;
-    }
 	public static void main(String[] args) {
 
 

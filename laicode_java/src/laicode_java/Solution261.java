@@ -16,13 +16,9 @@ import java.util.*;
 //A1 = {2, 1, 2, 5, 7, 1, 9, 3}, A2 = {2, 1, 3}, A1 is sorted to {2, 2, 1, 1, 3, 5, 7, 9}
 public class Solution261 {
 	static class Data {
-		int value;
-		int index;
-		Data() {
-			this.value = -1;
-			this.index = -1;
-		}
-		Data(int value, int index) {
+		private int value;
+		private int index;
+		public Data(int value, int index) {
 			this.value = value;
 			this.index = index;
 		}
@@ -45,10 +41,12 @@ public class Solution261 {
 	
 	public List<Integer> sortSpecial(int[] A1, int[] A2) {
 		List<Data> result = new ArrayList<>();
-		HashMap<Integer, Integer> indexer = new HashMap<>();
+		Map<Integer, Integer> indexer = new HashMap<>();
+		//先对每个元素index初始化为-1
 		for(int i=0; i<A1.length; i++) {
 			indexer.put(A1[i], -1);
 		}
+		//再更新index为坐标值
 		for(int i=0; i<A2.length; i++) {
 			indexer.put(A2[i], i);
 		}
@@ -57,6 +55,7 @@ public class Solution261 {
 			Data curr = new Data(A1[i], index);
 			result.add(curr);
 		}
+		//根据坐标值排序
 		Collections.sort(result, new MyComparator());
 		List<Integer> output=new ArrayList<>();
 		for(int i=0; i<result.size(); i++) {

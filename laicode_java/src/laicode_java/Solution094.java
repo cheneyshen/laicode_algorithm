@@ -13,6 +13,7 @@ import java.util.*;
 //{ 2, 3, 2, 1, 4, 5, 2, 11 }, the maximum profit you can make is(5 - 1) + (11 - 2) = 13
 
 public class Solution094 {
+	//根据Buy StockI把数组分成两部分，然后就能O(N^2)完成计算
 	public int maxProfit(int[] array) {
 		if(array==null || array.length<=1) {
 			return 0;
@@ -24,13 +25,6 @@ public class Solution094 {
 			result=Math.max(result, leftmax+rightmax);
 		}
 		return result;
-	}
-	
-	public int maxProfit1(int[] array) {
-		if(array==null || array.length<=1) {
-			return 0;
-		}
-		return maxHelper1(array, 2);
 	}
 	
 	private int maxHelper(int[] array, int left, int right) {
@@ -46,30 +40,18 @@ public class Solution094 {
 		return result;
 	}
 	
-	private int maxHelper1(int[] array, int k) {
-	    // f[k, ii] = max(f[k, ii-1], prices[ii] - prices[jj] + f[k-1, jj]) { jj in range of [0, ii-1] }
-        //          = max(f[k, ii-1], prices[ii] + max(f[k-1, jj] - prices[jj]))
-		if(array==null || array.length<=1) {
-			return 0;
+	public int maxProfit1(int[] array) {
+		//第一次买，卖，第二次买，卖，最后返回卖一次或者卖两次的最大值
+		int buy1=Integer.MIN_VALUE, sell1=0, buy2=buy1, sell2=sell1;
+		for(int i=0; i<array.length; i++) {
+			buy1 = Math.max(buy1, -array[i]);	//花了第一笔钱，所以要－
+			sell1 = Math.max(sell1, array[i] + buy1);	//挣得第一笔钱
+			buy2 = Math.max(buy2, -array[i] + sell1);	//再花了一笔钱
+			sell2 = Math.max(sell2, array[i] + buy2);	//再挣了一笔钱
 		}
-		int result=0;
-		int[][] matrix=new int[k+1][array.length];
-		for (int i = 0; i < matrix.length; i++) {
-			Arrays.fill(matrix[i], 0);
-		}
-		for(int kk=1; kk<=k; kk++) {
-			int temp=matrix[kk-1][0]-array[0];
-			for(int ii=1; ii<array.length; ii++) {
-				matrix[kk][ii]=Math.max(matrix[kk][ii-1], array[ii]+temp);
-				temp=Math.max(matrix[kk-1][ii]-array[ii], temp);
-				result=Math.max(result, matrix[kk][ii]);
-			}
-		}
-		return result;
-        // zero time	0 0 0 0 0 0 0 0  
-        //	1st time	0 1 1 1 3 4 4 10    tmp:-2, -2, -2, -1, -1, -1, -1
-        //	2nd time	0 1 1 1 6 7 7 13	tmp:-2, -1,  2,  2,  2,  2, 2
+		return Math.max(sell1, sell2);
 	}
+	
 	public static void main(String[] args) {
 
 

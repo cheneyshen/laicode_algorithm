@@ -1,6 +1,7 @@
 package laicode_java;
 
 import java.util.*;
+import java.util.logging.Level;
 
 //Reconstruct Binary Search Tree With Level Order Traversal
 //Given the levelorder traversal sequence of a binary search tree, reconstruct the original tree.
@@ -11,40 +12,32 @@ import java.util.*;
 //There are no duplicate keys in the binary search tree
 public class Solution212 {
 	public TreeNode reconstruct(int[] level) {
-		List<Integer> ll = new ArrayList<Integer>();
-		for(int i=0; i<level.length; i++) {
-			ll.add(level[i]);
-		}
-		int[] inorder = level;
-		Arrays.sort(inorder);
-		HashMap<Integer, Integer> dict = new HashMap<Integer, Integer>();
-		for(int i=0; i<inorder.length; i++) {
-			dict.put(inorder[i], i);
-		}
-		return helper(ll, 0, inorder.length-1, dict);
-	}
-	
-	private TreeNode helper(List<Integer> ll, int left, int right, HashMap<Integer, Integer> dict) {
-		if(left>right) {
+		if(level==null || level.length<1) {
 			return null;
 		}
-		else if(left==right) {
-			return new TreeNode(ll.get(0));
+		List<Integer> llist = new ArrayList<>();
+		for(int i:level) {
+			llist.add(i);
 		}
-		TreeNode root = new TreeNode(ll.get(0));
+		return helper(llist);
+	}
+	
+	private TreeNode helper(List<Integer> ll) {
+		if(ll.isEmpty()) {
+			return null;
+		}
+		TreeNode root = new TreeNode(ll.remove(0));
 		List<Integer> lefts=new ArrayList<Integer>();
 		List<Integer> rights=new ArrayList<Integer>();
-		int pivot = dict.get(ll.get(0));
-		for(int i=1; i<ll.size(); i++) {
-			if(dict.get(ll.get(i))<pivot) {
-				lefts.add(ll.get(i));
-			}
-			else if(dict.get(ll.get(i))>pivot) {
-				rights.add(ll.get(i));
+		for(int i : ll) {
+			if(i<root.key) {
+				lefts.add(i);
+			} else {
+				rights.add(i);
 			}
 		}
-		root.left = helper(lefts, left, pivot-1, dict);
-		root.right = helper(rights, pivot+1, right, dict);
+		root.left = helper(lefts);
+		root.right = helper(rights);
 		return root;
 	}
 	

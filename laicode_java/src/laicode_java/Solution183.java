@@ -17,9 +17,8 @@ public class Solution183 {
 			return null;
 		}
 		Arrays.sort(array);
-		List<Integer> result = new ArrayList<Integer>();
-		result.add(array[0]);
-		result.add(array[1]);
+		List<Integer> result = new ArrayList<>();
+		result =  Arrays.asList(array[0], array[1]);
 		if(array.length==2) {
 			return result;
 		}
@@ -27,11 +26,12 @@ public class Solution183 {
 		while(start<end) {
 			int sum = array[start]+array[end];
 			int dist = Math.abs(sum-target);
+			//说明在不断收敛，需要更新结果
 			if(dist<mini) {
-				result.set(0, array[start]);
-				result.set(1, array[end]);
+				result = Arrays.asList(array[start], array[end]);
 				mini = dist;
 			}
+			//dist==0, 直接返回，否则移动左右
 			if(dist==0) {
 				return result;
 			} else if(sum>target) {

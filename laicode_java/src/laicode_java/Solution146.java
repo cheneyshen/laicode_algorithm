@@ -8,17 +8,24 @@ import java.util.*;
 //Example:
 //
 //Input: 3, Return: 5
-/* M[i]����i����������ɶ��ٸ�BST
+/* M[i]����i����������ɶ��ٸ�BST
  * M[i]=sum(M[j-1]*M[i-j])
  *    1       2       3
  *  M1  M3  M1  M3  M2  M1
  */
 public class Solution146 {
 	public int numOfTrees(int n) {
+		/*
+		 * 动态规划
+		 * 0 -> 0
+		 * 1 -> 1
+		 * 如果2个以上，抽出一个做root,
+		 * 那么 func(i) += func(j) + func(i-j-1)
+		 */
 		if(n<=0) {
 			return 0;
 		}
-		else if(n==1) {
+		if(n==1) {
 			return 1;
 		}
 		int[] result= new int[n+1];

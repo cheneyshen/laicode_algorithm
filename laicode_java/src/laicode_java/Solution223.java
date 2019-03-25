@@ -19,37 +19,38 @@ public class Solution223 {
 			this.next=null;
 		}
 	}
-	public ListNode addTwo(ListNode left, ListNode right) {
-		ListNode result=new ListNode(-1);
-		ListNode output=result;
-		int carry=0;
-		while(left!=null && right!=null) {
-			carry+=left.key;
-			carry+=right.key;
-			result.next=new ListNode(carry%10);
+	public ListNode addTwo(ListNode l1, ListNode l2) {
+		//标准带dummy做法
+		ListNode dummy=new ListNode(-1);
+		ListNode curr=dummy;
+		int carry=0;	//进位符
+		while(l1!=null && l2!=null) {
+			carry+=l1.key;
+			carry+=l2.key;
+			curr.next=new ListNode(carry%10);
 			carry=carry/10;
-			result=result.next;
-			left=left.next;
-			right=right.next;
+			curr=curr.next;
+			l1=l1.next;
+			l2=l2.next;
 		}
-		while(left!=null) {
-			carry+=left.key;
-			result.next=new ListNode(carry%10);
+		while(l1!=null) {
+			carry+=l1.key;
+			curr.next=new ListNode(carry%10);
 			carry=carry/10;
-			result=result.next;
-			left=left.next;
+			curr=curr.next;
+			l1=l1.next;
 		}
-		while(right!=null) {
-			carry+=right.key;
-			result.next=new ListNode(carry%10);
+		while(l2!=null) {
+			carry+=l2.key;
+			curr.next=new ListNode(carry%10);
 			carry=carry/10;
-			result=result.next;
-			right=right.next;
+			curr=curr.next;
+			l2=l2.next;
 		}
 		if(carry!=0) {
-			result.next=new ListNode(carry);
+			curr.next=new ListNode(carry);
 		}
-		return output.next;
+		return dummy.next;
 	}
 	public static void main(String[] args) {
 		ListNode l1=new ListNode(2);

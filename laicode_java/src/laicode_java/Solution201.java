@@ -17,15 +17,14 @@ public class Solution201 {
 		}
 		int leng=array.length;
 		int left=0, right=leng-1;
+		//Swipe line 两边走，再根据最小短板求雨水
 		while (left < right) {
 			int minHeight = Math.min(array[left], array[right]);
 			result = Math.max(result, minHeight*(right-left));
-			if(left<right) {
-				if(array[left]<array[right]) {
-					left++;
-				} else {
-					right--;
-				}
+			if(array[left]<array[right]) {
+				left++;
+			} else {
+				right--;
 			}
 		}
 		return result;

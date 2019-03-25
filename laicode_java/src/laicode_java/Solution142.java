@@ -18,7 +18,7 @@ import java.util.*;
 //
 //          6     14
 //
-//    The diameter of this tree is 4 (2 鈫� 5 鈫� 11 鈫� 14)
+//    The diameter of this tree is 4 (2 → 5 → 11 →  14)
 //                      1
 //                   2     6
 //                3     4
@@ -40,16 +40,16 @@ public class Solution142 {
 	
 	public int diameter(TreeNode root) {
 		int[] result = new int[]{0};
-		height(root, result);
+		helper(root, result);
 		return result[0];
 	}
 	
-	private int height(TreeNode root, int[] result) {
+	private int helper(TreeNode root, int[] result) {
 		if(root==null) {
-			return -1;
+			return 0;
 		}
-		int leftHeight = height(root.left, result);
-		int rightHeight = height(root.right, result);
+		int leftHeight = helper(root.left, result);
+		int rightHeight = helper(root.right, result);
 		int height = Math.max(leftHeight, rightHeight) + 1;
 		result[0] = Math.max(result[0], leftHeight + rightHeight + 1);
 		return height;

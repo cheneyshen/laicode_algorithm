@@ -12,28 +12,29 @@ Examples
 { 2, 3, 2, 1, 4, 5, 2, 11 }, K = 3, the maximum profit you can make is(3 - 2) + (5 - 1) + (11 - 2) = 14*/
 
 public class Solution095 {
-	public int maxProfit(int[] array, int k) {
-		if(array==null || array.length<=1) {
+	public static int maxProfit(int[] array, int k) {
+		if(array==null || array.length<=1 || k<1) {
 			return 0;
 		}
-		if(k<1) {
-			return 0;
-		}
-		int[][] matrix=new int[k+1][array.length];
-		int result=0;
+		int[][] buysell = new int[k+1][array.length];
+		int result = 0;
 		for(int kk=1; kk<=k; kk++) {
-			int temp=matrix[kk-1][0]-array[0];
+			//当前次的第一手买
+			int prevbuy = buysell[kk-1][0]-array[0];
 			for(int ii=1; ii<array.length; ii++) {
-				matrix[kk][ii] = Math.max(matrix[kk][ii-1],	array[ii]+temp);
-				temp=Math.max(temp, matrix[kk-1][ii]-array[ii]);
-				result=Math.max(result, matrix[kk][ii]);
+				//当前次的卖
+				buysell[kk][ii] = Math.max(buysell[kk][ii-1], prevbuy + array[ii]);
+				//当前次的第二次买 再用上一次的卖-array[i]去更新
+				prevbuy = Math.max(prevbuy, buysell[kk-1][ii]-array[ii]);
+				result = Math.max(result, buysell[kk][ii]);
 			}
 		}
 		return result;
 	}
 	
 	public static void main(String[] args) {
-
+		int[] array = new int[]{2, 3, 2, 1, 4, 5, 2, 11};
+		System.out.println(maxProfit(array, 3));
 
 	}
 }

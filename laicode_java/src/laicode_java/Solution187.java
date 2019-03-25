@@ -11,7 +11,9 @@ import java.util.*;
 //  A = {1, 3, 5}, B = {8, 2}, C = {3}, target = 14, return true(pick 3 from A, pick 8 from B and pick 3 from C)
 public class Solution187 {
 	public boolean exist(int[] a, int[] b, int[] c, int target) {
-		HashMap<Integer, Integer> dict = new HashMap<Integer, Integer>();
+		//把C数组的值进行缓存，然后对A B 数组计算
+		//时间复杂度O(n^2)
+		Map<Integer, Integer> dict = new HashMap<Integer, Integer>();
 		if(a==null || b==null || c==null || a.length<1 || b.length<1 || c.length<1) {
 			return false;
 		}

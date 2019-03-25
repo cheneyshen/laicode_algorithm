@@ -7,7 +7,7 @@ import java.util.*;
 //
 //    Make a deep copy of the original skip list.
 public class Solution130 {
-	class SkipListNode {
+	static class SkipListNode {
 		public int key;
 		public SkipListNode next;
 		public SkipListNode forward;
@@ -20,25 +20,28 @@ public class Solution130 {
 		if(head==null) {
 			return null;
 		}
-		SkipListNode dummy = new SkipListNode(0);
-		SkipListNode curr = dummy;
 		
 		HashMap<SkipListNode, SkipListNode> dict = new HashMap<SkipListNode, SkipListNode>();
-		while(head!=null) {
-			if(!dict.containsKey(head)) {
-				dict.put(head, new SkipListNode(head.key));
+		SkipListNode curr = head;
+		while(curr != null) {
+			if(!dict.containsKey(curr)) {
+				dict.put(curr, new SkipListNode(curr.key));
 			}
-			curr.next=dict.get(head);
-			if(head.forward!=null) {
-				if(!dict.containsKey(head.forward)) {
-					dict.put(head.forward, new SkipListNode(head.forward.key));
+			if(curr.next!=null) {
+				if(!dict.containsKey(curr.next)) {
+					dict.put(curr.next, new SkipListNode(curr.key));
 				}
-				curr.forward=dict.get(head.forward);
+				dict.get(curr).next = dict.get(curr.next);
 			}
-			head=head.next;
+			if(curr.forward!=null) {
+				if(!dict.containsKey(curr.forward)) {
+					dict.put(curr.forward, new SkipListNode(curr.forward.key));
+				}
+				dict.get(curr).forward=dict.get(curr.forward);
+			}
 			curr=curr.next;
 		}
-		return curr.next;
+		return dict.get(head);
 	}
 	
 	public static void main(String[] args) {

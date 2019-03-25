@@ -28,6 +28,7 @@ public class Solution210 {
 			TreeNode root = new TreeNode(pre[left]);
 			return root;
 		}
+		//先序遍历，没啥好说的，小的扔左边，大的扔右边
 		TreeNode root= new TreeNode(pre[left]);
 		int i=left;
 		for(i=left+1; i<=right; i++) {

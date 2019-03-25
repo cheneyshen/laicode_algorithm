@@ -20,30 +20,30 @@ public class Solution090 {
 		if(array.length==0) {
 			return -1;
 		}
-		int[] jumps=new int[array.length];
+		//记录跳到i所需要的最小的步数
+		int len = array.length;
+		int[] jumps = new int[len];
 		Arrays.fill(jumps, Integer.MAX_VALUE);
 		jumps[0]=0;
-		for(int i=0; i<array.length; i++) {
+		for(int i=0; i<len; i++) {
 			for(int j=array[i]; j>=0; j--) {
+				//从当前i能跳到i+array[i]，那i+array[i]的步数就是i的+1
 				if(jumps[i]!=Integer.MAX_VALUE) {
-					if(i+j<array.length) {
+					if(i+j<len) {
+						//没达到最后一个元素，刷新步数
 						jumps[i+j]=Math.min(jumps[i+j], jumps[i]+1);
 					} else {
+						//直接返回
 						return jumps[i]+1;
 					}
 				}
 			}
 		}
-		if(array[array.length-1]>0) {
-			if(jumps[array.length-1]!=Integer.MAX_VALUE) {
-				return jumps[array.length-1]+1;
-				
-			} else {
-				return -1;
-			}
-		} else {
-			return -1;
+		//最后需要检查是不是Integer.MAX_VALUE
+		if(array[len-1] != 0 && jumps[len-1]!=Integer.MAX_VALUE) {
+			return jumps[len-1]+1;
 		}
+		return -1;
 	}
 	public static void main(String[] args) {
 		int[] array = new int[] {1,3,2,0,2};

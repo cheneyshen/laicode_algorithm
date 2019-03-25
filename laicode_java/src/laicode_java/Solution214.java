@@ -32,19 +32,20 @@ public class Solution214 {
 		if(postorder==null || inorder==null) {
 			return null;
 		}
-		if(postorder.size() != inorder.size()) {
+		int pj=postorder.size()-1;
+		int ij=inorder.size()-1;
+		if(pj != ij) {
 			return null;
 		}
-		if(postorder.size()==1 || inorder.size()==1) {
+		if(pj==1 || ij==1) {
 			return new TreeNode(postorder.get(0));
 		}
-		int pi=0, pj=postorder.size()-1;
-		int ii=0, ij=inorder.size()-1;
 		TreeNode root = new TreeNode(postorder.get(pj));
 		List<Integer> leftp = new ArrayList<>();
 		List<Integer> rightp = new ArrayList<>();
 		List<Integer> lefti = new ArrayList<>();
 		List<Integer> righti = new ArrayList<>();
+		//遍历中序，先序数组，根据数字大小拆分
 		for(int i=0; i<=ij; i++) {
 			if(postorder.get(i) < postorder.get(pj)) {
 				leftp.add(postorder.get(i));
@@ -59,6 +60,7 @@ public class Solution214 {
 				righti.add(inorder.get(i));
 			}
 		}
+		//递归调用
 		root.left = recontruct(leftp, lefti);
 		root.right = recontruct(rightp, righti);
 		return root;

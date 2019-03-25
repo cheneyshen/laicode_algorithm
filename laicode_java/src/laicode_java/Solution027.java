@@ -18,31 +18,12 @@ import java.util.*;
 //    3rd, 4th smallest s are 9 (1 + 8, 4 + 5)
 //    5th smallest s is 3 + 8 = 11
 public class Solution027 {
-	class Pair {
-		int first, second;
-		public Pair(int first, int second) {
-			this.first=first;
-			this.second=second;
-		}
-	}
-	
-	class Combo {
-		int a,b;
-		public Combo(int a, int b) {
-			this.a=a;
-			this.b=b;
-		}
-		public String toString() {
-			return String.valueOf(a)+" "+String.valueOf(b);
-		}
-	}
-	
 	class Node {
-		Pair pa;
-		Pair pb;
-		public Node(Pair pa, Pair pb) {
-			this.pa=pa;
-			this.pb=pb;
+		int x, y, val;
+		public Node(int x, int y, int val) {
+			this.x = x;
+			this.y = y;
+			this.val = val;
 		}
 	}
 	
@@ -50,51 +31,28 @@ public class Solution027 {
 		PriorityQueue<Node> myque=new PriorityQueue<Node>(k, new Comparator<Node>() {
 			@Override
 			public int compare(Node o1, Node o2) {
-				int a1=o1.pa.first+o1.pa.first;
-				int b1=o2.pa.first+o2.pa.first;
+				int a1=o1.val;
+				int b1=o2.val;
 				if(a1==b1) {
 					return 0;
 				}
 				return a1>b1?1:-1;
 			}
 		});
-		Set<String> myset=new HashSet<String>();
-		int aleng=a.length;
-		int bleng=b.length;
-		int loop=k;
-		if(aleng==0 || bleng==0) {
-			return 0;
+		//一次性把A的所有元素都扔到优先队列里
+		//为什么这样做？可以一次性初始化很多
+		for(int i=0; i<a.length; i++) {
+			myque.offer(new Node(i, 0, a[i]+b[0]));
 		}
-		if(k<=0 || k>aleng*bleng) {
-			return 0;
-		}
-		Pair aone=new Pair(a[0], 0);
-		Pair bone=new Pair(b[0], 0);
-		Node one=new Node(aone, bone);
-		Combo newbo=new Combo(0, 0);
-		myque.add(one);
-		myset.add(newbo.toString());
 		while(!myque.isEmpty()) {
-			Node now=myque.poll();
-			loop--;
-			if(loop==0) {
-				return now.pa.first+now.pb.first;
+			k--;
+			Node cur = myque.poll();
+			if(k==0) {
+				return cur.val;
 			}
-			int aindex=now.pa.second;
-			int bindex=now.pb.second;
-			newbo=new Combo(aindex+1, bindex);
-			if(aindex+1<aleng && myset.contains(newbo.toString())==false) {
-				aone=new Pair(a[aindex+1], aindex+1);
-				Node newone=new Node(aone, now.pb);
-				myque.add(newone);
-				myset.add(newbo.toString());
-			}
-			newbo=new Combo(aindex, bindex+1);
-			if(bindex+1<bleng && myset.contains(newbo.toString())==false) {
-				bone=new Pair(b[bindex+1], bindex+1);
-				Node newtwo=new Node(now.pa, bone);
-				myque.add(newtwo);
-				myset.add(newbo.toString());
+			//这时根据弹出的A中元素再去组合新的Node
+			if(cur.y+1 < b.length) {
+				myque.offer(new Node(cur.x, cur.y+1, a[cur.x]+b[cur.y+1]));
 			}
 		}
 		return 0;

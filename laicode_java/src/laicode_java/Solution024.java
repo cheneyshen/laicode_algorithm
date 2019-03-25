@@ -19,46 +19,43 @@ public class Solution024 {
 			return 0;
 		}
 		int left=0, right=input.length-1;
+		//第一次出现的位置为first,最后一次出现的为last
 		int first=-1, last=-1;
+		//用Version3 Binary Search进行二分搜索
+		//left+1 < right
 		while(left<right-1) {
 			int mid=left+(right-left)/2;
-			if(input[mid]==target) {
+			//大于等于当前数,则right左移
+			if(input[mid]>=target) {
 				right=mid;
-			}
-			else if(input[mid]>target) {
-				right=mid;
-			}
-			else {
-				left=mid;
+			} else {
+				left=mid+1;
 			}
 		}
+		//目前left+1=right,只需要看这两个元素是不是等于target
 		if(input[left]==target) {
 			first=left;
-		}
-		else if(input[right]==target) {
+		} else if(input[right]==target) {
 			first=right;
 		}
 		if (first==-1) {
 			return 0;
 		}
+		//重置left, right再次搜索
 		left=0;
 		right=input.length-1;
 		while(left<right-1) {
 			int mid=left+(right-left)/2;
-			if(input[mid]==target) {
+			//小于等于当前数，则left右移
+			if(input[mid]<=target) {
 				left=mid;
-			}
-			else if(input[mid]<target) {
-				left=mid;
-			}
-			else {
-				right=mid;
+			} else {
+				right=mid-1;
 			}
 		}
 		if(input[right]==target) {
 			last=right;
-		}
-		else if(input[left]==target) {
+		} else if(input[left]==target) {
 			last=left;
 		}
 		return last-first+1;

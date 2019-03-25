@@ -16,24 +16,24 @@ import java.util.*;
 //      If the given string is null, we do not need to do anything.
 public class Solution081 {
 	public String duDup(String input) {
-		int leng=input.length();
-		if(leng<=1) {
+		if(input==null || input.length()<2) {
 			return input;
 		}
-		String result="";
-		result+=input.charAt(0);
-		for(int i=1; i<leng; ) {
-			if(result.length()>0 && input.charAt(i)==result.charAt(result.length()-1)) {
-				while(i<leng && input.charAt(i)==result.charAt(result.length()-1)) {
-					i++;
-				}
-				result=result.substring(0, result.length()-1);
-			} else {
-				result+=input.charAt(i);
-				i++;
+		StringBuilder result = new StringBuilder();
+		int fast = 0, leng = input.length();
+		while(fast<leng) {
+			int fast1=fast;
+			while(fast1<leng && input.charAt(fast)==input.charAt(fast1)) {
+				fast1++;
 			}
-		} 
-		return result;
+			//有重复的则跳过
+			//没有重复的则添加到结果中
+			if(fast1-fast==1) {
+				result.append(input.charAt(fast));
+			}
+			fast=fast1;
+		}
+		return result.toString();
 	}
 	
 	public static void main(String[] args) {

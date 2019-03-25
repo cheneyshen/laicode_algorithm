@@ -14,15 +14,16 @@ import java.util.*;
 public class Solution092 {
 
 	public int maxProfit(int[] array) {
-		int leng=array.length;
-		if(leng<=1) {
+		if(array==null || array.length<2) {
 			return 0;
 		}
-		int minprice=array[0];
-		int maxprofit=0;
+		int leng=array.length;
+		int minprice = array[0];
+		int maxprofit = 0;
+		//O(n)时间复杂度，刷新minprice, 再根据array[i]得出maxprofit
 		for(int i=0; i<leng; i++) {
-			minprice=Math.min(minprice, array[i]);
-			maxprofit=Math.max(maxprofit, array[i]-minprice);
+			minprice = Math.min(minprice, array[i]);
+			maxprofit = Math.max(maxprofit, array[i]-minprice);
 		}
 		return maxprofit;
 	}

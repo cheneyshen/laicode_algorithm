@@ -19,30 +19,31 @@ public class Solution008 {
 		if(tokens==null || tokens.length<=0) {
 			return 0;
 		}
-		Stack<Integer> stk=new Stack<Integer>();
+		Deque<Integer> stk=new LinkedList<>();
 		for (int i = 0; i < tokens.length; i++) {
 			if (tokens[i].charAt(0)>='1' && tokens[i].charAt(0)<='9') {
 				stk.push(tokens[i].charAt(0)-'0');
-			}
-			else if (tokens[i]=="+") {
-				int b=stk.pop();
-				int a=stk.pop();
-				stk.push(a+b);
-			}
-			else if (tokens[i]=="-") {
-				int b=stk.pop();
-				int a=stk.pop();
-				stk.push(a-b);
-			}
-			else if (tokens[i]=="*") {
-				int b=stk.pop();
-				int a=stk.pop();
-				stk.push(a*b);
-			}
-			else if (tokens[i]=="/") {
-				int b=stk.pop();
-				int a=stk.pop();
-				stk.push(a/b);
+			} else {
+				Integer b=stk.pop();
+				Integer a=stk.pop();
+				char cur = tokens[i].charAt(0);
+				switch(cur) {
+				case '+':
+					stk.push(a+b);
+					break;
+				case '-':
+					stk.push(a-b);
+					break;
+				case '*':
+					stk.push(a*b);
+					break;
+				case '/':
+					stk.push(a/b);
+					break;
+				default:
+					stk.push(0);
+					break;
+				}
 			}
 		}
 		return stk.peek();

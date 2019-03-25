@@ -11,7 +11,7 @@ import java.util.*;
 //
 public class Solution052 {
 
-	TreeNode solve(TreeNode root, int value) {
+	TreeNode search(TreeNode root, int value) {
 		if (root == null) {
 			return null;
 		}
@@ -19,11 +19,9 @@ public class Solution052 {
 		while (temp != null) {
 			if (temp.key == value) {
 				return temp;
-			}
-			else if (temp.key>value) {
+			} else if (temp.key>value) {
 				temp = temp.left;
-			}
-			else {
+			} else {
 				temp = temp.right;
 			}
 		}

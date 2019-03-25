@@ -31,7 +31,7 @@ public class Solution138 {
 	
 	public int maxPathSum(TreeNode root) {
 		if(root==null) {
-			return Integer.MIN_VALUE;
+			return 0;
 		}
 		int[] max = new int[]{Integer.MIN_VALUE};
 		helper(root, max);

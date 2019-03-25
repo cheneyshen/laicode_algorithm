@@ -11,43 +11,47 @@ import java.util.*;
 //A = {1, 2, 2, 4, 7}, target = 7, number of pairs is 6({1,2}, {1, 2}, {1, 4}, {2, 2}, {2, 4}, {2, 4})
 public class Solution184 {
 	public int smallerPairs(int[] array, int target) {
-		if(array==null || array.length<=1) {
+		if(array==null || array.length<2) {
 			return 0;
 		}
 		Arrays.sort(array);
-		if(array.length==2) {
-			if(array[0]+array[1]<target) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
 		int result=0;
+		// 对每个数字i, 计算对应的最远的j, 然后求距离
 		for(int i=0; i<array.length-1 && array[i]<=target; i++) {
-			int other=target-array[i];
-			int low=i, high=array.length-1, mid=i;
-			while(low<=high) {
-				mid = low + (high-low)/2;
-				if(array[mid]<other) {
-					if(mid+1<=high && array[mid+1]>other) {
-						break;
-					}
-					else {
-						low=mid+1;
-					}
-				} else {
-					if(mid-1>=low && array[mid-1]<other) {
-						mid=mid-1;
-						break;
-					}
-					else {
-						high=mid-1;
-					}
-				}
+			// 从i+1 到末尾 二分查找求
+			int j = search(array, i+1, array.length-1, target-array[i]);
+			if(j!=-1) {
+				result+=j-i;
 			}
-			result+=mid-i;
 		}
 		return result;
+	}
+	private int search(int[] array, int left, int right, int target) {
+		// binary search v3 2分查找
+		if(left+1>=right) {
+			if(right>left && array[right]<target) {
+				return right;
+			}
+			if(array[left]<target) {
+				return left;
+			}
+			return -1;
+		}
+		while(left+1<right) {
+			int mid = left+(right-left)/2;
+			if(array[mid]>=target) {
+				right=mid;
+			} else {
+				left=mid;
+			}
+		}
+		if(array[right]<target) {
+			return right;
+		}
+		if(array[left]<target) {
+			return left;
+		}
+		return -1;
 	}
 	
 	public static void main(String[] args) {

@@ -19,7 +19,10 @@ public class Solution028 {
 			next=null;
 		}
 	}
-	
+	/*
+	 * 选择排序，每次选取最小那个元素，然后交换值就好了
+	 * 头是当前node,尾是null
+	 */
 	public ListNode selectionSort(ListNode a) {
 		for(ListNode node1=a; node1!=null; node1=node1.next) {
 			ListNode min=node1;

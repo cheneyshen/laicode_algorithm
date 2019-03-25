@@ -14,9 +14,7 @@ import java.util.*;
 //C = "abcde", A = "adc", B = "be", return false
 public class Solution209 {
 	public boolean canMerge(String a, String b, String c) {
-		int x=a.length();
-		int y=b.length();
-		int z=c.length();
+		int x=a.length(), y=b.length(), z=c.length();
 		if(x+y!=z) {
 			return false;
 		}
@@ -29,6 +27,7 @@ public class Solution209 {
 //		1 1 0
 //		0 1 0
 //		0 1 1
+		//这么写直观些，先算连个边界，然后再看induction rule
 		for(int i=1; i<=x; i++) {
 			if(c.charAt(i-1) == a.charAt(i-1)) {
 				common[i][0]=true;

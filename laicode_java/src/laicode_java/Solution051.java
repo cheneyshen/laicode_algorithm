@@ -55,25 +55,24 @@ public class Solution051 {
 			root = new TreeNode(value);
 			return root;
 		}
+		// 我们需要parent帮我们插入左边还是右边
 		TreeNode parent = null;
 		TreeNode current = root;
 		while (current != null) {
 			if (current.key == value) {
 				return root;
-			}
-			else if (current.key>value) {
+			} else if (current.key>value) {
 				parent = current;
 				current = current.left;
-			}
-			else {
+			} else {
 				parent = current;
 				current = current.right;
 			}
 		}
+		//退出时，current==null
 		if (parent.key<value) {
 			parent.right = new TreeNode(value);
-		}
-		else {
+		} else {
 			parent.left = new TreeNode(value);
 		}
 		return root;

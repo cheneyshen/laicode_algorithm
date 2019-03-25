@@ -16,7 +16,37 @@ import java.util.*;
 //k << logn.
 
 public class Solution400 {
-
+	public int[] rainbowSortIII(int[] array, int k) {
+	    if(array==null || array.length<2) {
+	      return array;
+	    }
+	    int right = array.length-1;
+	    sortHelper(array, 0, right, 1, k);
+	    return array;
+	  }
+	  void sortHelper(int[] array, int left, int right, int from, int to) {
+	    if(from==to || left>=right) {
+	      return;
+	    }
+	    int mid = from +(to-from)/2;
+	    int l=left, r=right;
+	    while(l<=r) {
+	      while(l<=r && array[l] <= mid) {
+	        l++;
+	      }
+	      while(l<=r && array[r] > mid) {
+	        r--;
+	      }
+	      if(l<=r) {
+	        int t=array[l];
+	        array[l]=array[r];
+	        array[r]=t;
+	        l++;r--;
+	      }
+	    }
+	    sortHelper(array, left, r, from, mid);
+	    sortHelper(array, l, right, mid+1, to);
+	  }
 	public static void main(String[] args) {
 
 

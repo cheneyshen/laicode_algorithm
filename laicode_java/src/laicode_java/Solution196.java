@@ -15,13 +15,14 @@ import java.util.*;
 //  {  ' ',  ' ', 'E' } }
 //we should put the chair at (1, 1), so that the sum of cost from the chair to the two equipments is 2 + 0 + 2 = 4, which is minimal.
 public class Solution196 {
-	public List<Integer> solve(char[][] gym) {
+	public List<Integer> putChair(char[][] gym) {
 		int m=gym.length, n=gym[0].length;
 		List<Integer> result =new ArrayList<Integer>();
 		List<Integer> lat = new ArrayList<Integer>();
 		List<Integer> log = new ArrayList<Integer>();
 		for(int i=0; i<m; i++) {
 			for(int j=0; j<n; j++) {
+				//找到所有的E
 				if(gym[i][j]=='E') {
 					lat.add(i);
 					log.add(j);
@@ -31,6 +32,7 @@ public class Solution196 {
 		Collections.sort(lat);
 		Collections.sort(log);
 		int leng = lat.size();
+		//求中位数就好了
 		if(leng%2==0) {
 			int a = lat.get(lat.size()/2-1) + lat.get(lat.size()/2);
 			int b = log.get(log.size()/2-1) + log.get(log.size()/2);
@@ -49,7 +51,7 @@ public class Solution196 {
 				{ { 'E', ' ', ' ', 'E'},
 				{  ' ', 'E',  ' ', 'E'},
 				{  ' ',  ' ', 'E', 'E'} };
-		List<Integer> result = ss.solve(gym);
+		List<Integer> result = ss.putChair(gym);
 		System.out.println(result);
 	}
 }

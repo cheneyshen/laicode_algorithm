@@ -15,28 +15,35 @@ import java.util.*;
 //        The minimum number of cuts needed is 3.
 public class Solution143 {
 	public int minCuts(String input) {
-		return getMinHelper(input);
-	}
-	
-	private int getMinHelper(String input) {
-		if(input==null || input.length()<=1) {
+		if(input==null || input.length()<2) {
 			return 0;
 		}
 		int leng = input.length();
-		boolean[][] huiwen = new boolean[leng+1][leng+1];
+		boolean[][] huiwen = new boolean[leng][leng];
+		//为什么用leng+1呢？因为需要用到mincuts[0]==0的性质
 		int[] mincuts = new int[leng+1];
-		for(int end=1; end<leng+1; end++) {
-			mincuts[end]=end;
-			for(int start=end; start>=1; start--) {
-				if(input.charAt(start-1) == input.charAt(end-1)) {
-					huiwen[start][end] = end-start<2 || huiwen[start+1][end-1];
-				}
-				if(huiwen[start][end]==true) {
-					mincuts[end] = Math.min(mincuts[end], mincuts[start-1]+1);
+		for(int i=0; i<=leng; i++) {
+			mincuts[i] = i-1;
+		}
+		/*
+		 * j是右,i是左
+		 * for(int j=1; j<leng; j++) {
+		 * 	for(int i=j; i>=0; i--) {
+		 * 		一个往左，一个往右，判断字符是否相等
+		 *  }
+		 * }
+		 */
+		
+		for(int j=1; j<leng; j++) {
+			for(int i=j; i>=0; i--) {
+				if(input.charAt(i) == input.charAt(j) && (j-i<2 || huiwen[i+1][j-1]==true)) {
+					huiwen[i][j] = true;
+					
+					mincuts[j+1] = Math.min(mincuts[j+1], mincuts[i]+1);
 				}
 			}
 		}
-		return mincuts[leng]-1;
+		return mincuts[leng];
 	}
 	
 	public static void main(String[] args) {

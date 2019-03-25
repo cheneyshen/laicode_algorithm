@@ -20,29 +20,34 @@ import java.util.*;
 
 public class Solution021 {
 	public int search(int[] array, int target) {
+		if(array==null || array.length<1) {
+			return -1;
+		}
 		int left=0, right=array.length-1;
 		while(left<right) {
 			int mid=left+(right-left)/2;
+			//中位数大于右边的点，则最小数肯定在右边
 			if(array[mid]>array[right]) {
 				left=mid+1;
 			}
+			//否则right = mid
 			else {
 				right=mid;
 			}
  		}
+		//退出时left==right,
 		int shift=left;
 		left=0;
 		right=array.length-1;
 		while(left<=right) {
 			int mid=left+(right-left)/2;
+			//根据偏移量进行标准二分搜索
 			int realmid=(mid+shift)%array.length;
 			if(array[realmid]==target) {
 				return realmid;
-			}
-			else if(array[realmid]>target) {
+			} else if(array[realmid]>target) {
 				right=mid-1;
-			}
-			else {
+			} else {
 				left=mid+1;
 			}
 		}

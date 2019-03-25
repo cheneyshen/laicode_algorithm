@@ -15,15 +15,13 @@ import java.util.*;
 //        the characters used in "aba" are not unique
 public class Solution076 {
 	public boolean allUnique(String word) {
-		int[] dict=new int[8];
-		Arrays.fill(dict, 0);
+		int[] dict=new int[26];
+		
 		for(int i=0; i<word.length(); i++) {
-			int aa=word.charAt(i)%32;
-			int bb=word.charAt(i)/32;
-			if((dict[bb] >> aa)==1) {
+			int cur = word.charAt(i)-'a';
+			if(dict[cur] != 0) {
 				return false;
-			} 
-			dict[bb]|=1<<aa;
+			}
 		}
 		return true;
 	}

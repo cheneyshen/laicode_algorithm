@@ -17,41 +17,36 @@ import java.util.*;
 // { 4, 0, 1, 0, 0 }, if the initial position is 2, you are not able to reach the right end of array, return -1 in this case.
 public class Solution091 {
 	public int minJump(int[] array, int index) {
-		int leng=array.length;
-		int[] cancome=new int[leng];
-		Arrays.fill(cancome, Integer.MAX_VALUE);
-		if(leng<=index || index<0) {
-			return -1;
-		}
-		cancome[index]=0;
-		minJumpHelper(array, leng, index, cancome);
-		for(int i=0; i<leng; i++) {
-			if(array[i] == 0) {
-
-				if(cancome[i]==Integer.MAX_VALUE) {
-					return -1;
+		//用来保存往左跳 或者 往右跳 的节点
+		Queue<Integer> que = new LinkedList<>();
+		//用来去重
+		Set<Integer> set = new HashSet<>();
+		que.offer(index);
+		set.add(index);
+		int count = 0;
+		while(!que.isEmpty()) {
+			int size = que.size();
+			//BFS 操作把可以跳到的节点给存入队列
+			for(int i=0; i<size; i++) {
+				int cur = que.poll();
+				if(cur == array.length-1) {
+					return count;
 				}
-				else {
-					return cancome[i];
+				for(int j=1; j<=array[cur]; j++) {
+					//没有访问的继续操作
+					if(cur+j < array.length && !set.contains(cur+j)) {
+						que.offer(cur+j);
+						set.add(cur+j);
+					}
+					if(cur-j>=0 && !set.contains(cur-j)) {
+						que.offer(cur-j);
+						set.add(cur-j);
+					}
 				}
 			}
-			
+			count++;
 		}
 		return -1;
-	}
-	
-	private void minJumpHelper(int[] array, int leng, int index, int[] cancome) {
-		if(index<0 || index>=leng || array[index]==0) {
-			return ;
-		}
-		if(array[index]+index<leng && cancome[array[index]+index]!=cancome[index]) {
-			cancome[array[index]+index]=cancome[index];
-			minJumpHelper(array, leng, array[index]+index, cancome);
-		}
-		if(index-array[index]>=0 && cancome[index-array[index]]!=cancome[index]) {
-			cancome[index-array[index]]=cancome[index];
-			minJumpHelper(array, leng, index-array[index], cancome);
-		}
 	}
 	
 	public static void main(String[] args) {

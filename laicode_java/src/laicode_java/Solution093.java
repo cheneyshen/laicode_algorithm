@@ -31,12 +31,14 @@ import java.util.*;
 //		0 0 0 0 5 0
 public class Solution093 {
 	public int maxProfit(int[] array) {
-		int leng=array.length;
-		if(leng<=1) {
+		if(array==null || array.length<2) {
 			return 0;
 		}
+		int leng=array.length;
 		int result=0;
-		for(int i=0; i<leng; i++) {
+		//make as many transactions to make profit
+		//只要比左边大就加进profit
+		for(int i=1; i<leng; i++) {
 			if(array[i]>array[i-1]) {
 				result+=array[i]-array[i-1];
 			}

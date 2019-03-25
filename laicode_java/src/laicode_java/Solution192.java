@@ -21,6 +21,7 @@ import java.util.*;
 //    2^3*3^0  2^1*3^1
 public class Solution192 {
 	public int Kth(int k) {
+		//k的corner case
 		if(k<=0) {
 			return 0;
 		} else if(k==1) {
@@ -30,6 +31,8 @@ public class Solution192 {
 		int i2=0, i3=0;
 		int next=1;
 		result[0]=1;
+		//从1开始到k,看看当前数是2的倍数还是3的倍数
+		//是2的话,i2就++, 是3的话, i3就++
 		for(int i=1; i<k; i++) {
 			next = Math.min(result[i2]*2, result[i3]*3);
 			result[i] = next;

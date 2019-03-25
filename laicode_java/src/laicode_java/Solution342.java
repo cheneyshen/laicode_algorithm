@@ -10,6 +10,35 @@ import java.util.*;
 //  "abca" and "xyzx" are isomorphic since the mapping is 'a' <-> 'x', 'b' <-> 'y', 'c' <-> 'z'.
 //  "abba" and "cccc" are not isomorphic.
 public class Solution342 {
+	public boolean isomorphic(String source, String target) {
+	    // use two hashset
+		// Assume s and t are not null
+		// as long as s and t have same length and same kinds of characters
+		// s and t will be isomorphic
+		if(source == null && target == null) {
+			return true;
+		}
+		if(source==null || target==null) {
+			return false;
+		}
+		int slen=source.length(), tlen=target.length();
+		if(slen!=tlen) {
+			return false;
+		}
+		char[] sarray = source.toCharArray();
+		char[] tarray = target.toCharArray();
+		Set<Character> settt = new HashSet<>();
+		Set<Character> setss = new HashSet<>();
+		for(int i=0; i<sarray.length; i++) {
+			if(!setss.contains(sarray[i])) {
+				setss.add(sarray[i]);
+			}
+			if(!settt.contains(tarray[i])) {
+				settt.add(tarray[i]);
+			}
+		}
+		return settt.size() == setss.size();
+	}
 
 	public static void main(String[] args) {
 

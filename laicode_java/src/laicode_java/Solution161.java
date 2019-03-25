@@ -17,17 +17,26 @@ public class Solution161 {
 	public int sqrt(int x) {
 		if(x<=0) {
 			return 0;
-		} else if (x==1) {
-			return 1;
-		} else {
-			int i=x/2;
-			for(; i>=2; i--) {
-				if(Math.pow(i, 2)<=x) {
-					break;
-				}
-			}
-			return i;
 		}
+		if (x==1) {
+			return 1;
+		}
+		if (x==2) {
+			return 1;
+		}
+		int left=2, right=x/2;
+		// log(n)的时间复杂度
+		while(left<=right) {
+			int mid = left+(right-left)/2;
+			if(x/mid==mid) {
+				return mid;
+			} else if(x/mid > mid) {
+				left = mid+1;
+			} else {
+				right = mid-1;
+			}
+		}
+		return right;
 	}
 	public static void main(String[] args) {
 

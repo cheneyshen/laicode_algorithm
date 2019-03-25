@@ -27,6 +27,7 @@ public class Solution030 {
 			return a;
 		}
 		ListNode head=a;
+		// 头就是head, 尾就是null
 		ListNode result=quickSortHelper(head, null);
 		return result;
 	}
@@ -35,17 +36,27 @@ public class Solution030 {
 		if(head==null || head==tail) {
 			return head;
 		}
+		//找出pivot值过后进行swap
 		ListNode pivot=partition(head, tail);
 		quickSortHelper(head, pivot);
 		quickSortHelper(pivot.next, tail);
 		return head;
 	}
-	
+	/*
+	 * 以head.value为pivot值，进行拆分
+	 */
 	private ListNode partition(ListNode head, ListNode tail) {
 		int pivot=head.value;
 		ListNode i=head, j=head.next;
+		/*
+		 * while(j!=tail) {
+		 * 		j=j.next;
+		 * }
+		 * 移动模板
+		 */
 		while(j!=tail) {
-			if(j.value<=pivot) {
+			if(j.value <= pivot) {
+				//相当于swap(a, ++i, j);
 				i=i.next;
 				int temp=i.value;
 				i.value=j.value;
@@ -59,7 +70,6 @@ public class Solution030 {
 	}
 	
 	public static void main(String[] args) {
-
 		Solution030 ss = new Solution030();
 		ListNode l1=new ListNode(2);
 		ListNode l2=new ListNode(1);

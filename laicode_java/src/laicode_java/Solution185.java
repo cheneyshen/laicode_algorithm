@@ -16,6 +16,7 @@ public class Solution185 {
 			return false;
 		}
 		Arrays.sort(b);
+		//因为只需要返回boolean,所以对b做标准二分查找就可以了
 		for(int i=0; i<a.length; i++) {
 			int other = target-a[i];
 			int start=0, end=b.length-1;

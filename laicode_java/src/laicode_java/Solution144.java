@@ -41,10 +41,13 @@ public class Solution144 {
 		if(root==null || (root.left==null && root.right==null)) {
 			return root;
 		}
+		/*
+		 * 需要这个数组是为了记录交换的TreeNode，中序遍历
+		 * 2用来存之前的node
+		 * 第一次发现2大于当前元素的值，把当前元素存入1
+		 * 第二次发现如果2大于当前元素，那就说明可以对调了
+		 */
 		TreeNode[] list = new TreeNode[3];
-//		private TreeNode node1 = null;
-//		private TreeNode node2 = null;
-//		private TreeNode prev = null;
 		helper(root, list, Integer.MIN_VALUE, Integer.MAX_VALUE);
 		if (list[0]!=null && list[1]!=null) {
 			int temp=list[0].key;

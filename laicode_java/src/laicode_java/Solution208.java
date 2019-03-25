@@ -19,44 +19,45 @@ public class Solution208 {
 		if(k<2) {
 			return null;
 		}
+		//直接用二维数组存取candidate & freq
 		int[][] major = new int[k][2];
 		for(int i=0; i<array.length; i++) {
 			int comp=0;
 			for(int j=0; j<major.length; j++) {
 				if(major[j][0]==0) {
-					major[j][0]=1;
+					major[j][0]=1;	//有个为空，就占用
 					major[j][1]=array[i];
 					break;
 				} else if(major[j][1]==array[i]) {
-					major[j][0]++;
+					major[j][0]++;	//相等的话，freq++
 					break;
 				}
 				else {
-					comp++;
+					comp++;	//如果不相等，记录比较次数
 				}
 			}
-			if(comp==k) {
+			if(comp==k) {	//发现一个都不相等
 				for(int j=0; j<major.length; j++) {
 					if(major[j][0]>0) {
-						major[j][0]--;
+						major[j][0]--;	//所有freq都--
 					}
 				}
 			}
 		}
 		for(int i=0; i<k; i++) {
-			major[i][0]=0;
+			major[i][0]=0;	//再把freq都清零
 		}
 		for(int j=0; j<array.length; j++) {
 			for(int i=0; i<k; i++) {
 				if(major[i][1]==array[j]) {
-					major[i][0]++;
+					major[i][0]++;//重新算freq
 				}
 			}
 		}
 		List<Integer> result=new ArrayList<Integer>();
 		for(int i=0; i<k; i++) {
 			if(major[i][0]>array.length/k) {
-				result.add(major[i][1]);
+				result.add(major[i][1]);//验证通过的话，加入结果
 			}
 		}
 		return result;

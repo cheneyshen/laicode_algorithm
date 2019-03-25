@@ -20,15 +20,6 @@ import java.util.*;
 //
 //Input:     "abcbcbd"
 //Output:  "bcbcb"
-/*	abcbcbd
- * 	a
- * 	 b abc
- *    c bcb abcbc
- *     b cbc bcbcb abcbcbd
- *      c bcb cbcbd
- *       b cbd
- *        d  
- */
 public class Solution252 {
 	public String longestPalindrome(String s) {
 		if(s==null || s.length()<2) {
@@ -38,6 +29,19 @@ public class Solution252 {
 		String result="";
 		int dist=0;
 		boolean[][] isPalindrome = new boolean[leng+1][leng+1]; 
+		/*	
+		 * 以如下为例，每个字母为end,再去往两边拓展，不断刷新结果
+		 * isPalindrome[start][end] = end-start<2 || isPalindrome[start+1][end-1]
+		 * 需要依赖原来的计算结果
+		 *  abcbcbd
+		 * 	a
+		 * 	 b abc
+		 *    c bcb abcbc
+		 *     b cbc bcbcb abcbcbd
+		 *      c bcb cbcbd
+		 *       b cbd
+		 *        d  
+		 */
 		for(int end=1; end<=leng; end++) {
 			for(int start=end; start>0; start--) {
 				if(s.charAt(start-1)==s.charAt(end-1)) {
@@ -50,20 +54,6 @@ public class Solution252 {
 			}
 		}
 		return result;
-	}
-	
-	public boolean canAttendMeetings(Interval[] intervals) {
-		Arrays.sort(intervals, new Comparator<Interval>() {
-			public int compare(Interval i1, Interval i2) {
-				return i1.start - i2.start;
-			}
-		});
-		for(int i=0; i<intervals.length-1; i++) {
-			if(intervals[i].end > intervals[i+1].start) {
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	public static void main(String[] args) {

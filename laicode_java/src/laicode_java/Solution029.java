@@ -17,7 +17,7 @@ public class Solution029 {
 		public ListNode next;
 		public ListNode(int value) {
 			this.value=value;
-			next=null;
+			this.next=null;
 		}
 	}
 	
@@ -29,13 +29,11 @@ public class Solution029 {
 		ListNode right=getMiddle(a);
 		ListNode prev=right;
 		right=right.next;
-		if(prev!=null) {
-			prev.next=null;
-		}
+		prev.next=null;
+		
 		left=mergeSort(left);
 		right=mergeSort(right);
-		a=merge(left, right);
-		return a;
+		return merge(left, right);
 	}
 	
 	private ListNode getMiddle(ListNode head) {
@@ -43,6 +41,7 @@ public class Solution029 {
 			return head;
 		}
 		ListNode slow=head, fast=head;
+		//这里需要用fast.next && fast.next.next，意思是凑不齐2个就不走
 		while(fast.next!=null && fast.next.next!=null) {
 			slow=slow.next;
 			fast=fast.next.next;
@@ -54,40 +53,29 @@ public class Solution029 {
 		if(left==null) {
 			return right;
 		}
-		else if(right==null) {
+		if(right==null) {
 			return left;
 		}
-		else {
-			ListNode result, index;
+		ListNode dummy = new ListNode(-1);
+		ListNode cur = dummy;
+		while(left !=null && right !=null) {
 			if(left.value<=right.value) {
-				result=left;
+				cur.next=left;
 				left=left.next;
-			}
-			else {
-				result=right;
+				cur=cur.next;
+			} else {
+				cur.next=right;
 				right=right.next;
+				cur=cur.next;
 			}
-			index=result;
-			while(left !=null && right !=null) {
-				if(left.value<=right.value) {
-					index.next=left;
-					left=left.next;
-					index=index.next;
-				}
-				else {
-					index.next=right;
-					right=right.next;
-					index=index.next;
-				}
-			}
-			if (left!=null) {
-				index.next=left;
-			}
-			if (right!=null) {
-				index.next=right;
-			}
-			return result;
 		}
+		if (left!=null) {
+			cur.next=left;
+		}
+		if (right!=null) {
+			cur.next=right;
+		}
+		return dummy.next;
 	}
 	
 	public static void main(String[] args) {

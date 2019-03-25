@@ -17,22 +17,24 @@ import java.util.*;
 //“acb2c4” → “acbbcccc”
 public class Solution174 {
 	public String decompress(String input) {
-		if(input==null || input.length()<=1) {
+		if(input==null || input.length()<2) {
 			return input;
 		}
-		String output="";
+		StringBuilder sb = new StringBuilder();
 		char curr = input.charAt(0);
 		for(int i=0; i<input.length(); i++) {
+			//不是数字的话，我们直接加字母，同时更新当前字母
 			if(input.charAt(i)>'9') {
+				sb.append(input.charAt(i));
 				curr = input.charAt(i);
-				output += curr;
 			} else {
+				//从2开始，因为我们已经加了一次
 				for(char j='2'; j<=input.charAt(i); j++) {
-					output += curr;
+					sb.append(curr);
 				}
 			}
 		}
-		return output;
+		return sb.toString();
 	}
 	
 	public static void main(String[] args) {

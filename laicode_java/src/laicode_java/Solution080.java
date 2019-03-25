@@ -15,26 +15,25 @@ import java.util.*;
 //      
 //      If the given string is null, we do not need to do anything.
 public class Solution080 {
-	public String deDup(String input) {
-		int leng=input.length();
-		if(leng<=2) {
+	public static String deDup(String input) {
+		if(input==null || input.length()<2) {
 			return input;
 		}
-		String result="";
-		result+=input.charAt(0);
-		result+=input.charAt(1);
-		for(int i=2; i<leng; i++) {
-			if(input.charAt(i)==input.charAt(i-2)) {
-				continue;
-			} else {
-				result+=input.charAt(i);
+		char[] array = input.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		//直接把前两个元素复制给结果
+		sb.append(input.substring(0, 2));
+		for(int fast=2; fast<array.length; fast++) {
+			//看fast是不是等于fast-2, 不相等就记录
+			if(array[fast]!=array[fast-2]) {
+				sb.append(array[fast]);
 			}
 		}
-		return result;
+		return sb.toString();
 	}
 	
 	public static void main(String[] args) {
-
-
+		System.out.println(deDup("aaaabbbc"));
+		System.out.println(deDup("acd"));
 	}
 }
